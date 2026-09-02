@@ -1295,9 +1295,9 @@
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "b2000041-2222-4222-8222-000000000042")
     (property "Reference" "L2" (at 142.7 51.975 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "2.2uH Isat>=5A" (at 142.7 55.975 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "Inductor_SMD:L_4.0x4.0mm_TBD" (at 139.7 53.975 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "~" (at 139.7 53.975 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "XGL4030-222MEC / 2.2uH" (at 142.7 55.975 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Inductor_SMD:L_Coilcraft_XxL4030" (at 139.7 53.975 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.coilcraft.com/en-us/products/power/shielded-inductors/molded-inductor/xgl/xgl4030/xgl4030-222/" (at 139.7 53.975 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "b2000042-2222-4222-8222-000000000043")) (pin "2" (uuid "b2000043-2222-4222-8222-000000000044"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000002-6b2a-4a3a-8c91-000000000002" (reference "L2") (unit 1))))
@@ -1430,7 +1430,7 @@
   (hierarchical_label "3V3_AUDIO" (shape output) (at 219.71 57.785 90) (effects (font (size 1.27 1.27))) (uuid "b200006c-2222-4222-8222-00000000006d"))
   (text "Rev A: TPS62132 fixed 3.3V, 2.2uH, CIN 10uF+100nF, COUT 22uF + DNP 22uF + 100nF, SS/TR 3.3nF" (exclude_from_sim no) (at 80 85 0) (effects (font (size 1.27 1.27))) (uuid "b200006d-2222-4222-8222-00000000006e"))
   (text "FSW=LOW (~2.5MHz), DEF=LOW (nominal 3.3V), FB=GND on fixed-output part; VOS senses quiet 3V3 output node." (exclude_from_sim no) (at 80 90 0) (effects (font (size 1.27 1.27))) (uuid "b200006e-2222-4222-8222-00000000006f"))
-  (text "L2 exact shielded MPN remains TBD after availability/thermal check. Keep SW copper compact and away from audio/MIPI/USB HS." (exclude_from_sim no) (at 80 95 0) (effects (font (size 1.27 1.27))) (uuid "b200006f-2222-4222-8222-000000000070"))
+  (text "L2 locked: Coilcraft XGL4030-222MEC, 2.2uH, Isat 5.0A at 20% drop / 7.0A at 30% drop, Irms 8.7A at 40C rise. Keep SW copper compact and away from audio/MIPI/USB HS." (exclude_from_sim no) (at 80 95 0) (effects (font (size 1.27 1.27))) (uuid "b200006f-2222-4222-8222-000000000070"))
   (symbol
     (lib_id "power:PWR_FLAG")
     (at 120.015 42.545 0)
