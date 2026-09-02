@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Repo:** `dvucinozd/Pajoniiir-M1`  
 **Datum:** 2026-09-02  
-**Status:** Engineering BOM v0.1 — prije shematskog capturea i PCB layouta
+**Status:** **SUPERSEDED** — koristiti `Pajoniiir_Mainboard_BOM_v0.2.md` za aktualni Rev A baseline
 
 > Ovaj BOM je namjerno konzervativan. Dijelovi koji ovise o konačnom LCD panelu, FPC rasporedu, kućištu ili mjerenju stvarne potrošnje označeni su kao `TBD`, `TBD-MECH` ili `TBD-VALIDATE`. Takve stavke se ne smiju tretirati kao proizvodno zaključane prije schematic/EVT reviewa.
 
