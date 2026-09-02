@@ -636,14 +636,14 @@ Zbog toga buduća PCB mora imati namjenski dual-VBUS power distribution.
 ```text
                          +---------------- USB0 VBUS
                          |
-5V_SYS ── TPS2561 ───────+
+5V_SYS ── TPS25221 x2 ───────+
                          |
                          +---------------- USB1 VBUS
 ```
 
 ### U6
 
-**TPS2561**
+**TPS25221 x2**
 
 Dual USB current-limited high-side switch.
 
@@ -668,7 +668,7 @@ Točan ILIM treba definirati prema:
 
 - DDJ-FLX4 stvarnoj potrošnji
 - USB stick peak currentu
-- TPS2561 datasheetu
+- TPS25221 x2 datasheetu
 - bench mjerenju
 
 ---
@@ -761,7 +761,7 @@ Za svaki USB port treba predvidjeti:
 - D-
 - GND
 - SHIELD
-- VBUS iz TPS2561
+- VBUS iz TPS25221 x2
 
 ## FS USB
 
@@ -818,7 +818,7 @@ External regulated 5 V / 4 A
      ┌──────┼───────────────┐
      │      │               │
      │      │               │
- TPS2561   5→3.3V         LCD BL
+ TPS25221 x2   5→3.3V         LCD BL
  USB VBUS   BUCK            BOOST
             |
        ┌────┼──────┬──────────────┐
@@ -965,7 +965,7 @@ Preporučuje se od `5V_SYS` razdvojiti glavne grane:
  |
  +-- P4/3V3 converter
  |
- +-- USB TPS2561
+ +-- USB TPS25221 x2
  |
  +-- LCD backlight
  |
@@ -1181,7 +1181,7 @@ Ovo nije još finalni manufacturing BOM, nego početni popis glavnih komponenti.
 | L1 | 1 | P4 DCDC inductor | prema P4 ref designu | obavezno |
 | U4 | 1 | Wireless | ESP32-C6-WROOM-1 | obavezno za Wi-Fi |
 | U5 | 1 | MAIN DAC | PCM5102APWR | obavezno |
-| U6 | 1 | Dual USB VBUS | TPS2561 | obavezno |
+| U6 | 1 | Dual USB VBUS (Rev A: 2× TPS25221) | TPS25221 x2 | obavezno |
 | U7 | 1 | Input eFuse | TPS25947 class | preporučeno |
 | U8 | 1 | 3.3 V buck | 2–3 A synchronous buck | obavezno |
 | U9 | 1 | LCD backlight | MP3202 class | obavezno |
@@ -1356,7 +1356,7 @@ Preporuka:
 ├──────────────────┬────────────────────┤
 │ USB0 + ESD       │ USB1 + ESD         │
 │                  │                    │
-│      TPS2561 dual VBUS switch         │
+│      2× TPS25221 independent USB VBUS switches         │
 ├──────────────────┴────────────────────┤
 │                                       │
 │  PCM5102A                 microSD     │
@@ -1591,7 +1591,7 @@ Ne mora sve biti implementirano u prvom firmwareu, ali PCB treba dati mogućnost
                                      │
            ┌─────────────────────────┼──────────────────────────┐
            │                         │                          │
-        3.3V BUCK                TPS2561                  BACKLIGHT
+        3.3V BUCK                TPS25221 x2                  BACKLIGHT
            │                  DUAL USB SWITCH                BOOST
            │                    │       │                       │
            │                   VBUS0   VBUS1                    │
@@ -1687,7 +1687,7 @@ Nakon ovog dokumenta preporučeni redoslijed je:
 3. odabrati točan 16 MB flash
 4. odabrati 3.3 V buck
 5. odabrati input eFuse
-6. zaključati TPS2561
+6. zaključati TPS25221 x2
 7. definirati USB current limit
 8. odabrati točan 4.3" LCD panel/FPC
 9. zaključati GT911 izvedbu
