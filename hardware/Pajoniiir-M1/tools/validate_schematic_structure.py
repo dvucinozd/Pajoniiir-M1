@@ -218,7 +218,10 @@ def main() -> int:
 
             severities = erc.get("rule_severities", {})
             for rule in ("label_dangling", "pin_not_driven"):
-                if severities.get(rule) != "error":
+                # Missing entry means KiCad's built-in default severity. Both
+                # rules are error-level by default in KiCad 9; only an explicit
+                # non-error override is forbidden here.
+                if severities.get(rule, "error") != "error":
                     errors.append(
                         f"{PROJECT.name}: {rule} severity must remain error; "
                         "use only UUID-scoped hard-gate exclusions"
