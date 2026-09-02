@@ -557,7 +557,7 @@
 					)
 				)
 			)
-			(pin bidirectional line
+			(pin power_in line
 				(at -22.86 -16.51 0)
 				(length 2.54)
 				(name "VDD_ANA"
@@ -575,7 +575,7 @@
 					)
 				)
 			)
-			(pin bidirectional line
+			(pin power_in line
 				(at -22.86 -24.13 0)
 				(length 2.54)
 				(name "VDD_BAT"
@@ -2445,7 +2445,7 @@
 				(at 0 -7.62 90)
 				(length 2.54)
 				(hide yes)
-				(name "EP/GND" (effects (font (size 1.27 1.27))))
+				(name "GND" (effects (font (size 1.27 1.27))))
 				(number "7" (effects (font (size 1.27 1.27))))
 			)
 		)
