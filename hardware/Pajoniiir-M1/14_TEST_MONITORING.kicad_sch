@@ -813,9 +813,9 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_SYS_SHUNT") (unit 1))))
   )
   (wire (pts (xy 34.925 45.085) (xy 81.28 45.085)) (stroke (width 0) (type default)) (uuid "0e000005-e000-4e00-8e00-000000000006"))
-  (label "SHUNT_HI" (at 64.77 45.085 0) (effects (font (size 1.27 1.27))) (uuid "0e000006-e000-4e00-8e00-000000000007"))
+  
   (wire (pts (xy 88.9 45.085) (xy 135.255 45.085)) (stroke (width 0) (type default)) (uuid "0e000007-e000-4e00-8e00-000000000008"))
-  (label "SHUNT_LO" (at 109.855 45.085 0) (effects (font (size 1.27 1.27))) (uuid "0e000008-e000-4e00-8e00-000000000009"))
+  
   (hierarchical_label "5V_SYS" (shape output) (at 135.255 45.085 0) (effects (font (size 1.27 1.27))) (uuid "0e000009-e000-4e00-8e00-00000000000a"))
   (symbol
     (lib_id "Pajoniiir-M1:INA238") (at 165.1 74.93 0) (unit 1)
@@ -840,7 +840,7 @@
     (pin "1" (uuid "0e000016-e000-4e00-8e00-000000000017")) (pin "2" (uuid "0e000017-e000-4e00-8e00-000000000018"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_INA_P") (unit 1))))
   )
-  (label "SHUNT_HI" (at 121.285 72.39 0) (effects (font (size 1.27 1.27))) (uuid "0e000018-e000-4e00-8e00-000000000019"))
+  (label "5V_PROTECTED" (at 121.285 72.39 0) (effects (font (size 1.27 1.27))) (uuid "0e000018-e000-4e00-8e00-000000000019"))
   
   (label "INA_INP_FILT" (at 128.905 72.39 0) (effects (font (size 1.27 1.27))) (uuid "0e00001a-e000-4e00-8e00-00000000001b"))
   (symbol
@@ -854,7 +854,7 @@
     (pin "1" (uuid "0e00001c-e000-4e00-8e00-00000000001d")) (pin "2" (uuid "0e00001d-e000-4e00-8e00-00000000001e"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_INA_N") (unit 1))))
   )
-  (label "SHUNT_LO" (at 121.285 62.23 0) (effects (font (size 1.27 1.27))) (uuid "0e00001e-e000-4e00-8e00-00000000001f"))
+  (label "5V_SYS" (at 121.285 62.23 0) (effects (font (size 1.27 1.27))) (uuid "0e00001e-e000-4e00-8e00-00000000001f"))
   (wire (pts (xy 128.905 62.23) (xy 144.78 62.23)) (stroke (width 0) (type default)) (uuid "0e00001f-e000-4e00-8e00-000000000020"))
   (wire (pts (xy 144.78 62.23) (xy 144.78 69.85)) (stroke (width 0) (type default)) (uuid "0e000020-e000-4e00-8e00-000000000021"))
   

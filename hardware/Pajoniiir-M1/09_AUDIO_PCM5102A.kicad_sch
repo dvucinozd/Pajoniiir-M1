@@ -1105,6 +1105,9 @@
 			(embedded_fonts no)
 		)
   )
+  (label "DAC_DATA_DAC" (at 85.725 72.39 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000001"))
+  (label "DAC_DATA_DAC" (at 112.395 72.39 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000002"))
+  (label "MAIN_L" (at 219.71 90.17 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000003"))
   (label "DAC_VNEG" (at 137.795 92.71 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000001"))
   (label "DAC_LDOO_1V8" (at 137.795 90.17 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000002"))
   (label "MAIN_L" (at 163.83 69.85 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000003"))
@@ -1167,7 +1170,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R_I2S_DATA") (unit 1))))
   )
   (wire (pts (xy 55.245 72.39) (xy 78.105 72.39)) (stroke (width 0) (type default)) (uuid "09000020-9000-4900-8900-000000000021"))
-  (wire (pts (xy 85.725 72.39) (xy 112.395 72.39)) (stroke (width 0) (type default)) (uuid "09000021-9000-4900-8900-000000000022"))
+  
   (hierarchical_label "DAC_BCLK" (shape input) (at 55.245 74.93 0) (effects (font (size 1.27 1.27))) (uuid "09000022-9000-4900-8900-000000000023"))
   (symbol
     (lib_id "Device:R_US") (at 81.915 74.93 90) (unit 1)
@@ -1479,7 +1482,7 @@
   
   (label "DAC_CAPM" (at 137.795 85.09 0) (effects (font (size 1.27 1.27))) (uuid "09000078-9000-4900-8900-000000000079"))
   (symbol
-    (lib_id "Device:C") (at 154.94 71.12 0) (unit 1)
+    (lib_id "Device:C") (at 146.05 71.12 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000079-9000-4900-8900-00000000007a")
     (property "Reference" "C_VNEG" (at 157.94 69.12 0) (effects (font (size 1.27 1.27))))
     (property "Value" "2.2uF" (at 157.94 73.12 0) (effects (font (size 1.27 1.27))))
@@ -1490,9 +1493,9 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_VNEG") (unit 1))))
   )
   
-  (label "DAC_VNEG" (at 154.94 67.31 0) (effects (font (size 1.27 1.27))) (uuid "0900007d-9000-4900-8900-00000000007e"))
+  (label "DAC_VNEG" (at 146.05 67.31 0) (effects (font (size 1.27 1.27))) (uuid "0900007d-9000-4900-8900-00000000007e"))
   (symbol
-    (lib_id "power:GND") (at 154.94 74.93 0) (unit 1)
+    (lib_id "power:GND") (at 146.05 74.93 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900007e-9000-4900-8900-00000000007f")
     (property "Reference" "#PWR0910" (at 154.94 80.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 154.94 77.93 0) (effects (font (size 1.27 1.27))))
@@ -1611,7 +1614,7 @@
     (pin "1" (uuid "090000a0-9000-4900-8900-0000000000a1")) (pin "2" (uuid "090000a1-9000-4900-8900-0000000000a2"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "J_RCA_L") (unit 1))))
   )
-  (wire (pts (xy 205.105 90.17) (xy 219.71 90.17)) (stroke (width 0) (type default)) (uuid "090000a2-9000-4900-8900-0000000000a3"))
+  
   (symbol
     (lib_id "power:GND") (at 224.79 95.25 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "090000a3-9000-4900-8900-0000000000a4")

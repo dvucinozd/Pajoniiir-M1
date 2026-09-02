@@ -819,6 +819,11 @@
 			(embedded_fonts no)
 		)
   )
+  (label "SD_D2_CARD" (at 196.85 74.93 0) (effects (font (size 1.27 1.27))) (uuid "af0c0000-0000-4000-8000-000000000001"))
+  (label "SD_D3_CARD" (at 196.85 77.47 0) (effects (font (size 1.27 1.27))) (uuid "af0c0000-0000-4000-8000-000000000002"))
+  (label "SD_CMD_CARD" (at 196.85 80.01 0) (effects (font (size 1.27 1.27))) (uuid "af0c0000-0000-4000-8000-000000000003"))
+  (label "SD_D0_CARD" (at 196.85 90.17 0) (effects (font (size 1.27 1.27))) (uuid "af0c0000-0000-4000-8000-000000000004"))
+  (label "SD_D1_CARD" (at 196.85 92.71 0) (effects (font (size 1.27 1.27))) (uuid "af0c0000-0000-4000-8000-000000000005"))
   (label "SD_CARD_DETECT" (at 170.18 72.39 0) (effects (font (size 1.27 1.27))) (uuid "8d6f0000-0000-4000-8000-000000000003"))
   (wire (pts (xy 83.82 42.545) (xy 109.855 42.545)) (stroke (width 0) (type default)) (uuid "8d6f0000-0000-4000-8000-000000000001"))
   (wire (pts (xy 109.855 42.545) (xy 109.855 47.625)) (stroke (width 0) (type default)) (uuid "8d6f0000-0000-4000-8000-000000000002"))
@@ -1084,8 +1089,8 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_D2_SER") (unit 1))))
   )
   (wire (pts (xy 34.925 74.93) (xy 81.28 74.93)) (stroke (width 0) (type default)) (uuid "0c000055-c000-4c00-8c00-000000000056"))
-  (wire (pts (xy 88.9 74.93) (xy 196.85 74.93)) (stroke (width 0) (type default)) (uuid "0c000056-c000-4c00-8c00-000000000057"))
-  (label "SD_D2_CARD" (at 125.095 74.93 0) (effects (font (size 1.27 1.27))) (uuid "0c000057-c000-4c00-8c00-000000000058"))
+  
+  (label "SD_D2_CARD" (at 88.9 74.93 0) (effects (font (size 1.27 1.27))) (uuid "0c000057-c000-4c00-8c00-000000000058"))
   (hierarchical_label "SDMMC_D3" (shape bidirectional) (at 34.925 77.47 0) (effects (font (size 1.27 1.27))) (uuid "0c000058-c000-4c00-8c00-000000000059"))
   (symbol
     (lib_id "Device:R_US") (at 85.09 77.47 90) (unit 1)
@@ -1099,8 +1104,8 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_D3_SER") (unit 1))))
   )
   (wire (pts (xy 34.925 77.47) (xy 81.28 77.47)) (stroke (width 0) (type default)) (uuid "0c00005c-c000-4c00-8c00-00000000005d"))
-  (wire (pts (xy 88.9 77.47) (xy 196.85 77.47)) (stroke (width 0) (type default)) (uuid "0c00005d-c000-4c00-8c00-00000000005e"))
-  (label "SD_D3_CARD" (at 125.095 77.47 0) (effects (font (size 1.27 1.27))) (uuid "0c00005e-c000-4c00-8c00-00000000005f"))
+  
+  (label "SD_D3_CARD" (at 88.9 77.47 0) (effects (font (size 1.27 1.27))) (uuid "0c00005e-c000-4c00-8c00-00000000005f"))
   (hierarchical_label "SDMMC_CMD" (shape bidirectional) (at 34.925 80.01 0) (effects (font (size 1.27 1.27))) (uuid "0c00005f-c000-4c00-8c00-000000000060"))
   (symbol
     (lib_id "Device:R_US") (at 85.09 80.01 90) (unit 1)
@@ -1114,8 +1119,8 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_CMD_SER") (unit 1))))
   )
   (wire (pts (xy 34.925 80.01) (xy 81.28 80.01)) (stroke (width 0) (type default)) (uuid "0c000063-c000-4c00-8c00-000000000064"))
-  (wire (pts (xy 88.9 80.01) (xy 196.85 80.01)) (stroke (width 0) (type default)) (uuid "0c000064-c000-4c00-8c00-000000000065"))
-  (label "SD_CMD_CARD" (at 125.095 80.01 0) (effects (font (size 1.27 1.27))) (uuid "0c000065-c000-4c00-8c00-000000000066"))
+  
+  (label "SD_CMD_CARD" (at 88.9 80.01 0) (effects (font (size 1.27 1.27))) (uuid "0c000065-c000-4c00-8c00-000000000066"))
   (hierarchical_label "SDMMC_CLK" (shape bidirectional) (at 34.925 85.09 0) (effects (font (size 1.27 1.27))) (uuid "0c000066-c000-4c00-8c00-000000000067"))
   (symbol
     (lib_id "Device:R_US") (at 85.09 85.09 90) (unit 1)
@@ -1144,8 +1149,8 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_D0_SER") (unit 1))))
   )
   (wire (pts (xy 34.925 90.17) (xy 81.28 90.17)) (stroke (width 0) (type default)) (uuid "0c000071-c000-4c00-8c00-000000000072"))
-  (wire (pts (xy 88.9 90.17) (xy 196.85 90.17)) (stroke (width 0) (type default)) (uuid "0c000072-c000-4c00-8c00-000000000073"))
-  (label "SD_D0_CARD" (at 125.095 90.17 0) (effects (font (size 1.27 1.27))) (uuid "0c000073-c000-4c00-8c00-000000000074"))
+  
+  (label "SD_D0_CARD" (at 88.9 90.17 0) (effects (font (size 1.27 1.27))) (uuid "0c000073-c000-4c00-8c00-000000000074"))
   (hierarchical_label "SDMMC_D1" (shape bidirectional) (at 34.925 92.71 0) (effects (font (size 1.27 1.27))) (uuid "0c000074-c000-4c00-8c00-000000000075"))
   (symbol
     (lib_id "Device:R_US") (at 85.09 92.71 90) (unit 1)
@@ -1159,8 +1164,8 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_D1_SER") (unit 1))))
   )
   (wire (pts (xy 34.925 92.71) (xy 81.28 92.71)) (stroke (width 0) (type default)) (uuid "0c000078-c000-4c00-8c00-000000000079"))
-  (wire (pts (xy 88.9 92.71) (xy 196.85 92.71)) (stroke (width 0) (type default)) (uuid "0c000079-c000-4c00-8c00-00000000007a"))
-  (label "SD_D1_CARD" (at 125.095 92.71 0) (effects (font (size 1.27 1.27))) (uuid "0c00007a-c000-4c00-8c00-00000000007b"))
+  
+  (label "SD_D1_CARD" (at 88.9 92.71 0) (effects (font (size 1.27 1.27))) (uuid "0c00007a-c000-4c00-8c00-00000000007b"))
   (symbol
     (lib_id "Device:R_US") (at 120.015 67.31 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c00007b-c000-4c00-8c00-00000000007c")
