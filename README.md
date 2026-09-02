@@ -255,8 +255,8 @@ RGB565
 Backlight baseline reconstructed from original JC4880 schematic:
 
 ~~~text
-MP3202
-10 µH
+MP3202DJ-LF-Z
+XGL4030-103MEC 10 µH
 SS14
 3.9 Ω || 2.2 Ω sense
 ~74 mA nominal LED current
@@ -318,7 +318,7 @@ EVT/DVT option:
 
 ~~~text
 INA238AIDGSR
-5 mΩ Kelvin shunt
+WSK25125L000FEA 5 mΩ / 1% / 1 W / 4-terminal
 I2C 0x40
 GPIO53 ALERT optional
 ~~~
@@ -442,7 +442,8 @@ Current sign-off gates:
 - [ ] final LCD/FPC physical definition
 - [ ] exact external connector MPNs / footprints
 - [ ] U7 HotRod RPW land pattern freeze
-- [ ] L_BL and Kelvin shunt exact sourcing/footprints
+- [x] L_BL exact sourcing/footprint — XGL4030-103MEC / `Inductor_SMD:L_Coilcraft_XxL4030`
+- [x] Kelvin shunt sourcing/footprint — WSK25125L000FEA / `Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm`
 - [ ] schematic PDF human review
 - [ ] manufacturing BOM/netlist cross-check
 
