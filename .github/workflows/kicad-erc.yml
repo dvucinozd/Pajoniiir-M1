@@ -177,7 +177,119 @@ jobs:
               sed 's/^/  stderr: /' /tmp/paj-diag.stderr || true
             fi
           done
+
+          # Distinguish hierarchy loading from ERC-specific crashes.
+          for schematic in \
+            Pajoniiir-M1.kicad_sch \
+            diag_single_03_03_P4_CORE.kicad_sch \
+            diag_single_06_06_USB_POWER.kicad_sch \
+            diag_single_10_10_DISPLAY_MIPI.kicad_sch \
+            diag_single_14_14_TEST_MONITORING.kicad_sch; do
+            set +e
+            kicad-cli sch export netlist \
+              --output "/tmp/$(basename "$schematic" .kicad_sch).net" \
+              "$schematic" >/tmp/paj-net.stdout 2>/tmp/paj-net.stderr
+            rc=$?
+            set -e
+            printf 'ROOT-NETLIST rc=%d file=%s\n' "$rc" "$schematic"
+            if [[ "$rc" -ne 0 ]]; then
+              sed 's/^/  net-stderr: /' /tmp/paj-net.stderr || true
+            fi
+          done
           cd -
+
+          # Test whether standalone child sheet_instances metadata is poisoning
+          # hierarchy resolution. Official KiCad shared child sheets omit it.
+          for mode in strip4 stripall stripall_fonts; do
+            rm -rf "/tmp/paj-root-$mode"
+            cp -a /tmp/paj-root-diag "/tmp/paj-root-$mode"
+          done
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          problem = {
+              "03_P4_CORE.kicad_sch",
+              "06_USB_POWER.kicad_sch",
+              "10_DISPLAY_MIPI.kicad_sch",
+              "14_TEST_MONITORING.kicad_sch",
+          }
+          all_children = {
+              p.name
+              for p in Path("/tmp/paj-root-diag").glob("[0-9][0-9]_*.kicad_sch")
+          }
+
+          def sexpr_at(src: str, start: int) -> tuple[str, int]:
+              depth = 0
+              in_string = False
+              escaped = False
+              begun = False
+              for i in range(start, len(src)):
+                  ch = src[i]
+                  if in_string:
+                      if escaped:
+                          escaped = False
+                          continue
+                      if ch == "\\":
+                          escaped = True
+                          continue
+                      if ch == '"':
+                          in_string = False
+                      continue
+                  if ch == '"':
+                      in_string = True
+                      continue
+                  if ch == "(":
+                      depth += 1
+                      begun = True
+                  elif ch == ")":
+                      depth -= 1
+                      if begun and depth == 0:
+                          return src[start : i + 1], i + 1
+              raise ValueError("unterminated s-expression")
+
+          def remove_top_token(path: Path, token: str) -> None:
+              text = path.read_text(encoding="utf-8")
+              start = text.rfind(f"({token}")
+              if start < 0:
+                  return
+              _, end = sexpr_at(text, start)
+              text = text[:start] + text[end:]
+              path.write_text(text, encoding="utf-8")
+
+          modes = {
+              "strip4": (problem, False),
+              "stripall": (all_children, False),
+              "stripall_fonts": (all_children, True),
+          }
+          for mode, (targets, remove_fonts) in modes.items():
+              base = Path(f"/tmp/paj-root-{mode}")
+              for name in targets:
+                  path = base / name
+                  remove_top_token(path, "sheet_instances")
+                  if remove_fonts:
+                      remove_top_token(path, "embedded_fonts")
+          PY
+
+          for mode in strip4 stripall stripall_fonts; do
+            cd "/tmp/paj-root-$mode"
+            for schematic in \
+              Pajoniiir-M1.kicad_sch \
+              diag_single_03_03_P4_CORE.kicad_sch \
+              diag_single_06_06_USB_POWER.kicad_sch \
+              diag_single_10_10_DISPLAY_MIPI.kicad_sch \
+              diag_single_14_14_TEST_MONITORING.kicad_sch; do
+              set +e
+              kicad-cli sch erc --severity-error \
+                --output "/tmp/$mode-$(basename "$schematic" .kicad_sch).rpt" \
+                "$schematic" >/tmp/paj-child.stdout 2>/tmp/paj-child.stderr
+              rc=$?
+              set -e
+              printf 'ROOT-DIAG-CHILD mode=%s rc=%d file=%s\n' \
+                "$mode" "$rc" "$schematic"
+            done
+            cd -
+          done
 
       - name: KiCad schematic load preflight
         shell: bash
