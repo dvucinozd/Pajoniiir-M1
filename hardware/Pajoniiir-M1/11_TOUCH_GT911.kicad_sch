@@ -550,7 +550,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000b-6b2a-4a3a-8c91-00000000000b" (reference "FB_TOUCH") (unit 1))))
   )
   (wire (pts (xy 29.845 29.845) (xy 55.88 29.845)) (stroke (width 0) (type default)) (uuid "0b000005-b000-4b00-8b00-000000000006"))
-  (wire (pts (xy 63.5 29.845) (xy 109.855 29.845)) (stroke (width 0) (type default)) (uuid "0b000006-b000-4b00-8b00-000000000007"))
+  (wire (pts (xy 63.5 29.845) (xy 90.17 29.845)) (stroke (width 0) (type default)) (uuid "0b000006-b000-4b00-8b00-000000000007"))
   (label "3V3_TOUCH" (at 63.5 29.845 0) (effects (font (size 1.27 1.27))) (uuid "cc110000-0000-4000-8000-000000000001"))
   (label "3V3_TOUCH" (at 90.17 29.845 0) (effects (font (size 1.27 1.27))) (uuid "0b000007-b000-4b00-8b00-000000000008"))
   (symbol

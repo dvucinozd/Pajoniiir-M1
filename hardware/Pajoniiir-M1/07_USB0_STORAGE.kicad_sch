@@ -1016,7 +1016,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000007-6b2a-4a3a-8c91-000000000007" (reference "R_USB0_DM") (unit 1))))
   )
   (wire (pts (xy 29.845 55.245) (xy 51.435 55.245)) (stroke (width 0) (type default)) (uuid "07000005-7000-4700-8700-000000000006"))
-  (wire (pts (xy 59.055 55.245) (xy 130.175 55.245)) (stroke (width 0) (type default)) (uuid "07000006-7000-4700-8700-000000000007"))
+  (wire (pts (xy 59.055 55.245) (xy 90.17 55.245)) (stroke (width 0) (type default)) (uuid "07000006-7000-4700-8700-000000000007"))
   (label "USB0_DM_CONN" (at 90.17 55.245 0) (effects (font (size 1.27 1.27))) (uuid "07000007-7000-4700-8700-000000000008"))
   (hierarchical_label "USB0_HS_DP" (shape bidirectional) (at 29.845 64.77 0) (effects (font (size 1.27 1.27))) (uuid "07000008-7000-4700-8700-000000000009"))
   (symbol

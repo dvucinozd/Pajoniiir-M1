@@ -1143,7 +1143,6 @@
     (pin "1" (uuid "0a00004f-a000-4a00-8a00-000000000050")) (pin "2" (uuid "0a000050-a000-4a00-8a00-000000000051"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_LCD_RST_PD") (unit 1))))
   )
-  (wire (pts (xy 90.17 111.76) (xy 114.935 111.76)) (stroke (width 0) (type default)) (uuid "0a000051-a000-4a00-8a00-000000000052"))
   (symbol
     (lib_id "power:GND") (at 90.17 119.38 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000052-a000-4a00-8a00-000000000053")
@@ -1181,7 +1180,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_LCD_TE_SER") (unit 1))))
   )
   (wire (pts (xy 29.845 123.825) (xy 55.88 123.825)) (stroke (width 0) (type default)) (uuid "0a00005b-a000-4a00-8a00-00000000005c"))
-  (wire (pts (xy 63.5 123.825) (xy 114.935 123.825)) (stroke (width 0) (type default)) (uuid "0a00005c-a000-4a00-8a00-00000000005d"))
+  (wire (pts (xy 63.5 123.825) (xy 90.17 123.825)) (stroke (width 0) (type default)) (uuid "0a00005c-a000-4a00-8a00-00000000005d"))
   (label "PANEL_LCD_TE" (at 90.17 123.825 0) (effects (font (size 1.27 1.27))) (uuid "0a00005d-a000-4a00-8a00-00000000005e"))
   (symbol
     (lib_id "Connector:TestPoint") (at 125.095 123.825 0) (unit 1)
@@ -1254,7 +1253,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "L_BL") (unit 1))))
   )
   (label "5V_SYS" (at 186.055 50.165 0) (effects (font (size 1.27 1.27))) (uuid "0a000070-a000-4a00-8a00-000000000071"))
-  (wire (pts (xy 193.675 50.165) (xy 205.105 50.165)) (stroke (width 0) (type default)) (uuid "0a000071-a000-4a00-8a00-000000000072"))
+  (wire (pts (xy 193.675 50.165) (xy 201.93 50.165)) (stroke (width 0) (type default)) (uuid "0a000071-a000-4a00-8a00-000000000072"))
   (label "BL_SW" (at 201.93 50.165 0) (effects (font (size 1.27 1.27))) (uuid "0a000072-a000-4a00-8a00-000000000073"))
   (symbol
     (lib_id "Pajoniiir-M1:MP3202DJ") (at 215.265 55.245 0) (unit 1)
@@ -1295,7 +1294,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "D_BL") (unit 1))))
   )
   (label "BL_SW" (at 241.3 57.785 0) (effects (font (size 1.27 1.27))) (uuid "0a000083-a000-4a00-8a00-000000000084"))
-  (wire (pts (xy 248.92 57.785) (xy 274.955 57.785)) (stroke (width 0) (type default)) (uuid "0a000084-a000-4a00-8a00-000000000085"))
+  (wire (pts (xy 248.92 57.785) (xy 264.795 57.785)) (stroke (width 0) (type default)) (uuid "0a000084-a000-4a00-8a00-000000000085"))
   (label "LEDA" (at 264.795 57.785 0) (effects (font (size 1.27 1.27))) (uuid "0a000085-a000-4a00-8a00-000000000086"))
   (wire (pts (xy 222.885 55.245) (xy 229.87 55.245)) (stroke (width 0) (type default)) (uuid "0a000086-a000-4a00-8a00-000000000087"))
   (wire (pts (xy 229.87 55.245) (xy 229.87 57.785)) (stroke (width 0) (type default)) (uuid "0a000087-a000-4a00-8a00-000000000088"))
@@ -1448,7 +1447,6 @@
     (pin "1" (uuid "0a0000b3-a000-4a00-8a00-0000000000b4")) (pin "2" (uuid "0a0000b4-a000-4a00-8a00-0000000000b5"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_BL_EN_PD") (unit 1))))
   )
-  (wire (pts (xy 189.865 85.09) (xy 200.025 85.09)) (stroke (width 0) (type default)) (uuid "0a0000b5-a000-4a00-8a00-0000000000b6"))
   (symbol
     (lib_id "power:GND") (at 189.865 92.71 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000b6-a000-4a00-8a00-0000000000b7")

@@ -1297,7 +1297,7 @@
     (pin "1" (uuid "e5000033-5555-4555-8555-000000000034"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "#PWR0501") (unit 1))))
   )
-  (label "C6_EN" (at 102.235 107.95 0) (effects (font (size 1.27 1.27))) (uuid "e5000034-5555-4555-8555-000000000035"))
+  (hierarchical_label "C6_EN" (shape output) (at 102.235 107.95 0) (effects (font (size 1.27 1.27))) (uuid "e5000045-5555-4555-8555-000000000046"))
   (symbol
     (lib_id "Device:R_US") (at 81.915 107.95 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -1351,9 +1351,6 @@
     (pin "1" (uuid "e5000044-5555-4555-8555-000000000045"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "#PWR0502") (unit 1))))
   )
-  (hierarchical_label "C6_EN" (shape output) (at 71.755 113.03 180) (effects (font (size 1.27 1.27))) (uuid "e5000045-5555-4555-8555-000000000046"))
-  (wire (pts (xy 71.755 113.03) (xy 81.915 113.03)) (stroke (width 0) (type default)) (uuid "e5000046-5555-4555-8555-000000000047"))
-  (wire (pts (xy 81.915 113.03) (xy 81.915 107.95)) (stroke (width 0) (type default)) (uuid "e5000047-5555-4555-8555-000000000048"))
   (wire (pts (xy 158.115 85.09) (xy 172.085 85.09)) (stroke (width 0) (type default)) (uuid "e5000048-5555-4555-8555-000000000049"))
   (symbol
     (lib_id "Device:R_US") (at 175.895 85.09 90) (unit 1)
