@@ -81,7 +81,7 @@ Ovaj dokument ima prednost nad starim JC4880 pinoutom za novu Pajoniiir-M1 ploč
 | 50 | **PCM5102A_BCLK** | LOCKED | bench-proven |
 | 51 | **PCM5102A_DATA** | LOCKED | bench-proven |
 | 52 | **PCM5102A_LRCK** | LOCKED | bench-proven |
-| 53 | Spare | FREE | ADC/debug candidate |
+| 53 | **SYS_POWER_ALERT_N** | LOCK-CANDIDATE/OPTIONAL | INA238 ALERT when monitor populated |
 | 54 | **C6_RESET / EN** | LOCKED | ESP-Hosted reset |
 
 ---
@@ -253,7 +253,7 @@ GPIO33
 GPIO46
 GPIO47
 GPIO48
-GPIO53
+GPIO53   optional INA238 ALERT
 ~~~
 
 Restricted/reserved spares:
