@@ -572,6 +572,8 @@ Primarni izvori provjereni 2026-09-02:
   https://www.ti.com/product/PCM5102A
 - TI TPS25221:  
   https://www.ti.com/product/TPS25221
+- TI TPD2EUSB30A:  
+  https://www.ti.com/product/TPD2EUSB30A
 - TI TPS2561 (alternate):  
   https://www.ti.com/product/TPS2561
 - TI TPS25947:  
