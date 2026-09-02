@@ -961,7 +961,6 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_QOD") (unit 1))))
   )
   (wire (pts (xy 83.82 47.625) (xy 95.885 47.625)) (stroke (width 0) (type default)) (uuid "0c00002b-c000-4c00-8c00-00000000002c"))
-  (wire (pts (xy 103.505 47.625) (xy 120.015 47.625)) (stroke (width 0) (type default)) (uuid "0c00002c-c000-4c00-8c00-00000000002d"))
   
   (symbol
     (lib_id "Device:C") (at 125.095 51.435 0) (unit 1)
