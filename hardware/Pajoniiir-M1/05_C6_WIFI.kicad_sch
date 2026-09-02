@@ -9,12 +9,1465 @@
     (date "2026-09-02")
     (rev "A / M1-SCH-A")
     (company "Pajoniiir")
-    (comment 1 "BOM authority: docs/Pajoniiir_Mainboard_BOM_v0.2.md")
-    (comment 2 "GPIO authority: docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md")
+    (comment 1 "ESP32-C6-WROOM-1-N4 / ESP-Hosted SDIO 4-bit")
+    (comment 2 "Official Espressif footprint with antenna keep-out")
   )
-  (lib_symbols)
-  (sheet_instances
-    (path "/" (page "6"))
+  (lib_symbols
+(symbol "PCM_Espressif:ESP32-C6-WROOM-1"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -25.4 35.56 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "ESP32-C6-WROOM-1"
+				(at -25.4 33.02 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "PCM_Espressif:ESP32-C6-WROOM-1"
+				(at 0 -45.085 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.espressif.com/sites/default/files/documentation/esp32-c6-wroom-1_wroom-1u_datasheet_en.pdf"
+				(at 0 -48.26 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "ESP32-C6-WROOM-1/U is a module that supports 2.4 GHz Wi-Fi 6 (802.11 ax), Bluetooth® 5 (LE), Zigbee and Thread (802.15.4)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "esp32-c6 esp32-c6-wroom-1 esp32-c6-wroom-1u"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "ESP32-C6-WROOM-1*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "ESP32-C6-WROOM-1_0_0"
+				(text "ESP32-C6-WROOM-1"
+					(at 0 -20.955 0)
+					(effects
+						(font
+							(size 2 2)
+						)
+					)
+				)
+			)
+			(symbol "ESP32-C6-WROOM-1_0_1"
+				(rectangle
+					(start -25.4 30.48)
+					(end 25.4 -30.48)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "ESP32-C6-WROOM-1_1_1"
+				(pin input line
+					(at -27.94 27.94 0)
+					(length 2.54)
+					(name "EN/CHIP_PU"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -27.94 22.86 0)
+					(length 2.54)
+					(name "GPIO0/ADC1_CH0/XTAL_32K_P"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -27.94 20.32 0)
+					(length 2.54)
+					(name "GPIO1/ADC1_CH1/XTAL_32K_N"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -27.94 17.78 0)
+					(length 2.54)
+					(name "GPIO2/ADC1_CH2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "27"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -27.94 15.24 0)
+					(length 2.54)
+					(name "GPIO3/ADC1_CH3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "26"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -27.94 7.62 0)
+					(length 2.54)
+					(name "MTMS/GPIO4/ADC1_CH4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -27.94 5.08 0)
+					(length 2.54)
+					(name "MTDI/GPIO5/ADC1_CH5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -27.94 2.54 0)
+					(length 2.54)
+					(name "MTCK/GPIO6/ADC1_CH6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -27.94 0 0)
+					(length 2.54)
+					(name "MTDO/GPIO7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at -25.4 -12.7 0)
+					(length 2.54)
+					(hide yes)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "22"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 33.02 270)
+					(length 2.54)
+					(name "3V3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -33.02 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -33.02 90)
+					(length 2.54)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "28"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -33.02 90)
+					(length 2.54)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "29"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 27.94 180)
+					(length 2.54)
+					(name "U0TXD/GPIO16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "25"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 25.4 180)
+					(length 2.54)
+					(name "U0RXD/GPIO17"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "24"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 20.32 180)
+					(length 2.54)
+					(name "GPIO13/USB_D+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 17.78 180)
+					(length 2.54)
+					(name "GPIO12/USB_D-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 7.62 180)
+					(length 2.54)
+					(name "GPIO8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 5.08 180)
+					(length 2.54)
+					(name "GPIO9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 2.54 180)
+					(length 2.54)
+					(name "GPIO10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 0 180)
+					(length 2.54)
+					(name "GPIO11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 -2.54 180)
+					(length 2.54)
+					(name "GPIO15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "23"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 -5.08 180)
+					(length 2.54)
+					(name "GPIO18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 -7.62 180)
+					(length 2.54)
+					(name "GPIO19"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "17"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 -10.16 180)
+					(length 2.54)
+					(name "GPIO20"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 -12.7 180)
+					(length 2.54)
+					(name "GPIO21"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "19"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 -15.24 180)
+					(length 2.54)
+					(name "GPIO22"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "20"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 27.94 -17.78 180)
+					(length 2.54)
+					(name "GPIO23"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "21"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Device:R_US"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R_US"
+				(at -2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.016 -0.254 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resistor, US symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_US_0_1"
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 1.016 1.905) (xy 0 1.524) (xy -1.016 1.143) (xy 0 0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0.762) (xy 1.016 0.381) (xy 0 0) (xy -1.016 -0.381) (xy 0 -0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy 1.016 -1.143) (xy 0 -1.524) (xy -1.016 -1.905) (xy 0 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.286) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_US_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "power:GND"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
   )
+  (symbol
+    (lib_id "PCM_Espressif:ESP32-C6-WROOM-1")
+    (at 130 80 0)
+    (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000001-5555-4555-8555-000000000002")
+    (property "Reference" "U4" (at 105 40 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "ESP32-C6-WROOM-1-N4" (at 105 43 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Pajoniiir-M1:ESP32-C6-WROOM-1" (at 130 80 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.espressif.com/sites/default/files/documentation/esp32-c6-wroom-1_wroom-1u_datasheet_en.pdf" (at 130 80 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "3" (uuid "e5000002-5555-4555-8555-000000000003"))
+    (pin "8" (uuid "e5000003-5555-4555-8555-000000000004"))
+    (pin "9" (uuid "e5000004-5555-4555-8555-000000000005"))
+    (pin "27" (uuid "e5000005-5555-4555-8555-000000000006"))
+    (pin "26" (uuid "e5000006-5555-4555-8555-000000000007"))
+    (pin "4" (uuid "e5000007-5555-4555-8555-000000000008"))
+    (pin "5" (uuid "e5000008-5555-4555-8555-000000000009"))
+    (pin "6" (uuid "e5000009-5555-4555-8555-00000000000a"))
+    (pin "7" (uuid "e500000a-5555-4555-8555-00000000000b"))
+    (pin "22" (uuid "e500000b-5555-4555-8555-00000000000c"))
+    (pin "2" (uuid "e500000c-5555-4555-8555-00000000000d"))
+    (pin "1" (uuid "e500000d-5555-4555-8555-00000000000e"))
+    (pin "28" (uuid "e500000e-5555-4555-8555-00000000000f"))
+    (pin "29" (uuid "e500000f-5555-4555-8555-000000000010"))
+    (pin "25" (uuid "e5000010-5555-4555-8555-000000000011"))
+    (pin "24" (uuid "e5000011-5555-4555-8555-000000000012"))
+    (pin "14" (uuid "e5000012-5555-4555-8555-000000000013"))
+    (pin "13" (uuid "e5000013-5555-4555-8555-000000000014"))
+    (pin "10" (uuid "e5000014-5555-4555-8555-000000000015"))
+    (pin "15" (uuid "e5000015-5555-4555-8555-000000000016"))
+    (pin "11" (uuid "e5000016-5555-4555-8555-000000000017"))
+    (pin "12" (uuid "e5000017-5555-4555-8555-000000000018"))
+    (pin "23" (uuid "e5000018-5555-4555-8555-000000000019"))
+    (pin "16" (uuid "e5000019-5555-4555-8555-00000000001a"))
+    (pin "17" (uuid "e500001a-5555-4555-8555-00000000001b"))
+    (pin "18" (uuid "e500001b-5555-4555-8555-00000000001c"))
+    (pin "19" (uuid "e500001c-5555-4555-8555-00000000001d"))
+    (pin "20" (uuid "e500001d-5555-4555-8555-00000000001e"))
+    (pin "21" (uuid "e500001e-5555-4555-8555-00000000001f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "U4") (unit 1))))
+  )
+  (hierarchical_label "3V3_C6" (shape input) (at 130 113.02 270) (effects (font (size 1.27 1.27))) (uuid "e500001f-5555-4555-8555-000000000020"))
+  (symbol
+    (lib_id "Device:C") (at 175 50.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000020-5555-4555-8555-000000000021")
+    (property "Reference" "C_C6_HF" (at 178 48.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 178 52.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 175 50.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 175 50.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000021-5555-4555-8555-000000000022")) (pin "2" (uuid "e5000022-5555-4555-8555-000000000023"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "C_C6_HF") (unit 1))))
+  )
+  (label "3V3_C6" (at 175 47 0) (effects (font (size 1.27 1.27))) (uuid "e5000023-5555-4555-8555-000000000024"))
+  (symbol
+    (lib_id "power:GND") (at 175 54.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000024-5555-4555-8555-000000000025")
+    (property "Reference" "#PWR05175" (at 175 60.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 175 57.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 175 54.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 175 54.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000025-5555-4555-8555-000000000026"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "#PWR05175") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 185 50.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000026-5555-4555-8555-000000000027")
+    (property "Reference" "C_C6_LOCAL" (at 188 48.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF" (at 188 52.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 185 50.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 185 50.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000027-5555-4555-8555-000000000028")) (pin "2" (uuid "e5000028-5555-4555-8555-000000000029"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "C_C6_LOCAL") (unit 1))))
+  )
+  (label "3V3_C6" (at 185 47 0) (effects (font (size 1.27 1.27))) (uuid "e5000029-5555-4555-8555-00000000002a"))
+  (symbol
+    (lib_id "power:GND") (at 185 54.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500002a-5555-4555-8555-00000000002b")
+    (property "Reference" "#PWR05185" (at 185 60.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 185 57.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 185 54.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 185 54.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500002b-5555-4555-8555-00000000002c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "#PWR05185") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 195 50.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500002c-5555-4555-8555-00000000002d")
+    (property "Reference" "C_C6_BULK" (at 198 48.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "22uF" (at 198 52.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_1206_3216Metric" (at 195 50.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 195 50.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500002d-5555-4555-8555-00000000002e")) (pin "2" (uuid "e500002e-5555-4555-8555-00000000002f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "C_C6_BULK") (unit 1))))
+  )
+  (label "3V3_C6" (at 195 47 0) (effects (font (size 1.27 1.27))) (uuid "e500002f-5555-4555-8555-000000000030"))
+  (symbol
+    (lib_id "power:GND") (at 195 54.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000030-5555-4555-8555-000000000031")
+    (property "Reference" "#PWR05195" (at 195 60.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 195 57.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 195 54.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 195 54.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000031-5555-4555-8555-000000000032"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "#PWR05195") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:GND") (at 130 46.98 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000032-5555-4555-8555-000000000033")
+    (property "Reference" "#PWR0501" (at 130 52.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 130 49.98 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 130 46.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 130 46.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000033-5555-4555-8555-000000000034"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "#PWR0501") (unit 1))))
+  )
+  (label "C6_EN" (at 102.06 107.94 0) (effects (font (size 1.27 1.27))) (uuid "e5000034-5555-4555-8555-000000000035"))
+  (symbol
+    (lib_id "Device:R_US") (at 82 107.94 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000035-5555-4555-8555-000000000036")
+    (property "Reference" "R_C6_RESET_SER" (at 85 105.94 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 85 109.94 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 82 107.94 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 82 107.94 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000036-5555-4555-8555-000000000037")) (pin "2" (uuid "e5000037-5555-4555-8555-000000000038"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_C6_RESET_SER") (unit 1))))
+  )
+  (hierarchical_label "C6_RESET" (shape input) (at 78.19 107.94 180) (effects (font (size 1.27 1.27))) (uuid "e5000038-5555-4555-8555-000000000039"))
+  (wire (pts (xy 85.81 107.94) (xy 102.06 107.94)) (stroke (width 0) (type default)) (uuid "e5000039-5555-4555-8555-00000000003a"))
+  (symbol
+    (lib_id "Device:R_US") (at 95 104.13 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500003a-5555-4555-8555-00000000003b")
+    (property "Reference" "R_C6_EN" (at 98 102.13 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 98 106.13 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 95 104.13 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 95 104.13 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500003b-5555-4555-8555-00000000003c")) (pin "2" (uuid "e500003c-5555-4555-8555-00000000003d"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_C6_EN") (unit 1))))
+  )
+  (label "3V3_C6" (at 95 100.32 0) (effects (font (size 1.27 1.27))) (uuid "e500003d-5555-4555-8555-00000000003e"))
+  (wire (pts (xy 95 107.94) (xy 102.06 107.94)) (stroke (width 0) (type default)) (uuid "e500003e-5555-4555-8555-00000000003f"))
+  (symbol
+    (lib_id "Device:C") (at 90 111.75 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500003f-5555-4555-8555-000000000040")
+    (property "Reference" "C_C6_EN" (at 93 109.75 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "1uF" (at 93 113.75 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 90 111.75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 90 111.75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000040-5555-4555-8555-000000000041")) (pin "2" (uuid "e5000041-5555-4555-8555-000000000042"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "C_C6_EN") (unit 1))))
+  )
+  (label "C6_EN" (at 90 107.94 0) (effects (font (size 1.27 1.27))) (uuid "e5000042-5555-4555-8555-000000000043"))
+  (symbol
+    (lib_id "power:GND") (at 90 115.56 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000043-5555-4555-8555-000000000044")
+    (property "Reference" "#PWR0502" (at 90 121.56 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 90 118.56 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 90 115.56 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 90 115.56 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000044-5555-4555-8555-000000000045"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "#PWR0502") (unit 1))))
+  )
+  (hierarchical_label "C6_EN" (shape output) (at 72 113 180) (effects (font (size 1.27 1.27))) (uuid "e5000045-5555-4555-8555-000000000046"))
+  (wire (pts (xy 72 113) (xy 82 113)) (stroke (width 0) (type default)) (uuid "e5000046-5555-4555-8555-000000000047"))
+  (wire (pts (xy 82 113) (xy 82 107.94)) (stroke (width 0) (type default)) (uuid "e5000047-5555-4555-8555-000000000048"))
+  (wire (pts (xy 157.94 74.92) (xy 172.19 74.92)) (stroke (width 0) (type default)) (uuid "e5000048-5555-4555-8555-000000000049"))
+  (symbol
+    (lib_id "Device:R_US") (at 176 74.92 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000049-5555-4555-8555-00000000004a")
+    (property "Reference" "R_SDIO_CMD" (at 179 72.92 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 179 76.92 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 176 74.92 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 176 74.92 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500004a-5555-4555-8555-00000000004b")) (pin "2" (uuid "e500004b-5555-4555-8555-00000000004c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_CMD") (unit 1))))
+  )
+  (hierarchical_label "C6_SDIO_CMD" (shape bidirectional) (at 179.81 74.92 0) (effects (font (size 1.27 1.27))) (uuid "e500004c-5555-4555-8555-00000000004d"))
+  (symbol
+    (lib_id "Device:R_US") (at 190 75 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500004d-5555-4555-8555-00000000004e")
+    (property "Reference" "R_SDIO_CMD_PU" (at 193 73 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "51.1k 1%" (at 193 77 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 190 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 190 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500004e-5555-4555-8555-00000000004f")) (pin "2" (uuid "e500004f-5555-4555-8555-000000000050"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_CMD_PU") (unit 1))))
+  )
+  (label "3V3_C6" (at 190 71.19 0) (effects (font (size 1.27 1.27))) (uuid "e5000050-5555-4555-8555-000000000051"))
+  (wire (pts (xy 190 78.81) (xy 190 74.92)) (stroke (width 0) (type default)) (uuid "e5000051-5555-4555-8555-000000000052"))
+  (wire (pts (xy 190 74.92) (xy 157.94 74.92)) (stroke (width 0) (type default)) (uuid "e5000052-5555-4555-8555-000000000053"))
+  (wire (pts (xy 157.94 72.38) (xy 172.19 72.38)) (stroke (width 0) (type default)) (uuid "e5000053-5555-4555-8555-000000000054"))
+  (symbol
+    (lib_id "Device:R_US") (at 176 72.38 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000054-5555-4555-8555-000000000055")
+    (property "Reference" "R_SDIO_CLK" (at 179 70.38 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "22R" (at 179 74.38 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 176 72.38 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 176 72.38 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000055-5555-4555-8555-000000000056")) (pin "2" (uuid "e5000056-5555-4555-8555-000000000057"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_CLK") (unit 1))))
+  )
+  (hierarchical_label "C6_SDIO_CLK" (shape bidirectional) (at 179.81 72.38 0) (effects (font (size 1.27 1.27))) (uuid "e5000057-5555-4555-8555-000000000058"))
+  (wire (pts (xy 157.94 69.84) (xy 172.19 69.84)) (stroke (width 0) (type default)) (uuid "e5000058-5555-4555-8555-000000000059"))
+  (symbol
+    (lib_id "Device:R_US") (at 176 69.84 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000059-5555-4555-8555-00000000005a")
+    (property "Reference" "R_SDIO_D0" (at 179 67.84 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 179 71.84 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 176 69.84 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 176 69.84 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500005a-5555-4555-8555-00000000005b")) (pin "2" (uuid "e500005b-5555-4555-8555-00000000005c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_D0") (unit 1))))
+  )
+  (hierarchical_label "C6_SDIO_D0" (shape bidirectional) (at 179.81 69.84 0) (effects (font (size 1.27 1.27))) (uuid "e500005c-5555-4555-8555-00000000005d"))
+  (symbol
+    (lib_id "Device:R_US") (at 198 75 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500005d-5555-4555-8555-00000000005e")
+    (property "Reference" "R_SDIO_D0_PU" (at 201 73 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "51.1k 1%" (at 201 77 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 198 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 198 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500005e-5555-4555-8555-00000000005f")) (pin "2" (uuid "e500005f-5555-4555-8555-000000000060"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_D0_PU") (unit 1))))
+  )
+  (label "3V3_C6" (at 198 71.19 0) (effects (font (size 1.27 1.27))) (uuid "e5000060-5555-4555-8555-000000000061"))
+  (wire (pts (xy 198 78.81) (xy 198 69.84)) (stroke (width 0) (type default)) (uuid "e5000061-5555-4555-8555-000000000062"))
+  (wire (pts (xy 198 69.84) (xy 157.94 69.84)) (stroke (width 0) (type default)) (uuid "e5000062-5555-4555-8555-000000000063"))
+  (wire (pts (xy 157.94 67.3) (xy 172.19 67.3)) (stroke (width 0) (type default)) (uuid "e5000063-5555-4555-8555-000000000064"))
+  (symbol
+    (lib_id "Device:R_US") (at 176 67.3 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000064-5555-4555-8555-000000000065")
+    (property "Reference" "R_SDIO_D1" (at 179 65.3 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 179 69.3 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 176 67.3 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 176 67.3 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000065-5555-4555-8555-000000000066")) (pin "2" (uuid "e5000066-5555-4555-8555-000000000067"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_D1") (unit 1))))
+  )
+  (hierarchical_label "C6_SDIO_D1" (shape bidirectional) (at 179.81 67.3 0) (effects (font (size 1.27 1.27))) (uuid "e5000067-5555-4555-8555-000000000068"))
+  (symbol
+    (lib_id "Device:R_US") (at 206 75 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000068-5555-4555-8555-000000000069")
+    (property "Reference" "R_SDIO_D1_PU" (at 209 73 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "51.1k 1%" (at 209 77 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 206 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 206 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000069-5555-4555-8555-00000000006a")) (pin "2" (uuid "e500006a-5555-4555-8555-00000000006b"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_D1_PU") (unit 1))))
+  )
+  (label "3V3_C6" (at 206 71.19 0) (effects (font (size 1.27 1.27))) (uuid "e500006b-5555-4555-8555-00000000006c"))
+  (wire (pts (xy 206 78.81) (xy 206 67.3)) (stroke (width 0) (type default)) (uuid "e500006c-5555-4555-8555-00000000006d"))
+  (wire (pts (xy 206 67.3) (xy 157.94 67.3)) (stroke (width 0) (type default)) (uuid "e500006d-5555-4555-8555-00000000006e"))
+  (wire (pts (xy 157.94 64.76) (xy 172.19 64.76)) (stroke (width 0) (type default)) (uuid "e500006e-5555-4555-8555-00000000006f"))
+  (symbol
+    (lib_id "Device:R_US") (at 176 64.76 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500006f-5555-4555-8555-000000000070")
+    (property "Reference" "R_SDIO_D2" (at 179 62.760000000000005 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 179 66.76 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 176 64.76 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 176 64.76 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000070-5555-4555-8555-000000000071")) (pin "2" (uuid "e5000071-5555-4555-8555-000000000072"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_D2") (unit 1))))
+  )
+  (hierarchical_label "C6_SDIO_D2" (shape bidirectional) (at 179.81 64.76 0) (effects (font (size 1.27 1.27))) (uuid "e5000072-5555-4555-8555-000000000073"))
+  (symbol
+    (lib_id "Device:R_US") (at 214 75 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000073-5555-4555-8555-000000000074")
+    (property "Reference" "R_SDIO_D2_PU" (at 217 73 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "51.1k 1%" (at 217 77 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 214 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 214 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000074-5555-4555-8555-000000000075")) (pin "2" (uuid "e5000075-5555-4555-8555-000000000076"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_D2_PU") (unit 1))))
+  )
+  (label "3V3_C6" (at 214 71.19 0) (effects (font (size 1.27 1.27))) (uuid "e5000076-5555-4555-8555-000000000077"))
+  (wire (pts (xy 214 78.81) (xy 214 64.76)) (stroke (width 0) (type default)) (uuid "e5000077-5555-4555-8555-000000000078"))
+  (wire (pts (xy 214 64.76) (xy 157.94 64.76)) (stroke (width 0) (type default)) (uuid "e5000078-5555-4555-8555-000000000079"))
+  (wire (pts (xy 157.94 62.22) (xy 172.19 62.22)) (stroke (width 0) (type default)) (uuid "e5000079-5555-4555-8555-00000000007a"))
+  (symbol
+    (lib_id "Device:R_US") (at 176 62.22 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500007a-5555-4555-8555-00000000007b")
+    (property "Reference" "R_SDIO_D3" (at 179 60.22 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 179 64.22 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 176 62.22 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 176 62.22 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500007b-5555-4555-8555-00000000007c")) (pin "2" (uuid "e500007c-5555-4555-8555-00000000007d"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_D3") (unit 1))))
+  )
+  (hierarchical_label "C6_SDIO_D3" (shape bidirectional) (at 179.81 62.22 0) (effects (font (size 1.27 1.27))) (uuid "e500007d-5555-4555-8555-00000000007e"))
+  (symbol
+    (lib_id "Device:R_US") (at 222 75 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500007e-5555-4555-8555-00000000007f")
+    (property "Reference" "R_SDIO_D3_PU" (at 225 73 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "51.1k 1%" (at 225 77 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 222 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 222 75 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500007f-5555-4555-8555-000000000080")) (pin "2" (uuid "e5000080-5555-4555-8555-000000000081"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_SDIO_D3_PU") (unit 1))))
+  )
+  (label "3V3_C6" (at 222 71.19 0) (effects (font (size 1.27 1.27))) (uuid "e5000081-5555-4555-8555-000000000082"))
+  (wire (pts (xy 222 78.81) (xy 222 62.22)) (stroke (width 0) (type default)) (uuid "e5000082-5555-4555-8555-000000000083"))
+  (wire (pts (xy 222 62.22) (xy 157.94 62.22)) (stroke (width 0) (type default)) (uuid "e5000083-5555-4555-8555-000000000084"))
+  (wire (pts (xy 157.94 107.94) (xy 172.19 107.94)) (stroke (width 0) (type default)) (uuid "e5000084-5555-4555-8555-000000000085"))
+  (symbol
+    (lib_id "Device:R_US") (at 176 107.94 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000085-5555-4555-8555-000000000086")
+    (property "Reference" "R_C6_UART_TX" (at 179 105.94 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "33R" (at 179 109.94 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 176 107.94 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 176 107.94 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000086-5555-4555-8555-000000000087")) (pin "2" (uuid "e5000087-5555-4555-8555-000000000088"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_C6_UART_TX") (unit 1))))
+  )
+  (hierarchical_label "C6_UART_TX" (shape output) (at 179.81 107.94 0) (effects (font (size 1.27 1.27))) (uuid "e5000088-5555-4555-8555-000000000089"))
+  (wire (pts (xy 157.94 105.4) (xy 172.19 105.4)) (stroke (width 0) (type default)) (uuid "e5000089-5555-4555-8555-00000000008a"))
+  (symbol
+    (lib_id "Device:R_US") (at 176 105.4 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500008a-5555-4555-8555-00000000008b")
+    (property "Reference" "R_C6_UART_RX" (at 179 103.4 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "33R" (at 179 107.4 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 176 105.4 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 176 105.4 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e500008b-5555-4555-8555-00000000008c")) (pin "2" (uuid "e500008c-5555-4555-8555-00000000008d"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_C6_UART_RX") (unit 1))))
+  )
+  (hierarchical_label "C6_UART_RX" (shape input) (at 179.81 105.4 0) (effects (font (size 1.27 1.27))) (uuid "e500008d-5555-4555-8555-00000000008e"))
+  (hierarchical_label "C6_BOOT_GPIO8" (shape bidirectional) (at 157.94 87.62 180) (effects (font (size 1.27 1.27))) (uuid "e500008e-5555-4555-8555-00000000008f"))
+  (symbol
+    (lib_id "Device:R_US") (at 205 83.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e500008f-5555-4555-8555-000000000090")
+    (property "Reference" "R_C6_GPIO8_PU" (at 208 81.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 208 85.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 205 83.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 205 83.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000090-5555-4555-8555-000000000091")) (pin "2" (uuid "e5000091-5555-4555-8555-000000000092"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_C6_GPIO8_PU") (unit 1))))
+  )
+  (label "3V3_C6" (at 205 80 0) (effects (font (size 1.27 1.27))) (uuid "e5000092-5555-4555-8555-000000000093"))
+  (wire (pts (xy 205 87.62) (xy 157.94 87.62)) (stroke (width 0) (type default)) (uuid "e5000093-5555-4555-8555-000000000094"))
+  (hierarchical_label "C6_BOOT_GPIO9" (shape bidirectional) (at 157.94 85.08 180) (effects (font (size 1.27 1.27))) (uuid "e5000094-5555-4555-8555-000000000095"))
+  (symbol
+    (lib_id "Device:R_US") (at 217 81.27 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "e5000095-5555-4555-8555-000000000096")
+    (property "Reference" "R_C6_GPIO9_PU" (at 220 79.27 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 220 83.27 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 217 81.27 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 217 81.27 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "e5000096-5555-4555-8555-000000000097")) (pin "2" (uuid "e5000097-5555-4555-8555-000000000098"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000005-6b2a-4a3a-8c91-000000000005" (reference "R_C6_GPIO9_PU") (unit 1))))
+  )
+  (label "3V3_C6" (at 217 77.46 0) (effects (font (size 1.27 1.27))) (uuid "e5000098-5555-4555-8555-000000000099"))
+  (wire (pts (xy 217 85.08) (xy 157.94 85.08)) (stroke (width 0) (type default)) (uuid "e5000099-5555-4555-8555-00000000009a"))
+  (no_connect (at 102.06 102.86) (uuid "e500009a-5555-4555-8555-00000000009b"))
+  (no_connect (at 102.06 100.32) (uuid "e500009b-5555-4555-8555-00000000009c"))
+  (no_connect (at 102.06 97.78) (uuid "e500009c-5555-4555-8555-00000000009d"))
+  (no_connect (at 102.06 95.24) (uuid "e500009d-5555-4555-8555-00000000009e"))
+  (no_connect (at 102.06 87.62) (uuid "e500009e-5555-4555-8555-00000000009f"))
+  (no_connect (at 102.06 85.08) (uuid "e500009f-5555-4555-8555-0000000000a0"))
+  (no_connect (at 102.06 82.54) (uuid "e50000a0-5555-4555-8555-0000000000a1"))
+  (no_connect (at 102.06 80) (uuid "e50000a1-5555-4555-8555-0000000000a2"))
+  (no_connect (at 104.6 67.3) (uuid "e50000a2-5555-4555-8555-0000000000a3"))
+  (no_connect (at 157.94 100.32) (uuid "e50000a3-5555-4555-8555-0000000000a4"))
+  (no_connect (at 157.94 97.78) (uuid "e50000a4-5555-4555-8555-0000000000a5"))
+  (no_connect (at 157.94 82.54) (uuid "e50000a5-5555-4555-8555-0000000000a6"))
+  (no_connect (at 157.94 80) (uuid "e50000a6-5555-4555-8555-0000000000a7"))
+  (no_connect (at 157.94 77.46) (uuid "e50000a7-5555-4555-8555-0000000000a8"))
+  (text "3V3_C6 isolation/tuning link is implemented once in 02_POWER_3V3 (FB_C6). Do not duplicate it here." (exclude_from_sim no) (at 35 132 0) (effects (font (size 1.27 1.27))) (uuid "e50000a8-5555-4555-8555-0000000000a9"))
+  (text "SDIO pull-ups: CMD + DAT0..3 = 51.1k to 3V3_C6. CLK has no pull-up. Series: CLK=22R, others=0R initial." (exclude_from_sim no) (at 35 137 0) (effects (font (size 1.27 1.27))) (uuid "e50000a9-5555-4555-8555-0000000000aa"))
+  (text "C6 recovery remains independent of P4: UART0 TX/RX + GPIO8/GPIO9 + EN are exported to service/debug sheet." (exclude_from_sim no) (at 35 142 0) (effects (font (size 1.27 1.27))) (uuid "e50000aa-5555-4555-8555-0000000000ab"))
+  (text "RF: place module antenna at PCB edge; preserve official footprint keep-out on every copper layer. If enclosure blocks antenna, switch to WROOM-1U before PCB freeze." (exclude_from_sim no) (at 35 147 0) (effects (font (size 1.27 1.27))) (uuid "e50000ab-5555-4555-8555-0000000000ac"))
+  (sheet_instances (path "/" (page "6")))
   (embedded_fonts no)
 )
