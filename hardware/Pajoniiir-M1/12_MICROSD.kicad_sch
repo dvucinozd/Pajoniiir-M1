@@ -825,8 +825,7 @@
   (label "SD_D0_CARD" (at 196.85 90.17 0) (effects (font (size 1.27 1.27))) (uuid "af0c0000-0000-4000-8000-000000000004"))
   (label "SD_D1_CARD" (at 196.85 92.71 0) (effects (font (size 1.27 1.27))) (uuid "af0c0000-0000-4000-8000-000000000005"))
   (label "SD_CARD_DETECT" (at 170.18 72.39 0) (effects (font (size 1.27 1.27))) (uuid "8d6f0000-0000-4000-8000-000000000003"))
-  (wire (pts (xy 83.82 42.545) (xy 109.855 42.545)) (stroke (width 0) (type default)) (uuid "8d6f0000-0000-4000-8000-000000000001"))
-  (wire (pts (xy 109.855 42.545) (xy 109.855 47.625)) (stroke (width 0) (type default)) (uuid "8d6f0000-0000-4000-8000-000000000002"))
+  (label "3V3_SD" (at 83.82 42.545 0) (effects (font (size 1.27 1.27))) (uuid "dd120000-0000-4000-8000-000000000001"))
   (junction (at 50.165 47.625) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000019"))
   (junction (at 179.705 85.09) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000026"))
   (symbol
