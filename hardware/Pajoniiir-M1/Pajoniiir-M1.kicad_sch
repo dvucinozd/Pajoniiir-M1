@@ -291,6 +291,9 @@
       (at 240 69.8246 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
+    (pin "USB0_HS_DM" bidirectional (at 240 55 180) (uuid "07100001-7100-4710-8710-000000000002") (effects (font (size 1.27 1.27)) (justify left)))
+    (pin "USB0_HS_DP" bidirectional (at 240 59 180) (uuid "07100002-7100-4710-8710-000000000003") (effects (font (size 1.27 1.27)) (justify left)))
+    (pin "USB0_VBUS" output (at 240 63 180) (uuid "07100003-7100-4710-8710-000000000004") (effects (font (size 1.27 1.27)) (justify left)))
     (instances
       (project "Pajoniiir-M1"
         (path "/31000007-6b2a-4a3a-8c91-000000000007" (page "8"))
@@ -509,6 +512,12 @@
   (label "USB0_FAULT_N" (at 130 41 180) (effects (font (size 1.27 1.27))) (uuid "f7000014-7777-4777-8777-000000000015"))
   (label "USB1_PWR_EN" (at 175 39 0) (effects (font (size 1.27 1.27))) (uuid "f7000015-7777-4777-8777-000000000016"))
   (label "USB1_FAULT_N" (at 175 41 0) (effects (font (size 1.27 1.27))) (uuid "f7000016-7777-4777-8777-000000000017"))
+  (label "USB0_HS_DM" (at 240 55 180) (effects (font (size 1.27 1.27))) (uuid "07100004-7100-4710-8710-000000000005"))
+  (label "USB0_HS_DP" (at 240 59 180) (effects (font (size 1.27 1.27))) (uuid "07100005-7100-4710-8710-000000000006"))
+  (label "USB0_VBUS" (at 240 63 180) (effects (font (size 1.27 1.27))) (uuid "07100006-7100-4710-8710-000000000007"))
+  (label "USB0_HS_DM" (at 130 45 180) (effects (font (size 1.27 1.27))) (uuid "07100007-7100-4710-8710-000000000008"))
+  (label "USB0_HS_DP" (at 130 47 180) (effects (font (size 1.27 1.27))) (uuid "07100008-7100-4710-8710-000000000009"))
+  (label "USB0_VBUS" (at 120 73 0) (effects (font (size 1.27 1.27))) (uuid "07100009-7100-4710-8710-00000000000a"))
   (sheet_instances (path "/" (page "1")))
   (embedded_fonts no)
 )
