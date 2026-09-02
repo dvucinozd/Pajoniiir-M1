@@ -1,0 +1,20 @@
+(kicad_sch
+  (version 20250114)
+  (generator "eeschema")
+  (generator_version "9.0")
+  (uuid "31000004-6b2a-4a3a-8c91-000000000004")
+  (paper "A4")
+  (title_block
+    (title "Pajoniiir-M1 Rev A — 04_P4_FLASH_CLOCK_RESET")
+    (date "2026-09-02")
+    (rev "A / M1-SCH-A")
+    (company "Pajoniiir")
+    (comment 1 "BOM authority: docs/Pajoniiir_Mainboard_BOM_v0.2.md")
+    (comment 2 "GPIO authority: docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md")
+  )
+  (lib_symbols)
+  (sheet_instances
+    (path "/" (page "5"))
+  )
+  (embedded_fonts no)
+)
