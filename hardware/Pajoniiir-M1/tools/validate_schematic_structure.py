@@ -7,6 +7,7 @@ It catches hierarchy/source-control regressions without requiring kicad-cli.
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from collections import Counter, defaultdict
@@ -14,6 +15,7 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parents[1]
 ROOT = BASE / "Pajoniiir-M1.kicad_sch"
+PROJECT = BASE / "Pajoniiir-M1.kicad_pro"
 RPW0010A_FOOTPRINT = BASE / "libraries" / "footprints.pretty" / "Texas_RPW0010A_VQFN-HR-10_2x2mm.kicad_mod"
 CHILDREN = [
     "01_POWER_INPUT",
@@ -146,6 +148,81 @@ def main() -> int:
 
     root_text = ROOT.read_text(encoding="utf-8")
     child_text: dict[str, str] = {}
+
+    # ERC exclusions are allowed only for explicitly documented hard gates.
+    # Any extra exclusion, UUID drift, or global severity downgrade is a CI error.
+    expected_erc_exclusions = {
+        ("label_dangling", "0a000023-a000-4a00-8a00-000000000024"),
+        ("label_dangling", "0a00002a-a000-4a00-8a00-00000000002b"),
+        ("label_dangling", "0a000031-a000-4a00-8a00-000000000032"),
+        ("label_dangling", "0a000038-a000-4a00-8a00-000000000039"),
+        ("label_dangling", "0a00003f-a000-4a00-8a00-000000000040"),
+        ("label_dangling", "0a000046-a000-4a00-8a00-000000000047"),
+        ("label_dangling", "a1000061-1111-4111-8111-000000000062"),
+        ("pin_not_driven", "a1000025-1111-4111-8111-000000000026"),
+    }
+    if not PROJECT.exists():
+        errors.append(f"missing KiCad project file {PROJECT.name}")
+    else:
+        try:
+            project = json.loads(PROJECT.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            errors.append(f"{PROJECT.name}: invalid JSON: {exc}")
+        else:
+            erc = project.get("erc", {})
+            exclusions = erc.get("erc_exclusions", [])
+            observed_erc_exclusions: set[tuple[str, str]] = set()
+            malformed_exclusions: list[str] = []
+            for entry in exclusions:
+                if (
+                    not isinstance(entry, list)
+                    or len(entry) != 2
+                    or not isinstance(entry[0], str)
+                    or not isinstance(entry[1], str)
+                ):
+                    malformed_exclusions.append(repr(entry))
+                    continue
+                key, comment = entry
+                fields = key.split("|")
+                if len(fields) < 4:
+                    malformed_exclusions.append(key)
+                    continue
+                observed_erc_exclusions.add((fields[0], fields[3]))
+                if "HARD GATE" not in comment:
+                    errors.append(
+                        f"{PROJECT.name}: ERC exclusion lacks HARD GATE rationale: "
+                        f"{fields[0]} {fields[3]}"
+                    )
+            if malformed_exclusions:
+                errors.append(
+                    f"{PROJECT.name}: malformed ERC exclusions: "
+                    + "; ".join(malformed_exclusions)
+                )
+            if len(exclusions) != len(expected_erc_exclusions):
+                errors.append(
+                    f"{PROJECT.name}: ERC exclusion count={len(exclusions)}; "
+                    f"expected exactly {len(expected_erc_exclusions)}"
+                )
+            missing = expected_erc_exclusions - observed_erc_exclusions
+            extra = observed_erc_exclusions - expected_erc_exclusions
+            if missing:
+                errors.append(
+                    f"{PROJECT.name}: missing approved ERC hard-gate exclusions: "
+                    + ", ".join(f"{kind}:{uuid}" for kind, uuid in sorted(missing))
+                )
+            if extra:
+                errors.append(
+                    f"{PROJECT.name}: unapproved ERC exclusions present: "
+                    + ", ".join(f"{kind}:{uuid}" for kind, uuid in sorted(extra))
+                )
+
+            severities = erc.get("rule_severities", {})
+            for rule in ("label_dangling", "pin_not_driven"):
+                if severities.get(rule) != "error":
+                    errors.append(
+                        f"{PROJECT.name}: {rule} severity must remain error; "
+                        "use only UUID-scoped hard-gate exclusions"
+                    )
 
     for name in CHILDREN:
         path = BASE / f"{name}.kicad_sch"
