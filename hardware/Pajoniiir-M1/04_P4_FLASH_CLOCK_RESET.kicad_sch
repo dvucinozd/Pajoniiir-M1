@@ -1375,7 +1375,9 @@
     (pin "1" (uuid "d4000064-4444-4444-8444-000000000065")) (pin "2" (uuid "d4000065-4444-4444-8444-000000000066"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000004-6b2a-4a3a-8c91-000000000004" (reference "SW_RESET") (unit 1))))
   )
-  (wire (pts (xy 78.105 45.72) (xy 74.93 45.72)) (stroke (width 0) (type default)) (uuid "d4000066-4444-4444-8444-000000000067"))
+  (wire (pts (xy 78.105 45.72) (xy 76.835 45.72)) (stroke (width 0) (type default)) (uuid "d4000066-4444-4444-8444-000000000067"))
+  (wire (pts (xy 76.835 45.72) (xy 74.93 45.72)) (stroke (width 0) (type default)) (uuid "7b4d0000-0000-4000-8000-000000000008"))
+  (wire (pts (xy 86.995 45.72) (xy 85.725 45.72)) (stroke (width 0) (type default)) (uuid "7b4d0000-0000-4000-8000-000000000009"))
   (symbol
     (lib_id "power:GND") (at 85.725 45.72 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -1414,7 +1416,9 @@
     (pin "1" (uuid "d4000070-4444-4444-8444-000000000071")) (pin "2" (uuid "d4000071-4444-4444-8444-000000000072"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000004-6b2a-4a3a-8c91-000000000004" (reference "SW_BOOT") (unit 1))))
   )
-  (wire (pts (xy 78.105 71.12) (xy 74.93 71.12)) (stroke (width 0) (type default)) (uuid "d4000072-4444-4444-8444-000000000073"))
+  (wire (pts (xy 78.105 71.12) (xy 76.835 71.12)) (stroke (width 0) (type default)) (uuid "d4000072-4444-4444-8444-000000000073"))
+  (wire (pts (xy 76.835 71.12) (xy 74.93 71.12)) (stroke (width 0) (type default)) (uuid "7b4d0000-0000-4000-8000-000000000010"))
+  (wire (pts (xy 86.995 71.12) (xy 85.725 71.12)) (stroke (width 0) (type default)) (uuid "7b4d0000-0000-4000-8000-000000000011"))
   (symbol
     (lib_id "power:GND") (at 85.725 71.12 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
