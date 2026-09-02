@@ -77,12 +77,12 @@ Espressif trenutno preporučuje najmanje oko 380 mA samo za osnovni ESP32-P4 + f
 
 | RefDes | Qty | Value/spec | Package | Status |
 |---|---:|---|---|---|
-| Y1 | 1 | **40 MHz, ±10 ppm or better** | 2520/3225 | **TBD exact crystal MPN after CL selection** |
-| C_XTAL1 | 1 | TBD from Y1 CL + PCB stray | 0402 | tune during EVT |
-| C_XTAL2 | 1 | TBD from Y1 CL + PCB stray | 0402 | tune during EVT |
+| Y1 | 1 | **ECS-400-10-37B2-CKY-TR — 40 MHz, ±10 ppm, CL 10 pF** | 2016, 4-SMD | **LOCK-CANDIDATE** |
+| C_XTAL1 | 1 | **15 pF C0G/NP0 initial** | 0402 | EVT tuning |
+| C_XTAL2 | 1 | **15 pF C0G/NP0 initial** | 0402 | EVT tuning |
 | R_XTAL_SER | 1 | 0 Ω default | 0402 | tuning footprint |
 
-Espressif zahtijeva 40 MHz; vrijednosti load kondenzatora ne treba naslijepo zaključavati prije odabira stvarnog kristala.
+Za Y1 je početni proračun rađen s CL=10 pF i približno 2–2.5 pF PCB stray capacitance; 15 pF + 15 pF je EVT startna vrijednost i mora se potvrditi mjerenjem stvarne frekvencije na Rev A ploči.
 
 ---
 
@@ -115,12 +115,13 @@ Razlozi odabira:
 - 16 MB odgovara sadašnjem firmware partition/OTA modelu.
 - 2.7–3.6 V odgovara defaultnom P4 VDDO_FLASH 3.3 V režimu.
 - WSON 6×5 mm je dovoljno kompaktan i još uvijek proizvodno razuman.
-- Winbond ga navodi u aktualnoj W25Q-JV 2025 selection guide obitelji.
+- Winbond ga navodi u aktualnoj W25Q-JV selection guide obitelji kao mass-production variant.
+- **W25Q128JVPSQ** je preporučena pin/package-compatible temperaturno robusnija alternativa (-40…125 °C family variant).
 
 | RefDes | Qty | Value | Package |
 |---|---:|---|---|
 | C_FLASH | 1 | 100 nF | 0402/0603 |
-| R_FLASH_CS | 1 | pull-up, **TBD exact value per Espressif reference** | 0603 |
+| R_FLASH_CS | 1 | **10 kΩ 1% pull-up** | 0603 |
 | R_FLASH_CLK | 1 | 0 Ω | 0402 |
 | R_FLASH_CS_SER | 1 | 0 Ω | 0402 |
 | R_FLASH_D0 | 1 | 0 Ω | 0402 |
