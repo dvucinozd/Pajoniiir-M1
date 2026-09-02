@@ -796,6 +796,9 @@
 			(embedded_fonts no)
 		)
   )
+  (label "INA_INP_FILT" (at 154.94 77.47 0) (effects (font (size 1.27 1.27))) (uuid "ae140000-0000-4000-8000-000000000001"))
+  (label "INA_INN_FILT" (at 154.94 80.01 0) (effects (font (size 1.27 1.27))) (uuid "ae140000-0000-4000-8000-000000000002"))
+  (label "SYS_POWER_ALERT_N" (at 194.945 67.31 0) (effects (font (size 1.27 1.27))) (uuid "ae140000-0000-4000-8000-000000000003"))
   (junction (at 194.945 67.31) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000027"))
   (hierarchical_label "5V_PROTECTED" (shape input) (at 34.925 45.085 0) (effects (font (size 1.27 1.27))) (uuid "0e000001-e000-4e00-8e00-000000000002"))
   (symbol
@@ -838,8 +841,8 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_INA_P") (unit 1))))
   )
   (label "SHUNT_HI" (at 121.285 72.39 0) (effects (font (size 1.27 1.27))) (uuid "0e000018-e000-4e00-8e00-000000000019"))
-  (wire (pts (xy 128.905 72.39) (xy 154.94 72.39)) (stroke (width 0) (type default)) (uuid "0e000019-e000-4e00-8e00-00000000001a"))
-  (label "INA_INP_FILT" (at 139.7 72.39 0) (effects (font (size 1.27 1.27))) (uuid "0e00001a-e000-4e00-8e00-00000000001b"))
+  
+  (label "INA_INP_FILT" (at 128.905 72.39 0) (effects (font (size 1.27 1.27))) (uuid "0e00001a-e000-4e00-8e00-00000000001b"))
   (symbol
     (lib_id "Device:R_US") (at 125.095 62.23 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00001b-e000-4e00-8e00-00000000001c")
@@ -854,7 +857,7 @@
   (label "SHUNT_LO" (at 121.285 62.23 0) (effects (font (size 1.27 1.27))) (uuid "0e00001e-e000-4e00-8e00-00000000001f"))
   (wire (pts (xy 128.905 62.23) (xy 144.78 62.23)) (stroke (width 0) (type default)) (uuid "0e00001f-e000-4e00-8e00-000000000020"))
   (wire (pts (xy 144.78 62.23) (xy 144.78 69.85)) (stroke (width 0) (type default)) (uuid "0e000020-e000-4e00-8e00-000000000021"))
-  (wire (pts (xy 144.78 69.85) (xy 154.94 69.85)) (stroke (width 0) (type default)) (uuid "0e000021-e000-4e00-8e00-000000000022"))
+  
   (label "INA_INN_FILT" (at 144.78 69.85 0) (effects (font (size 1.27 1.27))) (uuid "0e000022-e000-4e00-8e00-000000000023"))
   (symbol
     (lib_id "Device:C") (at 109.855 74.93 0) (unit 1)
@@ -869,8 +872,8 @@
   )
   (label "INA_INP_FILT" (at 109.855 71.12 0) (effects (font (size 1.27 1.27))) (uuid "0e000026-e000-4e00-8e00-000000000027"))
   (label "INA_INN_FILT" (at 109.855 78.74 0) (effects (font (size 1.27 1.27))) (uuid "0e000027-e000-4e00-8e00-000000000028"))
-  (label "5V_SYS" (at 154.94 82.55 0) (effects (font (size 1.27 1.27))) (uuid "0e000028-e000-4e00-8e00-000000000029"))
-  (hierarchical_label "3V3_SYS" (shape input) (at 165.1 87.63 270) (effects (font (size 1.27 1.27))) (uuid "0e000029-e000-4e00-8e00-00000000002a"))
+  (label "5V_SYS" (at 154.94 67.31 0) (effects (font (size 1.27 1.27))) (uuid "0e000028-e000-4e00-8e00-000000000029"))
+  (hierarchical_label "3V3_SYS" (shape input) (at 165.1 62.23 270) (effects (font (size 1.27 1.27))) (uuid "0e000029-e000-4e00-8e00-00000000002a"))
   
   (symbol
     (lib_id "Device:C") (at 189.865 93.98 0) (unit 1)
@@ -919,7 +922,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "#PWR1402") (unit 1))))
   )
   (symbol
-    (lib_id "power:GND") (at 165.1 62.23 0) (unit 1)
+    (lib_id "power:GND") (at 165.1 87.63 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000037-e000-4e00-8e00-000000000038")
     (property "Reference" "#PWR1403" (at 165.1 68.23 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 165.1 65.23 0) (effects (font (size 1.27 1.27))))
@@ -930,7 +933,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "#PWR1403") (unit 1))))
   )
   (symbol
-    (lib_id "power:GND") (at 175.26 82.55 0) (unit 1)
+    (lib_id "power:GND") (at 175.26 67.31 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000039-e000-4e00-8e00-00000000003a")
     (property "Reference" "#PWR1404" (at 175.26 88.55 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 175.26 85.55 0) (effects (font (size 1.27 1.27))))
@@ -941,7 +944,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "#PWR1404") (unit 1))))
   )
   (symbol
-    (lib_id "power:GND") (at 175.26 80.01 0) (unit 1)
+    (lib_id "power:GND") (at 175.26 69.85 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00003b-e000-4e00-8e00-00000000003c")
     (property "Reference" "#PWR1405" (at 175.26 86.01 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 175.26 83.01 0) (effects (font (size 1.27 1.27))))
@@ -953,10 +956,10 @@
   )
   (hierarchical_label "I2C_SDA" (shape bidirectional) (at 215.265 74.93 0) (effects (font (size 1.27 1.27))) (uuid "0e00003d-e000-4e00-8e00-00000000003e"))
   (wire (pts (xy 175.26 74.93) (xy 215.265 74.93)) (stroke (width 0) (type default)) (uuid "0e00003e-e000-4e00-8e00-00000000003f"))
-  (hierarchical_label "I2C_SCL" (shape input) (at 215.265 72.39 0) (effects (font (size 1.27 1.27))) (uuid "0e00003f-e000-4e00-8e00-000000000040"))
-  (wire (pts (xy 175.26 72.39) (xy 215.265 72.39)) (stroke (width 0) (type default)) (uuid "0e000040-e000-4e00-8e00-000000000041"))
-  (hierarchical_label "SYS_POWER_ALERT_N" (shape output) (at 215.265 67.31 0) (effects (font (size 1.27 1.27))) (uuid "0e000041-e000-4e00-8e00-000000000042"))
-  (wire (pts (xy 175.26 67.31) (xy 215.265 67.31)) (stroke (width 0) (type default)) (uuid "0e000042-e000-4e00-8e00-000000000043"))
+  (hierarchical_label "I2C_SCL" (shape input) (at 215.265 77.47 0) (effects (font (size 1.27 1.27))) (uuid "0e00003f-e000-4e00-8e00-000000000040"))
+  (wire (pts (xy 175.26 77.47) (xy 215.265 77.47)) (stroke (width 0) (type default)) (uuid "0e000040-e000-4e00-8e00-000000000041"))
+  (hierarchical_label "SYS_POWER_ALERT_N" (shape output) (at 175.26 82.55 0) (effects (font (size 1.27 1.27))) (uuid "0e000041-e000-4e00-8e00-000000000042"))
+  
   (symbol
     (lib_id "Device:R_US") (at 194.945 63.5 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000043-e000-4e00-8e00-000000000044")
@@ -969,7 +972,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_INA_ALERT_PU") (unit 1))))
   )
   (label "3V3_SYS" (at 194.945 59.69 0) (effects (font (size 1.27 1.27))) (uuid "0e000046-e000-4e00-8e00-000000000047"))
-  (wire (pts (xy 194.945 67.31) (xy 215.265 67.31)) (stroke (width 0) (type default)) (uuid "0e000047-e000-4e00-8e00-000000000048"))
+  
   (symbol
     (lib_id "Connector:TestPoint") (at 55.245 104.775 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000048-e000-4e00-8e00-000000000049")
