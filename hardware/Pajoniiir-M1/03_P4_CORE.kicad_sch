@@ -3,18 +3,4061 @@
   (generator "eeschema")
   (generator_version "9.0")
   (uuid "31000003-6b2a-4a3a-8c91-000000000003")
-  (paper "A4")
+  (paper "A3")
   (title_block
     (title "Pajoniiir-M1 Rev A — 03_P4_CORE")
     (date "2026-09-02")
     (rev "A / M1-SCH-A")
     (company "Pajoniiir")
-    (comment 1 "BOM authority: docs/Pajoniiir_Mainboard_BOM_v0.2.md")
-    (comment 2 "GPIO authority: docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md")
+    (comment 1 "ESP32-P4NRW32X / official ESP32-P4X pin map normalized for KiCad 9")
+    (comment 2 "Physical pin 54 = VDD_HP_1; v3.x 499k/499k/22pF feedback populated")
   )
-  (lib_symbols)
-  (sheet_instances
-    (path "/" (page "4"))
+  (lib_symbols
+(symbol "ESP32-P4X"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at -17.78 40.132 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "ESP32-P4NRW32X"
+			(at -17.78 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Pajoniiir-M1:ESP32-P4"
+			(at 0 -48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://documentation.espressif.com/esp32-p4_datasheet_en.html"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Microcontroller, RISC-V 32-bit dual-core"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Espressif"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer PN" "ESP32-P4NRW32X"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "modue PN" "MELP100286"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "JLC PN" "C22387510"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_locked" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "Microcontroller ESP ESP32 Espressif 32bit RISC-V"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "ESP32-P4NRW32X_0_1"
+			(rectangle
+				(start -20.32 36.83)
+				(end 20.32 -78.74)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+		)
+		(symbol "ESP32-P4NRW32X_1_0"
+			(pin power_in line
+				(at -22.86 21.59 0)
+				(length 2.54)
+				(name "VDD_IO_0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "21"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 19.05 0)
+				(length 2.54)
+				(name "VDD_IO_4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "62"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 16.51 0)
+				(length 2.54)
+				(name "VDD_IO_5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "85"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 13.97 0)
+				(length 2.54)
+				(name "VDD_IO_6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "96"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 6.35 0)
+				(length 2.54)
+				(name "VDD_USBPHY"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "51"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 -1.27 0)
+				(length 2.54)
+				(name "VDD_LDO"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "75"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 -8.89 0)
+				(length 2.54)
+				(name "VDD_DCDCC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "77"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -16.51 0)
+				(length 2.54)
+				(name "VDD_ANA"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "101"
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -24.13 0)
+				(length 2.54)
+				(name "VDD_BAT"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "102"
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 -31.75 0)
+				(length 2.54)
+				(name "VDD_HP_0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "26"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 -34.29 0)
+				(length 2.54)
+				(name "VDD_HP_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "54"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 -36.83 0)
+				(length 2.54)
+				(name "VDD_HP_2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "76"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 -39.37 0)
+				(length 2.54)
+				(name "VDD_HP_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "91"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 -46.99 0)
+				(length 2.54)
+				(name "VDD_MIPI_DPHY"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "41"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 -81.28 90)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "105"
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at 22.86 29.21 180)
+				(length 2.54)
+				(name "CHIP_PU"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "103"
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 21.59 180)
+				(length 2.54)
+				(name "XTAL_P"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "100"
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 8.89 180)
+				(length 2.54)
+				(name "XTAL_N"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "99"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_out line
+				(at 22.86 1.27 180)
+				(length 2.54)
+				(name "VDDO_PSRAM"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "72"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 22.86 -1.27 180)
+				(length 2.54)
+				(name "VDD_PSRAM_0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "59"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 22.86 -3.81 180)
+				(length 2.54)
+				(name "VDD_PSRAM_1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "67"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_out line
+				(at 22.86 -11.43 180)
+				(length 2.54)
+				(name "VDDO_FLASH"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "71"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 22.86 -13.97 180)
+				(length 2.54)
+				(name "VDD_FLASH_IO"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "30"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 22.86 -21.59 180)
+				(length 2.54)
+				(name "EN_DCDC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "79"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -29.21 180)
+				(length 2.54)
+				(name "FB_DCDC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "78"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_out line
+				(at 22.86 -36.83 180)
+				(length 2.54)
+				(name "VDDO_3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "73"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_out line
+				(at 22.86 -44.45 180)
+				(length 2.54)
+				(name "VDDO_4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "74"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ESP32-P4NRW32X_1_1"
+			(polyline
+				(pts
+					(xy -17.78 31.75) (xy 17.78 31.75)
+				)
+				(stroke
+					(width 0)
+					(type dot)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(text "Power and Clock"
+				(at -0.508 34.036 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(bold yes)
+					)
+				)
+			)
+			(pin power_in line
+				(at -22.86 29.21 0)
+				(length 2.54)
+				(name "VDD_LP"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ESP32-P4NRW32X_2_0"
+			(pin bidirectional line
+				(at -22.86 29.21 0)
+				(length 2.54)
+				(name "GPIO0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "104"
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 6.35 0)
+				(length 2.54)
+				(name "GPIO9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 3.81 0)
+				(length 2.54)
+				(name "GPIO10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "11"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 1.27 0)
+				(length 2.54)
+				(name "GPIO11"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "12"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -1.27 0)
+				(length 2.54)
+				(name "GPIO12"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "13"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -3.81 0)
+				(length 2.54)
+				(name "GPIO13"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "14"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -6.35 0)
+				(length 2.54)
+				(name "GPIO14"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "15"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -8.89 0)
+				(length 2.54)
+				(name "GPIO15"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "16"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -11.43 0)
+				(length 2.54)
+				(name "GPIO16/ADC1_CHANNEL0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "17"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -13.97 0)
+				(length 2.54)
+				(name "GPIO17/ADC1_CHANNEL1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "18"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -16.51 0)
+				(length 2.54)
+				(name "GPIO18/ADC1_CHANNEL2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "19"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -19.05 0)
+				(length 2.54)
+				(name "GPIO19/ADC1_CHANNEL3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "20"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -21.59 0)
+				(length 2.54)
+				(name "GPIO20/ADC1_CHANNEL4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "22"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -24.13 0)
+				(length 2.54)
+				(name "GPIO21/ADC1_CHANNEL5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "23"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -26.67 0)
+				(length 2.54)
+				(name "GPIO22/ADC1_CHANNEL6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "24"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -29.21 0)
+				(length 2.54)
+				(name "GPIO23/ADC1_CHANNEL7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "25"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -34.29 0)
+				(length 2.54)
+				(name "FLASH_CS"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "27"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -36.83 0)
+				(length 2.54)
+				(name "FLASH_Q"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "28"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -39.37 0)
+				(length 2.54)
+				(name "FLASH_WP"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "29"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -41.91 0)
+				(length 2.54)
+				(name "FLASH_HOLD"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "31"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -44.45 0)
+				(length 2.54)
+				(name "FLASH_CK"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "32"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -46.99 0)
+				(length 2.54)
+				(name "FLASH_D"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "33"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -52.07 0)
+				(length 2.54)
+				(name "DSI_REXT"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "34"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -54.61 0)
+				(length 2.54)
+				(name "DSI_DATAP1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "35"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -57.15 0)
+				(length 2.54)
+				(name "DSI_DATAN1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "36"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -59.69 0)
+				(length 2.54)
+				(name "DSI_CLKN"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "37"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -62.23 0)
+				(length 2.54)
+				(name "DSI_CLKP"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "38"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -64.77 0)
+				(length 2.54)
+				(name "DSI_DATAP0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "39"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 -67.31 0)
+				(length 2.54)
+				(name "DSI_DATAN0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "40"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 29.21 180)
+				(length 2.54)
+				(name "CSI_DATAN0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "42"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 26.67 180)
+				(length 2.54)
+				(name "CSI_DATAP0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "43"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 24.13 180)
+				(length 2.54)
+				(name "CSI_CLKP"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "44"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 21.59 180)
+				(length 2.54)
+				(name "CSI_CLKN"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "45"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 19.05 180)
+				(length 2.54)
+				(name "CSI_DATAN1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "46"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 16.51 180)
+				(length 2.54)
+				(name "CSI_DATAP1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "47"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 13.97 180)
+				(length 2.54)
+				(name "CSI_REXT"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "48"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 8.89 180)
+				(length 2.54)
+				(name "USB-DM"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "49"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 6.35 180)
+				(length 2.54)
+				(name "USB-DP"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "50"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 1.27 180)
+				(length 2.54)
+				(name "GPIO24/USB1P1_N0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "52"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -1.27 180)
+				(length 2.54)
+				(name "GPIO25/USB1P1_P0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "53"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -3.81 180)
+				(length 2.54)
+				(name "GPIO26/USB1P1_N1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "55"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -6.35 180)
+				(length 2.54)
+				(name "GPIO27/USB1P1_P1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "56"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -8.89 180)
+				(length 2.54)
+				(name "GPIO28"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "57"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -11.43 180)
+				(length 2.54)
+				(name "GPIO29"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "58"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -13.97 180)
+				(length 2.54)
+				(name "GPIO30"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "60"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -16.51 180)
+				(length 2.54)
+				(name "GPIO31"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "61"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -19.05 180)
+				(length 2.54)
+				(name "GPIO32"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "63"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -21.59 180)
+				(length 2.54)
+				(name "GPIO33"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "64"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -24.13 180)
+				(length 2.54)
+				(name "GPIO34"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "65"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -26.67 180)
+				(length 2.54)
+				(name "GPIO35"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "66"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -29.21 180)
+				(length 2.54)
+				(name "GPIO36"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "68"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -31.75 180)
+				(length 2.54)
+				(name "GPIO37"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "69"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -34.29 180)
+				(length 2.54)
+				(name "GPIO38"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "70"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -36.83 180)
+				(length 2.54)
+				(name "GPIO39"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "80"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -39.37 180)
+				(length 2.54)
+				(name "GPIO40"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "81"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -41.91 180)
+				(length 2.54)
+				(name "GPIO41"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "82"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -44.45 180)
+				(length 2.54)
+				(name "GPIO42"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "83"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -46.99 180)
+				(length 2.54)
+				(name "GPIO43"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "84"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -49.53 180)
+				(length 2.54)
+				(name "GPIO44"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "86"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -52.07 180)
+				(length 2.54)
+				(name "GPIO45"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "87"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -54.61 180)
+				(length 2.54)
+				(name "GPIO46"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "88"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -57.15 180)
+				(length 2.54)
+				(name "GPIO47"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "89"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -59.69 180)
+				(length 2.54)
+				(name "GPIO48"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "90"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -62.23 180)
+				(length 2.54)
+				(name "GPIO49/ADC2_CHANNEL0"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "92"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -64.77 180)
+				(length 2.54)
+				(name "GPIO50/ADC2_CHANNEL1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "93"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -67.31 180)
+				(length 2.54)
+				(name "GPIO51/ADC2_CHANNEL2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "94"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -69.85 180)
+				(length 2.54)
+				(name "GPIO52/ADC2_CHANNEL3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "95"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -72.39 180)
+				(length 2.54)
+				(name "GPIO53/ADC2_CHANNEL4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "97"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at 22.86 -74.93 180)
+				(length 2.54)
+				(name "GPIO54/ADC2_CHANNEL5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "98"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ESP32-P4NRW32X_2_1"
+			(polyline
+				(pts
+					(xy -17.78 31.75) (xy 17.78 31.75)
+				)
+				(stroke
+					(width 0)
+					(type dot)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(text "I/O"
+				(at -0.508 34.036 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(bold yes)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 26.67 0)
+				(length 2.54)
+				(name "GPIO1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 24.13 0)
+				(length 2.54)
+				(name "GPIO2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 21.59 0)
+				(length 2.54)
+				(name "GPIO3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 19.05 0)
+				(length 2.54)
+				(name "GPIO4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 16.51 0)
+				(length 2.54)
+				(name "GPIO5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 13.97 0)
+				(length 2.54)
+				(name "GPIO6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 11.43 0)
+				(length 2.54)
+				(name "GPIO7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin bidirectional line
+				(at -22.86 8.89 0)
+				(length 2.54)
+				(name "GPIO8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Regulator_Switching:TLV62569DRL"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -5.08 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "TLV62569DRL"
+				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-563"
+				(at 1.27 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tlv62569.pdf"
+				(at -6.35 11.43 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "High Efficiency Synchronous Buck Converter, Adjustable Output 0.6V-5.5V, 2A, SOT-563-6"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Step-Down Buck DC-DC Regulator Adjustable"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "SOT*563*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "TLV62569DRL_0_1"
+				(rectangle
+					(start -5.08 5.08)
+					(end 5.08 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "TLV62569DRL_1_1"
+				(pin power_in line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at 5.08 -2.54 180)
+					(length 2.54)
+					(hide yes)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 7.62 2.54 180)
+					(length 2.54)
+					(name "SW"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "FB"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Device:R_US"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R_US"
+				(at -2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.016 -0.254 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resistor, US symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_US_0_1"
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 1.016 1.905) (xy 0 1.524) (xy -1.016 1.143) (xy 0 0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0.762) (xy 1.016 0.381) (xy 0 0) (xy -1.016 -0.381) (xy 0 -0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy 1.016 -1.143) (xy 0 -1.524) (xy -1.016 -1.905) (xy 0 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.286) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_US_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Device:L"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "L"
+				(at -1.27 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "L"
+				(at 1.905 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Inductor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "inductor choke coil reactor magnetic"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Choke_* *Coil* Inductor_* L_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "L_0_1"
+				(arc
+					(start 0 2.54)
+					(mid 0.6323 1.905)
+					(end 0 1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 1.27)
+					(mid 0.6323 0.635)
+					(end 0 0)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 0)
+					(mid 0.6323 -0.635)
+					(end 0 -1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -1.27)
+					(mid 0.6323 -1.905)
+					(end 0 -2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "L_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "power:GND"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
   )
+  (symbol
+    (lib_id "Pajoniiir-M1:ESP32-P4X")
+    (at 112 112 0)
+    (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300006a-3333-4333-8333-00000000006b")
+    (property "Reference" "U1" (at 92 60 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "ESP32-P4NRW32X" (at 92 63 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Pajoniiir-M1:ESP32-P4" (at 112 112 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://documentation.espressif.com/esp32-p4_datasheet_en.html" (at 112 112 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (property "Source" "Espressif ESP32-P4X pin map; KiCad9 geometry normalized" (at 112 112 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "21" (uuid "c3000001-3333-4333-8333-000000000002"))
+    (pin "62" (uuid "c3000002-3333-4333-8333-000000000003"))
+    (pin "85" (uuid "c3000003-3333-4333-8333-000000000004"))
+    (pin "96" (uuid "c3000004-3333-4333-8333-000000000005"))
+    (pin "51" (uuid "c3000005-3333-4333-8333-000000000006"))
+    (pin "75" (uuid "c3000006-3333-4333-8333-000000000007"))
+    (pin "77" (uuid "c3000007-3333-4333-8333-000000000008"))
+    (pin "101" (uuid "c3000008-3333-4333-8333-000000000009"))
+    (pin "102" (uuid "c3000009-3333-4333-8333-00000000000a"))
+    (pin "26" (uuid "c300000a-3333-4333-8333-00000000000b"))
+    (pin "54" (uuid "c300000b-3333-4333-8333-00000000000c"))
+    (pin "76" (uuid "c300000c-3333-4333-8333-00000000000d"))
+    (pin "91" (uuid "c300000d-3333-4333-8333-00000000000e"))
+    (pin "41" (uuid "c300000e-3333-4333-8333-00000000000f"))
+    (pin "105" (uuid "c300000f-3333-4333-8333-000000000010"))
+    (pin "103" (uuid "c3000010-3333-4333-8333-000000000011"))
+    (pin "100" (uuid "c3000011-3333-4333-8333-000000000012"))
+    (pin "99" (uuid "c3000012-3333-4333-8333-000000000013"))
+    (pin "72" (uuid "c3000013-3333-4333-8333-000000000014"))
+    (pin "59" (uuid "c3000014-3333-4333-8333-000000000015"))
+    (pin "67" (uuid "c3000015-3333-4333-8333-000000000016"))
+    (pin "71" (uuid "c3000016-3333-4333-8333-000000000017"))
+    (pin "30" (uuid "c3000017-3333-4333-8333-000000000018"))
+    (pin "79" (uuid "c3000018-3333-4333-8333-000000000019"))
+    (pin "78" (uuid "c3000019-3333-4333-8333-00000000001a"))
+    (pin "73" (uuid "c300001a-3333-4333-8333-00000000001b"))
+    (pin "74" (uuid "c300001b-3333-4333-8333-00000000001c"))
+    (pin "9" (uuid "c300001c-3333-4333-8333-00000000001d"))
+    (pin "104" (uuid "c300001d-3333-4333-8333-00000000001e"))
+    (pin "10" (uuid "c300001e-3333-4333-8333-00000000001f"))
+    (pin "11" (uuid "c300001f-3333-4333-8333-000000000020"))
+    (pin "12" (uuid "c3000020-3333-4333-8333-000000000021"))
+    (pin "13" (uuid "c3000021-3333-4333-8333-000000000022"))
+    (pin "14" (uuid "c3000022-3333-4333-8333-000000000023"))
+    (pin "15" (uuid "c3000023-3333-4333-8333-000000000024"))
+    (pin "16" (uuid "c3000024-3333-4333-8333-000000000025"))
+    (pin "17" (uuid "c3000025-3333-4333-8333-000000000026"))
+    (pin "18" (uuid "c3000026-3333-4333-8333-000000000027"))
+    (pin "19" (uuid "c3000027-3333-4333-8333-000000000028"))
+    (pin "20" (uuid "c3000028-3333-4333-8333-000000000029"))
+    (pin "22" (uuid "c3000029-3333-4333-8333-00000000002a"))
+    (pin "23" (uuid "c300002a-3333-4333-8333-00000000002b"))
+    (pin "24" (uuid "c300002b-3333-4333-8333-00000000002c"))
+    (pin "25" (uuid "c300002c-3333-4333-8333-00000000002d"))
+    (pin "27" (uuid "c300002d-3333-4333-8333-00000000002e"))
+    (pin "28" (uuid "c300002e-3333-4333-8333-00000000002f"))
+    (pin "29" (uuid "c300002f-3333-4333-8333-000000000030"))
+    (pin "31" (uuid "c3000030-3333-4333-8333-000000000031"))
+    (pin "32" (uuid "c3000031-3333-4333-8333-000000000032"))
+    (pin "33" (uuid "c3000032-3333-4333-8333-000000000033"))
+    (pin "34" (uuid "c3000033-3333-4333-8333-000000000034"))
+    (pin "35" (uuid "c3000034-3333-4333-8333-000000000035"))
+    (pin "36" (uuid "c3000035-3333-4333-8333-000000000036"))
+    (pin "37" (uuid "c3000036-3333-4333-8333-000000000037"))
+    (pin "38" (uuid "c3000037-3333-4333-8333-000000000038"))
+    (pin "39" (uuid "c3000038-3333-4333-8333-000000000039"))
+    (pin "40" (uuid "c3000039-3333-4333-8333-00000000003a"))
+    (pin "42" (uuid "c300003a-3333-4333-8333-00000000003b"))
+    (pin "43" (uuid "c300003b-3333-4333-8333-00000000003c"))
+    (pin "44" (uuid "c300003c-3333-4333-8333-00000000003d"))
+    (pin "45" (uuid "c300003d-3333-4333-8333-00000000003e"))
+    (pin "46" (uuid "c300003e-3333-4333-8333-00000000003f"))
+    (pin "47" (uuid "c300003f-3333-4333-8333-000000000040"))
+    (pin "48" (uuid "c3000040-3333-4333-8333-000000000041"))
+    (pin "49" (uuid "c3000041-3333-4333-8333-000000000042"))
+    (pin "50" (uuid "c3000042-3333-4333-8333-000000000043"))
+    (pin "52" (uuid "c3000043-3333-4333-8333-000000000044"))
+    (pin "53" (uuid "c3000044-3333-4333-8333-000000000045"))
+    (pin "55" (uuid "c3000045-3333-4333-8333-000000000046"))
+    (pin "56" (uuid "c3000046-3333-4333-8333-000000000047"))
+    (pin "57" (uuid "c3000047-3333-4333-8333-000000000048"))
+    (pin "58" (uuid "c3000048-3333-4333-8333-000000000049"))
+    (pin "60" (uuid "c3000049-3333-4333-8333-00000000004a"))
+    (pin "61" (uuid "c300004a-3333-4333-8333-00000000004b"))
+    (pin "63" (uuid "c300004b-3333-4333-8333-00000000004c"))
+    (pin "64" (uuid "c300004c-3333-4333-8333-00000000004d"))
+    (pin "65" (uuid "c300004d-3333-4333-8333-00000000004e"))
+    (pin "66" (uuid "c300004e-3333-4333-8333-00000000004f"))
+    (pin "68" (uuid "c300004f-3333-4333-8333-000000000050"))
+    (pin "69" (uuid "c3000050-3333-4333-8333-000000000051"))
+    (pin "70" (uuid "c3000051-3333-4333-8333-000000000052"))
+    (pin "80" (uuid "c3000052-3333-4333-8333-000000000053"))
+    (pin "81" (uuid "c3000053-3333-4333-8333-000000000054"))
+    (pin "82" (uuid "c3000054-3333-4333-8333-000000000055"))
+    (pin "83" (uuid "c3000055-3333-4333-8333-000000000056"))
+    (pin "84" (uuid "c3000056-3333-4333-8333-000000000057"))
+    (pin "86" (uuid "c3000057-3333-4333-8333-000000000058"))
+    (pin "87" (uuid "c3000058-3333-4333-8333-000000000059"))
+    (pin "88" (uuid "c3000059-3333-4333-8333-00000000005a"))
+    (pin "89" (uuid "c300005a-3333-4333-8333-00000000005b"))
+    (pin "90" (uuid "c300005b-3333-4333-8333-00000000005c"))
+    (pin "92" (uuid "c300005c-3333-4333-8333-00000000005d"))
+    (pin "93" (uuid "c300005d-3333-4333-8333-00000000005e"))
+    (pin "94" (uuid "c300005e-3333-4333-8333-00000000005f"))
+    (pin "95" (uuid "c300005f-3333-4333-8333-000000000060"))
+    (pin "97" (uuid "c3000060-3333-4333-8333-000000000061"))
+    (pin "98" (uuid "c3000061-3333-4333-8333-000000000062"))
+    (pin "1" (uuid "c3000062-3333-4333-8333-000000000063"))
+    (pin "2" (uuid "c3000063-3333-4333-8333-000000000064"))
+    (pin "3" (uuid "c3000064-3333-4333-8333-000000000065"))
+    (pin "4" (uuid "c3000065-3333-4333-8333-000000000066"))
+    (pin "5" (uuid "c3000066-3333-4333-8333-000000000067"))
+    (pin "6" (uuid "c3000067-3333-4333-8333-000000000068"))
+    (pin "7" (uuid "c3000068-3333-4333-8333-000000000069"))
+    (pin "8" (uuid "c3000069-3333-4333-8333-00000000006a"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "U1") (unit 1))))
+  )
+  (hierarchical_label "TOUCH_RST" (shape output) (at 89.14 133.59 0) (effects (font (size 1.27 1.27))) (uuid "c300006b-3333-4333-8333-00000000006c"))
+  (hierarchical_label "TOUCH_INT" (shape input) (at 89.14 131.05 0) (effects (font (size 1.27 1.27))) (uuid "c300006c-3333-4333-8333-00000000006d"))
+  (hierarchical_label "LCD_RST" (shape output) (at 89.14 128.51 0) (effects (font (size 1.27 1.27))) (uuid "c300006d-3333-4333-8333-00000000006e"))
+  (hierarchical_label "LCD_TE" (shape bidirectional) (at 89.14 125.97 0) (effects (font (size 1.27 1.27))) (uuid "c300006e-3333-4333-8333-00000000006f"))
+  (hierarchical_label "I2C_SDA" (shape bidirectional) (at 89.14 123.43 0) (effects (font (size 1.27 1.27))) (uuid "c300006f-3333-4333-8333-000000000070"))
+  (hierarchical_label "I2C_SCL" (shape bidirectional) (at 89.14 120.89 0) (effects (font (size 1.27 1.27))) (uuid "c3000070-3333-4333-8333-000000000071"))
+  (hierarchical_label "C6_SDIO_D0" (shape bidirectional) (at 89.14 105.65 0) (effects (font (size 1.27 1.27))) (uuid "c3000071-3333-4333-8333-000000000072"))
+  (hierarchical_label "C6_SDIO_D1" (shape bidirectional) (at 89.14 103.11 0) (effects (font (size 1.27 1.27))) (uuid "c3000072-3333-4333-8333-000000000073"))
+  (hierarchical_label "C6_SDIO_D2" (shape bidirectional) (at 89.14 100.57 0) (effects (font (size 1.27 1.27))) (uuid "c3000073-3333-4333-8333-000000000074"))
+  (hierarchical_label "C6_SDIO_D3" (shape bidirectional) (at 89.14 98.03 0) (effects (font (size 1.27 1.27))) (uuid "c3000074-3333-4333-8333-000000000075"))
+  (hierarchical_label "C6_SDIO_CLK" (shape output) (at 89.14 95.49 0) (effects (font (size 1.27 1.27))) (uuid "c3000075-3333-4333-8333-000000000076"))
+  (hierarchical_label "C6_SDIO_CMD" (shape bidirectional) (at 89.14 92.95 0) (effects (font (size 1.27 1.27))) (uuid "c3000076-3333-4333-8333-000000000077"))
+  (hierarchical_label "USB0_PWR_EN" (shape output) (at 89.14 90.41 0) (effects (font (size 1.27 1.27))) (uuid "c3000077-3333-4333-8333-000000000078"))
+  (hierarchical_label "USB0_FAULT_N" (shape input) (at 89.14 87.87 0) (effects (font (size 1.27 1.27))) (uuid "c3000078-3333-4333-8333-000000000079"))
+  (hierarchical_label "USB1_PWR_EN" (shape output) (at 89.14 85.33 0) (effects (font (size 1.27 1.27))) (uuid "c3000079-3333-4333-8333-00000000007a"))
+  (hierarchical_label "LCD_BL_PWM" (shape output) (at 89.14 82.79 0) (effects (font (size 1.27 1.27))) (uuid "c300007a-3333-4333-8333-00000000007b"))
+  (hierarchical_label "FLASH_CS" (shape bidirectional) (at 89.14 77.71 0) (effects (font (size 1.27 1.27))) (uuid "c300007b-3333-4333-8333-00000000007c"))
+  (hierarchical_label "FLASH_Q" (shape bidirectional) (at 89.14 75.17 0) (effects (font (size 1.27 1.27))) (uuid "c300007c-3333-4333-8333-00000000007d"))
+  (hierarchical_label "FLASH_WP" (shape bidirectional) (at 89.14 72.63 0) (effects (font (size 1.27 1.27))) (uuid "c300007d-3333-4333-8333-00000000007e"))
+  (hierarchical_label "FLASH_HOLD" (shape bidirectional) (at 89.14 70.09 0) (effects (font (size 1.27 1.27))) (uuid "c300007e-3333-4333-8333-00000000007f"))
+  (hierarchical_label "FLASH_CK" (shape bidirectional) (at 89.14 67.55 0) (effects (font (size 1.27 1.27))) (uuid "c300007f-3333-4333-8333-000000000080"))
+  (hierarchical_label "FLASH_D" (shape bidirectional) (at 89.14 65.01 0) (effects (font (size 1.27 1.27))) (uuid "c3000080-3333-4333-8333-000000000081"))
+  (hierarchical_label "DSI_D1_P" (shape bidirectional) (at 89.14 57.39 0) (effects (font (size 1.27 1.27))) (uuid "c3000081-3333-4333-8333-000000000082"))
+  (hierarchical_label "DSI_D1_N" (shape bidirectional) (at 89.14 54.85 0) (effects (font (size 1.27 1.27))) (uuid "c3000082-3333-4333-8333-000000000083"))
+  (hierarchical_label "DSI_CLK_N" (shape bidirectional) (at 89.14 52.31 0) (effects (font (size 1.27 1.27))) (uuid "c3000083-3333-4333-8333-000000000084"))
+  (hierarchical_label "DSI_CLK_P" (shape bidirectional) (at 89.14 49.77 0) (effects (font (size 1.27 1.27))) (uuid "c3000084-3333-4333-8333-000000000085"))
+  (hierarchical_label "DSI_D0_P" (shape bidirectional) (at 89.14 47.23 0) (effects (font (size 1.27 1.27))) (uuid "c3000085-3333-4333-8333-000000000086"))
+  (hierarchical_label "DSI_D0_N" (shape bidirectional) (at 89.14 44.69 0) (effects (font (size 1.27 1.27))) (uuid "c3000086-3333-4333-8333-000000000087"))
+  (hierarchical_label "USB0_HS_DM" (shape bidirectional) (at 134.86 120.89 180) (effects (font (size 1.27 1.27))) (uuid "c3000087-3333-4333-8333-000000000088"))
+  (hierarchical_label "USB0_HS_DP" (shape bidirectional) (at 134.86 118.35 180) (effects (font (size 1.27 1.27))) (uuid "c3000088-3333-4333-8333-000000000089"))
+  (hierarchical_label "P4_USBJTAG_DM" (shape bidirectional) (at 134.86 113.27 180) (effects (font (size 1.27 1.27))) (uuid "c3000089-3333-4333-8333-00000000008a"))
+  (hierarchical_label "P4_USBJTAG_DP" (shape bidirectional) (at 134.86 110.73 180) (effects (font (size 1.27 1.27))) (uuid "c300008a-3333-4333-8333-00000000008b"))
+  (hierarchical_label "USB1_FS_DM" (shape bidirectional) (at 134.86 108.19 180) (effects (font (size 1.27 1.27))) (uuid "c300008b-3333-4333-8333-00000000008c"))
+  (hierarchical_label "USB1_FS_DP" (shape bidirectional) (at 134.86 105.65 180) (effects (font (size 1.27 1.27))) (uuid "c300008c-3333-4333-8333-00000000008d"))
+  (hierarchical_label "USB1_FAULT_N" (shape input) (at 134.86 92.95 180) (effects (font (size 1.27 1.27))) (uuid "c300008d-3333-4333-8333-00000000008e"))
+  (hierarchical_label "BOOT_GPIO35" (shape bidirectional) (at 134.86 85.33 180) (effects (font (size 1.27 1.27))) (uuid "c300008e-3333-4333-8333-00000000008f"))
+  (hierarchical_label "BOOT_GPIO36" (shape bidirectional) (at 134.86 82.79 180) (effects (font (size 1.27 1.27))) (uuid "c300008f-3333-4333-8333-000000000090"))
+  (hierarchical_label "UART0_TX" (shape output) (at 134.86 80.25 180) (effects (font (size 1.27 1.27))) (uuid "c3000090-3333-4333-8333-000000000091"))
+  (hierarchical_label "UART0_RX" (shape input) (at 134.86 77.71 180) (effects (font (size 1.27 1.27))) (uuid "c3000091-3333-4333-8333-000000000092"))
+  (hierarchical_label "SDMMC_D0" (shape bidirectional) (at 134.86 75.17 180) (effects (font (size 1.27 1.27))) (uuid "c3000092-3333-4333-8333-000000000093"))
+  (hierarchical_label "SDMMC_D1" (shape bidirectional) (at 134.86 72.63 180) (effects (font (size 1.27 1.27))) (uuid "c3000093-3333-4333-8333-000000000094"))
+  (hierarchical_label "SDMMC_D2" (shape bidirectional) (at 134.86 70.09 180) (effects (font (size 1.27 1.27))) (uuid "c3000094-3333-4333-8333-000000000095"))
+  (hierarchical_label "SDMMC_D3" (shape bidirectional) (at 134.86 67.55 180) (effects (font (size 1.27 1.27))) (uuid "c3000095-3333-4333-8333-000000000096"))
+  (hierarchical_label "SDMMC_CLK" (shape output) (at 134.86 65.01 180) (effects (font (size 1.27 1.27))) (uuid "c3000096-3333-4333-8333-000000000097"))
+  (hierarchical_label "SDMMC_CMD" (shape bidirectional) (at 134.86 62.47 180) (effects (font (size 1.27 1.27))) (uuid "c3000097-3333-4333-8333-000000000098"))
+  (hierarchical_label "SD_PWR_EN" (shape output) (at 134.86 59.93 180) (effects (font (size 1.27 1.27))) (uuid "c3000098-3333-4333-8333-000000000099"))
+  (hierarchical_label "SD_CARD_DETECT" (shape input) (at 134.86 57.39 180) (effects (font (size 1.27 1.27))) (uuid "c3000099-3333-4333-8333-00000000009a"))
+  (hierarchical_label "DAC_XSMT" (shape output) (at 134.86 49.77 180) (effects (font (size 1.27 1.27))) (uuid "c300009a-3333-4333-8333-00000000009b"))
+  (hierarchical_label "DAC_BCLK" (shape output) (at 134.86 47.23 180) (effects (font (size 1.27 1.27))) (uuid "c300009b-3333-4333-8333-00000000009c"))
+  (hierarchical_label "DAC_DATA" (shape output) (at 134.86 44.69 180) (effects (font (size 1.27 1.27))) (uuid "c300009c-3333-4333-8333-00000000009d"))
+  (hierarchical_label "DAC_LRCK" (shape output) (at 134.86 42.15 180) (effects (font (size 1.27 1.27))) (uuid "c300009d-3333-4333-8333-00000000009e"))
+  (hierarchical_label "SYS_POWER_ALERT_N" (shape input) (at 134.86 39.61 180) (effects (font (size 1.27 1.27))) (uuid "c300009e-3333-4333-8333-00000000009f"))
+  (hierarchical_label "C6_RESET" (shape output) (at 134.86 37.07 180) (effects (font (size 1.27 1.27))) (uuid "c300009f-3333-4333-8333-0000000000a0"))
+  (hierarchical_label "XTAL_N" (shape bidirectional) (at 134.86 120.89 180) (effects (font (size 1.27 1.27))) (uuid "c30000a0-3333-4333-8333-0000000000a1"))
+  (hierarchical_label "XTAL_P" (shape bidirectional) (at 134.86 133.59 180) (effects (font (size 1.27 1.27))) (uuid "c30000a1-3333-4333-8333-0000000000a2"))
+  (hierarchical_label "CHIP_PU" (shape input) (at 134.86 141.21 180) (effects (font (size 1.27 1.27))) (uuid "c30000a2-3333-4333-8333-0000000000a3"))
+  (wire (pts (xy 89.14 59.93) (xy 89.14 53.93)) (stroke (width 0) (type default)) (uuid "c30000a3-3333-4333-8333-0000000000a4"))
+  (symbol
+    (lib_id "Device:R_US") (at 89.14 50.12 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000a4-3333-4333-8333-0000000000a5")
+    (property "Reference" "R_DSI_REXT" (at 92.14 48.12 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "4.02k 1%" (at 92.14 52.12 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 89.14 50.12 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 89.14 50.12 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000a5-3333-4333-8333-0000000000a6")) (pin "2" (uuid "c30000a6-3333-4333-8333-0000000000a7"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "R_DSI_REXT") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:GND") (at 89.14 46.31 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000a7-3333-4333-8333-0000000000a8")
+    (property "Reference" "#PWR0301" (at 89.14 52.31 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 89.14 49.31 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 89.14 46.31 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 89.14 46.31 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000a8-3333-4333-8333-0000000000a9"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0301") (unit 1))))
+  )
+  (label "3V3_SYS" (at 89.14 141.21 0) (effects (font (size 1.27 1.27))) (uuid "c30000a9-3333-4333-8333-0000000000aa"))
+  (label "3V3_SYS" (at 89.14 133.59 0) (effects (font (size 1.27 1.27))) (uuid "c30000aa-3333-4333-8333-0000000000ab"))
+  (label "3V3_SYS" (at 89.14 131.05 0) (effects (font (size 1.27 1.27))) (uuid "c30000ab-3333-4333-8333-0000000000ac"))
+  (label "3V3_SYS" (at 89.14 128.51 0) (effects (font (size 1.27 1.27))) (uuid "c30000ac-3333-4333-8333-0000000000ad"))
+  (label "3V3_SYS" (at 89.14 125.97 0) (effects (font (size 1.27 1.27))) (uuid "c30000ad-3333-4333-8333-0000000000ae"))
+  (label "3V3_SYS" (at 89.14 87.87 0) (effects (font (size 1.27 1.27))) (uuid "c30000ae-3333-4333-8333-0000000000af"))
+  (label "3V3_SYS" (at 89.14 110.73 0) (effects (font (size 1.27 1.27))) (uuid "c30000af-3333-4333-8333-0000000000b0"))
+  (label "3V3_SYS" (at 89.14 103.11 0) (effects (font (size 1.27 1.27))) (uuid "c30000b0-3333-4333-8333-0000000000b1"))
+  (label "P4_VDD_ANA" (at 89.14 95.49 0) (effects (font (size 1.27 1.27))) (uuid "c30000b1-3333-4333-8333-0000000000b2"))
+  (symbol
+    (lib_id "Device:R_US") (at 50 150 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000b2-3333-4333-8333-0000000000b3")
+    (property "Reference" "R_ANA_LINK" (at 53 148 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 53 152 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 50 150 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 50 150 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000b3-3333-4333-8333-0000000000b4")) (pin "2" (uuid "c30000b4-3333-4333-8333-0000000000b5"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "R_ANA_LINK") (unit 1))))
+  )
+  (label "3V3_SYS" (at 46.19 150 0) (effects (font (size 1.27 1.27))) (uuid "c30000b5-3333-4333-8333-0000000000b6"))
+  (label "P4_VDD_ANA" (at 53.81 150 0) (effects (font (size 1.27 1.27))) (uuid "c30000b6-3333-4333-8333-0000000000b7"))
+  (symbol
+    (lib_id "Device:C") (at 60 153.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000b7-3333-4333-8333-0000000000b8")
+    (property "Reference" "C_ANA" (at 63 151.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 63 155.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 60 153.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 153.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000b8-3333-4333-8333-0000000000b9")) (pin "2" (uuid "c30000b9-3333-4333-8333-0000000000ba"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_ANA") (unit 1))))
+  )
+  (label "P4_VDD_ANA" (at 60 150 0) (effects (font (size 1.27 1.27))) (uuid "c30000ba-3333-4333-8333-0000000000bb"))
+  (symbol
+    (lib_id "power:GND") (at 60 157.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000bb-3333-4333-8333-0000000000bc")
+    (property "Reference" "#PWR0302" (at 60 163.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 60 160.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 60 157.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 60 157.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000bc-3333-4333-8333-0000000000bd"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0302") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 89.14 80.25 0) (effects (font (size 1.27 1.27))) (uuid "c30000bd-3333-4333-8333-0000000000be"))
+  (label "P4_VDD_HP" (at 89.14 77.71 0) (effects (font (size 1.27 1.27))) (uuid "c30000be-3333-4333-8333-0000000000bf"))
+  (label "P4_VDD_HP" (at 89.14 75.17 0) (effects (font (size 1.27 1.27))) (uuid "c30000bf-3333-4333-8333-0000000000c0"))
+  (label "P4_VDD_HP" (at 89.14 72.63 0) (effects (font (size 1.27 1.27))) (uuid "c30000c0-3333-4333-8333-0000000000c1"))
+  (label "P4_VDD_USBPHY" (at 89.14 118.35 0) (effects (font (size 1.27 1.27))) (uuid "c30000c1-3333-4333-8333-0000000000c2"))
+  (symbol
+    (lib_id "Device:R_US") (at 50 166 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000c2-3333-4333-8333-0000000000c3")
+    (property "Reference" "R_USBPHY_LINK" (at 53 164 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 53 168 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 50 166 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 50 166 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000c3-3333-4333-8333-0000000000c4")) (pin "2" (uuid "c30000c4-3333-4333-8333-0000000000c5"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "R_USBPHY_LINK") (unit 1))))
+  )
+  (label "3V3_SYS" (at 46.19 166 0) (effects (font (size 1.27 1.27))) (uuid "c30000c5-3333-4333-8333-0000000000c6"))
+  (label "P4_VDD_USBPHY" (at 53.81 166 0) (effects (font (size 1.27 1.27))) (uuid "c30000c6-3333-4333-8333-0000000000c7"))
+  (symbol
+    (lib_id "Device:C") (at 62 169.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000c7-3333-4333-8333-0000000000c8")
+    (property "Reference" "C_USBPHY_1" (at 65 167.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10nF" (at 65 171.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 62 169.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 62 169.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000c8-3333-4333-8333-0000000000c9")) (pin "2" (uuid "c30000c9-3333-4333-8333-0000000000ca"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_USBPHY_1") (unit 1))))
+  )
+  (label "P4_VDD_USBPHY" (at 62 166 0) (effects (font (size 1.27 1.27))) (uuid "c30000ca-3333-4333-8333-0000000000cb"))
+  (symbol
+    (lib_id "power:GND") (at 62 173.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000cb-3333-4333-8333-0000000000cc")
+    (property "Reference" "#PWR0372" (at 62 179.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 62 176.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 62 173.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 62 173.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000cc-3333-4333-8333-0000000000cd"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0372") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 72 169.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000cd-3333-4333-8333-0000000000ce")
+    (property "Reference" "C_USBPHY_2" (at 75 167.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 75 171.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 72 169.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 72 169.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000ce-3333-4333-8333-0000000000cf")) (pin "2" (uuid "c30000cf-3333-4333-8333-0000000000d0"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_USBPHY_2") (unit 1))))
+  )
+  (label "P4_VDD_USBPHY" (at 72 166 0) (effects (font (size 1.27 1.27))) (uuid "c30000d0-3333-4333-8333-0000000000d1"))
+  (symbol
+    (lib_id "power:GND") (at 72 173.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000d1-3333-4333-8333-0000000000d2")
+    (property "Reference" "#PWR0382" (at 72 179.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 72 176.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 72 173.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 72 173.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000d2-3333-4333-8333-0000000000d3"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0382") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 82 169.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000d3-3333-4333-8333-0000000000d4")
+    (property "Reference" "C_USBPHY_3" (at 85 167.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "4.7uF" (at 85 171.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 82 169.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 82 169.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000d4-3333-4333-8333-0000000000d5")) (pin "2" (uuid "c30000d5-3333-4333-8333-0000000000d6"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_USBPHY_3") (unit 1))))
+  )
+  (label "P4_VDD_USBPHY" (at 82 166 0) (effects (font (size 1.27 1.27))) (uuid "c30000d6-3333-4333-8333-0000000000d7"))
+  (symbol
+    (lib_id "power:GND") (at 82 173.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000d7-3333-4333-8333-0000000000d8")
+    (property "Reference" "#PWR0392" (at 82 179.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 82 176.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 82 173.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 82 173.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000d8-3333-4333-8333-0000000000d9"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0392") (unit 1))))
+  )
+  (label "FLASH_VCC" (at 134.86 100.57 180) (effects (font (size 1.27 1.27))) (uuid "c30000d9-3333-4333-8333-0000000000da"))
+  (label "FLASH_VCC" (at 134.86 98.03 180) (effects (font (size 1.27 1.27))) (uuid "c30000da-3333-4333-8333-0000000000db"))
+  (hierarchical_label "FLASH_VCC" (shape output) (at 160 36 0) (effects (font (size 1.27 1.27))) (uuid "c30000db-3333-4333-8333-0000000000dc"))
+  (symbol
+    (lib_id "Device:C") (at 168 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000dc-3333-4333-8333-0000000000dd")
+    (property "Reference" "C_VDDO_FLASH" (at 171 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "1uF" (at 171 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 168 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 168 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000dd-3333-4333-8333-0000000000de")) (pin "2" (uuid "c30000de-3333-4333-8333-0000000000df"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDDO_FLASH") (unit 1))))
+  )
+  (label "FLASH_VCC" (at 168 36 0) (effects (font (size 1.27 1.27))) (uuid "c30000df-3333-4333-8333-0000000000e0"))
+  (symbol
+    (lib_id "power:GND") (at 168 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000e0-3333-4333-8333-0000000000e1")
+    (property "Reference" "#PWR0320" (at 168 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 168 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 168 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 168 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000e1-3333-4333-8333-0000000000e2"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0320") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 178 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000e2-3333-4333-8333-0000000000e3")
+    (property "Reference" "C_FLASHIO_HF" (at 181 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 181 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 178 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 178 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000e3-3333-4333-8333-0000000000e4")) (pin "2" (uuid "c30000e4-3333-4333-8333-0000000000e5"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_FLASHIO_HF") (unit 1))))
+  )
+  (label "FLASH_VCC" (at 178 36 0) (effects (font (size 1.27 1.27))) (uuid "c30000e5-3333-4333-8333-0000000000e6"))
+  (symbol
+    (lib_id "power:GND") (at 178 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000e6-3333-4333-8333-0000000000e7")
+    (property "Reference" "#PWR0321" (at 178 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 178 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 178 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 178 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000e7-3333-4333-8333-0000000000e8"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0321") (unit 1))))
+  )
+  (label "P4_VDDO_PSRAM" (at 134.86 113.27 180) (effects (font (size 1.27 1.27))) (uuid "c30000e8-3333-4333-8333-0000000000e9"))
+  (label "P4_VDDO_PSRAM" (at 134.86 110.73 180) (effects (font (size 1.27 1.27))) (uuid "c30000e9-3333-4333-8333-0000000000ea"))
+  (label "P4_VDDO_PSRAM" (at 134.86 108.19 180) (effects (font (size 1.27 1.27))) (uuid "c30000ea-3333-4333-8333-0000000000eb"))
+  (symbol
+    (lib_id "Device:C") (at 190 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000eb-3333-4333-8333-0000000000ec")
+    (property "Reference" "C_VDDO_PSRAM" (at 193 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "1uF" (at 193 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 190 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 190 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000ec-3333-4333-8333-0000000000ed")) (pin "2" (uuid "c30000ed-3333-4333-8333-0000000000ee"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDDO_PSRAM") (unit 1))))
+  )
+  (label "P4_VDDO_PSRAM" (at 190 36 0) (effects (font (size 1.27 1.27))) (uuid "c30000ee-3333-4333-8333-0000000000ef"))
+  (symbol
+    (lib_id "power:GND") (at 190 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000ef-3333-4333-8333-0000000000f0")
+    (property "Reference" "#PWR033190" (at 190 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 190 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 190 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 190 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000f0-3333-4333-8333-0000000000f1"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR033190") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 200 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000f1-3333-4333-8333-0000000000f2")
+    (property "Reference" "C_PSRAM0_HF" (at 203 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 203 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 200 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 200 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000f2-3333-4333-8333-0000000000f3")) (pin "2" (uuid "c30000f3-3333-4333-8333-0000000000f4"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_PSRAM0_HF") (unit 1))))
+  )
+  (label "P4_VDDO_PSRAM" (at 200 36 0) (effects (font (size 1.27 1.27))) (uuid "c30000f4-3333-4333-8333-0000000000f5"))
+  (symbol
+    (lib_id "power:GND") (at 200 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000f5-3333-4333-8333-0000000000f6")
+    (property "Reference" "#PWR033200" (at 200 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 200 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 200 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 200 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000f6-3333-4333-8333-0000000000f7"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR033200") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 210 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000f7-3333-4333-8333-0000000000f8")
+    (property "Reference" "C_PSRAM0_LOCAL" (at 213 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "1uF" (at 213 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 210 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 210 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000f8-3333-4333-8333-0000000000f9")) (pin "2" (uuid "c30000f9-3333-4333-8333-0000000000fa"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_PSRAM0_LOCAL") (unit 1))))
+  )
+  (label "P4_VDDO_PSRAM" (at 210 36 0) (effects (font (size 1.27 1.27))) (uuid "c30000fa-3333-4333-8333-0000000000fb"))
+  (symbol
+    (lib_id "power:GND") (at 210 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000fb-3333-4333-8333-0000000000fc")
+    (property "Reference" "#PWR033210" (at 210 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 210 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 210 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 210 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000fc-3333-4333-8333-0000000000fd"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR033210") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 220 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30000fd-3333-4333-8333-0000000000fe")
+    (property "Reference" "C_PSRAM1_HF" (at 223 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 223 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 220 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 220 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30000fe-3333-4333-8333-0000000000ff")) (pin "2" (uuid "c30000ff-3333-4333-8333-000000000100"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_PSRAM1_HF") (unit 1))))
+  )
+  (label "P4_VDDO_PSRAM" (at 220 36 0) (effects (font (size 1.27 1.27))) (uuid "c3000100-3333-4333-8333-000000000101"))
+  (symbol
+    (lib_id "power:GND") (at 220 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000101-3333-4333-8333-000000000102")
+    (property "Reference" "#PWR033220" (at 220 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 220 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 220 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 220 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000102-3333-4333-8333-000000000103"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR033220") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 230 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000103-3333-4333-8333-000000000104")
+    (property "Reference" "C_PSRAM1_LOCAL" (at 233 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "1uF" (at 233 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 230 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 230 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000104-3333-4333-8333-000000000105")) (pin "2" (uuid "c3000105-3333-4333-8333-000000000106"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_PSRAM1_LOCAL") (unit 1))))
+  )
+  (label "P4_VDDO_PSRAM" (at 230 36 0) (effects (font (size 1.27 1.27))) (uuid "c3000106-3333-4333-8333-000000000107"))
+  (symbol
+    (lib_id "power:GND") (at 230 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000107-3333-4333-8333-000000000108")
+    (property "Reference" "#PWR033230" (at 230 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 230 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 230 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 230 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000108-3333-4333-8333-000000000109"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR033230") (unit 1))))
+  )
+  (label "P4_LDO_MIPI_2V5" (at 134.86 75.17 180) (effects (font (size 1.27 1.27))) (uuid "c3000109-3333-4333-8333-00000000010a"))
+  (label "P4_LDO_MIPI_2V5" (at 89.14 65.01 0) (effects (font (size 1.27 1.27))) (uuid "c300010a-3333-4333-8333-00000000010b"))
+  (hierarchical_label "P4_LDO_MIPI_2V5" (shape output) (at 245 36 0) (effects (font (size 1.27 1.27))) (uuid "c300010b-3333-4333-8333-00000000010c"))
+  (symbol
+    (lib_id "Device:C") (at 250 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300010c-3333-4333-8333-00000000010d")
+    (property "Reference" "C_MIPI_LDO_OUT" (at 253 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "1uF" (at 253 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 250 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 250 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300010d-3333-4333-8333-00000000010e")) (pin "2" (uuid "c300010e-3333-4333-8333-00000000010f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_MIPI_LDO_OUT") (unit 1))))
+  )
+  (label "P4_LDO_MIPI_2V5" (at 250 36 0) (effects (font (size 1.27 1.27))) (uuid "c300010f-3333-4333-8333-000000000110"))
+  (symbol
+    (lib_id "power:GND") (at 250 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000110-3333-4333-8333-000000000111")
+    (property "Reference" "#PWR034250" (at 250 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 250 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 250 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 250 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000111-3333-4333-8333-000000000112"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR034250") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 260 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000112-3333-4333-8333-000000000113")
+    (property "Reference" "C_MIPI_10N" (at 263 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10nF" (at 263 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 260 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 260 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000113-3333-4333-8333-000000000114")) (pin "2" (uuid "c3000114-3333-4333-8333-000000000115"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_MIPI_10N") (unit 1))))
+  )
+  (label "P4_LDO_MIPI_2V5" (at 260 36 0) (effects (font (size 1.27 1.27))) (uuid "c3000115-3333-4333-8333-000000000116"))
+  (symbol
+    (lib_id "power:GND") (at 260 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000116-3333-4333-8333-000000000117")
+    (property "Reference" "#PWR034260" (at 260 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 260 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 260 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 260 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000117-3333-4333-8333-000000000118"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR034260") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 270 39.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000118-3333-4333-8333-000000000119")
+    (property "Reference" "C_MIPI_100N" (at 273 37.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 273 41.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 270 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 270 39.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000119-3333-4333-8333-00000000011a")) (pin "2" (uuid "c300011a-3333-4333-8333-00000000011b"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_MIPI_100N") (unit 1))))
+  )
+  (label "P4_LDO_MIPI_2V5" (at 270 36 0) (effects (font (size 1.27 1.27))) (uuid "c300011b-3333-4333-8333-00000000011c"))
+  (symbol
+    (lib_id "power:GND") (at 270 43.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300011c-3333-4333-8333-00000000011d")
+    (property "Reference" "#PWR034270" (at 270 49.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 270 46.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 270 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 270 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300011d-3333-4333-8333-00000000011e"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR034270") (unit 1))))
+  )
+  (no_connect (at 134.86 67.55) (uuid "c300011e-3333-4333-8333-00000000011f"))
+  (symbol
+    (lib_id "power:GND") (at 112 30.72 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300011f-3333-4333-8333-000000000120")
+    (property "Reference" "#PWR0303" (at 112 36.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 112 33.72 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 112 30.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 112 30.72 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000120-3333-4333-8333-000000000121"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0303") (unit 1))))
+  )
+  (symbol
+    (lib_id "Regulator_Switching:TLV62569DRL") (at 210 90 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000121-3333-4333-8333-000000000122")
+    (property "Reference" "U3" (at 204 80 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "TLV62569DRLR" (at 204 83 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-563" (at 210 90 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/tlv62569.pdf" (at 210 90 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000122-3333-4333-8333-000000000123")) (pin "2" (uuid "c3000123-3333-4333-8333-000000000124")) (pin "3" (uuid "c3000124-3333-4333-8333-000000000125"))
+    (pin "4" (uuid "c3000125-3333-4333-8333-000000000126")) (pin "5" (uuid "c3000126-3333-4333-8333-000000000127")) (pin "6" (uuid "c3000127-3333-4333-8333-000000000128"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "U3") (unit 1))))
+  )
+  (label "3V3_SYS" (at 202.38 92.54 0) (effects (font (size 1.27 1.27))) (uuid "c3000128-3333-4333-8333-000000000129"))
+  (symbol
+    (lib_id "Device:C") (at 194 96.35 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000129-3333-4333-8333-00000000012a")
+    (property "Reference" "C_CORE_IN" (at 197 94.35 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "4.7uF" (at 197 98.35 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 194 96.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 194 96.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300012a-3333-4333-8333-00000000012b")) (pin "2" (uuid "c300012b-3333-4333-8333-00000000012c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_CORE_IN") (unit 1))))
+  )
+  (label "3V3_SYS" (at 194 92.54 0) (effects (font (size 1.27 1.27))) (uuid "c300012c-3333-4333-8333-00000000012d"))
+  (symbol
+    (lib_id "power:GND") (at 194 100.16 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300012d-3333-4333-8333-00000000012e")
+    (property "Reference" "#PWR0304" (at 194 106.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 194 103.16 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 194 100.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 194 100.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300012e-3333-4333-8333-00000000012f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0304") (unit 1))))
+  )
+  (label "P4_EN_DCDC" (at 202.38 90 0) (effects (font (size 1.27 1.27))) (uuid "c300012f-3333-4333-8333-000000000130"))
+  (label "P4_EN_DCDC" (at 134.86 90.41 180) (effects (font (size 1.27 1.27))) (uuid "c3000130-3333-4333-8333-000000000131"))
+  (symbol
+    (lib_id "power:GND") (at 210 97.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000131-3333-4333-8333-000000000132")
+    (property "Reference" "#PWR0305" (at 210 103.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 210 100.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 210 97.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 210 97.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000132-3333-4333-8333-000000000133"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0305") (unit 1))))
+  )
+  (wire (pts (xy 217.62 92.54) (xy 225 92.54)) (stroke (width 0) (type default)) (uuid "c3000133-3333-4333-8333-000000000134"))
+  (symbol
+    (lib_id "Device:L") (at 225 96.35 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000134-3333-4333-8333-000000000135")
+    (property "Reference" "L_CORE" (at 228 94.35 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "2.2uH" (at 228 98.35 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Inductor_SMD:L_4.0x4.0mm_TBD" (at 225 96.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 225 96.35 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000135-3333-4333-8333-000000000136")) (pin "2" (uuid "c3000136-3333-4333-8333-000000000137"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "L_CORE") (unit 1))))
+  )
+  (wire (pts (xy 225 100.16) (xy 245 100.16)) (stroke (width 0) (type default)) (uuid "c3000137-3333-4333-8333-000000000138"))
+  (label "P4_VDD_HP" (at 245 100.16 0) (effects (font (size 1.27 1.27))) (uuid "c3000138-3333-4333-8333-000000000139"))
+  (symbol
+    (lib_id "Device:C") (at 238 103.97 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000139-3333-4333-8333-00000000013a")
+    (property "Reference" "C_CORE_OUT" (at 241 101.97 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "22uF" (at 241 105.97 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 238 103.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 238 103.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300013a-3333-4333-8333-00000000013b")) (pin "2" (uuid "c300013b-3333-4333-8333-00000000013c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_CORE_OUT") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 238 100.16 0) (effects (font (size 1.27 1.27))) (uuid "c300013c-3333-4333-8333-00000000013d"))
+  (symbol
+    (lib_id "power:GND") (at 238 107.78 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300013d-3333-4333-8333-00000000013e")
+    (property "Reference" "#PWR0306" (at 238 113.78 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 238 110.78 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 238 107.78 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 238 107.78 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300013e-3333-4333-8333-00000000013f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0306") (unit 1))))
+  )
+  (label "P4_FB_DCDC" (at 217.62 90 0) (effects (font (size 1.27 1.27))) (uuid "c300013f-3333-4333-8333-000000000140"))
+  (label "P4_FB_DCDC" (at 134.86 82.79 180) (effects (font (size 1.27 1.27))) (uuid "c3000140-3333-4333-8333-000000000141"))
+  (symbol
+    (lib_id "Device:R_US") (at 250 92.54 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000141-3333-4333-8333-000000000142")
+    (property "Reference" "R_CORE_FB_TOP" (at 253 90.54 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "499k 1%" (at 253 94.54 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 250 92.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 250 92.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000142-3333-4333-8333-000000000143")) (pin "2" (uuid "c3000143-3333-4333-8333-000000000144"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "R_CORE_FB_TOP") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 250 88.73 0) (effects (font (size 1.27 1.27))) (uuid "c3000144-3333-4333-8333-000000000145"))
+  (label "P4_FB_DCDC" (at 250 96.35 0) (effects (font (size 1.27 1.27))) (uuid "c3000145-3333-4333-8333-000000000146"))
+  (symbol
+    (lib_id "Device:R_US") (at 260 100.16 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000146-3333-4333-8333-000000000147")
+    (property "Reference" "R_CORE_FB_BOT" (at 263 98.16 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "499k 1%" (at 263 102.16 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 260 100.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 260 100.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000147-3333-4333-8333-000000000148")) (pin "2" (uuid "c3000148-3333-4333-8333-000000000149"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "R_CORE_FB_BOT") (unit 1))))
+  )
+  (label "P4_FB_DCDC" (at 260 96.35 0) (effects (font (size 1.27 1.27))) (uuid "c3000149-3333-4333-8333-00000000014a"))
+  (symbol
+    (lib_id "power:GND") (at 260 103.97 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300014a-3333-4333-8333-00000000014b")
+    (property "Reference" "#PWR0307" (at 260 109.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 260 106.97 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 260 103.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 260 103.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300014b-3333-4333-8333-00000000014c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0307") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 270 92.54 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300014c-3333-4333-8333-00000000014d")
+    (property "Reference" "C_CORE_FF" (at 273 90.54 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "22pF C0G" (at 273 94.54 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 270 92.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 270 92.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300014d-3333-4333-8333-00000000014e")) (pin "2" (uuid "c300014e-3333-4333-8333-00000000014f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_CORE_FF") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 270 88.73 0) (effects (font (size 1.27 1.27))) (uuid "c300014f-3333-4333-8333-000000000150"))
+  (label "P4_FB_DCDC" (at 270 96.35 0) (effects (font (size 1.27 1.27))) (uuid "c3000150-3333-4333-8333-000000000151"))
+  (symbol
+    (lib_id "Device:C") (at 190 119.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000151-3333-4333-8333-000000000152")
+    (property "Reference" "C_HP_BULK" (at 193 117.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF" (at 193 121.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 190 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 190 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000152-3333-4333-8333-000000000153")) (pin "2" (uuid "c3000153-3333-4333-8333-000000000154"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_HP_BULK") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 190 116 0) (effects (font (size 1.27 1.27))) (uuid "c3000154-3333-4333-8333-000000000155"))
+  (symbol
+    (lib_id "power:GND") (at 190 123.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000155-3333-4333-8333-000000000156")
+    (property "Reference" "#PWR035190" (at 190 129.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 190 126.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 190 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 190 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000156-3333-4333-8333-000000000157"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR035190") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 200 119.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000157-3333-4333-8333-000000000158")
+    (property "Reference" "C_HP0" (at 203 117.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 203 121.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 200 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 200 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000158-3333-4333-8333-000000000159")) (pin "2" (uuid "c3000159-3333-4333-8333-00000000015a"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_HP0") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 200 116 0) (effects (font (size 1.27 1.27))) (uuid "c300015a-3333-4333-8333-00000000015b"))
+  (symbol
+    (lib_id "power:GND") (at 200 123.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300015b-3333-4333-8333-00000000015c")
+    (property "Reference" "#PWR035200" (at 200 129.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 200 126.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 200 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 200 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300015c-3333-4333-8333-00000000015d"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR035200") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 210 119.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300015d-3333-4333-8333-00000000015e")
+    (property "Reference" "C_HP1" (at 213 117.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 213 121.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 210 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 210 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300015e-3333-4333-8333-00000000015f")) (pin "2" (uuid "c300015f-3333-4333-8333-000000000160"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_HP1") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 210 116 0) (effects (font (size 1.27 1.27))) (uuid "c3000160-3333-4333-8333-000000000161"))
+  (symbol
+    (lib_id "power:GND") (at 210 123.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000161-3333-4333-8333-000000000162")
+    (property "Reference" "#PWR035210" (at 210 129.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 210 126.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 210 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 210 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000162-3333-4333-8333-000000000163"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR035210") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 220 119.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000163-3333-4333-8333-000000000164")
+    (property "Reference" "C_HP2" (at 223 117.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 223 121.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 220 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 220 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000164-3333-4333-8333-000000000165")) (pin "2" (uuid "c3000165-3333-4333-8333-000000000166"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_HP2") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 220 116 0) (effects (font (size 1.27 1.27))) (uuid "c3000166-3333-4333-8333-000000000167"))
+  (symbol
+    (lib_id "power:GND") (at 220 123.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000167-3333-4333-8333-000000000168")
+    (property "Reference" "#PWR035220" (at 220 129.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 220 126.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 220 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 220 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000168-3333-4333-8333-000000000169"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR035220") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 230 119.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000169-3333-4333-8333-00000000016a")
+    (property "Reference" "C_HP3" (at 233 117.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 233 121.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 230 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 230 119.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300016a-3333-4333-8333-00000000016b")) (pin "2" (uuid "c300016b-3333-4333-8333-00000000016c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_HP3") (unit 1))))
+  )
+  (label "P4_VDD_HP" (at 230 116 0) (effects (font (size 1.27 1.27))) (uuid "c300016c-3333-4333-8333-00000000016d"))
+  (symbol
+    (lib_id "power:GND") (at 230 123.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300016d-3333-4333-8333-00000000016e")
+    (property "Reference" "#PWR035230" (at 230 129.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 230 126.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 230 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 230 123.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300016e-3333-4333-8333-00000000016f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR035230") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 30 133.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300016f-3333-4333-8333-000000000170")
+    (property "Reference" "C_P4_3V3_BULK" (at 33 131.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF" (at 33 135.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 30 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 30 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000170-3333-4333-8333-000000000171")) (pin "2" (uuid "c3000171-3333-4333-8333-000000000172"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_P4_3V3_BULK") (unit 1))))
+  )
+  (label "3V3_SYS" (at 30 130 0) (effects (font (size 1.27 1.27))) (uuid "c3000172-3333-4333-8333-000000000173"))
+  (symbol
+    (lib_id "power:GND") (at 30 137.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000173-3333-4333-8333-000000000174")
+    (property "Reference" "#PWR03630" (at 30 143.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 30 140.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 30 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 30 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000174-3333-4333-8333-000000000175"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03630") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 40 133.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000175-3333-4333-8333-000000000176")
+    (property "Reference" "C_VDD_LP" (at 43 131.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 43 135.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 40 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 40 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000176-3333-4333-8333-000000000177")) (pin "2" (uuid "c3000177-3333-4333-8333-000000000178"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_LP") (unit 1))))
+  )
+  (label "3V3_SYS" (at 40 130 0) (effects (font (size 1.27 1.27))) (uuid "c3000178-3333-4333-8333-000000000179"))
+  (symbol
+    (lib_id "power:GND") (at 40 137.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000179-3333-4333-8333-00000000017a")
+    (property "Reference" "#PWR03640" (at 40 143.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 40 140.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 40 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 40 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300017a-3333-4333-8333-00000000017b"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03640") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 50 133.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300017b-3333-4333-8333-00000000017c")
+    (property "Reference" "C_VDD_IO0" (at 53 131.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 53 135.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 50 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 50 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300017c-3333-4333-8333-00000000017d")) (pin "2" (uuid "c300017d-3333-4333-8333-00000000017e"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_IO0") (unit 1))))
+  )
+  (label "3V3_SYS" (at 50 130 0) (effects (font (size 1.27 1.27))) (uuid "c300017e-3333-4333-8333-00000000017f"))
+  (symbol
+    (lib_id "power:GND") (at 50 137.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300017f-3333-4333-8333-000000000180")
+    (property "Reference" "#PWR03650" (at 50 143.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 50 140.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 50 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 50 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000180-3333-4333-8333-000000000181"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03650") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 60 133.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000181-3333-4333-8333-000000000182")
+    (property "Reference" "C_VDD_IO4" (at 63 131.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 63 135.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 60 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000182-3333-4333-8333-000000000183")) (pin "2" (uuid "c3000183-3333-4333-8333-000000000184"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_IO4") (unit 1))))
+  )
+  (label "3V3_SYS" (at 60 130 0) (effects (font (size 1.27 1.27))) (uuid "c3000184-3333-4333-8333-000000000185"))
+  (symbol
+    (lib_id "power:GND") (at 60 137.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000185-3333-4333-8333-000000000186")
+    (property "Reference" "#PWR03660" (at 60 143.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 60 140.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 60 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 60 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000186-3333-4333-8333-000000000187"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03660") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 70 133.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000187-3333-4333-8333-000000000188")
+    (property "Reference" "C_VDD_IO5" (at 73 131.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 73 135.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 70 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 70 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000188-3333-4333-8333-000000000189")) (pin "2" (uuid "c3000189-3333-4333-8333-00000000018a"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_IO5") (unit 1))))
+  )
+  (label "3V3_SYS" (at 70 130 0) (effects (font (size 1.27 1.27))) (uuid "c300018a-3333-4333-8333-00000000018b"))
+  (symbol
+    (lib_id "power:GND") (at 70 137.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300018b-3333-4333-8333-00000000018c")
+    (property "Reference" "#PWR03670" (at 70 143.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 70 140.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 70 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 70 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300018c-3333-4333-8333-00000000018d"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03670") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 80 133.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300018d-3333-4333-8333-00000000018e")
+    (property "Reference" "C_VDD_IO6" (at 83 131.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 83 135.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 80 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 80 133.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300018e-3333-4333-8333-00000000018f")) (pin "2" (uuid "c300018f-3333-4333-8333-000000000190"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_IO6") (unit 1))))
+  )
+  (label "3V3_SYS" (at 80 130 0) (effects (font (size 1.27 1.27))) (uuid "c3000190-3333-4333-8333-000000000191"))
+  (symbol
+    (lib_id "power:GND") (at 80 137.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000191-3333-4333-8333-000000000192")
+    (property "Reference" "#PWR03680" (at 80 143.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 80 140.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 80 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 80 137.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000192-3333-4333-8333-000000000193"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03680") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 30 147.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000193-3333-4333-8333-000000000194")
+    (property "Reference" "C_VDD_BAT_HF" (at 33 145.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 33 149.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 30 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 30 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000194-3333-4333-8333-000000000195")) (pin "2" (uuid "c3000195-3333-4333-8333-000000000196"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_BAT_HF") (unit 1))))
+  )
+  (label "3V3_SYS" (at 30 144 0) (effects (font (size 1.27 1.27))) (uuid "c3000196-3333-4333-8333-000000000197"))
+  (symbol
+    (lib_id "power:GND") (at 30 151.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000197-3333-4333-8333-000000000198")
+    (property "Reference" "#PWR03730" (at 30 157.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 30 154.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 30 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 30 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c3000198-3333-4333-8333-000000000199"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03730") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 40 147.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c3000199-3333-4333-8333-00000000019a")
+    (property "Reference" "C_VDD_BAT_BULK" (at 43 145.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF" (at 43 149.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 40 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 40 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300019a-3333-4333-8333-00000000019b")) (pin "2" (uuid "c300019b-3333-4333-8333-00000000019c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_BAT_BULK") (unit 1))))
+  )
+  (label "3V3_SYS" (at 40 144 0) (effects (font (size 1.27 1.27))) (uuid "c300019c-3333-4333-8333-00000000019d"))
+  (symbol
+    (lib_id "power:GND") (at 40 151.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300019d-3333-4333-8333-00000000019e")
+    (property "Reference" "#PWR03740" (at 40 157.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 40 154.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 40 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 40 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c300019e-3333-4333-8333-00000000019f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03740") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 50 147.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c300019f-3333-4333-8333-0000000001a0")
+    (property "Reference" "C_VDD_LDO_HF" (at 53 145.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 53 149.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 50 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 50 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30001a0-3333-4333-8333-0000000001a1")) (pin "2" (uuid "c30001a1-3333-4333-8333-0000000001a2"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_LDO_HF") (unit 1))))
+  )
+  (label "3V3_SYS" (at 50 144 0) (effects (font (size 1.27 1.27))) (uuid "c30001a2-3333-4333-8333-0000000001a3"))
+  (symbol
+    (lib_id "power:GND") (at 50 151.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30001a3-3333-4333-8333-0000000001a4")
+    (property "Reference" "#PWR03750" (at 50 157.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 50 154.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 50 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 50 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30001a4-3333-4333-8333-0000000001a5"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03750") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 60 147.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30001a5-3333-4333-8333-0000000001a6")
+    (property "Reference" "C_VDD_LDO_BULK" (at 63 145.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF" (at 63 149.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 60 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30001a6-3333-4333-8333-0000000001a7")) (pin "2" (uuid "c30001a7-3333-4333-8333-0000000001a8"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_LDO_BULK") (unit 1))))
+  )
+  (label "3V3_SYS" (at 60 144 0) (effects (font (size 1.27 1.27))) (uuid "c30001a8-3333-4333-8333-0000000001a9"))
+  (symbol
+    (lib_id "power:GND") (at 60 151.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30001a9-3333-4333-8333-0000000001aa")
+    (property "Reference" "#PWR03760" (at 60 157.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 60 154.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 60 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 60 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30001aa-3333-4333-8333-0000000001ab"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03760") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 70 147.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30001ab-3333-4333-8333-0000000001ac")
+    (property "Reference" "C_VDD_DCDCC_HF" (at 73 145.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 73 149.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 70 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 70 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30001ac-3333-4333-8333-0000000001ad")) (pin "2" (uuid "c30001ad-3333-4333-8333-0000000001ae"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_DCDCC_HF") (unit 1))))
+  )
+  (label "3V3_SYS" (at 70 144 0) (effects (font (size 1.27 1.27))) (uuid "c30001ae-3333-4333-8333-0000000001af"))
+  (symbol
+    (lib_id "power:GND") (at 70 151.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30001af-3333-4333-8333-0000000001b0")
+    (property "Reference" "#PWR03770" (at 70 157.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 70 154.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 70 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 70 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30001b0-3333-4333-8333-0000000001b1"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03770") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 80 147.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30001b1-3333-4333-8333-0000000001b2")
+    (property "Reference" "C_VDD_DCDCC_BULK" (at 83 145.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF" (at 83 149.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 80 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 80 147.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30001b2-3333-4333-8333-0000000001b3")) (pin "2" (uuid "c30001b3-3333-4333-8333-0000000001b4"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "C_VDD_DCDCC_BULK") (unit 1))))
+  )
+  (label "3V3_SYS" (at 80 144 0) (effects (font (size 1.27 1.27))) (uuid "c30001b4-3333-4333-8333-0000000001b5"))
+  (symbol
+    (lib_id "power:GND") (at 80 151.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+    (uuid "c30001b5-3333-4333-8333-0000000001b6")
+    (property "Reference" "#PWR03780" (at 80 157.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 80 154.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 80 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 80 151.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "c30001b6-3333-4333-8333-0000000001b7"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR03780") (unit 1))))
+  )
+  (hierarchical_label "3V3_SYS" (shape input) (at 20 25 0) (effects (font (size 1.27 1.27))) (uuid "c30001b7-3333-4333-8333-0000000001b8"))
+  (no_connect (at 89.14 141.21) (uuid "c30001b8-3333-4333-8333-0000000001b9"))
+  (no_connect (at 89.14 118.35) (uuid "c30001b9-3333-4333-8333-0000000001ba"))
+  (no_connect (at 89.14 115.81) (uuid "c30001ba-3333-4333-8333-0000000001bb"))
+  (no_connect (at 89.14 113.27) (uuid "c30001bb-3333-4333-8333-0000000001bc"))
+  (no_connect (at 89.14 110.73) (uuid "c30001bc-3333-4333-8333-0000000001bd"))
+  (no_connect (at 89.14 108.19) (uuid "c30001bd-3333-4333-8333-0000000001be"))
+  (no_connect (at 134.86 141.21) (uuid "c30001be-3333-4333-8333-0000000001bf"))
+  (no_connect (at 134.86 138.67) (uuid "c30001bf-3333-4333-8333-0000000001c0"))
+  (no_connect (at 134.86 136.13) (uuid "c30001c0-3333-4333-8333-0000000001c1"))
+  (no_connect (at 134.86 133.59) (uuid "c30001c1-3333-4333-8333-0000000001c2"))
+  (no_connect (at 134.86 131.05) (uuid "c30001c2-3333-4333-8333-0000000001c3"))
+  (no_connect (at 134.86 128.51) (uuid "c30001c3-3333-4333-8333-0000000001c4"))
+  (no_connect (at 134.86 125.97) (uuid "c30001c4-3333-4333-8333-0000000001c5"))
+  (no_connect (at 134.86 103.11) (uuid "c30001c5-3333-4333-8333-0000000001c6"))
+  (no_connect (at 134.86 100.57) (uuid "c30001c6-3333-4333-8333-0000000001c7"))
+  (no_connect (at 134.86 98.03) (uuid "c30001c7-3333-4333-8333-0000000001c8"))
+  (no_connect (at 134.86 95.49) (uuid "c30001c8-3333-4333-8333-0000000001c9"))
+  (no_connect (at 134.86 90.41) (uuid "c30001c9-3333-4333-8333-0000000001ca"))
+  (no_connect (at 134.86 87.87) (uuid "c30001ca-3333-4333-8333-0000000001cb"))
+  (no_connect (at 134.86 54.85) (uuid "c30001cb-3333-4333-8333-0000000001cc"))
+  (no_connect (at 134.86 52.31) (uuid "c30001cc-3333-4333-8333-0000000001cd"))
+  (no_connect (at 89.14 138.67) (uuid "c30001cd-3333-4333-8333-0000000001ce"))
+  (no_connect (at 89.14 136.13) (uuid "c30001ce-3333-4333-8333-0000000001cf"))
+  (text "ESP32-P4X pin map normalized pin-by-pin against current Espressif library; 105/105 physical pins verified." (exclude_from_sim no) (at 20 170 0) (effects (font (size 1.27 1.27))) (uuid "c30001cf-3333-4333-8333-0000000001d0"))
+  (text "CRITICAL: physical package pin 54 = VDD_HP_1 on v3.x. All VDD_HP_0/1/2/3 are tied to P4_VDD_HP." (exclude_from_sim no) (at 20 175 0) (effects (font (size 1.27 1.27))) (uuid "c30001d0-3333-4333-8333-0000000001d1"))
+  (text "Core feedback: 499k P4_VDD_HP->FB, 499k FB->GND, 22pF in parallel with upper 499k per Espressif v3.x TLV62569 reference." (exclude_from_sim no) (at 20 180 0) (effects (font (size 1.27 1.27))) (uuid "c30001d1-3333-4333-8333-0000000001d2"))
+  (text "VDDO_3 is firmware-configured to 2.5V for MIPI DPHY. VDDO_4 is intentionally unused/NC in Rev A (no SDIO 3.0 voltage switching)." (exclude_from_sim no) (at 20 185 0) (effects (font (size 1.27 1.27))) (uuid "c30001d2-3333-4333-8333-0000000001d3"))
+  (text "ESP32-P4NRW32X requires a separate v3.x firmware build; legacy JC4880 rev1.3 binary is not valid for M1." (exclude_from_sim no) (at 20 190 0) (effects (font (size 1.27 1.27))) (uuid "c30001d3-3333-4333-8333-0000000001d4"))
+  (sheet_instances (path "/" (page "4")))
   (embedded_fonts no)
 )
