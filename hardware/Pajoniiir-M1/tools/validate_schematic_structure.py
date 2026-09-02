@@ -220,7 +220,9 @@ def main() -> int:
             errors.append(f"{name}: root pin {net} missing child label")
 
     # 3. RefDes uniqueness across hierarchy.
-    refs: dict[str, list[str]] = defaultdict(list)
+    # Multi-unit symbols legitimately repeat a RefDes on the same sheet/library,
+    # but each unit number must be unique. Cross-sheet/library repeats are errors.
+    refs: dict[str, list[tuple[str, str, int]]] = defaultdict(list)
     blank_footprints: list[tuple[str, str, str]] = []
     for name, text in child_text.items():
         for block in instantiated_symbol_blocks(text):
@@ -228,12 +230,20 @@ def main() -> int:
             val_m = re.search(r'\(property "Value" "([^"]*)"', block)
             fp_m = re.search(r'\(property "Footprint" "([^"]*)"', block)
             on_m = re.search(r'\(on_board (yes|no)\)', block)
+            lib_m = re.search(r'\(lib_id "([^"]+)"', block)
+            unit_m = re.search(r'\(unit (\d+)\)', block)
             if not ref_m:
                 continue
             ref = ref_m.group(1)
             value = val_m.group(1) if val_m else ""
             if not ref.startswith("#PWR"):
-                refs[ref].append(name)
+                refs[ref].append(
+                    (
+                        name,
+                        lib_m.group(1) if lib_m else "",
+                        int(unit_m.group(1)) if unit_m else 1,
+                    )
+                )
             if (
                 not ref.startswith("#PWR")
                 and on_m
@@ -244,7 +254,6 @@ def main() -> int:
                 blank_footprints.append((name, ref, value))
 
             # No legacy functional IC blocks in Rev A.
-            lib_m = re.search(r'\(lib_id "([^"]+)"', block)
             searchable = " ".join(
                 x for x in [value, lib_m.group(1) if lib_m else ""] if x
             ).upper()
@@ -253,8 +262,20 @@ def main() -> int:
                     errors.append(f"{name}:{ref}: prohibited legacy block {banned}")
 
     for ref, owners in refs.items():
-        if len(owners) > 1:
-            errors.append(f"duplicate RefDes {ref}: {', '.join(owners)}")
+        sheet_lib = {(sheet, lib_id) for sheet, lib_id, _ in owners}
+        units = [unit for _, _, unit in owners]
+        if len(sheet_lib) > 1:
+            locations = ", ".join(
+                f"{sheet}:{lib_id or '<unknown>'}/unit{unit}"
+                for sheet, lib_id, unit in owners
+            )
+            errors.append(f"duplicate RefDes {ref}: {locations}")
+        elif len(units) != len(set(units)):
+            sheet, lib_id = next(iter(sheet_lib))
+            errors.append(
+                f"duplicate RefDes/unit {ref} on {sheet}:{lib_id}: "
+                + ", ".join(f"unit{unit}" for unit in units)
+            )
 
     for name, ref, value in blank_footprints:
         if (name, ref) not in ALLOWED_BLANK_FOOTPRINTS:
