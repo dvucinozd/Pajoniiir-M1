@@ -1247,7 +1247,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "#PWR1206") (unit 1))))
   )
   (wire (pts (xy 196.85 72.39) (xy 175.26 72.39)) (stroke (width 0) (type default)) (uuid "0c00009a-c000-4c00-8c00-00000000009b"))
-  (hierarchical_label "SD_CARD_DETECT" (shape output) (at 160.02 72.39 180) (effects (font (size 1.27 1.27))) (uuid "0c00009b-c000-4c00-8c00-00000000009c"))
+  (hierarchical_label "SD_CARD_DETECT" (shape output) (at 175.26 72.39 180) (effects (font (size 1.27 1.27))) (uuid "0c00009b-c000-4c00-8c00-00000000009c"))
   (symbol
     (lib_id "Device:R_US") (at 170.18 68.58 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c00009c-c000-4c00-8c00-00000000009d")

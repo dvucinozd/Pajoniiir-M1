@@ -855,7 +855,7 @@
   (wire (pts (xy 128.905 62.23) (xy 144.78 62.23)) (stroke (width 0) (type default)) (uuid "0e00001f-e000-4e00-8e00-000000000020"))
   (wire (pts (xy 144.78 62.23) (xy 144.78 69.85)) (stroke (width 0) (type default)) (uuid "0e000020-e000-4e00-8e00-000000000021"))
   (wire (pts (xy 144.78 69.85) (xy 154.94 69.85)) (stroke (width 0) (type default)) (uuid "0e000021-e000-4e00-8e00-000000000022"))
-  (label "INA_INN_FILT" (at 139.7 69.85 0) (effects (font (size 1.27 1.27))) (uuid "0e000022-e000-4e00-8e00-000000000023"))
+  (label "INA_INN_FILT" (at 144.78 69.85 0) (effects (font (size 1.27 1.27))) (uuid "0e000022-e000-4e00-8e00-000000000023"))
   (symbol
     (lib_id "Device:C") (at 109.855 74.93 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000023-e000-4e00-8e00-000000000024")
@@ -870,8 +870,8 @@
   (label "INA_INP_FILT" (at 109.855 71.12 0) (effects (font (size 1.27 1.27))) (uuid "0e000026-e000-4e00-8e00-000000000027"))
   (label "INA_INN_FILT" (at 109.855 78.74 0) (effects (font (size 1.27 1.27))) (uuid "0e000027-e000-4e00-8e00-000000000028"))
   (label "5V_SYS" (at 154.94 82.55 0) (effects (font (size 1.27 1.27))) (uuid "0e000028-e000-4e00-8e00-000000000029"))
-  (hierarchical_label "3V3_SYS" (shape input) (at 34.925 90.17 0) (effects (font (size 1.27 1.27))) (uuid "0e000029-e000-4e00-8e00-00000000002a"))
-  (label "3V3_SYS" (at 165.1 87.63 270) (effects (font (size 1.27 1.27))) (uuid "0e00002a-e000-4e00-8e00-00000000002b"))
+  (hierarchical_label "3V3_SYS" (shape input) (at 165.1 87.63 270) (effects (font (size 1.27 1.27))) (uuid "0e000029-e000-4e00-8e00-00000000002a"))
+  
   (symbol
     (lib_id "Device:C") (at 189.865 93.98 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00002b-e000-4e00-8e00-00000000002c")

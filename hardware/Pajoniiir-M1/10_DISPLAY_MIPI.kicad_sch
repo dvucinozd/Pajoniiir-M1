@@ -936,8 +936,8 @@
   (junction (at 255.27 52.705) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000012"))
   (junction (at 189.865 85.09) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000013"))
   (hierarchical_label "3V3_SYS" (shape input) (at 29.845 29.845 0) (effects (font (size 1.27 1.27))) (uuid "0a000001-a000-4a00-8a00-000000000002"))
-  (hierarchical_label "5V_SYS" (shape input) (at 29.845 34.925 0) (effects (font (size 1.27 1.27))) (uuid "0a000002-a000-4a00-8a00-000000000003"))
-  (hierarchical_label "P4_LDO_MIPI_2V5" (shape input) (at 29.845 40.005 0) (effects (font (size 1.27 1.27))) (uuid "0a000003-a000-4a00-8a00-000000000004"))
+  (hierarchical_label "5V_SYS" (shape input) (at 154.94 29.845 0) (effects (font (size 1.27 1.27))) (uuid "0a000002-a000-4a00-8a00-000000000003"))
+  (hierarchical_label "P4_LDO_MIPI_2V5" (shape input) (at 125.095 40.005 0) (effects (font (size 1.27 1.27))) (uuid "0a000003-a000-4a00-8a00-000000000004"))
   (symbol
     (lib_id "Device:R_US") (at 55.245 29.845 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000004-a000-4a00-8a00-000000000005")
@@ -1023,7 +1023,7 @@
     (pin "1" (uuid "0a00001b-a000-4a00-8a00-00000000001c"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "TP_MIPI_2V5") (unit 1))))
   )
-  (label "P4_LDO_MIPI_2V5" (at 125.095 40.005 0) (effects (font (size 1.27 1.27))) (uuid "0a00001c-a000-4a00-8a00-00000000001d"))
+  
 
   (hierarchical_label "DSI_D0_P" (shape bidirectional) (at 29.845 55.245 0) (effects (font (size 1.27 1.27))) (uuid "0a00001d-a000-4a00-8a00-00000000001e"))
   (symbol
@@ -1205,7 +1205,7 @@
     (pin "1" (uuid "0a000062-a000-4a00-8a00-000000000063")) (pin "2" (uuid "0a000063-a000-4a00-8a00-000000000064"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "C_BL_IN") (unit 1))))
   )
-  (label "5V_SYS" (at 154.94 29.845 0) (effects (font (size 1.27 1.27))) (uuid "0a000064-a000-4a00-8a00-000000000065"))
+  
   (symbol
     (lib_id "power:GND") (at 154.94 37.465 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000065-a000-4a00-8a00-000000000066")
