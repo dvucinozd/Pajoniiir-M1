@@ -15,11 +15,11 @@
   (lib_symbols
 (symbol "Power_Switch:TPS22918" (pin_names (offset 0.508)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
-      (property "Value" "TPS22918" (at 0 -8.89 0) (effects (font (size 1.27 1.27)) hide))
-      (symbol "Power_Switch:TPS22918_0_1"
+      (property "Value" "TPS22918" (at 0 -8.89 0) (effects (font (size 1.27 1.27)) (hide yes)))
+      (symbol "TPS22918_0_1"
         (rectangle (start -6.35 5.08) (end 6.35 -6.35) (stroke (width 0.254) (type default)) (fill (type background)))
       )
-      (symbol "Power_Switch:TPS22918_1_1"
+      (symbol "TPS22918_1_1"
         (pin power_in line (at -8.89 2.54 0) (length 2.54)
           (name "VIN" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27)))))

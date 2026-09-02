@@ -115,7 +115,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "ESP32-P4NRW32X_0_1"
+		(symbol "ESP32-P4X_0_1"
 			(rectangle
 				(start -20.32 36.83)
 				(end 20.32 -78.74)
@@ -128,7 +128,7 @@
 				)
 			)
 		)
-		(symbol "ESP32-P4NRW32X_1_0"
+		(symbol "ESP32-P4X_1_0"
 			(pin power_in line
 				(at -22.86 21.59 0)
 				(length 2.54)
@@ -616,7 +616,7 @@
 				)
 			)
 		)
-		(symbol "ESP32-P4NRW32X_1_1"
+		(symbol "ESP32-P4X_1_1"
 			(polyline
 				(pts
 					(xy -17.78 31.75) (xy 17.78 31.75)
@@ -657,7 +657,7 @@
 				)
 			)
 		)
-		(symbol "ESP32-P4NRW32X_2_0"
+		(symbol "ESP32-P4X_2_0"
 			(pin bidirectional line
 				(at -22.86 29.21 0)
 				(length 2.54)
@@ -1901,7 +1901,7 @@
 				)
 			)
 		)
-		(symbol "ESP32-P4NRW32X_2_1"
+		(symbol "ESP32-P4X_2_1"
 			(polyline
 				(pts
 					(xy -17.78 31.75) (xy 17.78 31.75)
