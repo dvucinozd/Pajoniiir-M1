@@ -40,7 +40,7 @@ Za novi dizajn mora se koristiti ESP32-P4 v3.x-or-later referentna shema. Espres
 | U5 | 1 | Stereo MAIN DAC | Texas Instruments | **PCM5102APWR** | TSSOP-20 | 2.1 Vrms class, 112 dB SNR, PLL, MCLK nije obavezan | **LOCKED by existing hardware path** |
 | U6 | 1 | Dual USB VBUS power switch | Texas Instruments | **TPS2561DRCR** | VSON-10, 3×3 mm | 2 kanala, 0.25–2.8 A adjustable ILIM, 2.5–6.5 V | **LOCK-CANDIDATE** |
 | U7 | 1 | 5V input eFuse | Texas Instruments | **TPS259474ARPWR** | VQFN-HR-10, 2×2 mm | 2.7–23 V, 5.5 A class, reverse blocking, OCP/OVP | **LOCK-CANDIDATE** |
-| U8 | 1 | 5V→3V3 system buck | Texas Instruments | **TPS62133RGTR** | VQFN-16, 3×3 mm | fixed 3.3 V, 3 A, 3–17 V input | **LOCK-CANDIDATE** |
+| U8 | 1 | 5V→3V3 system buck | Texas Instruments | **TPS62132RGTR** | VQFN-16, 3×3 mm | fixed 3.3 V, 3 A, 3–17 V input | **LOCK-CANDIDATE** |
 | U9 | 1 | LCD WLED boost | Monolithic Power Systems | **MP3202DJ-LF-Z** | TSOT23-6 | 2.5–6 V in, 1.3 A switch, PWM dimming | **TBD-VALIDATE against final panel LED string** |
 | U10 | 0/1 | Touch controller | GOODIX | **GT911** | panel/module dependent | capacitive touch, I²C | **TBD: may already be on touch FPC/module** |
 
@@ -169,7 +169,7 @@ Firmware baseline:
 
 # 7. Glavni 3.3 V rail
 
-U8 = **TPS62133RGTR**.
+U8 = **TPS62132RGTR**.
 
 Zašto:
 
@@ -181,7 +181,7 @@ Zašto:
 
 | RefDes | Qty | Vrijednost | Napomena |
 |---|---:|---|---|
-| L_3V3 | 1 | TBD prema TPS62133 datasheetu/EVM | odabrati low-DCR, Isat s marginom |
+| L_3V3 | 1 | TBD prema TPS62132 datasheetu/EVM | odabrati low-DCR, Isat s marginom |
 | C_3V3_IN | set | TBD, X7R | prema TI reference designu |
 | C_3V3_OUT | set | TBD, X7R | prema TI reference designu |
 | TP_3V3 | 1 | test point | obavezno |
@@ -512,7 +512,7 @@ Sljedeće stavke moraju čekati kućište i finalni panel:
 
 - TPS2561 family — TI ACTIVE.
 - TPS25947 family — TI ACTIVE.
-- TPS62133RGTR — TI ACTIVE.
+- TPS62132RGTR — TI ACTIVE.
 - TLV62569 family — TI ACTIVE; TI navodi i novije alternative, ali Espressif ga i dalje eksplicitno navodi kao verified P4 DCDC model.
 - PCM5102A — TI ACTIVE.
 - MP3202 — MPS ACTIVE.
@@ -561,8 +561,8 @@ Primarni izvori provjereni 2026-09-02:
   https://www.ti.com/product/TPS2561
 - TI TPS25947:  
   https://www.ti.com/product/TPS25947
-- TI TPS62133:  
-  https://www.ti.com/product/TPS62133
+- TI TPS62132:  
+  https://www.ti.com/product/TPS62132
 - TI TLV62569:  
   https://www.ti.com/product/TLV62569
 - Winbond W25Q-JV selection / W25Q128JV:  
@@ -586,7 +586,7 @@ ESP32-C6-WROOM-1-N4
 PCM5102APWR
 TPS2561DRCR
 TPS259474ARPWR
-TPS62133RGTR
+TPS62132RGTR
 MP3202DJ-LF-Z
 ```
 
