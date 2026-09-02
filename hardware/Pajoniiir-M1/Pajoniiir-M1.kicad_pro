@@ -59,7 +59,32 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [],
+    "erc_exclusions": [
+      [
+        "label_dangling|635000|552450|0a000023-a000-4a00-8a00-000000000024|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a||",
+        "INTENTIONAL M1-SCH-A HARD GATE: PANEL_DSI_D0_P terminates at the prepared panel side; physical J_LCD remains uninstantiated until authoritative panel/FPC MPN, contact count, pitch, contact side and ambiguous pins are locked."
+      ],
+      [
+        "label_dangling|635000|622300|0a00002a-a000-4a00-8a00-00000000002b|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a||",
+        "INTENTIONAL M1-SCH-A HARD GATE: PANEL_DSI_D0_N terminates at the prepared panel side; physical J_LCD remains uninstantiated until authoritative panel/FPC MPN, contact count, pitch, contact side and ambiguous pins are locked."
+      ],
+      [
+        "label_dangling|635000|730250|0a000031-a000-4a00-8a00-000000000032|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a||",
+        "INTENTIONAL M1-SCH-A HARD GATE: PANEL_DSI_D1_P terminates at the prepared panel side; physical J_LCD remains uninstantiated until authoritative panel/FPC MPN, contact count, pitch, contact side and ambiguous pins are locked."
+      ],
+      [
+        "label_dangling|635000|800100|0a000038-a000-4a00-8a00-000000000039|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a||",
+        "INTENTIONAL M1-SCH-A HARD GATE: PANEL_DSI_D1_N terminates at the prepared panel side; physical J_LCD remains uninstantiated until authoritative panel/FPC MPN, contact count, pitch, contact side and ambiguous pins are locked."
+      ],
+      [
+        "label_dangling|635000|908050|0a00003f-a000-4a00-8a00-000000000040|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a||",
+        "INTENTIONAL M1-SCH-A HARD GATE: PANEL_DSI_CLK_P terminates at the prepared panel side; physical J_LCD remains uninstantiated until authoritative panel/FPC MPN, contact count, pitch, contact side and ambiguous pins are locked."
+      ],
+      [
+        "label_dangling|635000|977900|0a000046-a000-4a00-8a00-000000000047|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a||",
+        "INTENTIONAL M1-SCH-A HARD GATE: PANEL_DSI_CLK_N terminates at the prepared panel side; physical J_LCD remains uninstantiated until authoritative panel/FPC MPN, contact count, pitch, contact side and ambiguous pins are locked."
+      ]
+    ],
     "meta": {
       "version": 0
     },
@@ -187,7 +212,7 @@
     "bom_export_filename": "${PROJECTNAME}.csv",
     "bom_fmt_presets": [],
     "bom_presets": [],
-    "connection_grid_size": 25.0,
+    "connection_grid_size": 25,
     "drawing": {
       "default_line_thickness": 6,
       "default_text_size": 50,
