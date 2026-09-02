@@ -1041,7 +1041,7 @@
   )
   (wire (pts (xy 29.845 55.245) (xy 55.88 55.245)) (stroke (width 0) (type default)) (uuid "0a000021-a000-4a00-8a00-000000000022"))
   (wire (pts (xy 63.5 55.245) (xy 114.935 55.245)) (stroke (width 0) (type default)) (uuid "0a000022-a000-4a00-8a00-000000000023"))
-  (label "PANEL_DSI_D0_P" (at 90.17 55.245 0) (effects (font (size 1.27 1.27))) (uuid "0a000023-a000-4a00-8a00-000000000024"))
+  (label "PANEL_DSI_D0_P" (at 63.5 55.245 0) (effects (font (size 1.27 1.27))) (uuid "0a000023-a000-4a00-8a00-000000000024"))
   (hierarchical_label "DSI_D0_N" (shape bidirectional) (at 29.845 62.23 0) (effects (font (size 1.27 1.27))) (uuid "0a000024-a000-4a00-8a00-000000000025"))
   (symbol
     (lib_id "Device:R_US") (at 59.69 62.23 90) (unit 1)
@@ -1056,7 +1056,7 @@
   )
   (wire (pts (xy 29.845 62.23) (xy 55.88 62.23)) (stroke (width 0) (type default)) (uuid "0a000028-a000-4a00-8a00-000000000029"))
   (wire (pts (xy 63.5 62.23) (xy 114.935 62.23)) (stroke (width 0) (type default)) (uuid "0a000029-a000-4a00-8a00-00000000002a"))
-  (label "PANEL_DSI_D0_N" (at 90.17 62.23 0) (effects (font (size 1.27 1.27))) (uuid "0a00002a-a000-4a00-8a00-00000000002b"))
+  (label "PANEL_DSI_D0_N" (at 63.5 62.23 0) (effects (font (size 1.27 1.27))) (uuid "0a00002a-a000-4a00-8a00-00000000002b"))
   (hierarchical_label "DSI_D1_P" (shape bidirectional) (at 29.845 73.025 0) (effects (font (size 1.27 1.27))) (uuid "0a00002b-a000-4a00-8a00-00000000002c"))
   (symbol
     (lib_id "Device:R_US") (at 59.69 73.025 90) (unit 1)
@@ -1071,7 +1071,7 @@
   )
   (wire (pts (xy 29.845 73.025) (xy 55.88 73.025)) (stroke (width 0) (type default)) (uuid "0a00002f-a000-4a00-8a00-000000000030"))
   (wire (pts (xy 63.5 73.025) (xy 114.935 73.025)) (stroke (width 0) (type default)) (uuid "0a000030-a000-4a00-8a00-000000000031"))
-  (label "PANEL_DSI_D1_P" (at 90.17 73.025 0) (effects (font (size 1.27 1.27))) (uuid "0a000031-a000-4a00-8a00-000000000032"))
+  (label "PANEL_DSI_D1_P" (at 63.5 73.025 0) (effects (font (size 1.27 1.27))) (uuid "0a000031-a000-4a00-8a00-000000000032"))
   (hierarchical_label "DSI_D1_N" (shape bidirectional) (at 29.845 80.01 0) (effects (font (size 1.27 1.27))) (uuid "0a000032-a000-4a00-8a00-000000000033"))
   (symbol
     (lib_id "Device:R_US") (at 59.69 80.01 90) (unit 1)
@@ -1086,7 +1086,7 @@
   )
   (wire (pts (xy 29.845 80.01) (xy 55.88 80.01)) (stroke (width 0) (type default)) (uuid "0a000036-a000-4a00-8a00-000000000037"))
   (wire (pts (xy 63.5 80.01) (xy 114.935 80.01)) (stroke (width 0) (type default)) (uuid "0a000037-a000-4a00-8a00-000000000038"))
-  (label "PANEL_DSI_D1_N" (at 90.17 80.01 0) (effects (font (size 1.27 1.27))) (uuid "0a000038-a000-4a00-8a00-000000000039"))
+  (label "PANEL_DSI_D1_N" (at 63.5 80.01 0) (effects (font (size 1.27 1.27))) (uuid "0a000038-a000-4a00-8a00-000000000039"))
   (hierarchical_label "DSI_CLK_P" (shape bidirectional) (at 29.845 90.805 0) (effects (font (size 1.27 1.27))) (uuid "0a000039-a000-4a00-8a00-00000000003a"))
   (symbol
     (lib_id "Device:R_US") (at 59.69 90.805 90) (unit 1)
@@ -1101,7 +1101,7 @@
   )
   (wire (pts (xy 29.845 90.805) (xy 55.88 90.805)) (stroke (width 0) (type default)) (uuid "0a00003d-a000-4a00-8a00-00000000003e"))
   (wire (pts (xy 63.5 90.805) (xy 114.935 90.805)) (stroke (width 0) (type default)) (uuid "0a00003e-a000-4a00-8a00-00000000003f"))
-  (label "PANEL_DSI_CLK_P" (at 90.17 90.805 0) (effects (font (size 1.27 1.27))) (uuid "0a00003f-a000-4a00-8a00-000000000040"))
+  (label "PANEL_DSI_CLK_P" (at 63.5 90.805 0) (effects (font (size 1.27 1.27))) (uuid "0a00003f-a000-4a00-8a00-000000000040"))
   (hierarchical_label "DSI_CLK_N" (shape bidirectional) (at 29.845 97.79 0) (effects (font (size 1.27 1.27))) (uuid "0a000040-a000-4a00-8a00-000000000041"))
   (symbol
     (lib_id "Device:R_US") (at 59.69 97.79 90) (unit 1)
@@ -1116,7 +1116,7 @@
   )
   (wire (pts (xy 29.845 97.79) (xy 55.88 97.79)) (stroke (width 0) (type default)) (uuid "0a000044-a000-4a00-8a00-000000000045"))
   (wire (pts (xy 63.5 97.79) (xy 114.935 97.79)) (stroke (width 0) (type default)) (uuid "0a000045-a000-4a00-8a00-000000000046"))
-  (label "PANEL_DSI_CLK_N" (at 90.17 97.79 0) (effects (font (size 1.27 1.27))) (uuid "0a000046-a000-4a00-8a00-000000000047"))
+  (label "PANEL_DSI_CLK_N" (at 63.5 97.79 0) (effects (font (size 1.27 1.27))) (uuid "0a000046-a000-4a00-8a00-000000000047"))
   (hierarchical_label "LCD_RST" (shape input) (at 29.845 111.76 0) (effects (font (size 1.27 1.27))) (uuid "0a000047-a000-4a00-8a00-000000000048"))
   (symbol
     (lib_id "Device:R_US") (at 59.69 111.76 90) (unit 1)

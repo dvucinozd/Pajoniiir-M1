@@ -828,12 +828,6 @@
   (wire (pts (xy 83.82 42.545) (xy 109.855 42.545)) (stroke (width 0) (type default)) (uuid "8d6f0000-0000-4000-8000-000000000001"))
   (wire (pts (xy 109.855 42.545) (xy 109.855 47.625)) (stroke (width 0) (type default)) (uuid "8d6f0000-0000-4000-8000-000000000002"))
   (junction (at 50.165 47.625) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000019"))
-  (junction (at 109.855 47.625) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000020"))
-  (junction (at 120.015 74.93) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000021"))
-  (junction (at 132.08 77.47) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000022"))
-  (junction (at 144.145 80.01) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000023"))
-  (junction (at 156.21 90.17) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000024"))
-  (junction (at 168.275 92.71) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000025"))
   (junction (at 179.705 85.09) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000026"))
   (symbol
     (lib_id "Pajoniiir-M1:TPS22918") (at 74.93 45.085 0) (unit 1)
@@ -875,7 +869,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "#PWR1201") (unit 1))))
   )
   (symbol
-    (lib_id "Device:C") (at 45.085 51.435 0) (unit 1)
+    (lib_id "Device:C") (at 45.085 46.355 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c000012-c000-4c00-8c00-000000000013")
     (property "Reference" "C_SD_SW_IN_HF" (at 48.085 49.435 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100nF" (at 48.085 53.435 0) (effects (font (size 1.27 1.27))))
@@ -885,9 +879,9 @@
     (pin "1" (uuid "0c000013-c000-4c00-8c00-000000000014")) (pin "2" (uuid "0c000014-c000-4c00-8c00-000000000015"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "C_SD_SW_IN_HF") (unit 1))))
   )
-  (label "3V3_SYS" (at 45.085 47.625 0) (effects (font (size 1.27 1.27))) (uuid "0c000015-c000-4c00-8c00-000000000016"))
+  (label "3V3_SYS" (at 45.085 42.545 0) (effects (font (size 1.27 1.27))) (uuid "0c000015-c000-4c00-8c00-000000000016"))
   (symbol
-    (lib_id "power:GND") (at 45.085 55.245 0) (unit 1)
+    (lib_id "power:GND") (at 45.085 50.165 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c000016-c000-4c00-8c00-000000000017")
     (property "Reference" "#PWR1245" (at 45.085 61.245 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 45.085 58.245 0) (effects (font (size 1.27 1.27))))
@@ -898,7 +892,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "#PWR1245") (unit 1))))
   )
   (symbol
-    (lib_id "Device:C") (at 57.15 51.435 0) (unit 1)
+    (lib_id "Device:C") (at 57.15 46.355 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c000018-c000-4c00-8c00-000000000019")
     (property "Reference" "C_SD_SW_IN" (at 60.15 49.435 0) (effects (font (size 1.27 1.27))))
     (property "Value" "1uF" (at 60.15 53.435 0) (effects (font (size 1.27 1.27))))
@@ -908,9 +902,9 @@
     (pin "1" (uuid "0c000019-c000-4c00-8c00-00000000001a")) (pin "2" (uuid "0c00001a-c000-4c00-8c00-00000000001b"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "C_SD_SW_IN") (unit 1))))
   )
-  (label "3V3_SYS" (at 57.15 47.625 0) (effects (font (size 1.27 1.27))) (uuid "0c00001b-c000-4c00-8c00-00000000001c"))
+  (label "3V3_SYS" (at 57.15 42.545 0) (effects (font (size 1.27 1.27))) (uuid "0c00001b-c000-4c00-8c00-00000000001c"))
   (symbol
-    (lib_id "power:GND") (at 57.15 55.245 0) (unit 1)
+    (lib_id "power:GND") (at 57.15 50.165 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c00001c-c000-4c00-8c00-00000000001d")
     (property "Reference" "#PWR1257" (at 57.15 61.245 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 57.15 58.245 0) (effects (font (size 1.27 1.27))))
@@ -954,8 +948,8 @@
     (pin "1" (uuid "0c000025-c000-4c00-8c00-000000000026"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "#PWR1203") (unit 1))))
   )
-  (wire (pts (xy 109.855 47.625) (xy 120.015 47.625)) (stroke (width 0) (type default)) (uuid "0c000026-c000-4c00-8c00-000000000027"))
-  (label "3V3_SD" (at 104.775 47.625 0) (effects (font (size 1.27 1.27))) (uuid "0c000027-c000-4c00-8c00-000000000028"))
+
+  (label "3V3_SD" (at 103.505 47.625 0) (effects (font (size 1.27 1.27))) (uuid "0c000027-c000-4c00-8c00-000000000028"))
   (symbol
     (lib_id "Device:R_US") (at 99.695 47.625 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c000028-c000-4c00-8c00-000000000029")
@@ -968,7 +962,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_QOD") (unit 1))))
   )
   (wire (pts (xy 83.82 47.625) (xy 95.885 47.625)) (stroke (width 0) (type default)) (uuid "0c00002b-c000-4c00-8c00-00000000002c"))
-  (wire (pts (xy 103.505 47.625) (xy 109.855 47.625)) (stroke (width 0) (type default)) (uuid "0c00002c-c000-4c00-8c00-00000000002d"))
+  (wire (pts (xy 103.505 47.625) (xy 120.015 47.625)) (stroke (width 0) (type default)) (uuid "0c00002c-c000-4c00-8c00-00000000002d"))
   
   (symbol
     (lib_id "Device:C") (at 125.095 51.435 0) (unit 1)
@@ -1178,7 +1172,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_D2_PU") (unit 1))))
   )
   (label "3V3_SD" (at 120.015 63.5 0) (effects (font (size 1.27 1.27))) (uuid "0c00007e-c000-4c00-8c00-00000000007f"))
-  (wire (pts (xy 120.015 71.12) (xy 120.015 74.93)) (stroke (width 0) (type default)) (uuid "0c00007f-c000-4c00-8c00-000000000080"))
+  (label "SD_D2_CARD" (at 120.015 71.12 0) (effects (font (size 1.27 1.27))) (uuid "cc120000-0000-4000-8000-000000000001"))
   (symbol
     (lib_id "Device:R_US") (at 132.08 67.31 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c000080-c000-4c00-8c00-000000000081")
@@ -1191,7 +1185,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_D3_PU") (unit 1))))
   )
   (label "3V3_SD" (at 132.08 63.5 0) (effects (font (size 1.27 1.27))) (uuid "0c000083-c000-4c00-8c00-000000000084"))
-  (wire (pts (xy 132.08 71.12) (xy 132.08 77.47)) (stroke (width 0) (type default)) (uuid "0c000084-c000-4c00-8c00-000000000085"))
+  (label "SD_D3_CARD" (at 132.08 71.12 0) (effects (font (size 1.27 1.27))) (uuid "cc120000-0000-4000-8000-000000000002"))
   (symbol
     (lib_id "Device:R_US") (at 144.145 67.31 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c000085-c000-4c00-8c00-000000000086")
@@ -1204,7 +1198,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_CMD_PU") (unit 1))))
   )
   (label "3V3_SD" (at 144.145 63.5 0) (effects (font (size 1.27 1.27))) (uuid "0c000088-c000-4c00-8c00-000000000089"))
-  (wire (pts (xy 144.145 71.12) (xy 144.145 80.01)) (stroke (width 0) (type default)) (uuid "0c000089-c000-4c00-8c00-00000000008a"))
+  (label "SD_CMD_CARD" (at 144.145 71.12 0) (effects (font (size 1.27 1.27))) (uuid "cc120000-0000-4000-8000-000000000003"))
   (symbol
     (lib_id "Device:R_US") (at 156.21 67.31 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c00008a-c000-4c00-8c00-00000000008b")
@@ -1217,7 +1211,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_D0_PU") (unit 1))))
   )
   (label "3V3_SD" (at 156.21 63.5 0) (effects (font (size 1.27 1.27))) (uuid "0c00008d-c000-4c00-8c00-00000000008e"))
-  (wire (pts (xy 156.21 71.12) (xy 156.21 90.17)) (stroke (width 0) (type default)) (uuid "0c00008e-c000-4c00-8c00-00000000008f"))
+  (label "SD_D0_CARD" (at 156.21 71.12 0) (effects (font (size 1.27 1.27))) (uuid "cc120000-0000-4000-8000-000000000004"))
   (symbol
     (lib_id "Device:R_US") (at 168.275 67.31 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c00008f-c000-4c00-8c00-000000000090")
@@ -1230,7 +1224,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000c-6b2a-4a3a-8c91-00000000000c" (reference "R_SD_D1_PU") (unit 1))))
   )
   (label "3V3_SD" (at 168.275 63.5 0) (effects (font (size 1.27 1.27))) (uuid "0c000092-c000-4c00-8c00-000000000093"))
-  (wire (pts (xy 168.275 71.12) (xy 168.275 92.71)) (stroke (width 0) (type default)) (uuid "0c000093-c000-4c00-8c00-000000000094"))
+  (label "SD_D1_CARD" (at 168.275 71.12 0) (effects (font (size 1.27 1.27))) (uuid "cc120000-0000-4000-8000-000000000005"))
   (symbol
     (lib_id "Device:C") (at 179.705 88.9 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp yes) (uuid "0c000094-c000-4c00-8c00-000000000095")

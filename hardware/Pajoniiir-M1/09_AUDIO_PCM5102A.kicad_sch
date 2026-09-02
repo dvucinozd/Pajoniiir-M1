@@ -1579,7 +1579,6 @@
   )
   (wire (pts (xy 137.795 72.39) (xy 156.21 72.39)) (stroke (width 0) (type default)) (uuid "09000096-9000-4900-8900-000000000097"))
   
-  (label "MAIN_R" (at 184.785 87.63 0) (effects (font (size 1.27 1.27))) (uuid "09000098-9000-4900-8900-000000000099"))
   (symbol
     (lib_id "Device:C") (at 189.865 91.44 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000099-9000-4900-8900-00000000009a")
