@@ -228,10 +228,9 @@ J_PWR_IN
 Izvesti:
 
 - `EFUSE_EN`
-- `EFUSE_FLT_N`
-- `EFUSE_PGOOD`
+- `EFUSE_PG`
 
-Ako nema dovoljno GPIO-a u Rev A, `EFUSE_EN` može biti hardware-on, ali `PGOOD` i `FLT_N` je poželjno izvesti barem na test point.
+Ako nema dovoljno GPIO-a u Rev A, `EFUSE_EN` može biti hardware-on. Za TPS259474A koristiti `EFUSE_PG`/`PGTH`; ova varijanta nema zaseban `FLT` izlaz. `EFUSE_PG` treba dovesti barem na P4 ili test point.
 
 ## 5.4 Test points
 
