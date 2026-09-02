@@ -3,18 +3,1495 @@
   (generator "eeschema")
   (generator_version "9.0")
   (uuid "3100000a-6b2a-4a3a-8c91-00000000000a")
-  (paper "A4")
+  (paper "A3")
   (title_block
     (title "Pajoniiir-M1 Rev A — 10_DISPLAY_MIPI")
     (date "2026-09-02")
     (rev "A / M1-SCH-A")
     (company "Pajoniiir")
-    (comment 1 "BOM authority: docs/Pajoniiir_Mainboard_BOM_v0.2.md")
-    (comment 2 "GPIO authority: docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md")
+    (comment 1 "2-lane ST7701S-class MIPI DSI + JC4880-derived MP3202 backlight")
+    (comment 2 "J_LCD physical pinout/footprint remains hard-gated pending authoritative panel/FPC")
   )
-  (lib_symbols)
-  (sheet_instances
-    (path "/" (page "11"))
+  (lib_symbols
+(symbol "MP3202DJ"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at 0 8.89 0)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Value" "MP3202DJ-LF-Z"
+			(at 0 6.35 0)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-6"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Datasheet" "https://www.monolithicpower.com/en/documentview/productdocument/index/version/2/document_type/Datasheet/lang/en/sku/MP3202/document_id/1495/"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(property "Description" "2.5V-6V 1.3A fixed-frequency white LED boost driver, TSOT23-6"
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) (hide yes))
+		)
+		(symbol "MP3202DJ_0_1"
+			(rectangle
+				(start -5.08 5.08)
+				(end 5.08 -5.08)
+				(stroke (width 0.254) (type default))
+				(fill (type background))
+			)
+		)
+		(symbol "MP3202DJ_1_1"
+			(pin power_out line
+				(at 7.62 2.54 180)
+				(length 2.54)
+				(name "SW" (effects (font (size 1.27 1.27))))
+				(number "1" (effects (font (size 1.27 1.27))))
+			)
+			(pin power_in line
+				(at 0 -7.62 90)
+				(length 2.54)
+				(name "GND" (effects (font (size 1.27 1.27))))
+				(number "2" (effects (font (size 1.27 1.27))))
+			)
+			(pin input line
+				(at 7.62 -2.54 180)
+				(length 2.54)
+				(name "FB" (effects (font (size 1.27 1.27))))
+				(number "3" (effects (font (size 1.27 1.27))))
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 2.54)
+				(name "EN" (effects (font (size 1.27 1.27))))
+				(number "4" (effects (font (size 1.27 1.27))))
+			)
+			(pin input line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name "OV" (effects (font (size 1.27 1.27))))
+				(number "5" (effects (font (size 1.27 1.27))))
+			)
+			(pin power_in line
+				(at -7.62 2.54 0)
+				(length 2.54)
+				(name "IN" (effects (font (size 1.27 1.27))))
+				(number "6" (effects (font (size 1.27 1.27))))
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Device:R_US"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R_US"
+				(at -2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.016 -0.254 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resistor, US symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_US_0_1"
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.286) (xy 1.016 1.905) (xy 0 1.524) (xy -1.016 1.143) (xy 0 0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0.762) (xy 1.016 0.381) (xy 0 0) (xy -1.016 -0.381) (xy 0 -0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy 1.016 -1.143) (xy 0 -1.524) (xy -1.016 -1.905) (xy 0 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.286) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_US_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "power:GND"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Device:L"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "L"
+				(at -1.27 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "L"
+				(at 1.905 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Inductor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "inductor choke coil reactor magnetic"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Choke_* *Coil* Inductor_* L_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "L_0_1"
+				(arc
+					(start 0 2.54)
+					(mid 0.6323 1.905)
+					(end 0 1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 1.27)
+					(mid 0.6323 0.635)
+					(end 0 0)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 0)
+					(mid 0.6323 -0.635)
+					(end 0 -1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -1.27)
+					(mid 0.6323 -1.905)
+					(end 0 -2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "L_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Device:D_Schottky"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "D_Schottky"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Schottky diode"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "diode Schottky"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "D_Schottky_0_1"
+				(polyline
+					(pts
+						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "D_Schottky_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+(symbol "Connector:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.762)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "TP"
+				(at 0 6.858 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "test point"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "test point tp"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Pin* Test*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 3.302)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 0 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
   )
+  (hierarchical_label "3V3_SYS" (shape input) (at 30 30 0) (effects (font (size 1.27 1.27))) (uuid "0a000001-a000-4a00-8a00-000000000002"))
+  (hierarchical_label "5V_SYS" (shape input) (at 30 35 0) (effects (font (size 1.27 1.27))) (uuid "0a000002-a000-4a00-8a00-000000000003"))
+  (hierarchical_label "P4_LDO_MIPI_2V5" (shape input) (at 30 40 0) (effects (font (size 1.27 1.27))) (uuid "0a000003-a000-4a00-8a00-000000000004"))
+  (symbol
+    (lib_id "Device:R_US") (at 55 30 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000004-a000-4a00-8a00-000000000005")
+    (property "Reference" "FB_LCD" (at 58 28 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R / FERRITE OPTION" (at 58 32 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 55 30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 55 30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000005-a000-4a00-8a00-000000000006")) (pin "2" (uuid "0a000006-a000-4a00-8a00-000000000007"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "FB_LCD") (unit 1))))
+  )
+  (wire (pts (xy 30 30) (xy 51.19 30)) (stroke (width 0) (type default)) (uuid "0a000007-a000-4a00-8a00-000000000008"))
+  (wire (pts (xy 58.81 30) (xy 95 30)) (stroke (width 0) (type default)) (uuid "0a000008-a000-4a00-8a00-000000000009"))
+  (label "3V3_LCD" (at 80 30 0) (effects (font (size 1.27 1.27))) (uuid "0a000009-a000-4a00-8a00-00000000000a"))
+  (hierarchical_label "3V3_LCD" (shape output) (at 95 30 0) (effects (font (size 1.27 1.27))) (uuid "0a00000a-a000-4a00-8a00-00000000000b"))
+  (symbol
+    (lib_id "Device:C") (at 70 33.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00000b-a000-4a00-8a00-00000000000c")
+    (property "Reference" "C_LCD_HF" (at 73 31.810000000000002 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF" (at 73 35.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 70 33.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 70 33.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00000c-a000-4a00-8a00-00000000000d")) (pin "2" (uuid "0a00000d-a000-4a00-8a00-00000000000e"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "C_LCD_HF") (unit 1))))
+  )
+  (label "3V3_LCD" (at 70 30 0) (effects (font (size 1.27 1.27))) (uuid "0a00000e-a000-4a00-8a00-00000000000f"))
+  (symbol
+    (lib_id "power:GND") (at 70 37.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00000f-a000-4a00-8a00-000000000010")
+    (property "Reference" "#PWR1001" (at 70 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 70 40.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 70 37.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 70 37.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000010-a000-4a00-8a00-000000000011"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1001") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 82 33.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000011-a000-4a00-8a00-000000000012")
+    (property "Reference" "C_LCD_BULK" (at 85 31.810000000000002 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF" (at 85 35.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 82 33.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 82 33.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000012-a000-4a00-8a00-000000000013")) (pin "2" (uuid "0a000013-a000-4a00-8a00-000000000014"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "C_LCD_BULK") (unit 1))))
+  )
+  (label "3V3_LCD" (at 82 30 0) (effects (font (size 1.27 1.27))) (uuid "0a000014-a000-4a00-8a00-000000000015"))
+  (symbol
+    (lib_id "power:GND") (at 82 37.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000015-a000-4a00-8a00-000000000016")
+    (property "Reference" "#PWR1002" (at 82 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 82 40.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 82 37.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 82 37.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000016-a000-4a00-8a00-000000000017"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1002") (unit 1))))
+  )
+  (symbol
+    (lib_id "Connector:TestPoint") (at 110 30 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000017-a000-4a00-8a00-000000000018")
+    (property "Reference" "TP_3V3_LCD" (at 110 23 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "3V3_LCD" (at 110 25 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 110 30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 110 30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000018-a000-4a00-8a00-000000000019"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "TP_3V3_LCD") (unit 1))))
+  )
+  (label "3V3_LCD" (at 110 30 0) (effects (font (size 1.27 1.27))) (uuid "0a000019-a000-4a00-8a00-00000000001a"))
+
+  (symbol
+    (lib_id "Connector:TestPoint") (at 125 40 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00001a-a000-4a00-8a00-00000000001b")
+    (property "Reference" "TP_MIPI_2V5" (at 125 33 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "P4_LDO_MIPI_2V5" (at 125 35 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 125 40 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 125 40 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00001b-a000-4a00-8a00-00000000001c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "TP_MIPI_2V5") (unit 1))))
+  )
+  (label "P4_LDO_MIPI_2V5" (at 125 40 0) (effects (font (size 1.27 1.27))) (uuid "0a00001c-a000-4a00-8a00-00000000001d"))
+
+  (hierarchical_label "DSI_D0_P" (shape bidirectional) (at 30 55 0) (effects (font (size 1.27 1.27))) (uuid "0a00001d-a000-4a00-8a00-00000000001e"))
+  (symbol
+    (lib_id "Device:R_US") (at 60 55 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00001e-a000-4a00-8a00-00000000001f")
+    (property "Reference" "R_DSI_D0_P" (at 63 53 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 63 57 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0201_0603Metric" (at 60 55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00001f-a000-4a00-8a00-000000000020")) (pin "2" (uuid "0a000020-a000-4a00-8a00-000000000021"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_DSI_D0_P") (unit 1))))
+  )
+  (wire (pts (xy 30 55) (xy 56.19 55)) (stroke (width 0) (type default)) (uuid "0a000021-a000-4a00-8a00-000000000022"))
+  (wire (pts (xy 63.81 55) (xy 115 55)) (stroke (width 0) (type default)) (uuid "0a000022-a000-4a00-8a00-000000000023"))
+  (label "PANEL_DSI_D0_P" (at 90 55 0) (effects (font (size 1.27 1.27))) (uuid "0a000023-a000-4a00-8a00-000000000024"))
+  (hierarchical_label "DSI_D0_N" (shape bidirectional) (at 30 62 0) (effects (font (size 1.27 1.27))) (uuid "0a000024-a000-4a00-8a00-000000000025"))
+  (symbol
+    (lib_id "Device:R_US") (at 60 62 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000025-a000-4a00-8a00-000000000026")
+    (property "Reference" "R_DSI_D0_N" (at 63 60 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 63 64 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0201_0603Metric" (at 60 62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000026-a000-4a00-8a00-000000000027")) (pin "2" (uuid "0a000027-a000-4a00-8a00-000000000028"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_DSI_D0_N") (unit 1))))
+  )
+  (wire (pts (xy 30 62) (xy 56.19 62)) (stroke (width 0) (type default)) (uuid "0a000028-a000-4a00-8a00-000000000029"))
+  (wire (pts (xy 63.81 62) (xy 115 62)) (stroke (width 0) (type default)) (uuid "0a000029-a000-4a00-8a00-00000000002a"))
+  (label "PANEL_DSI_D0_N" (at 90 62 0) (effects (font (size 1.27 1.27))) (uuid "0a00002a-a000-4a00-8a00-00000000002b"))
+  (hierarchical_label "DSI_D1_P" (shape bidirectional) (at 30 73 0) (effects (font (size 1.27 1.27))) (uuid "0a00002b-a000-4a00-8a00-00000000002c"))
+  (symbol
+    (lib_id "Device:R_US") (at 60 73 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00002c-a000-4a00-8a00-00000000002d")
+    (property "Reference" "R_DSI_D1_P" (at 63 71 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 63 75 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0201_0603Metric" (at 60 73 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 73 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00002d-a000-4a00-8a00-00000000002e")) (pin "2" (uuid "0a00002e-a000-4a00-8a00-00000000002f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_DSI_D1_P") (unit 1))))
+  )
+  (wire (pts (xy 30 73) (xy 56.19 73)) (stroke (width 0) (type default)) (uuid "0a00002f-a000-4a00-8a00-000000000030"))
+  (wire (pts (xy 63.81 73) (xy 115 73)) (stroke (width 0) (type default)) (uuid "0a000030-a000-4a00-8a00-000000000031"))
+  (label "PANEL_DSI_D1_P" (at 90 73 0) (effects (font (size 1.27 1.27))) (uuid "0a000031-a000-4a00-8a00-000000000032"))
+  (hierarchical_label "DSI_D1_N" (shape bidirectional) (at 30 80 0) (effects (font (size 1.27 1.27))) (uuid "0a000032-a000-4a00-8a00-000000000033"))
+  (symbol
+    (lib_id "Device:R_US") (at 60 80 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000033-a000-4a00-8a00-000000000034")
+    (property "Reference" "R_DSI_D1_N" (at 63 78 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 63 82 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0201_0603Metric" (at 60 80 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 80 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000034-a000-4a00-8a00-000000000035")) (pin "2" (uuid "0a000035-a000-4a00-8a00-000000000036"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_DSI_D1_N") (unit 1))))
+  )
+  (wire (pts (xy 30 80) (xy 56.19 80)) (stroke (width 0) (type default)) (uuid "0a000036-a000-4a00-8a00-000000000037"))
+  (wire (pts (xy 63.81 80) (xy 115 80)) (stroke (width 0) (type default)) (uuid "0a000037-a000-4a00-8a00-000000000038"))
+  (label "PANEL_DSI_D1_N" (at 90 80 0) (effects (font (size 1.27 1.27))) (uuid "0a000038-a000-4a00-8a00-000000000039"))
+  (hierarchical_label "DSI_CLK_P" (shape bidirectional) (at 30 91 0) (effects (font (size 1.27 1.27))) (uuid "0a000039-a000-4a00-8a00-00000000003a"))
+  (symbol
+    (lib_id "Device:R_US") (at 60 91 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00003a-a000-4a00-8a00-00000000003b")
+    (property "Reference" "R_DSI_CLK_P" (at 63 89 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 63 93 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0201_0603Metric" (at 60 91 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 91 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00003b-a000-4a00-8a00-00000000003c")) (pin "2" (uuid "0a00003c-a000-4a00-8a00-00000000003d"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_DSI_CLK_P") (unit 1))))
+  )
+  (wire (pts (xy 30 91) (xy 56.19 91)) (stroke (width 0) (type default)) (uuid "0a00003d-a000-4a00-8a00-00000000003e"))
+  (wire (pts (xy 63.81 91) (xy 115 91)) (stroke (width 0) (type default)) (uuid "0a00003e-a000-4a00-8a00-00000000003f"))
+  (label "PANEL_DSI_CLK_P" (at 90 91 0) (effects (font (size 1.27 1.27))) (uuid "0a00003f-a000-4a00-8a00-000000000040"))
+  (hierarchical_label "DSI_CLK_N" (shape bidirectional) (at 30 98 0) (effects (font (size 1.27 1.27))) (uuid "0a000040-a000-4a00-8a00-000000000041"))
+  (symbol
+    (lib_id "Device:R_US") (at 60 98 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000041-a000-4a00-8a00-000000000042")
+    (property "Reference" "R_DSI_CLK_N" (at 63 96 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 63 100 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0201_0603Metric" (at 60 98 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 98 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000042-a000-4a00-8a00-000000000043")) (pin "2" (uuid "0a000043-a000-4a00-8a00-000000000044"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_DSI_CLK_N") (unit 1))))
+  )
+  (wire (pts (xy 30 98) (xy 56.19 98)) (stroke (width 0) (type default)) (uuid "0a000044-a000-4a00-8a00-000000000045"))
+  (wire (pts (xy 63.81 98) (xy 115 98)) (stroke (width 0) (type default)) (uuid "0a000045-a000-4a00-8a00-000000000046"))
+  (label "PANEL_DSI_CLK_N" (at 90 98 0) (effects (font (size 1.27 1.27))) (uuid "0a000046-a000-4a00-8a00-000000000047"))
+  (hierarchical_label "LCD_RST" (shape input) (at 30 112 0) (effects (font (size 1.27 1.27))) (uuid "0a000047-a000-4a00-8a00-000000000048"))
+  (symbol
+    (lib_id "Device:R_US") (at 60 112 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000048-a000-4a00-8a00-000000000049")
+    (property "Reference" "R_LCD_RST_SER" (at 63 110 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100R" (at 63 114 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60 112 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 112 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000049-a000-4a00-8a00-00000000004a")) (pin "2" (uuid "0a00004a-a000-4a00-8a00-00000000004b"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_LCD_RST_SER") (unit 1))))
+  )
+  (wire (pts (xy 30 112) (xy 56.19 112)) (stroke (width 0) (type default)) (uuid "0a00004b-a000-4a00-8a00-00000000004c"))
+  (wire (pts (xy 63.81 112) (xy 115 112)) (stroke (width 0) (type default)) (uuid "0a00004c-a000-4a00-8a00-00000000004d"))
+  (label "PANEL_LCD_RST" (at 90 112 0) (effects (font (size 1.27 1.27))) (uuid "0a00004d-a000-4a00-8a00-00000000004e"))
+  (symbol
+    (lib_id "Device:R_US") (at 90 115.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00004e-a000-4a00-8a00-00000000004f")
+    (property "Reference" "R_LCD_RST_PD" (at 93 113.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100k" (at 93 117.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 90 115.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 90 115.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00004f-a000-4a00-8a00-000000000050")) (pin "2" (uuid "0a000050-a000-4a00-8a00-000000000051"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_LCD_RST_PD") (unit 1))))
+  )
+  (wire (pts (xy 90 112) (xy 115 112)) (stroke (width 0) (type default)) (uuid "0a000051-a000-4a00-8a00-000000000052"))
+  (symbol
+    (lib_id "power:GND") (at 90 119.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000052-a000-4a00-8a00-000000000053")
+    (property "Reference" "#PWR1003" (at 90 125.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 90 122.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 90 119.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 90 119.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000053-a000-4a00-8a00-000000000054"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1003") (unit 1))))
+  )
+  (symbol
+    (lib_id "Connector:TestPoint") (at 125 112 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000054-a000-4a00-8a00-000000000055")
+    (property "Reference" "TP_LCD_RST" (at 125 105 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "PANEL_LCD_RST" (at 125 107 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 125 112 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 125 112 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000055-a000-4a00-8a00-000000000056"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "TP_LCD_RST") (unit 1))))
+  )
+  (label "PANEL_LCD_RST" (at 125 112 0) (effects (font (size 1.27 1.27))) (uuid "0a000056-a000-4a00-8a00-000000000057"))
+
+  (hierarchical_label "LCD_TE" (shape bidirectional) (at 30 124 0) (effects (font (size 1.27 1.27))) (uuid "0a000057-a000-4a00-8a00-000000000058"))
+  (symbol
+    (lib_id "Device:R_US") (at 60 124 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp yes) (uuid "0a000058-a000-4a00-8a00-000000000059")
+    (property "Reference" "R_LCD_TE_SER" (at 63 122 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R DNP" (at 63 126 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60 124 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 60 124 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000059-a000-4a00-8a00-00000000005a")) (pin "2" (uuid "0a00005a-a000-4a00-8a00-00000000005b"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_LCD_TE_SER") (unit 1))))
+  )
+  (wire (pts (xy 30 124) (xy 56.19 124)) (stroke (width 0) (type default)) (uuid "0a00005b-a000-4a00-8a00-00000000005c"))
+  (wire (pts (xy 63.81 124) (xy 115 124)) (stroke (width 0) (type default)) (uuid "0a00005c-a000-4a00-8a00-00000000005d"))
+  (label "PANEL_LCD_TE" (at 90 124 0) (effects (font (size 1.27 1.27))) (uuid "0a00005d-a000-4a00-8a00-00000000005e"))
+  (symbol
+    (lib_id "Connector:TestPoint") (at 125 124 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00005e-a000-4a00-8a00-00000000005f")
+    (property "Reference" "TP_LCD_TE" (at 125 117 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "PANEL_LCD_TE" (at 125 119 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 125 124 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 125 124 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00005f-a000-4a00-8a00-000000000060"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "TP_LCD_TE") (unit 1))))
+  )
+  (label "PANEL_LCD_TE" (at 125 124 0) (effects (font (size 1.27 1.27))) (uuid "0a000060-a000-4a00-8a00-000000000061"))
+
+  (symbol
+    (lib_id "Device:C") (at 155 33.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000061-a000-4a00-8a00-000000000062")
+    (property "Reference" "C_BL_IN" (at 158 31.810000000000002 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uF 10V" (at 158 35.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 155 33.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 155 33.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000062-a000-4a00-8a00-000000000063")) (pin "2" (uuid "0a000063-a000-4a00-8a00-000000000064"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "C_BL_IN") (unit 1))))
+  )
+  (label "5V_SYS" (at 155 30 0) (effects (font (size 1.27 1.27))) (uuid "0a000064-a000-4a00-8a00-000000000065"))
+  (symbol
+    (lib_id "power:GND") (at 155 37.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000065-a000-4a00-8a00-000000000066")
+    (property "Reference" "#PWR1004" (at 155 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 155 40.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 155 37.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 155 37.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000066-a000-4a00-8a00-000000000067"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1004") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 167 33.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000067-a000-4a00-8a00-000000000068")
+    (property "Reference" "C_BL_HF" (at 170 31.810000000000002 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF 25V" (at 170 35.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 167 33.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 167 33.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000068-a000-4a00-8a00-000000000069")) (pin "2" (uuid "0a000069-a000-4a00-8a00-00000000006a"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "C_BL_HF") (unit 1))))
+  )
+  (label "5V_SYS" (at 167 30 0) (effects (font (size 1.27 1.27))) (uuid "0a00006a-a000-4a00-8a00-00000000006b"))
+  (symbol
+    (lib_id "power:GND") (at 167 37.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00006b-a000-4a00-8a00-00000000006c")
+    (property "Reference" "#PWR1005" (at 167 43.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 167 40.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 167 37.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 167 37.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00006c-a000-4a00-8a00-00000000006d"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1005") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:L") (at 190 50 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00006d-a000-4a00-8a00-00000000006e")
+    (property "Reference" "L_BL" (at 193 48 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10uH" (at 193 52 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 190 50 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 190 50 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00006e-a000-4a00-8a00-00000000006f")) (pin "2" (uuid "0a00006f-a000-4a00-8a00-000000000070"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "L_BL") (unit 1))))
+  )
+  (label "5V_SYS" (at 186.19 50 0) (effects (font (size 1.27 1.27))) (uuid "0a000070-a000-4a00-8a00-000000000071"))
+  (wire (pts (xy 193.81 50) (xy 205 50)) (stroke (width 0) (type default)) (uuid "0a000071-a000-4a00-8a00-000000000072"))
+  (label "BL_SW" (at 202 50 0) (effects (font (size 1.27 1.27))) (uuid "0a000072-a000-4a00-8a00-000000000073"))
+  (symbol
+    (lib_id "Pajoniiir-M1:MP3202DJ") (at 215 55 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000073-a000-4a00-8a00-000000000074")
+    (property "Reference" "U_BL" (at 215 43 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "MP3202DJ-LF-Z" (at 215 45.5 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Package_TO_SOT_SMD:TSOT-23-6" (at 215 55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.monolithicpower.com/en/documentview/productdocument/index/version/2/document_type/Datasheet/lang/en/sku/MP3202/document_id/1495/" (at 215 55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000074-a000-4a00-8a00-000000000075")) (pin "2" (uuid "0a000075-a000-4a00-8a00-000000000076")) (pin "3" (uuid "0a000076-a000-4a00-8a00-000000000077"))
+    (pin "4" (uuid "0a000077-a000-4a00-8a00-000000000078")) (pin "5" (uuid "0a000078-a000-4a00-8a00-000000000079")) (pin "6" (uuid "0a000079-a000-4a00-8a00-00000000007a"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "U_BL") (unit 1))))
+  )
+  (wire (pts (xy 205 50) (xy 205 57.54)) (stroke (width 0) (type default)) (uuid "0a00007a-a000-4a00-8a00-00000000007b"))
+  (wire (pts (xy 205 57.54) (xy 222.62 57.54)) (stroke (width 0) (type default)) (uuid "0a00007b-a000-4a00-8a00-00000000007c"))
+  (label "BL_SW" (at 210 57.54 0) (effects (font (size 1.27 1.27))) (uuid "0a00007c-a000-4a00-8a00-00000000007d"))
+  (label "5V_SYS" (at 207.38 57.54 0) (effects (font (size 1.27 1.27))) (uuid "0a00007d-a000-4a00-8a00-00000000007e"))
+  (symbol
+    (lib_id "power:GND") (at 215 47.38 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00007e-a000-4a00-8a00-00000000007f")
+    (property "Reference" "#PWR1006" (at 215 53.38 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 215 50.38 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 215 47.38 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 215 47.38 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00007f-a000-4a00-8a00-000000000080"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1006") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:D_Schottky") (at 245 57.54 180) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000080-a000-4a00-8a00-000000000081")
+    (property "Reference" "D_BL" (at 248 55.54 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "SS14" (at 248 59.54 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Diode_SMD:D_SMA" (at 245 57.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 245 57.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000081-a000-4a00-8a00-000000000082")) (pin "2" (uuid "0a000082-a000-4a00-8a00-000000000083"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "D_BL") (unit 1))))
+  )
+  (label "BL_SW" (at 241.19 57.54 0) (effects (font (size 1.27 1.27))) (uuid "0a000083-a000-4a00-8a00-000000000084"))
+  (wire (pts (xy 248.81 57.54) (xy 275 57.54)) (stroke (width 0) (type default)) (uuid "0a000084-a000-4a00-8a00-000000000085"))
+  (label "LEDA" (at 265 57.54 0) (effects (font (size 1.27 1.27))) (uuid "0a000085-a000-4a00-8a00-000000000086"))
+  (wire (pts (xy 222.62 55) (xy 230 55)) (stroke (width 0) (type default)) (uuid "0a000086-a000-4a00-8a00-000000000087"))
+  (wire (pts (xy 230 55) (xy 230 57.54)) (stroke (width 0) (type default)) (uuid "0a000087-a000-4a00-8a00-000000000088"))
+  (label "LEDA" (at 230 57.54 0) (effects (font (size 1.27 1.27))) (uuid "0a000088-a000-4a00-8a00-000000000089"))
+  (symbol
+    (lib_id "Device:C") (at 260 65.16 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000089-a000-4a00-8a00-00000000008a")
+    (property "Reference" "C_BL_OUT" (at 263 63.16 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "4.7uF 35V" (at 263 67.16 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_1206_3216Metric" (at 260 65.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 260 65.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00008a-a000-4a00-8a00-00000000008b")) (pin "2" (uuid "0a00008b-a000-4a00-8a00-00000000008c"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "C_BL_OUT") (unit 1))))
+  )
+  (label "LEDA" (at 260 61.35 0) (effects (font (size 1.27 1.27))) (uuid "0a00008c-a000-4a00-8a00-00000000008d"))
+  (symbol
+    (lib_id "power:GND") (at 260 68.97 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00008d-a000-4a00-8a00-00000000008e")
+    (property "Reference" "#PWR1007" (at 260 74.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 260 71.97 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 260 68.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 260 68.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00008e-a000-4a00-8a00-00000000008f"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1007") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:C") (at 272 65.16 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00008f-a000-4a00-8a00-000000000090")
+    (property "Reference" "C_BL_OUT_HF" (at 275 63.16 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "100nF 50V" (at 275 67.16 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 272 65.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 272 65.16 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000090-a000-4a00-8a00-000000000091")) (pin "2" (uuid "0a000091-a000-4a00-8a00-000000000092"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "C_BL_OUT_HF") (unit 1))))
+  )
+  (label "LEDA" (at 272 61.35 0) (effects (font (size 1.27 1.27))) (uuid "0a000092-a000-4a00-8a00-000000000093"))
+  (symbol
+    (lib_id "power:GND") (at 272 68.97 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000093-a000-4a00-8a00-000000000094")
+    (property "Reference" "#PWR1008" (at 272 74.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 272 71.97 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 272 68.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 272 68.97 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000094-a000-4a00-8a00-000000000095"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1008") (unit 1))))
+  )
+  (symbol
+    (lib_id "Connector:TestPoint") (at 290 57.54 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a000095-a000-4a00-8a00-000000000096")
+    (property "Reference" "TP_LEDA" (at 290 50.54 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "LEDA" (at 290 52.54 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 290 57.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 290 57.54 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a000096-a000-4a00-8a00-000000000097"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "TP_LEDA") (unit 1))))
+  )
+  (label "LEDA" (at 290 57.54 0) (effects (font (size 1.27 1.27))) (uuid "0a000097-a000-4a00-8a00-000000000098"))
+
+  (wire (pts (xy 222.62 52.46) (xy 260 52.46)) (stroke (width 0) (type default)) (uuid "0a000098-a000-4a00-8a00-000000000099"))
+  (label "LEDK" (at 250 52.46 0) (effects (font (size 1.27 1.27))) (uuid "0a000099-a000-4a00-8a00-00000000009a"))
+  (symbol
+    (lib_id "Device:R_US") (at 245 48.65 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00009a-a000-4a00-8a00-00000000009b")
+    (property "Reference" "R_BL_SENSE_A" (at 248 46.65 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "3.9R" (at 248 50.65 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 245 48.65 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 245 48.65 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00009b-a000-4a00-8a00-00000000009c")) (pin "2" (uuid "0a00009c-a000-4a00-8a00-00000000009d"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_BL_SENSE_A") (unit 1))))
+  )
+  (wire (pts (xy 245 52.46) (xy 260 52.46)) (stroke (width 0) (type default)) (uuid "0a00009d-a000-4a00-8a00-00000000009e"))
+  (symbol
+    (lib_id "power:GND") (at 245 44.84 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00009e-a000-4a00-8a00-00000000009f")
+    (property "Reference" "#PWR10245" (at 245 50.84 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 245 47.84 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 245 44.84 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 245 44.84 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a00009f-a000-4a00-8a00-0000000000a0"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR10245") (unit 1))))
+  )
+  (symbol
+    (lib_id "Device:R_US") (at 255 48.65 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000a0-a000-4a00-8a00-0000000000a1")
+    (property "Reference" "R_BL_SENSE_B" (at 258 46.65 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "2.2R" (at 258 50.65 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 255 48.65 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 255 48.65 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a0000a1-a000-4a00-8a00-0000000000a2")) (pin "2" (uuid "0a0000a2-a000-4a00-8a00-0000000000a3"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_BL_SENSE_B") (unit 1))))
+  )
+  (wire (pts (xy 255 52.46) (xy 260 52.46)) (stroke (width 0) (type default)) (uuid "0a0000a3-a000-4a00-8a00-0000000000a4"))
+  (symbol
+    (lib_id "power:GND") (at 255 44.84 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000a4-a000-4a00-8a00-0000000000a5")
+    (property "Reference" "#PWR10255" (at 255 50.84 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 255 47.84 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 255 44.84 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 255 44.84 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a0000a5-a000-4a00-8a00-0000000000a6"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR10255") (unit 1))))
+  )
+  (symbol
+    (lib_id "Connector:TestPoint") (at 290 52.46 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000a6-a000-4a00-8a00-0000000000a7")
+    (property "Reference" "TP_LED_CURRENT" (at 290 45.46 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "LEDK" (at 290 47.46 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 290 52.46 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 290 52.46 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a0000a7-a000-4a00-8a00-0000000000a8"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "TP_LED_CURRENT") (unit 1))))
+  )
+  (label "LEDK" (at 290 52.46 0) (effects (font (size 1.27 1.27))) (uuid "0a0000a8-a000-4a00-8a00-0000000000a9"))
+
+  (hierarchical_label "LCD_BL_PWM" (shape input) (at 150 85 0) (effects (font (size 1.27 1.27))) (uuid "0a0000a9-a000-4a00-8a00-0000000000aa"))
+  (symbol
+    (lib_id "Device:R_US") (at 180 85 90) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000aa-a000-4a00-8a00-0000000000ab")
+    (property "Reference" "R_BL_PWM" (at 183 83 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "0R" (at 183 87 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 180 85 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 180 85 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a0000ab-a000-4a00-8a00-0000000000ac")) (pin "2" (uuid "0a0000ac-a000-4a00-8a00-0000000000ad"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_BL_PWM") (unit 1))))
+  )
+  (wire (pts (xy 150 85) (xy 176.19 85)) (stroke (width 0) (type default)) (uuid "0a0000ad-a000-4a00-8a00-0000000000ae"))
+  (wire (pts (xy 183.81 85) (xy 200 85)) (stroke (width 0) (type default)) (uuid "0a0000ae-a000-4a00-8a00-0000000000af"))
+  (wire (pts (xy 200 85) (xy 200 52.46)) (stroke (width 0) (type default)) (uuid "0a0000af-a000-4a00-8a00-0000000000b0"))
+  (wire (pts (xy 200 52.46) (xy 207.38 52.46)) (stroke (width 0) (type default)) (uuid "0a0000b0-a000-4a00-8a00-0000000000b1"))
+  (label "BL_EN" (at 194 85 0) (effects (font (size 1.27 1.27))) (uuid "0a0000b1-a000-4a00-8a00-0000000000b2"))
+  (symbol
+    (lib_id "Device:R_US") (at 190 88.81 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000b2-a000-4a00-8a00-0000000000b3")
+    (property "Reference" "R_BL_EN_PD" (at 193 86.81 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "10k" (at 193 90.81 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 190 88.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 190 88.81 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a0000b3-a000-4a00-8a00-0000000000b4")) (pin "2" (uuid "0a0000b4-a000-4a00-8a00-0000000000b5"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "R_BL_EN_PD") (unit 1))))
+  )
+  (wire (pts (xy 190 85) (xy 200 85)) (stroke (width 0) (type default)) (uuid "0a0000b5-a000-4a00-8a00-0000000000b6"))
+  (symbol
+    (lib_id "power:GND") (at 190 92.62 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000b6-a000-4a00-8a00-0000000000b7")
+    (property "Reference" "#PWR1009" (at 190 98.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 190 95.62 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 190 92.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 190 92.62 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a0000b7-a000-4a00-8a00-0000000000b8"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "#PWR1009") (unit 1))))
+  )
+  (symbol
+    (lib_id "Connector:TestPoint") (at 215 85 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000b8-a000-4a00-8a00-0000000000b9")
+    (property "Reference" "TP_LCD_BL_PWM" (at 215 78 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "BL_EN" (at 215 80 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 215 85 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 215 85 0) (effects (font (size 1.27 1.27)) (hide yes)))
+
+    (pin "1" (uuid "0a0000b9-a000-4a00-8a00-0000000000ba"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "TP_LCD_BL_PWM") (unit 1))))
+  )
+  (label "BL_EN" (at 215 85 0) (effects (font (size 1.27 1.27))) (uuid "0a0000ba-a000-4a00-8a00-0000000000bb"))
+
+  (text "PHYSICAL J_LCD IS INTENTIONALLY NOT INSTANTIATED IN REV A SCHEMATIC YET." (exclude_from_sim no) (at 145 108 0) (effects (font (size 1.27 1.27))) (uuid "0a0000bb-a000-4a00-8a00-0000000000bc"))
+  (text "Authoritative gate still required: exact panel MPN, 30-vs-32 contact resolution, pitch, contact side and pins 15/16/18/19." (exclude_from_sim no) (at 145 113 0) (effects (font (size 1.27 1.27))) (uuid "0a0000bc-a000-4a00-8a00-0000000000bd"))
+  (text "Panel-side logical nets prepared: 3V3_LCD, PANEL_DSI_D0_P/N, PANEL_DSI_D1_P/N, PANEL_DSI_CLK_P/N, PANEL_LCD_RST, PANEL_LCD_TE, LEDA, LEDK." (exclude_from_sim no) (at 145 118 0) (effects (font (size 1.27 1.27))) (uuid "0a0000bd-a000-4a00-8a00-0000000000be"))
+  (text "MIPI DPHY 2.5V generation/decoupling and 4.02k DSI_REXT are already implemented in sheet 03_P4_CORE; do not duplicate them here." (exclude_from_sim no) (at 145 123 0) (effects (font (size 1.27 1.27))) (uuid "0a0000be-a000-4a00-8a00-0000000000bf"))
+  (text "DSI layout target: 100R differential ±10%; intra-pair skew <10mil; pair-to-pair target <30mil; continuous GND reference." (exclude_from_sim no) (at 145 128 0) (effects (font (size 1.27 1.27))) (uuid "0a0000bf-a000-4a00-8a00-0000000000c0"))
+  (text "M1 backlight baseline: direct EN PWM at 1kHz in BSP, ~74mA nominal LED current from 3.9R || 2.2R and 104mV FB." (exclude_from_sim no) (at 145 133 0) (effects (font (size 1.27 1.27))) (uuid "0a0000c0-a000-4a00-8a00-0000000000c1"))
+  (sheet_instances (path "/" (page "11")))
   (embedded_fonts no)
 )
