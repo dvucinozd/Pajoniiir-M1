@@ -574,7 +574,7 @@ TPS259474A -> 5V_PROTECTED -> 5mΩ Kelvin shunt -> 5V_SYS
 | RefDes | Qty | Value |
 |---|---:|---|
 | U_PWRMON | 0/1 | INA238AIDGSR |
-| R_SYS_SHUNT | 1 | **5 mΩ 1%, ≥1 W, Kelvin preferred** |
+| R_SYS_SHUNT | 1 | **Vishay WSK25125L000FEA — 5 mΩ, 1%, 1 W, 4-terminal** | `Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm` |
 | R_INA_P | 1 | 10 Ω |
 | R_INA_N | 1 | 10 Ω |
 | C_INA_DIFF | 1 | 100 nF |
@@ -634,6 +634,8 @@ Sljedeće stavke moraju čekati kućište i finalni panel:
 - TLV62569 family — TI ACTIVE; TI navodi i novije alternative, ali Espressif ga i dalje eksplicitno navodi kao verified P4 DCDC model.
 - PCM5102A — TI ACTIVE; MAIN audio design locked around PCM5102APWR with hardware XSMT mute.
 - MP3202 — MPS ACTIVE.
+- XGL4030-103MEC — Coilcraft current production 10 µH shielded power inductor; 3.1 A Isat / 3.9 A Irms class.
+- WSK25125L000FEA — Vishay current-sense shunt, 5 mΩ, 1%, 1 W, 4-terminal.
 - ESP32-C6-WROOM-1 — aktualni Espressif modul; datasheet v1.4.
 - W25Q128JV family — nalazi se u Winbond 2025 product selection guide, mass-production označen.
 - ESP32-P4NRW32X — nalazi se u aktualnom ESP32-P4 datasheetu; **prije EVT narudžbe obavezno potvrditi stvarni orderable revision/availability**, jer je dostupna javna P4 dokumentacija i dalje označena kao pre-release.
