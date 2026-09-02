@@ -34,7 +34,7 @@ Ovaj dokument ima prednost nad starim JC4880 pinoutom za novu Pajoniiir-M1 ploč
 | 3 | **TOUCH_RST** | LOCK-CANDIDATE | novi custom-board mapping |
 | 4 | **TOUCH_INT** | LOCK-CANDIDATE | novi custom-board mapping |
 | 5 | **LCD_RST** | LOCKED | postojeći firmware |
-| 6 | Spare | FREE | aux/status candidate |
+| 6 | **LCD_TE** | LOCK-CANDIDATE/DNP | panel tearing-event; optional 0 Ω connection |
 | 7 | **I2C_SDA / GT911** | LOCKED | postojeći firmware |
 | 8 | **I2C_SCL / GT911** | LOCKED | postojeći firmware |
 | 9 | Spare | FREE | stari ES8311 DOUT uklonjen |
@@ -244,7 +244,6 @@ Najčišći spare pool nakon trenutnog locka:
 
 ~~~text
 GPIO2
-GPIO6
 GPIO9
 GPIO10
 GPIO11
@@ -283,6 +282,7 @@ Novi BSP treba imati centralni header:
 ~~~text
 BSP_LCD_RST_GPIO       5
 BSP_LCD_BL_GPIO        23
+BSP_LCD_TE_GPIO        6
 BSP_I2C_SDA_GPIO       7
 BSP_I2C_SCL_GPIO       8
 BSP_TOUCH_RST_GPIO     3
