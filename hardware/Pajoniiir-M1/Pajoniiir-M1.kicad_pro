@@ -83,14 +83,6 @@
       [
         "label_dangling|635000|977900|0a000046-a000-4a00-8a00-000000000047|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a||",
         "INTENTIONAL M1-SCH-A HARD GATE: PANEL_DSI_CLK_N terminates at the prepared panel side; physical J_LCD remains uninstantiated until authoritative panel/FPC MPN, contact count, pitch, contact side and ambiguous pins are locked."
-      ],
-      [
-        "label_dangling|1581150|552450|a1000061-1111-4111-8111-000000000062|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000001-6b2a-4a3a-8c91-000000000001||",
-        "INTENTIONAL M1-SCH-A ELECTRICAL HARD GATE: EFUSE_PGTH_TBD remains open until TPS259474A Power Good assertion threshold, P4 boot timing and 3V3 startup sequencing are explicitly locked. Do not replace with an arbitrary divider."
-      ],
-      [
-        "pin_not_driven|1581150|552450|a1000025-1111-4111-8111-000000000026|00000000-0000-0000-0000-000000000000|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000001-6b2a-4a3a-8c91-000000000001|/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000001-6b2a-4a3a-8c91-000000000001|",
-        "INTENTIONAL M1-SCH-A ELECTRICAL HARD GATE: U7 PGTH is intentionally not driven while the Power Good threshold network is TBD-VALIDATE per Pajoniiir_Power_Input_Design_v0.1.md. This exclusion must be removed when PGTH values are selected."
       ]
     ],
     "meta": {

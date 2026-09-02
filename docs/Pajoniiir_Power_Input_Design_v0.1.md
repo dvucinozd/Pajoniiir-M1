@@ -431,17 +431,29 @@ Početni cilj:
 
 PG se smije smatrati validnim kada je `5V_SYS` dovoljno blizu nominalnom railu.
 
-Exact R mreža ostaje:
+Rev A mreža je zaključana na:
 
-`TBD-VALIDATE`
+```text
+5V_PROTECTED
+ |
+ R_PGTH_TOP = 100 kΩ, 1%
+ |
+ +---- PGTH
+ |
+ R_PGTH_BOT = 36.5 kΩ, 1%
+ |
+GND
+```
 
-dok se ne potvrdi:
+Prema TPS25947 Rev C jednadžbi `VPG = VPGTH(R) × (Rtop + Rbot) / Rbot`, uz tipičnih 1.20 V na PGTH:
 
-- željeni PG threshold
-- P4 boot timing
-- 3V3 converter startup
+```text
+VPG(rising, typ) ≈ 4.488 V
+VPG(rising, threshold tolerance) ≈ 4.424 ... 4.574 V
+VPG(falling, typ) ≈ 4.076 V
+```
 
-Ne treba je naslijepo vezati bez pregleda Rev C datasheeta pri captureu.
+Divider na 5 V vuče približno 36.6 µA, što daje veliku marginu prema maksimalnom PGTH leakageu. Power Good ovdje služi dijagnostici validnosti zaštićenog 5 V raila, a ne kao hard boot-sequencing uvjet.
 
 ---
 
@@ -676,7 +688,7 @@ EFUSE_PGTH
 | C7 | 22 µF | 5V_SYS mid |
 | C8 | 330 µF | 5V_SYS bulk |
 | R_PG | 10 kΩ | PG pull-up initial |
-| R/C PGTH | TBD | after PG threshold decision |
+| R_PGTH_TOP / R_PGTH_BOT | 100 kΩ / 36.5 kΩ, 1% | LOCKED Rev A; VPG rising ≈ 4.49 V typ |
 
 ---
 
@@ -686,7 +698,7 @@ Prije finalnog schematic locka:
 
 - [ ] exact input connector
 - [ ] exact TVS
-- [ ] PGTH values
+- [x] PGTH values — 100 kΩ / 36.5 kΩ, VPG rising ≈ 4.49 V typ
 - [ ] confirm PG pull-up voltage/rating
 - [ ] confirm 5V_SYS output bulk vs dVdt/inrush
 - [ ] confirm 750 Ω ILIM under measured maximum load

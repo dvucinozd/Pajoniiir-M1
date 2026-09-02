@@ -158,8 +158,6 @@ def main() -> int:
         ("label_dangling", "0a000038-a000-4a00-8a00-000000000039"),
         ("label_dangling", "0a00003f-a000-4a00-8a00-000000000040"),
         ("label_dangling", "0a000046-a000-4a00-8a00-000000000047"),
-        ("label_dangling", "a1000061-1111-4111-8111-000000000062"),
-        ("pin_not_driven", "a1000025-1111-4111-8111-000000000026"),
     }
     if not PROJECT.exists():
         errors.append(f"missing KiCad project file {PROJECT.name}")
