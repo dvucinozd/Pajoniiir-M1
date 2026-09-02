@@ -366,9 +366,11 @@ Baseline:
 - RGB565
 - PPA landscape rotation
 
+### DSI / panel interface
+
 | RefDes | Qty | Vrijednost / funkcija |
 |---|---:|---|
-| J_LCD | 1 | FPC connector — **TBD-PANEL/TBD-MECH** |
+| J_LCD | 1 | FPC connector — **TBD-MECH; original label 0.5TBQP-30P-1 but 30-vs-32 schematic discrepancy unresolved** |
 | R_DSI_REXT | 1 | **4.02 kΩ 1%** |
 | R_DSI_CLK_P/N | 2 | 0 Ω tuning |
 | R_DSI_D0_P/N | 2 | 0 Ω tuning |
@@ -379,17 +381,37 @@ Baseline:
 | R_LCD_RST_SER | 1 | 100 Ω |
 | R_LCD_RST_PD | 1 | 100 kΩ |
 | R_LCD_TE_SER | 1 | 0 Ω DNP |
-| U_BL | 1 | **MP3202DJ-LF-Z** |
-| L_BL | 1 | TBD-PANEL |
-| D_BL | 1 | TBD-PANEL |
-| R_BL_SENSE | 1 | TBD-PANEL |
-| R/C_BL_PWM | set | TBD-PANEL | filtered 5 kHz dimming path |
 
 MIPI target: **100 Ω differential ±10%**, P/N skew <10 mil, pair-to-pair mismatch <30 mil.
 
 GPIO5 = LCD_RST, GPIO23 = LCD_BL_PWM, GPIO6 = optional LCD_TE.
 
-Exact FPC pin-number order i LED string ostaju hard pre-layout gate.
+### Backlight — JC4880 forensic baseline
+
+| RefDes | Qty | Value / part |
+|---|---:|---|
+| U_BL | 1 | **MP3202DJ-LF-Z** |
+| L_BL | 1 | **10 µH** |
+| D_BL | 1 | **SS14** |
+| C_BL_IN | 1 | **10 µF / 10 V** |
+| C_BL_HF | 1 | **100 nF / 25 V** |
+| C_BL_OUT | 1 | **4.7 µF / 35 V** |
+| C_BL_OUT_HF | 1 | **100 nF / 50 V** |
+| R_BL_PWM | 1 | **0 Ω** |
+| R_BL_EN_PD | 1 | **10 kΩ** |
+| R_BL_SENSE_A | 1 | **3.9 Ω** |
+| R_BL_SENSE_B | 1 | **2.2 Ω** |
+
+Sense equivalent:
+
+~~~text
+3.9 Ω || 2.2 Ω ≈ 1.4066 Ω
+I_LED @104mV typ ≈ 73.9 mA
+~~~
+
+M1 baseline uses **direct EN PWM at 1 kHz**. The current JC4880 firmware's 5 kHz value should not be copied into the new M1 BSP without using the alternate filtered-FB topology.
+
+Backlight electrical values are now lock-candidates if the final panel is the same electrical JC4880 assembly family. Exact connector footprint/panel MPN remains the hard mechanical gate.
 
 # 13. Touch / GT911
 
@@ -626,8 +648,8 @@ Prije PCB layouta moraju se zatvoriti:
 - [ ] potvrda P4 v3.x TLV62569 reference values/net topology
 - [x] Y1 candidate ECS-400-10-37B2-CKY-TR + 15 pF initial CL network; EVT frequency tuning remains
 - [ ] flash compatibility / boot test s W25Q128JV
-- [ ] finalni LCD panel i FPC pinout
-- [ ] MP3202 LED-string calculation
+- [ ] finalni LCD panel MPN / FPC physical connector; electrical pin mapping mostly reconstructed, 30-vs-32 discrepancy remains
+- [x] MP3202 JC4880 backlight baseline reconstructed (~74 mA); EVT validation remains
 - [x] GT911 interface strategy: GPIO3 RST / GPIO4 INT / 0x5D; exact FPC pins still pending
 - [ ] USB0 actual peak current
 - [ ] FLX4 actual USB1 peak/startup current
@@ -699,7 +721,7 @@ INA238AIDGSR (EVT/DVT option)
 Najveći preostali hardverski rizici prije layouta ostaju:
 
 1. potvrda stvarne P4 v3.x orderable revizije,
-2. finalni LCD/FPC,
+2. finalni LCD/FPC mechanics and exact panel procurement,
 3. USB VBUS current-limit dimenzioniranje stvarnim mjerenjem,
 4. 5V_SYS transient/brownout margin,
 5. konačna mehanika konektora.
