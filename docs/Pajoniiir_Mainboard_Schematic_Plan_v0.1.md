@@ -531,7 +531,7 @@ ESP32-P4 HS USB PHY
 ```text
 5V_SYS
   |
-TPS2561 CH1
+TPS25221 x2 CH1
   |
 USB0_VBUS
   |
@@ -593,7 +593,7 @@ DDJ-FLX4
 
 ## 12.2 Power
 
-TPS2561 channel 2.
+TPS25221 x2 channel 2.
 
 Netovi:
 
@@ -616,7 +616,7 @@ bez brownouta P4.
 
 ---
 
-# 13. TPS2561 shared implementation
+# 13. TPS25221 x2 shared implementation
 
 Iako se USB sheetovi prikazuju odvojeno, U6 može fizički biti na jednom sheetu.
 
@@ -1081,7 +1081,7 @@ Prije povezivanja footprinta treba imati “footprint lock” listu.
 - U3 TLV62569 DRL
 - U4 ESP32-C6-WROOM
 - U5 PCM5102A TSSOP
-- U6 TPS2561 DRC
+- U6 TPS25221 x2 DRC
 - U7 TPS25947 RPW
 - U8 TPS62132 RGT
 - U9 MP3202 DJ
@@ -1220,7 +1220,7 @@ S obzirom na prototip, svaki schematic review mora posebno provjeriti:
 1. Je li 5V_SYS topologija dovoljno niskoimpedantna?
 2. Ima li USB0 vlastiti lokalni bulk C?
 3. Ima li USB1 vlastiti lokalni bulk C?
-4. Je li TPS2561 input dovoljno dobro bypassan?
+4. Je li TPS25221 x2 input dovoljno dobro bypassan?
 5. Je li 3V3 buck odvojen od USB VBUS load transienta?
 6. Je li P4 core regulator lokalno pravilno decouplan?
 7. Ima li input eFuse soft-start koji ne uzrokuje spor/pogrešan startup?
@@ -1249,7 +1249,7 @@ S obzirom na prototip, svaki schematic review mora posebno provjeriti:
 2. USB0 ESD tik uz connector.
 3. USB1 series R bliže source strani.
 4. VBUS trace dimenzioniran na najmanje 1 A + margin.
-5. TPS2561 thermal pad layout po datasheetu.
+5. TPS25221 x2 thermal pad layout po datasheetu.
 6. FAULT pinovi imaju pull-up.
 7. EN pinovi imaju definiran boot state.
 8. shield strategy dokumentirana.
