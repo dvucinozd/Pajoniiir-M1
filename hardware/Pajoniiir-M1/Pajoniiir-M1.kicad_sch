@@ -3,7 +3,7 @@
   (generator "eeschema")
   (generator_version "9.0")
   (uuid "2c8dd352-b7b8-4d9e-8f93-5dd43be2a100")
-  (paper "A4")
+  (paper "A3")
   (title_block
     (title "Pajoniiir-M1 Rev A Mainboard")
     (date "2026-09-02")
@@ -326,7 +326,7 @@
   )
   (sheet
     (at 20 105)
-    (size 45 18)
+    (size 45 28)
     (fields_autoplaced yes)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
@@ -336,9 +336,14 @@
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
     (property "Sheetfile" "09_AUDIO_PCM5102A.kicad_sch"
-      (at 20 124.8246 0)
+      (at 20 134.8246 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
+    (pin "3V3_AUDIO" output (at 20 111 180) (uuid "09100001-9100-4910-8910-000000000002") (effects (font (size 1.27 1.27)) (justify left)))
+    (pin "DAC_XSMT" output (at 65 111 0) (uuid "09100002-9100-4910-8910-000000000003") (effects (font (size 1.27 1.27)) (justify right)))
+    (pin "DAC_BCLK" output (at 65 115 0) (uuid "09100003-9100-4910-8910-000000000004") (effects (font (size 1.27 1.27)) (justify right)))
+    (pin "DAC_DATA" output (at 65 119 0) (uuid "09100004-9100-4910-8910-000000000005") (effects (font (size 1.27 1.27)) (justify right)))
+    (pin "DAC_LRCK" output (at 65 123 0) (uuid "09100005-9100-4910-8910-000000000006") (effects (font (size 1.27 1.27)) (justify right)))
     (instances
       (project "Pajoniiir-M1"
         (path "/31000009-6b2a-4a3a-8c91-000000000009" (page "10"))
@@ -367,18 +372,18 @@
     )
   )
   (sheet
-    (at 240 80)
+    (at 240 105)
     (size 45 18)
     (fields_autoplaced yes)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid "3100000b-6b2a-4a3a-8c91-00000000000b")
     (property "Sheetname" "11_TOUCH_GT911"
-      (at 240 79.2888 0)
+      (at 240 104.2888 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
     (property "Sheetfile" "11_TOUCH_GT911.kicad_sch"
-      (at 240 99.8246 0)
+      (at 240 124.8246 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (instances
@@ -409,18 +414,18 @@
     )
   )
   (sheet
-    (at 20 110)
+    (at 20 145)
     (size 45 18)
     (fields_autoplaced yes)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid "3100000d-6b2a-4a3a-8c91-00000000000d")
     (property "Sheetname" "13_DEBUG_SERVICE"
-      (at 20 109.2888 0)
+      (at 20 144.2888 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
     (property "Sheetfile" "13_DEBUG_SERVICE.kicad_sch"
-      (at 20 129.8246 0)
+      (at 20 164.8246 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (instances
@@ -430,18 +435,18 @@
     )
   )
   (sheet
-    (at 75 110)
+    (at 75 145)
     (size 45 18)
     (fields_autoplaced yes)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid "3100000e-6b2a-4a3a-8c91-00000000000e")
     (property "Sheetname" "14_TEST_MONITORING"
-      (at 75 109.2888 0)
+      (at 75 144.2888 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
     (property "Sheetfile" "14_TEST_MONITORING.kicad_sch"
-      (at 75 129.8246 0)
+      (at 75 164.8246 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (instances
@@ -451,18 +456,18 @@
     )
   )
   (sheet
-    (at 130 110)
+    (at 130 145)
     (size 45 18)
     (fields_autoplaced yes)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid "3100000f-6b2a-4a3a-8c91-00000000000f")
     (property "Sheetname" "15_DNP_OPTIONS"
-      (at 130 109.2888 0)
+      (at 130 144.2888 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
     (property "Sheetfile" "15_DNP_OPTIONS.kicad_sch"
-      (at 130 129.8246 0)
+      (at 130 164.8246 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (instances
@@ -527,6 +532,16 @@
   (label "USB1_FS_DM" (at 175 47 0) (effects (font (size 1.27 1.27))) (uuid "08100007-8100-4810-8810-000000000008"))
   (label "USB1_FS_DP" (at 175 49 0) (effects (font (size 1.27 1.27))) (uuid "08100008-8100-4810-8810-000000000009"))
   (label "USB1_VBUS" (at 120 77 0) (effects (font (size 1.27 1.27))) (uuid "08100009-8100-4810-8810-00000000000a"))
+  (label "3V3_AUDIO" (at 20 111 180) (effects (font (size 1.27 1.27))) (uuid "09100006-9100-4910-8910-000000000007"))
+  (label "DAC_XSMT" (at 65 111 0) (effects (font (size 1.27 1.27))) (uuid "09100007-9100-4910-8910-000000000008"))
+  (label "DAC_BCLK" (at 65 115 0) (effects (font (size 1.27 1.27))) (uuid "09100008-9100-4910-8910-000000000009"))
+  (label "DAC_DATA" (at 65 119 0) (effects (font (size 1.27 1.27))) (uuid "09100009-9100-4910-8910-00000000000a"))
+  (label "DAC_LRCK" (at 65 123 0) (effects (font (size 1.27 1.27))) (uuid "0910000a-9100-4910-8910-00000000000b"))
+  (label "3V3_AUDIO" (at 120 35 0) (effects (font (size 1.27 1.27))) (uuid "0910000b-9100-4910-8910-00000000000c"))
+  (label "DAC_XSMT" (at 130 57 180) (effects (font (size 1.27 1.27))) (uuid "0910000c-9100-4910-8910-00000000000d"))
+  (label "DAC_BCLK" (at 130 59 180) (effects (font (size 1.27 1.27))) (uuid "0910000d-9100-4910-8910-00000000000e"))
+  (label "DAC_DATA" (at 130 61 180) (effects (font (size 1.27 1.27))) (uuid "0910000e-9100-4910-8910-00000000000f"))
+  (label "DAC_LRCK" (at 130 63 180) (effects (font (size 1.27 1.27))) (uuid "0910000f-9100-4910-8910-000000000010"))
   (sheet_instances (path "/" (page "1")))
   (embedded_fonts no)
 )
