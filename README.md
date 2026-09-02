@@ -441,7 +441,7 @@ Current sign-off gates:
 - [ ] native KiCad ERC with zero unexplained errors
 - [ ] final LCD/FPC physical definition
 - [ ] exact external connector MPNs / footprints
-- [ ] U7 HotRod RPW land pattern freeze
+- [x] U7 HotRod RPW land pattern freeze — `Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm`
 - [x] L_BL exact sourcing/footprint — XGL4030-103MEC / `Inductor_SMD:L_Coilcraft_XxL4030`
 - [x] Kelvin shunt sourcing/footprint — WSK25125L000FEA / `Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm`
 - [ ] schematic PDF human review

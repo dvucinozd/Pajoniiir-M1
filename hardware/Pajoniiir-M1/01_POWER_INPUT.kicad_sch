@@ -36,7 +36,7 @@
 					)
 				)
 			)
-			(property "Footprint" "RPW0010A-MFG"
+			(property "Footprint" "Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm"
 				(at 0 0 0)
 				(effects
 					(font
@@ -82,7 +82,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "RPW0010A-MFG"
+			(property "ki_fp_filters" "Texas_RPW0010A_VQFN-HR-10_2x2mm"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1402,7 +1402,7 @@
       (effects (font (size 1.27 1.27)))
     )
 
-    (property "Footprint" "" (at 120 50 0)
+    (property "Footprint" "Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm" (at 120 50 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
 

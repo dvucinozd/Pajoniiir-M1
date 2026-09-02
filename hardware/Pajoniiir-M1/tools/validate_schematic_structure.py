@@ -9,11 +9,12 @@ from __future__ import annotations
 
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parents[1]
 ROOT = BASE / "Pajoniiir-M1.kicad_sch"
+RPW0010A_FOOTPRINT = BASE / "libraries" / "footprints.pretty" / "Texas_RPW0010A_VQFN-HR-10_2x2mm.kicad_mod"
 CHILDREN = [
     "01_POWER_INPUT",
     "02_POWER_3V3",
@@ -37,7 +38,6 @@ ALLOWED_BLANK_FOOTPRINTS = {
     ("01_POWER_INPUT", "J1"),
     ("01_POWER_INPUT", "C3"),
     ("01_POWER_INPUT", "D1"),
-    ("01_POWER_INPUT", "U7"),  # TI RPW0010A exact package; KiCad-9 land pattern still to be formally frozen.
     ("01_POWER_INPUT", "C8"),
     ("04_P4_FLASH_CLOCK_RESET", "SW_RESET"),
     ("04_P4_FLASH_CLOCK_RESET", "SW_BOOT"),
@@ -287,6 +287,45 @@ def main() -> int:
         errors.append("INA238 monitoring candidate missing")
     if "MP3202DJ-LF-Z" not in p10:
         errors.append("display backlight MP3202 baseline missing")
+
+    # U7 uses the exact project-local TI RPW0010A HotRod land pattern.
+    expected_rpw = "Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm"
+    u7_block = next(
+        (
+            block
+            for block in instantiated_symbol_blocks(p01)
+            if '(property "Reference" "U7"' in block
+        ),
+        "",
+    )
+    if not u7_block:
+        errors.append("01_POWER_INPUT: U7 eFuse instance missing")
+    elif f'(property "Footprint" "{expected_rpw}"' not in u7_block:
+        errors.append("01_POWER_INPUT: U7 must use exact project-local RPW0010A footprint")
+
+    if not RPW0010A_FOOTPRINT.exists():
+        errors.append(f"missing RPW0010A footprint: {RPW0010A_FOOTPRINT}")
+    else:
+        rpw_text = RPW0010A_FOOTPRINT.read_text(encoding="utf-8")
+        depth, minimum = balanced_sexpr(rpw_text)
+        if depth != 0 or minimum < 0:
+            errors.append(
+                f"RPW0010A footprint: unbalanced S-expression depth={depth}, min={minimum}"
+            )
+        expected_pad_counts = Counter(
+            {"1": 2, "2": 1, "3": 1, "4": 2, "5": 1, "6": 1,
+             "7": 2, "8": 1, "9": 1, "10": 2}
+        )
+        observed_pad_counts = Counter(re.findall(r'\(pad "(\d+)" smd', rpw_text))
+        if observed_pad_counts != expected_pad_counts:
+            errors.append(
+                "RPW0010A footprint copper primitive count/pin mapping changed: "
+                f"{dict(observed_pad_counts)}"
+            )
+        if rpw_text.count('"F.Paste"') != 16:
+            errors.append("RPW0010A footprint must retain 16 TI stencil paste primitives")
+        if rpw_text.count("(solder_mask_margin 0.05)") != 14:
+            errors.append("RPW0010A footprint must retain +0.05 mm NSMD mask expansion")
     if '(property "Reference" "J_LCD"' in p10:
         errors.append("J_LCD must remain uninstantiated until authoritative FPC gate closes")
     if "PHYSICAL J_LCD IS INTENTIONALLY NOT INSTANTIATED" not in p10:
