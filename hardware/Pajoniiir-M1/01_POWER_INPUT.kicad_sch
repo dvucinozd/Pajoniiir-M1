@@ -1394,7 +1394,7 @@
     (dnp no)
     (fields_autoplaced yes)
     (uuid "a1000021-1111-4111-8111-000000000022")
-    (property "Reference" "U1" (at 139 38 0)
+    (property "Reference" "U7" (at 139 38 0)
       (effects (font (size 1.27 1.27)))
     )
 
@@ -1426,7 +1426,7 @@
     (pin "10" (uuid "a100002b-1111-4111-8111-00000000002c"))
     (instances
       (project "Pajoniiir-M1"
-        (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000001-6b2a-4a3a-8c91-000000000001" (reference "U1") (unit 1))
+        (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000001-6b2a-4a3a-8c91-000000000001" (reference "U7") (unit 1))
       )
     )
   )
