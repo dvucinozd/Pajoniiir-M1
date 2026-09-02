@@ -647,7 +647,7 @@ Ako je potreban signal-integrity probing:
 | R_LCD_RST_PD | 1 | 100 kΩ | candidate |
 | R_LCD_TE_SER | 1 | 0 Ω DNP | optional |
 | U_BL | 1 | MP3202DJ-LF-Z | LOCK-CANDIDATE |
-| L_BL | 1 | **10 µH** | JC4880 proven baseline |
+| L_BL | 1 | **Coilcraft XGL4030-103MEC — 10 µH ±20%** | LOCK-CANDIDATE; 63 mΩ typ / 69.5 mΩ max DCR, Isat 3.1 A, Irms 3.9 A (40 °C rise) |
 | D_BL | 1 | **SS14** | JC4880 proven baseline |
 | C_BL_IN | 1 | **10 µF / 10 V** | input |
 | C_BL_HF | 1 | **100 nF / 25 V** | input HF |
@@ -739,6 +739,7 @@ ali pripadaju zasebnom sheetu.
 - [x] Backlight electrical replica values recovered from original JC4880 schematic
 - [ ] confirm final purchased panel assembly uses same LED/backlight electrical variant
 - [ ] validate ~74 mA target and actual LEDA voltage on EVT
+- [x] lock L_BL candidate: XGL4030-103MEC
 - [ ] validate M1 direct-EN PWM at 1 kHz
 - [ ] 100 Ω differential MIPI geometry from PCB fab stackup
 - [ ] FPC/mechanical position in enclosure
