@@ -13,6 +13,107 @@
     (comment 2 "Cue/PFL remains USB1 UAC ch3/ch4 to DDJ-FLX4")
   )
   (lib_symbols
+(symbol "power:PWR_FLAG"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 (symbol "Audio:PCM5102A"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1677,6 +1778,23 @@
   (text "Single 3V3_AUDIO supply for CPVDD/DVDD/AVDD. LDOO is an internal ~1.8V output and is decoupled only." (exclude_from_sim no) (at 35 140 0) (effects (font (size 1.27 1.27))) (uuid "090000b5-9000-4900-8900-0000000000b6"))
   (text "MAIN_L/R are ground-centered DirectPath line outputs: 470R + 2.2nF, no series DC-block capacitors." (exclude_from_sim no) (at 35 145 0) (effects (font (size 1.27 1.27))) (uuid "090000b6-9000-4900-8900-0000000000b7"))
   (text "RCA and optional 3.5mm mechanical footprints remain TBD-MECH. J_LINE_35 is DNP and is LINE OUT only, not headphone drive." (exclude_from_sim no) (at 35 150 0) (effects (font (size 1.27 1.27))) (uuid "090000b7-9000-4900-8900-0000000000b8"))
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 55.245 40.005 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fa090101-0000-4000-8000-000000000001")
+    (property "Reference" "#FLG0901" (at 55.245 41.910000000000004 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "PWR_FLAG" (at 55.245 43.815000000000005 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 55.245 40.005 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 55.245 40.005 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Description" "Special symbol for telling ERC where power comes from" (at 55.245 40.005 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "fa090101-0000-4000-8000-000000000002"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "#FLG0901") (unit 1))))
+  )
   (sheet_instances (path "/" (page "10")))
   (embedded_fonts no)
 )

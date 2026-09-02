@@ -13,6 +13,107 @@
     (comment 2 "GPIO26/27 FS path; GPIO24/25 preserved for USB Serial/JTAG")
   )
   (lib_symbols
+(symbol "power:PWR_FLAG"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 (symbol "Connector:USB_A" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at -5.08 11.43 0)
         (effects (font (size 1.27 1.27)) (justify left))
@@ -1106,6 +1207,23 @@
   (text "C_USB1_DM/DP are DNP-only EMI tuning footprints. Populate symmetrically and revalidate USB SI if ever used." (exclude_from_sim no) (at 35 100 0) (effects (font (size 1.27 1.27))) (uuid "08000047-8000-4800-8800-000000000048"))
   (text "TPD2EUSB30A must sit at J_USB1. USB1_VBUS comes exclusively from U_USB1 TPS25221." (exclude_from_sim no) (at 35 105 0) (effects (font (size 1.27 1.27))) (uuid "08000048-8000-4800-8800-000000000049"))
   (text "P4 GPIO24/25 are NOT consumed here; preserve them for USB Serial/JTAG factory/service access in sheet 13." (exclude_from_sim no) (at 35 110 0) (effects (font (size 1.27 1.27))) (uuid "08000049-8000-4800-8800-00000000004a"))
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 192.405 54.61 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fa080101-0000-4000-8000-000000000001")
+    (property "Reference" "#FLG0801" (at 192.405 56.515 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "PWR_FLAG" (at 192.405 58.42 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 192.405 54.61 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 192.405 54.61 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Description" "Special symbol for telling ERC where power comes from" (at 192.405 54.61 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "fa080101-0000-4000-8000-000000000002"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000008-6b2a-4a3a-8c91-000000000008" (reference "#FLG0801") (unit 1))))
+  )
   (sheet_instances (path "/" (page "9")))
   (embedded_fonts no)
 )

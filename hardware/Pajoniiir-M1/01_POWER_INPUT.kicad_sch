@@ -13,6 +13,107 @@
     (comment 2 "PGTH intentionally TBD-VALIDATE")
   )
   (lib_symbols
+(symbol "power:PWR_FLAG"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 (symbol "Pajoniiir-M1:TPS259474ARPWR"
 			(pin_names
 				(offset 0.254)
@@ -2196,6 +2297,40 @@
     (at 95 93 0)
     (effects (font (size 1.27 1.27)))
     (uuid "a1000078-1111-4111-8111-000000000079")
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 120.015 50.165 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fa010101-0000-4000-8000-000000000001")
+    (property "Reference" "#FLG0101" (at 120.015 52.07 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "PWR_FLAG" (at 120.015 53.975 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 120.015 50.165 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 120.015 50.165 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Description" "Special symbol for telling ERC where power comes from" (at 120.015 50.165 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "fa010101-0000-4000-8000-000000000002"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000001-6b2a-4a3a-8c91-000000000001" (reference "#FLG0101") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 19.685 47.625 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fa010102-0000-4000-8000-000000000001")
+    (property "Reference" "#FLG0102" (at 19.685 49.53 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "PWR_FLAG" (at 19.685 51.435 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 19.685 47.625 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 19.685 47.625 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Description" "Special symbol for telling ERC where power comes from" (at 19.685 47.625 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "fa010102-0000-4000-8000-000000000002"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000001-6b2a-4a3a-8c91-000000000001" (reference "#FLG0102") (unit 1))))
   )
   (sheet_instances
     (path "/" (page "2"))

@@ -13,6 +13,107 @@
     (comment 2 "Physical pin 54 = VDD_HP_1; v3.x 499k/499k/22pF feedback populated")
   )
   (lib_symbols
+(symbol "power:PWR_FLAG"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 (symbol "Pajoniiir-M1:ESP32-P4X"
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4080,6 +4181,57 @@
   (text "Core feedback: 499k P4_VDD_HP->FB, 499k FB->GND, 22pF in parallel with upper 499k per Espressif v3.x TLV62569 reference." (exclude_from_sim no) (at 20 180 0) (effects (font (size 1.27 1.27))) (uuid "c30001d1-3333-4333-8333-0000000001d2"))
   (text "VDDO_3 is firmware-configured to 2.5V for MIPI DPHY. VDDO_4 is intentionally unused/NC in Rev A (no SDIO 3.0 voltage switching)." (exclude_from_sim no) (at 20 185 0) (effects (font (size 1.27 1.27))) (uuid "c30001d2-3333-4333-8333-0000000001d3"))
   (text "ESP32-P4NRW32X requires a separate v3.x firmware build; legacy JC4880 rev1.3 binary is not valid for M1." (exclude_from_sim no) (at 20 190 0) (effects (font (size 1.27 1.27))) (uuid "c30001d3-3333-4333-8333-0000000001d4"))
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 88.9 82.55 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fa030101-0000-4000-8000-000000000001")
+    (property "Reference" "#FLG0301" (at 88.9 84.455 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "PWR_FLAG" (at 88.9 86.36 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 88.9 82.55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 88.9 82.55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Description" "Special symbol for telling ERC where power comes from" (at 88.9 82.55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "fa030101-0000-4000-8000-000000000002"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#FLG0301") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 88.9 105.41 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fa030102-0000-4000-8000-000000000001")
+    (property "Reference" "#FLG0302" (at 88.9 107.315 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "PWR_FLAG" (at 88.9 109.22 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 88.9 105.41 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 88.9 105.41 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Description" "Special symbol for telling ERC where power comes from" (at 88.9 105.41 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "fa030102-0000-4000-8000-000000000002"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#FLG0302") (unit 1))))
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 88.9 143.51 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fa030103-0000-4000-8000-000000000001")
+    (property "Reference" "#FLG0303" (at 88.9 145.415 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "PWR_FLAG" (at 88.9 147.32 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 88.9 143.51 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 88.9 143.51 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Description" "Special symbol for telling ERC where power comes from" (at 88.9 143.51 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "fa030103-0000-4000-8000-000000000002"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#FLG0303") (unit 1))))
+  )
   (sheet_instances (path "/" (page "4")))
   (embedded_fonts no)
 )
