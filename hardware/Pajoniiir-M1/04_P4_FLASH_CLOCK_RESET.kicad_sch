@@ -1316,7 +1316,7 @@
   )
   (wire (pts (xy 198.12 72.39) (xy 198.12 64.77)) (stroke (width 0) (type default)) (uuid "d4000054-4444-4444-8444-000000000055"))
   (wire (pts (xy 198.12 64.77) (xy 193.675 64.77)) (stroke (width 0) (type default)) (uuid "d4000055-4444-4444-8444-000000000056"))
-  (hierarchical_label "3V3_SYS" (shape input) (at 34.925 34.925 0) (effects (font (size 1.27 1.27))) (uuid "d4000056-4444-4444-8444-000000000057"))
+  (hierarchical_label "3V3_SYS" (shape input) (at 55.245 38.1 0) (effects (font (size 1.27 1.27))) (uuid "d4000056-4444-4444-8444-000000000057"))
   (symbol
     (lib_id "Device:R_US") (at 55.245 41.91 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -1329,7 +1329,7 @@
     (pin "1" (uuid "d4000058-4444-4444-8444-000000000059")) (pin "2" (uuid "d4000059-4444-4444-8444-00000000005a"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000004-6b2a-4a3a-8c91-000000000004" (reference "R_CHIP_PU") (unit 1))))
   )
-  (label "3V3_SYS" (at 55.245 38.1 0) (effects (font (size 1.27 1.27))) (uuid "d400005a-4444-4444-8444-00000000005b"))
+  
   (label "CHIP_PU" (at 55.245 45.72 0) (effects (font (size 1.27 1.27))) (uuid "d400005b-4444-4444-8444-00000000005c"))
   (symbol
     (lib_id "Device:C") (at 64.77 49.53 0) (unit 1)

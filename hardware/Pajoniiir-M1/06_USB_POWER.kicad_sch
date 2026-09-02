@@ -506,8 +506,8 @@
 			(embedded_fonts no)
 		)
   )
-  (hierarchical_label "5V_SYS" (shape input) (at 29.845 29.845 0) (effects (font (size 1.27 1.27))) (uuid "f6000001-6666-4666-8666-000000000002"))
-  (hierarchical_label "3V3_SYS" (shape input) (at 29.845 34.925 0) (effects (font (size 1.27 1.27))) (uuid "f6000002-6666-4666-8666-000000000003"))
+  (hierarchical_label "5V_SYS" (shape input) (at 45.085 29.845 0) (effects (font (size 1.27 1.27))) (uuid "f6000001-6666-4666-8666-000000000002"))
+  (hierarchical_label "3V3_SYS" (shape input) (at 118.11 45.085 0) (effects (font (size 1.27 1.27))) (uuid "f6000002-6666-4666-8666-000000000003"))
   (symbol
     (lib_id "Device:C") (at 45.085 33.655 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "f6000003-6666-4666-8666-000000000004")
@@ -519,7 +519,7 @@
     (pin "1" (uuid "f6000004-6666-4666-8666-000000000005")) (pin "2" (uuid "f6000005-6666-4666-8666-000000000006"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000006-6b2a-4a3a-8c91-000000000006" (reference "C_USB_PWR_LOCAL") (unit 1))))
   )
-  (label "5V_SYS" (at 45.085 29.845 0) (effects (font (size 1.27 1.27))) (uuid "f6000006-6666-4666-8666-000000000007"))
+  
   (symbol
     (lib_id "power:GND") (at 45.085 37.465 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "f6000007-6666-4666-8666-000000000008")
@@ -624,7 +624,7 @@
     (pin "1" (uuid "f6000025-6666-4666-8666-000000000026")) (pin "2" (uuid "f6000026-6666-4666-8666-000000000027"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000006-6b2a-4a3a-8c91-000000000006" (reference "R_U_USB0_FLT_PU") (unit 1))))
   )
-  (label "3V3_SYS" (at 118.11 45.085 0) (effects (font (size 1.27 1.27))) (uuid "f6000027-6666-4666-8666-000000000028"))
+  
   (wire (pts (xy 118.11 52.705) (xy 107.315 52.705)) (stroke (width 0) (type default)) (uuid "f6000028-6666-4666-8666-000000000029"))
   (symbol
     (lib_id "Device:R_US") (at 118.11 59.055 0) (unit 1)

@@ -1283,7 +1283,7 @@
     (pin "1" (uuid "b200005c-2222-4222-8222-00000000005d"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000002-6b2a-4a3a-8c91-000000000002" (reference "#PWR0210") (unit 1))))
   )
-  (hierarchical_label "3V3_PG" (shape output) (at 130.175 57.785 180) (effects (font (size 1.27 1.27))) (uuid "b200005d-2222-4222-8222-00000000005e"))
+  (hierarchical_label "3V3_PG" (shape output) (at 189.865 57.785 0) (effects (font (size 1.27 1.27))) (uuid "b200005d-2222-4222-8222-00000000005e"))
   (symbol
     (lib_id "Device:R_US") (at 189.865 53.975 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -1297,7 +1297,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000002-6b2a-4a3a-8c91-000000000002" (reference "R21") (unit 1))))
   )
   (label "3V3_SYS" (at 189.865 50.165 0) (effects (font (size 1.27 1.27))) (uuid "b2000061-2222-4222-8222-000000000062"))
-  (label "3V3_PG" (at 189.865 57.785 0) (effects (font (size 1.27 1.27))) (uuid "b2000062-2222-4222-8222-000000000063"))
+  
   (symbol
     (lib_id "Device:R_US") (at 205.105 53.975 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)

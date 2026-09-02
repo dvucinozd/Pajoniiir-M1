@@ -1259,7 +1259,7 @@
     (pin "1" (uuid "0900003b-9000-4900-8900-00000000003c"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "#PWR0905") (unit 1))))
   )
-  (hierarchical_label "3V3_AUDIO" (shape input) (at 45.085 40.005 0) (effects (font (size 1.27 1.27))) (uuid "0900003c-9000-4900-8900-00000000003d"))
+  (hierarchical_label "3V3_AUDIO" (shape input) (at 55.245 40.005 0) (effects (font (size 1.27 1.27))) (uuid "0900003c-9000-4900-8900-00000000003d"))
   (symbol
     (lib_id "Device:C") (at 55.245 43.815 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900003d-9000-4900-8900-00000000003e")
@@ -1271,7 +1271,7 @@
     (pin "1" (uuid "0900003e-9000-4900-8900-00000000003f")) (pin "2" (uuid "0900003f-9000-4900-8900-000000000040"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_AUDIO_BRANCH") (unit 1))))
   )
-  (label "3V3_AUDIO" (at 55.245 40.005 0) (effects (font (size 1.27 1.27))) (uuid "09000040-9000-4900-8900-000000000041"))
+  
   (symbol
     (lib_id "power:GND") (at 55.245 47.625 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000041-9000-4900-8900-000000000042")
