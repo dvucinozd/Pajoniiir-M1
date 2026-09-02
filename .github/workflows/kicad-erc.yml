@@ -41,6 +41,144 @@ jobs:
       - name: Structural schematic contracts
         run: python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 
+      - name: Root loader delta diagnostics
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/paj-root-diag
+          mkdir -p /tmp/paj-root-diag
+          cp hardware/Pajoniiir-M1/*.kicad_sch /tmp/paj-root-diag/
+
+          python3 - <<'PY'
+          from __future__ import annotations
+          from pathlib import Path
+          import re
+
+          base = Path("/tmp/paj-root-diag")
+          root = base / "Pajoniiir-M1.kicad_sch"
+          text = root.read_text(encoding="utf-8")
+
+          def sexpr_at(src: str, start: int) -> tuple[str, int]:
+              depth = 0
+              in_string = False
+              escaped = False
+              begun = False
+              for i in range(start, len(src)):
+                  ch = src[i]
+                  if in_string:
+                      if escaped:
+                          escaped = False
+                          continue
+                      if ch == "\\":
+                          escaped = True
+                          continue
+                      if ch == '"':
+                          in_string = False
+                      continue
+                  if ch == '"':
+                      in_string = True
+                      continue
+                  if ch == "(":
+                      depth += 1
+                      begun = True
+                  elif ch == ")":
+                      depth -= 1
+                      if begun and depth == 0:
+                          return src[start : i + 1], i + 1
+              raise ValueError("unterminated s-expression")
+
+          start = text.index("(kicad_sch")
+          pos = start + len("(kicad_sch")
+          items: list[tuple[str, str]] = []
+          while pos < len(text):
+              while pos < len(text) and text[pos].isspace():
+                  pos += 1
+              if text[pos] == ")":
+                  break
+              block, pos = sexpr_at(text, pos)
+              token = re.match(r"\(([^\s()]+)", block).group(1)
+              items.append((token, block))
+
+          header_tokens = {
+              "version", "generator", "generator_version", "uuid",
+              "paper", "title_block", "lib_symbols"
+          }
+          tail_tokens = {"sheet_instances", "embedded_fonts"}
+
+          sheets = [(tok, block) for tok, block in items if tok == "sheet"]
+          sheet_names: list[str] = []
+          for _, block in sheets:
+              m = re.search(r'\(property "Sheetname" "([^"]+)"', block)
+              sheet_names.append(m.group(1) if m else "UNKNOWN")
+
+          def emit(name: str, keep) -> None:
+              selected = [block for token, block in items if keep(token, block)]
+              body = "\n".join("  " + block.lstrip() for block in selected)
+              (base / f"diag_{name}.kicad_sch").write_text(
+                  "(kicad_sch\n" + body + "\n)\n",
+                  encoding="utf-8",
+              )
+
+          emit("no_sheets", lambda token, block: token != "sheet")
+          emit(
+              "sheets_only",
+              lambda token, block: token in header_tokens
+              or token == "sheet"
+              or token in tail_tokens,
+          )
+          emit("no_labels", lambda token, block: token != "label")
+          emit("no_wires", lambda token, block: token != "wire")
+          emit(
+              "no_wires_labels",
+              lambda token, block: token not in {"wire", "label"},
+          )
+
+          for idx, sheet_name in enumerate(sheet_names):
+              safe = re.sub(r"[^A-Za-z0-9_]+", "_", sheet_name)
+              target = sheets[idx][1]
+              emit(
+                  f"single_{idx+1:02d}_{safe}",
+                  lambda token, block, target=target: (
+                      token in header_tokens
+                      or token in tail_tokens
+                      or (token == "sheet" and block == target)
+                  ),
+              )
+
+          midpoint = len(sheets) // 2
+          first = {block for _, block in sheets[:midpoint]}
+          second = {block for _, block in sheets[midpoint:]}
+          emit(
+              "sheets_first_half",
+              lambda token, block: token in header_tokens
+              or token in tail_tokens
+              or (token == "sheet" and block in first),
+          )
+          emit(
+              "sheets_second_half",
+              lambda token, block: token in header_tokens
+              or token in tail_tokens
+              or (token == "sheet" and block in second),
+          )
+          print(f"Generated {5 + len(sheets) + 2} diagnostic roots")
+          PY
+
+          cd /tmp/paj-root-diag
+          for schematic in Pajoniiir-M1.kicad_sch diag_*.kicad_sch; do
+            report="/tmp/$(basename "$schematic" .kicad_sch).diag.rpt"
+            set +e
+            kicad-cli sch erc --severity-error --output "$report" "$schematic" \
+              >/tmp/paj-diag.stdout 2>/tmp/paj-diag.stderr
+            rc=$?
+            set -e
+            printf 'ROOT-DIAG rc=%d file=%s\n' "$rc" "$schematic"
+            if [[ "$rc" -ne 0 ]]; then
+              sed 's/^/  stderr: /' /tmp/paj-diag.stderr || true
+            fi
+          done
+          cd -
+
       - name: KiCad schematic load preflight
         shell: bash
         run: |
