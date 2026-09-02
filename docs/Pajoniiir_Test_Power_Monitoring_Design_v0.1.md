@@ -85,7 +85,7 @@ Time mjerimo ukupnu stvarnu potrošnju uređaja.
 
 Rev A:
 
-**R_SYS_SHUNT = 5 mΩ, 1%, 1 W, 2512, 4-terminal/Kelvin preferred**
+**R_SYS_SHUNT = Vishay WSK25125L000FEA — 5 mΩ, 1%, 1 W, 4-terminal/Kelvin**
 
 Pri 4.5 A:
 
@@ -415,7 +415,7 @@ populate:
 
 Ako se INA238 uklanja:
 
-- R_SHUNT se zamijeni 0 Ω high-current jumperom ili footprint-compatible shuntom po dizajnu
+- R_SHUNT se zamijeni odobrenim footprint-compatible 0 Ω high-current jumperom ako se želi eliminirati mjerni pad; standardna EVT/DVT konfiguracija zadržava WSK25125L000FEA
 - INA footprint DNP
 - ALERT GPIO oslobođen
 
@@ -428,7 +428,7 @@ Bolje je zadržati 5 mΩ shunt samo ako njegov cost/drop nije problem.
 | RefDes | Qty | Part/value | Status |
 |---|---:|---|---|
 | U_MON | 0/1 | INA238AIDGSR | DNP-capable |
-| R_SYS_SHUNT | 1 | 5 mΩ 1%, ≥1 W, Kelvin/4-terminal preferred | EVT |
+| R_SYS_SHUNT | 1 | **WSK25125L000FEA — 5 mΩ, 1%, 1 W, 4-terminal** | LOCK-CANDIDATE; `Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm` |
 | R_INA_P | 1 | 10 Ω | filter |
 | R_INA_N | 1 | 10 Ω | filter |
 | C_INA_DIFF | 1 | 100 nF | filter |
