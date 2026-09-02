@@ -2,13 +2,15 @@
 
 Purpose-built Rev A mainboard for the **Pajoniiir standalone dual-deck DJ system**.
 
-This repository contains the hardware architecture, engineering BOM, subsystem electrical designs, schematic-readiness reviews and — in the next milestone — the actual KiCad design.
+This repository contains the hardware architecture, engineering BOM, subsystem electrical designs and the active hierarchical KiCad Rev A schematic capture.
 
 ---
 
 ## Current status
 
-**GO for schematic capture:** YES  
+**M1-SCH-A component capture:** SUBSTANTIALLY COMPLETE  
+**Structural schematic audit:** PASS  
+**Native KiCad ERC:** PENDING  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -28,7 +30,7 @@ The electrical architecture is defined for:
 - P4/C6 recovery and factory programming
 - optional system power telemetry
 
-The largest remaining layout gate is the exact physical LCD/touch FPC/panel assembly.
+The largest remaining layout gate is the exact physical LCD/touch FPC/panel assembly. Native KiCad Sync Sheet Pins + ERC and final exact-footprint/mechanical closure are still required before M1-SCH-A sign-off.
 
 ---
 
@@ -38,6 +40,11 @@ The largest remaining layout gate is the exact physical LCD/touch FPC/panel asse
                            5V INPUT
                               |
                        TPS259474 eFuse
+                              |
+                       5V_PROTECTED
+                              |
+                     5 mΩ Kelvin shunt
+                    / INA238 measurement
                               |
                            5V_SYS
           +-------------------+-------------------+
@@ -66,13 +73,15 @@ v3.x               SDIO/Wi-Fi    MAIN L/R              SDMMC
 
 # Current authoritative documents
 
-When documents disagree, use this order:
+When sources disagree, use this order:
 
-1. **docs/Pajoniiir_Mainboard_BOM_v0.2.md**
-2. **docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md**
-3. the subsystem leaf-design document
-4. **docs/Pajoniiir_Mainboard_Schematic_Plan_v0.1.md**
-5. older architecture/research documents
+1. **actual `hardware/Pajoniiir-M1/*.kicad_sch` files** for captured connectivity and current RefDes
+2. **docs/Pajoniiir_Mainboard_BOM_v0.2.md** for engineering component intent
+3. **docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md**
+4. **docs/Pajoniiir_M1_Schematic_Audit_v0.1.md**
+5. the subsystem leaf-design document
+6. **docs/Pajoniiir_Mainboard_Schematic_Plan_v0.1.md**
+7. older architecture/research documents
 
 Pajoniiir_Mainboard_BOM_v0.1.md is superseded.
 
@@ -89,6 +98,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [Global GPIO allocation v0.1](docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md)
 - [Schematic plan v0.1](docs/Pajoniiir_Mainboard_Schematic_Plan_v0.1.md)
 - [Schematic readiness review v0.1](docs/Pajoniiir_RevA_Schematic_Readiness_Review_v0.1.md)
+- [M1-SCH-A schematic audit v0.1](docs/Pajoniiir_M1_Schematic_Audit_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
 ## 01 — Input power
@@ -408,41 +418,40 @@ These do not block electrical schematic capture.
 
 # Next milestone
 
-## M1-SCH-A
+## M1-SCH-A sign-off
 
-Create the real KiCad project under:
+The real KiCad hierarchy now exists under:
 
 ~~~text
 hardware/Pajoniiir-M1/
 ~~~
 
-and capture hierarchical sheets:
+and all 15 planned leaf sheets have component-level capture.
 
-~~~text
-00_ROOT
-01_POWER_INPUT
-02_POWER_3V3
-03_P4_CORE
-04_P4_FLASH_CLOCK_RESET
-05_C6_WIFI
-06_USB_POWER
-07_USB0_STORAGE
-08_USB1_FLX4
-09_AUDIO_PCM5102A
-10_DISPLAY_MIPI
-11_TOUCH_GT911
-12_MICROSD
-13_DEBUG_SERVICE
-14_TEST_MONITORING
-15_DNP_OPTIONS
+Current sign-off gates:
+
+- [x] hierarchy captured
+- [x] structural child/root audit clean
+- [x] duplicate RefDes audit clean
+- [x] 5V_PROTECTED -> shunt -> 5V_SYS power path corrected
+- [x] display/touch electrical capture
+- [x] DNP/DNL policy captured
+- [x] local structural validator committed
+- [ ] native KiCad Sync Sheet Pins
+- [ ] native KiCad ERC with zero unexplained errors
+- [ ] final LCD/FPC physical definition
+- [ ] exact external connector MPNs / footprints
+- [ ] U7 HotRod RPW land pattern freeze
+- [ ] L_BL and Kelvin shunt exact sourcing/footprints
+- [ ] schematic PDF human review
+- [ ] manufacturing BOM/netlist cross-check
+
+Use:
+
+~~~bash
+python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 ~~~
 
-Exit criteria:
+for the lightweight source-level structural check.
 
-- symbols/footprints verified
-- zero unexplained ERC errors
-- GPIO audit clean
-- power review passed
-- schematic design review passed
-
-Only after **M1-SCH-A** should the project move into final PCB placement/routing.
+Only after **M1-SCH-A sign-off** should the project move into final PCB placement/routing.
