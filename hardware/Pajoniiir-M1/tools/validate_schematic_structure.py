@@ -185,6 +185,16 @@ def main() -> int:
                 f"{name}: sheet instance path={instance_m.group(1)}; "
                 f"expected parent path={expected_sheet_parent_path}"
             )
+
+        required_sheet_flags = (
+            "(exclude_from_sim no)",
+            "(in_bom yes)",
+            "(on_board yes)",
+            "(dnp no)",
+        )
+        for flag in required_sheet_flags:
+            if flag not in block:
+                errors.append(f"{name}: KiCad-9 hierarchical sheet flag missing: {flag}")
     for name, text in child_text.items():
         if name not in blocks:
             errors.append(f"{name}: sheet symbol missing in root")
