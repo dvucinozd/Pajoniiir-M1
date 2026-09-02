@@ -4,13 +4,13 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Repo:** `dvucinozd/Pajoniiir-M1`  
 **Datum:** 2026-09-02  
-**Status:** Schematic architecture plan prije KiCad capturea
+**Status:** Schematic architecture plan — detailed leaf designs completed; use BOM v0.2 and Global GPIO Allocation v0.1 as current authority
 
 ---
 
 # 1. Svrha dokumenta
 
-Ovaj dokument pretvara hardversku arhitekturu i Engineering BOM v0.1 u konkretan plan za crtanje sheme.
+Ovaj dokument pretvara hardversku arhitekturu i Engineering BOM v0.2 u konkretan plan za crtanje sheme.
 
 Cilj je da KiCad projekt od početka bude:
 
@@ -56,15 +56,16 @@ Predloženi sheetovi:
 03_P4_CORE
 04_P4_FLASH_CLOCK_RESET
 05_C6_WIFI
-06_USB0_STORAGE
-07_USB1_FLX4
-08_AUDIO_PCM5102A
-09_DISPLAY_MIPI
-10_TOUCH_GT911
-11_MICROSD
-12_DEBUG_SERVICE
-13_TEST_MONITORING
-14_DNP_OPTIONS
+06_USB_POWER
+07_USB0_STORAGE
+08_USB1_FLX4
+09_AUDIO_PCM5102A
+10_DISPLAY_MIPI
+11_TOUCH_GT911
+12_MICROSD
+13_DEBUG_SERVICE
+14_TEST_MONITORING
+15_DNP_OPTIONS
 ```
 
 Preporuka: koristiti prefiks broja kako bi redoslijed sheetova ostao stabilan u KiCadu, PDF exportu i reviewu.
@@ -333,6 +334,8 @@ Na custom KiCad simbolu pinove grupirati po funkciji:
 
 ### Touch
 
+- GPIO3 = RST
+- GPIO4 = INT
 - GPIO7 = SDA
 - GPIO8 = SCL
 
@@ -348,6 +351,7 @@ Na custom KiCad simbolu pinove grupirati po funkciji:
 ### LCD
 
 - GPIO5 = LCD RESET
+- GPIO6 = optional TE
 - GPIO23 = BACKLIGHT PWM
 
 ### C6 SDIO
@@ -359,6 +363,26 @@ Na custom KiCad simbolu pinove grupirati po funkciji:
 - GPIO16 = D2
 - GPIO17 = D3
 - GPIO54 = C6 RESET
+
+### USB power control
+
+- GPIO20 = USB0 EN
+- GPIO21 = USB0 FAULT_N
+- GPIO22 = USB1 EN
+- GPIO32 = USB1 FAULT_N
+
+### microSD control
+
+- GPIO45 = SD_PWR_EN
+- GPIO46 = optional CARD_DETECT
+
+### Audio mute
+
+- GPIO49 = PCM5102A XSMT
+
+### Monitoring
+
+- GPIO53 = optional INA238 ALERT
 
 ## 7.4 Reserved GPIO table
 
