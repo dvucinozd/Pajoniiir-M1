@@ -49,6 +49,7 @@ Pajoniiir_Mainboard_BOM_v0.1.md is superseded.
 | Block | Document | Readiness |
 |---|---|---|
 | Architecture | Pajoniiir_Mainboard_Hardware_Architecture_RevA.md | READY |
+| Display forensics | Pajoniiir_Display_FPC_Backlight_Forensics_v0.1.md | READY / source reconstruction |
 | Consolidated BOM | Pajoniiir_Mainboard_BOM_v0.2.md | READY |
 | Global GPIO | Pajoniiir_Global_GPIO_Allocation_v0.1.md | READY |
 | Schematic hierarchy | Pajoniiir_Mainboard_Schematic_Plan_v0.1.md | READY |
@@ -61,7 +62,7 @@ Pajoniiir_Mainboard_BOM_v0.1.md is superseded.
 | 07 USB0 HS | Pajoniiir_USB0_HS_Storage_Design_v0.1.md | READY |
 | 08 USB1 FLX4 FS | Pajoniiir_USB1_FLX4_FS_Design_v0.1.md | READY |
 | 09 PCM5102A | Pajoniiir_PCM5102A_Audio_Design_v0.1.md | READY |
-| 10 MIPI display/backlight | Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md | READY WITH PANEL GATE |
+| 10 MIPI display/backlight | Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.2.md | READY WITH FPC MECHANICAL GATE |
 | 11 GT911 | Pajoniiir_GT911_Touch_Design_v0.1.md | READY WITH PANEL GATE |
 | 12 microSD | Pajoniiir_MicroSD_SDMMC_Design_v0.1.md | READY |
 | 13 Debug/service | Pajoniiir_Debug_Recovery_Factory_Service_v0.1.md | READY |
@@ -221,38 +222,54 @@ GPIO54  C6_RESET
 
 # 7. Hard blockers before PCB layout freeze
 
-## BLOCKER A — exact LCD/touch assembly
+## BLOCKER A — exact LCD/touch assembly mechanics
 
-Need:
+Electrical reconstruction is now substantially complete from the original JC4880 schematic.
 
-- exact manufacturer MPN
-- exact FPC contact count
-- exact FPC pitch
-- exact pin order
+Recovered with high confidence:
+
+- DSI lane pin mapping
+- TE
+- LCD reset
+- touch SDA/SCL/RST/INT
+- 3.3 V/GND group
+- LEDA/LEDK
+- original connector label `0.5TBQP-30P-1`
+
+Still required:
+
+- exact final panel manufacturer MPN
+- resolve **30-pin connector MPN vs 32-pin schematic-symbol reference discrepancy**
+- pins 15/16/18/19
 - contact orientation
-- panel mechanical drawing
-- touch controller placement
-- LEDA/LEDK electrical specification
+- panel mechanical drawing / FPC geometry
+- confirm purchased assembly is electrically the same JC4880 variant
 
-Without this, J_LCD footprint must remain unfrozen.
+Until then J_LCD footprint remains unfrozen.
 
-## BLOCKER B — backlight LED string
+## BLOCKER B — backlight is no longer a schematic blocker
 
-Need:
+Original JC4880 schematic reconstruction recovered:
 
-- number of LEDs
-- series/parallel configuration
-- LED Vf range
-- target current
-- maximum current
+~~~text
+MP3202
+10 µH
+SS14
+10 µF / 10 V input
+100 nF / 25 V input HF
+4.7 µF / 35 V output
+100 nF / 50 V output HF
+3.9 Ω || 2.2 Ω sense
+~74 mA nominal LED current
+0 Ω PWM-to-EN
+10 kΩ EN pulldown
+~~~
 
-Then lock:
+Rev A recommendation:
 
-- MP3202 inductor
-- Schottky diode
-- current-sense resistor
-- output capacitor
-- 5 kHz filtered-FB dimming network
+**direct EN PWM at 1 kHz in the M1-specific BSP.**
+
+Remaining work is EVT validation of actual LEDA voltage/current and confirmation that the final purchased panel is the same electrical variant.
 
 ## BLOCKER C — exact mechanical connectors
 
@@ -289,7 +306,7 @@ These values are intentionally engineering starting points:
 - crystal 15 pF load capacitors
 - C6/Audio ferrite vs 0 Ω
 - USB/MIPI/QSPI tuning resistors
-- backlight dimming filter
+- M1 1 kHz backlight PWM behavior / backlight current
 
 They do not block schematic capture.
 
@@ -434,10 +451,9 @@ Power, compute, USB, audio, Wi-Fi, touch logic, microSD, debug and monitoring ar
 
 Wait for:
 
-1. exact LCD/touch FPC
-2. exact backlight LED string
-3. final connector mechanics
-4. final P4 orderable silicon confirmation
+1. resolve exact LCD/touch physical FPC/panel MPN and 30-vs-32 discrepancy
+2. final connector mechanics
+3. final P4 orderable silicon confirmation
 
 ---
 
