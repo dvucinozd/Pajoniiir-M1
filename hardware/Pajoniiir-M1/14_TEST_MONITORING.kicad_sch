@@ -801,9 +801,9 @@
     (lib_id "Device:R_US") (at 85 45 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000002-e000-4e00-8e00-000000000003")
     (property "Reference" "R_SYS_SHUNT" (at 88 43 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "5mR 1% >=1W KELVIN" (at 88 47 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 85 45 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "~" (at 85 45 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "WSK25125L000FEA / 5mR 1% 1W" (at 88 47 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm" (at 85 45 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.vishay.com/docs/30108/wsk2512.pdf" (at 85 45 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e000003-e000-4e00-8e00-000000000004")) (pin "2" (uuid "0e000004-e000-4e00-8e00-000000000005"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_SYS_SHUNT") (unit 1))))
@@ -1021,7 +1021,7 @@
   )
   (label "SYS_POWER_ALERT_N" (at 130 105 0) (effects (font (size 1.27 1.27))) (uuid "0e000053-e000-4e00-8e00-000000000054"))
 
-  (text "R_SYS_SHUNT = 5mR 1%, >=1W; use true Kelvin/4-terminal footprint if available. At 4.5A: 22.5mV, ~101mW." (exclude_from_sim no) (at 35 125 0) (effects (font (size 1.27 1.27))) (uuid "0e000054-e000-4e00-8e00-000000000055"))
+  (text "R_SYS_SHUNT = WSK25125L000FEA, 5mR 1% 1W, 4-terminal/Kelvin. At 4.5A: 22.5mV, ~101mW." (exclude_from_sim no) (at 35 125 0) (effects (font (size 1.27 1.27))) (uuid "0e000054-e000-4e00-8e00-000000000055"))
   (text "INA238 address 0x40: A0=A1=GND. VBUS senses load-side 5V_SYS; IN+ = supply-side Kelvin, IN- = load-side Kelvin." (exclude_from_sim no) (at 35 130 0) (effects (font (size 1.27 1.27))) (uuid "0e000055-e000-4e00-8e00-000000000056"))
   (text "Input filter: 10R + 10R and 100nF differential. Do not route sense traces on shared high-current copper; take Kelvin taps at shunt pads." (exclude_from_sim no) (at 35 135 0) (effects (font (size 1.27 1.27))) (uuid "0e000056-e000-4e00-8e00-000000000057"))
   (text "Cost-down: U_MON/filter/ALERT may be DNP, but R_SYS_SHUNT must remain or be replaced by footprint-compatible 0R high-current jumper." (exclude_from_sim no) (at 35 140 0) (effects (font (size 1.27 1.27))) (uuid "0e000057-e000-4e00-8e00-000000000058"))
