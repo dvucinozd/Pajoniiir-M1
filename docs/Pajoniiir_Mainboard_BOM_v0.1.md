@@ -157,12 +157,23 @@ Firmware baseline:
 
 | RefDes | Qty | Value | Napomena |
 |---|---:|---|---|
-| C_C6_BULK | 1 | 10 µF | 3V3_C6 lokalno |
-| C_C6_DEC1 | 1+ | 100 nF | lokalno |
-| R_C6_EN | 1 | TBD per Espressif module reference | EN/CHIP_PU |
-| R_SDIO_* | set | 0 Ω / TBD | series tuning footprints |
-| R_SDIO_PULL_* | set | TBD | prema ESP-Hosted/SDIO host reference |
-| TP_C6_TX/RX | 2 | test pads | servis/debug |
+| C_C6_HF | 1 | **100 nF** | lokalno |
+| C_C6_LOCAL | 1 | **10 µF** | lokalno |
+| C_C6_BULK | 1 | **22 µF** | Wi-Fi TX transient reserve |
+| R_C6_EN | 1 | **10 kΩ** | EN pull-up |
+| C_C6_EN | 1 | **1 µF** | EN RC delay |
+| R_C6_RESET_SER | 1 | 0 Ω | P4 GPIO54 → C6 EN isolation/debug |
+| R_SDIO_CMD_PU | 1 | **51.1 kΩ 1%** | mandatory SDIO pull-up |
+| R_SDIO_D0_PU | 1 | **51.1 kΩ 1%** | mandatory SDIO pull-up |
+| R_SDIO_D1_PU | 1 | **51.1 kΩ 1%** | mandatory SDIO pull-up |
+| R_SDIO_D2_PU | 1 | **51.1 kΩ 1%** | mandatory SDIO pull-up |
+| R_SDIO_D3_PU | 1 | **51.1 kΩ 1%** | mandatory SDIO pull-up |
+| R_SDIO_CLK | 1 | **22 Ω initial** | SI tuning |
+| R_SDIO_CMD/D0-D3 | 5 | 0 Ω | SI tuning |
+| R_C6_GPIO8_PU | 1 | 10 kΩ | direct recovery/download mode |
+| R_C6_GPIO9_PU | 1 | 10 kΩ | normal boot + recovery |
+| R_C6_UART_TX/RX | 2 | 33 Ω | direct C6 debug |
+| TP_C6_* | multiple | test pads | 3V3, EN, UART, boot, SDIO |
 
 **RF:** ispod PCB antene nema coppera, trase ni visokih komponenti. Antena mora imati keep-out prema Espressif module placement pravilima.
 
