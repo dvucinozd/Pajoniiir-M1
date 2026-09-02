@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 10_DISPLAY_MIPI  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — DSI/power/timing zaključani; exact LCD/FPC MPN i backlight LED string ostaju pre-layout gate
+**Status:** **SUPERSEDED** — use `Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.2.md`
 
 ---
 
