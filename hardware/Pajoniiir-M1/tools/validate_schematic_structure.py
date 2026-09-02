@@ -570,7 +570,9 @@ def main() -> int:
                         "03_P4_CORE: U1 units 1 and 2 must not overlap geometrically"
                     )
 
-            # KiCad symbol-local +Y maps to decreasing schematic-world Y for these\n            # unrotated U1 instances; use world_y = instance_y - local_y.\n            hlabel_points: dict[str, list[tuple[float, float]]] = defaultdict(list)
+            # KiCad symbol-local +Y maps to decreasing schematic-world Y for these
+            # unrotated U1 instances; use world_y = instance_y - local_y.
+            hlabel_points: dict[str, list[tuple[float, float]]] = defaultdict(list)
             for match in re.finditer(
                 r'\(hierarchical_label "([^"]+)".*?'
                 r'\(at ([\-\d.]+) ([\-\d.]+) ([\-\d.]+)\)',
