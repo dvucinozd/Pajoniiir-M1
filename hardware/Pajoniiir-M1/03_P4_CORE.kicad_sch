@@ -2844,6 +2844,7 @@
   (wire (pts (xy 307.34 269.875) (xy 301.625 269.875)) (stroke (width 0) (type default)) (uuid "ad030000-0000-4000-8000-000000000001"))
   (label "DSI_REXT" (at 301.625 269.875 180) (effects (font (size 1.27 1.27))) (uuid "ad030000-0000-4000-8000-000000000002"))
   (label "DSI_REXT" (at 307.34 160.02 0) (effects (font (size 1.27 1.27))) (uuid "ad030000-0000-4000-8000-000000000003"))
+  (label "3V3_SYS" (at 88.9 82.55 0) (effects (font (size 1.27 1.27))) (uuid "ee030000-0000-4000-8000-000000000001"))
   (symbol
     (lib_id "Pajoniiir-M1:ESP32-P4X")
     (at 111.76 111.76 0)
@@ -3203,6 +3204,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0392") (unit 1))))
   )
   
+  (label "FLASH_VCC" (at 134.62 123.19 180) (effects (font (size 1.27 1.27))) (uuid "ee030000-0000-4000-8000-000000000002"))
   (label "FLASH_VCC" (at 134.62 125.73 180) (effects (font (size 1.27 1.27))) (uuid "c30000da-3333-4333-8333-0000000000db"))
   (hierarchical_label "FLASH_VCC" (shape output) (at 168.275 36.195 0) (effects (font (size 1.27 1.27))) (uuid "c30000db-3333-4333-8333-0000000000dc"))
   (symbol
@@ -3385,6 +3387,7 @@
   )
   
   (label "P4_LDO_MIPI_2V5" (at 88.9 158.75 0) (effects (font (size 1.27 1.27))) (uuid "c300010a-3333-4333-8333-00000000010b"))
+  (label "P4_LDO_MIPI_2V5" (at 134.62 148.59 180) (effects (font (size 1.27 1.27))) (uuid "ee030000-0000-4000-8000-000000000003"))
   (hierarchical_label "P4_LDO_MIPI_2V5" (shape output) (at 250.19 36.195 0) (effects (font (size 1.27 1.27))) (uuid "c300010b-3333-4333-8333-00000000010c"))
   (symbol
     (lib_id "Device:C") (at 250.19 40.005 0) (unit 1)
@@ -3463,13 +3466,13 @@
   )
   (no_connect (at 134.62 156.21) (uuid "c300011e-3333-4333-8333-00000000011f"))
   (symbol
-    (lib_id "power:GND") (at 111.76 30.48 0) (unit 1)
+    (lib_id "power:GND") (at 111.76 193.04 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "c300011f-3333-4333-8333-000000000120")
-    (property "Reference" "#PWR0303" (at 111.76 36.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Value" "GND" (at 111.76 33.48 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 111.76 30.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "" (at 111.76 30.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Reference" "#PWR0303" (at 111.76 199.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "GND" (at 111.76 196.04 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "" (at 111.76 193.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "" (at 111.76 193.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "c3000120-3333-4333-8333-000000000121"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0303") (unit 1))))
@@ -3487,7 +3490,7 @@
     (pin "4" (uuid "c3000125-3333-4333-8333-000000000126")) (pin "5" (uuid "c3000126-3333-4333-8333-000000000127")) (pin "6" (uuid "c3000127-3333-4333-8333-000000000128"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "U3") (unit 1))))
   )
-  (label "3V3_SYS" (at 202.565 92.71 0) (effects (font (size 1.27 1.27))) (uuid "c3000128-3333-4333-8333-000000000129"))
+  (label "3V3_SYS" (at 202.565 87.63 0) (effects (font (size 1.27 1.27))) (uuid "c3000128-3333-4333-8333-000000000129"))
   (symbol
     (lib_id "Device:C") (at 194.31 96.52 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -3527,7 +3530,8 @@
     (pin "1" (uuid "c3000132-3333-4333-8333-000000000133"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0305") (unit 1))))
   )
-  (wire (pts (xy 217.805 92.71) (xy 224.79 92.71)) (stroke (width 0) (type default)) (uuid "c3000133-3333-4333-8333-000000000134"))
+  (label "P4_CORE_SW" (at 217.805 87.63 0) (effects (font (size 1.27 1.27))) (uuid "ee030000-0000-4000-8000-000000000004"))
+  (label "P4_CORE_SW" (at 224.79 92.71 0) (effects (font (size 1.27 1.27))) (uuid "ee030000-0000-4000-8000-000000000005"))
   (symbol
     (lib_id "Device:L") (at 224.79 96.52 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
