@@ -187,7 +187,7 @@
     "bom_export_filename": "${PROJECTNAME}.csv",
     "bom_fmt_presets": [],
     "bom_presets": [],
-    "connection_grid_size": 50,
+    "connection_grid_size": 25.0,
     "drawing": {
       "default_line_thickness": 6,
       "default_text_size": 50,
