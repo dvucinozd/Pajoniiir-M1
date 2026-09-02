@@ -909,8 +909,8 @@ radi rezerve.
 
 Kandidati klase:
 
-- TPS62133
-- TPS62162
+- TPS62132
+- TPS62132
 - MP2145
 - SY8089
 - drugi kvalitetan synchronous buck
