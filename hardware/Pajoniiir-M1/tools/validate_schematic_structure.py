@@ -570,7 +570,7 @@ def main() -> int:
                         "03_P4_CORE: U1 units 1 and 2 must not overlap geometrically"
                     )
 
-            hlabel_points: dict[str, list[tuple[float, float]]] = defaultdict(list)
+            # KiCad symbol-local +Y maps to decreasing schematic-world Y for these\n            # unrotated U1 instances; use world_y = instance_y - local_y.\n            hlabel_points: dict[str, list[tuple[float, float]]] = defaultdict(list)
             for match in re.finditer(
                 r'\(hierarchical_label "([^"]+)".*?'
                 r'\(at ([\-\d.]+) ([\-\d.]+) ([\-\d.]+)\)',
@@ -653,7 +653,7 @@ def main() -> int:
                             f"03_P4_CORE: unit-2 pin definition missing for {pin_name}"
                         )
                         continue
-                    target = (ux + pin[1], uy + pin[2])
+                    target = (ux + pin[1], uy - pin[2])
                     points = hlabel_points.get(net, [])
                     if len(points) != 1 or not close_xy(points[0], target):
                         errors.append(
@@ -679,7 +679,7 @@ def main() -> int:
                     pin = unit2_pins.get(pin_name)
                     if not pin:
                         continue
-                    target = (ux + pin[1], uy + pin[2])
+                    target = (ux + pin[1], uy - pin[2])
                     if not any(close_xy(point, target) for point in nc_points):
                         errors.append(
                             f"03_P4_CORE: unused U1/2 {pin_name} lacks explicit NC"
@@ -711,7 +711,7 @@ def main() -> int:
             if 1 in instance_data:
                 ux, uy, _ = instance_data[1]
                 unit1_targets = {
-                    pin_name: (ux + pin[1], uy + pin[2])
+                    pin_name: (ux + pin[1], uy - pin[2])
                     for pin_name, pin in unit1_pins.items()
                 }
                 for net, points in hlabel_points.items():
