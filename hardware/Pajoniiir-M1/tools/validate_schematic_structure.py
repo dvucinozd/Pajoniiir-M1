@@ -271,7 +271,7 @@ def main() -> int:
                 continue
             ref = ref_m.group(1)
             value = val_m.group(1) if val_m else ""
-            if not ref.startswith("#PWR"):
+            if not ref.startswith(("#PWR", "#FLG")):
                 refs[ref].append(
                     (
                         name,
@@ -280,7 +280,7 @@ def main() -> int:
                     )
                 )
             if (
-                not ref.startswith("#PWR")
+                not ref.startswith(("#PWR", "#FLG"))
                 and on_m
                 and on_m.group(1) == "yes"
                 and fp_m
