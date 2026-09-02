@@ -38,7 +38,8 @@ Za novi dizajn mora se koristiti ESP32-P4 v3.x-or-later referentna shema. Espres
 | U3 | 1 | P4 VDD_HP core DCDC | Texas Instruments | **TLV62569DRLR** | SOT-563 / DRL-6 | 2.5–5.5 V in, 2 A, adjustable | **LOCK-CANDIDATE**, Espressif-verified family |
 | U4 | 1 | Wi-Fi coprocessor | Espressif | **ESP32-C6-WROOM-1-N4** | module, 18×25.5 mm | 4 MB flash, PCB antenna, 3.0–3.6 V | **LOCK-CANDIDATE** |
 | U5 | 1 | Stereo MAIN DAC | Texas Instruments | **PCM5102APWR** | TSSOP-20 | 2.1 Vrms class, 112 dB SNR, PLL, MCLK nije obavezan | **LOCKED by existing hardware path** |
-| U6 | 1 | Dual USB VBUS power switch | Texas Instruments | **TPS2561DRCR** | VSON-10, 3×3 mm | 2 kanala, 0.25–2.8 A adjustable ILIM, 2.5–6.5 V | **LOCK-CANDIDATE** |
+| U6 | 1 | USB0 VBUS power switch | Texas Instruments | **TPS25221DRVR** | WSON-6, 2×2 mm | 2 A continuous, adjustable ILIM, active-high, reverse blocking | **LOCK-CANDIDATE** |
+| U12 | 1 | USB1 VBUS power switch | Texas Instruments | **TPS25221DRVR** | WSON-6, 2×2 mm | independent 2 A channel, adjustable ILIM | **LOCK-CANDIDATE** |
 | U7 | 1 | 5V input eFuse | Texas Instruments | **TPS259474ARPWR** | VQFN-HR-10, 2×2 mm | 2.7–23 V, 5.5 A class, reverse blocking, OCP/OVP | **LOCK-CANDIDATE** |
 | U8 | 1 | 5V→3V3 system buck | Texas Instruments | **TPS62132RGTR** | VQFN-16, 3×3 mm | fixed 3.3 V, 3 A, 3–17 V input | **LOCK-CANDIDATE** |
 | U9 | 1 | LCD WLED boost | Monolithic Power Systems | **MP3202DJ-LF-Z** | TSOT23-6 | 2.5–6 V in, 1.3 A switch, PWM dimming | **TBD-VALIDATE against final panel LED string** |
@@ -234,34 +235,33 @@ Design rail: **5 V / 4 A preporučeni vanjski adapter**, ali stvarna granica se 
 
 # 9. Dual USB VBUS
 
-U6 = **TPS2561DRCR**.
+Rev A primary architecture koristi **2 × TPS25221DRVR**, po jedan switch za svaki port. Raniji TPS2561 koncept je demotiran u ALT jer ima zajednički RILIM za oba kanala.
 
-Početni cilj: oko **0.8–1.0 A po portu**.
-
-TI primjer za približno 1 A maksimum koristi oko **63.4 kΩ** RILIM i daje približno 0.78–0.99 A raspon ovisno o toleranciji sklopa. To je dobar EVT start point, ali USB1/FLX4 vrijednost se smije povećati samo nakon stvarnog current-profile mjerenja.
+Početni EVT targeti:
 
 | RefDes | Qty | Value | Funkcija |
 |---|---:|---|---|
-| R_USB0_ILIM | 1 | **63.4 kΩ 1% initial** | USB0 storage current limit |
-| R_USB1_ILIM | 1 | **63.4 kΩ 1% initial** | USB1 FLX4 current limit; TBD validate |
-| R_USB0_EN_PD | 1 | 100 kΩ start point | default OFF |
-| R_USB1_EN_PD | 1 | 100 kΩ start point | default OFF |
-| R_USB0_FLT_PU | 1 | 10 kΩ | fault pull-up |
-| R_USB1_FLT_PU | 1 | 10 kΩ | fault pull-up |
-| C_USB0_VBUS | 1 | 10 µF start point | device-side VBUS |
-| C_USB1_VBUS | 1 | 10 µF start point | device-side VBUS |
-| TP_USB0_VBUS | 1 | test point | obavezno |
-| TP_USB1_VBUS | 1 | test point | obavezno |
+| U_USB0 | 1 | TPS25221DRVR | USB0 independent switch |
+| U_USB1 | 1 | TPS25221DRVR | USB1 independent switch |
+| R_USB0_ILIM | 1 | **54.9 kΩ 1%** | ~1.0 A nominal storage limit |
+| R_USB1_ILIM | 1 | **34.8 kΩ 1%** | ~1.6 A nominal FLX4 initial limit |
+| R_USB0_EN_PD | 1 | 100 kΩ | default OFF |
+| R_USB1_EN_PD | 1 | 100 kΩ | default OFF |
+| R_USB0_FLT_PU | 1 | 10 kΩ | active-low fault pull-up |
+| R_USB1_FLT_PU | 1 | 10 kΩ | active-low fault pull-up |
+| C_USB0_IN | 1 | 100 nF | local switch input |
+| C_USB1_IN | 1 | 100 nF | local switch input |
+| C_USB_PWR_LOCAL | 1 | 10 µF | local 5V_SYS reserve |
+| C_USB0_OUT_HF | 1 | 100 nF | USB0 output |
+| C_USB1_OUT_HF | 1 | 100 nF | USB1 output |
+| C_USB0_OUT_BULK | 1 | 47 µF | EVT initial |
+| C_USB1_OUT_BULK | 1 | 47 µF | EVT initial |
+| C_USB0_OUT_OPT | 1 | 100 µF | DNP tuning |
+| C_USB1_OUT_OPT | 1 | 100 µF | DNP tuning |
 
-Firmware-facing nets:
+Predloženi P4 control GPIO-i: GPIO20/21 za USB0 EN/FAULT_N i GPIO22/32 za USB1 EN/FAULT_N; finalno potvrditi punim v3.x pin-conflict auditom.
 
-- `USB0_PWR_EN`
-- `USB0_FAULT_N`
-- `USB1_PWR_EN`
-- `USB1_FAULT_N`
-
-Poželjno je da firmware može neovisno power-cycleati svaki USB port.
-
+Detalji su u `Pajoniiir_Dual_USB_VBUS_Power_Design_v0.2.md`.
 ---
 
 # 10. USB signal path
@@ -522,7 +522,8 @@ Sljedeće stavke moraju čekati kućište i finalni panel:
 
 ## Manufacturer-verified ACTIVE / current candidate
 
-- TPS2561 family — TI ACTIVE.
+- TPS25221 family — TI ACTIVE; Rev A primary USB VBUS switch.
+- TPS2561 family — TI ACTIVE; ALT only because both channels share one RILIM.
 - TPS25947 family — TI ACTIVE.
 - TPS62132RGTR — TI ACTIVE.
 - TLV62569 family — TI ACTIVE; TI navodi i novije alternative, ali Espressif ga i dalje eksplicitno navodi kao verified P4 DCDC model.
@@ -547,7 +548,7 @@ Prije PCB layouta moraju se zatvoriti:
 - [ ] GT911 voltage/INT/RST pinout
 - [ ] USB0 actual peak current
 - [ ] FLX4 actual USB1 peak/startup current
-- [ ] TPS2561 RILIM final values
+- [ ] TPS25221 USB0/USB1 RILIM final values from measured device currents
 - [ ] TPS25947 system ILIM / dVdt
 - [ ] 5V/4A adapter connector
 - [ ] RCA mechanical choice
@@ -569,7 +570,9 @@ Primarni izvori provjereni 2026-09-02:
   https://documentation.espressif.com/esp32-c6-wroom-1_wroom-1u_datasheet_en.html
 - TI PCM5102A:  
   https://www.ti.com/product/PCM5102A
-- TI TPS2561:  
+- TI TPS25221:  
+  https://www.ti.com/product/TPS25221
+- TI TPS2561 (alternate):  
   https://www.ti.com/product/TPS2561
 - TI TPS25947:  
   https://www.ti.com/product/TPS25947
@@ -596,7 +599,7 @@ W25Q128JVPIQ
 TLV62569DRLR
 ESP32-C6-WROOM-1-N4
 PCM5102APWR
-TPS2561DRCR
+TPS25221DRVR x2
 TPS259474ARPWR
 TPS62132RGTR
 MP3202DJ-LF-Z
