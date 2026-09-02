@@ -50,6 +50,7 @@ Pajoniiir_Mainboard_BOM_v0.1.md is superseded.
 |---|---|---|
 | Architecture | Pajoniiir_Mainboard_Hardware_Architecture_RevA.md | READY |
 | Display forensics | Pajoniiir_Display_FPC_Backlight_Forensics_v0.1.md | READY / source reconstruction |
+| P4 silicon selection | Pajoniiir_ESP32P4_v3_2_Silicon_Selection_v0.1.md | READY |
 | Consolidated BOM | Pajoniiir_Mainboard_BOM_v0.2.md | READY |
 | Global GPIO | Pajoniiir_Global_GPIO_Allocation_v0.1.md | READY |
 | Schematic hierarchy | Pajoniiir_Mainboard_Schematic_Plan_v0.1.md | READY |
@@ -283,12 +284,25 @@ Need final MPNs for:
 
 These do not block drawing the logical schematic, but block footprint and PCB mechanical freeze.
 
-## BLOCKER D — exact orderable P4 silicon
+## P4 silicon — resolved for schematic
 
-Before EVT procurement:
+Selected MPN:
 
-- confirm orderable ESP32-P4NRW32X v3.x revision
-- verify package drawing and symbol/footprint against current datasheet/PCN
+**ESP32-P4NRW32X**
+
+Official Espressif product/PCN material lists it as the upgraded v3.x product family replacing ESP32-P4NRW32.
+
+Target actual silicon for EVT:
+
+**v3.2 or later approved revision**
+
+Remaining work:
+
+- verify incoming marking/lot/revision at procurement
+- verify KiCad QFN104 symbol and footprint against the current datasheet
+- use a separate M1 v3.x firmware binary with the pre-v3 selector disabled
+
+This is no longer a PCB architecture blocker.
 
 ---
 
@@ -453,7 +467,7 @@ Wait for:
 
 1. resolve exact LCD/touch physical FPC/panel MPN and 30-vs-32 discrepancy
 2. final connector mechanics
-3. final P4 orderable silicon confirmation
+
 
 ---
 
