@@ -558,7 +558,7 @@
 			)
 			(embedded_fonts no)
 		)
-(symbol "Connector:Conn_Coaxial" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+(symbol "Pajoniiir-M1:Conn_Coaxial_M1" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0.254 3.048 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -580,7 +580,7 @@
       (property "ki_fp_filters" "*BNC* *SMA* *SMB* *SMC* *Cinch* *LEMO* *UMRF* *MCX* *U.FL*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (symbol "Conn_Coaxial_0_1"
+      (symbol "Conn_Coaxial_M1_0_1"
         (arc (start -1.778 -0.508) (mid 0.2311 -1.8066) (end 1.778 0)
           (stroke (width 0.254) (type default))
           (fill (type none))
@@ -610,7 +610,7 @@
           (fill (type none))
         )
       )
-      (symbol "Conn_Coaxial_1_1"
+      (symbol "Conn_Coaxial_M1_1_1"
         (pin passive line (at -5.08 0 0) (length 2.54)
           (name "In" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27))))
@@ -1704,7 +1704,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "#PWR0913") (unit 1))))
   )
   (symbol
-    (lib_id "Connector:Conn_Coaxial") (at 224.79 90.17 0) (unit 1)
+    (lib_id "Pajoniiir-M1:Conn_Coaxial_M1") (at 224.79 90.17 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900009f-9000-4900-8900-0000000000a0")
     (property "Reference" "J_RCA_L" (at 224.79 84.01 0) (effects (font (size 1.27 1.27))))
     (property "Value" "RCA LEFT TBD-MECH" (at 224.79 86.51 0) (effects (font (size 1.27 1.27))))
@@ -1727,7 +1727,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "#PWR0914") (unit 1))))
   )
   (symbol
-    (lib_id "Connector:Conn_Coaxial") (at 224.79 104.775 0) (unit 1)
+    (lib_id "Pajoniiir-M1:Conn_Coaxial_M1") (at 224.79 104.775 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "090000a5-9000-4900-8900-0000000000a6")
     (property "Reference" "J_RCA_R" (at 224.79 98.775 0) (effects (font (size 1.27 1.27))))
     (property "Value" "RCA RIGHT TBD-MECH" (at 224.79 101.275 0) (effects (font (size 1.27 1.27))))

@@ -239,7 +239,7 @@
 			)
 			(embedded_fonts no)
 		)
-(symbol "Device:Crystal_GND24"
+(symbol "Pajoniiir-M1:Crystal_GND24_M1"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -310,7 +310,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Crystal_GND24_0_1"
+			(symbol "Crystal_GND24_M1_0_1"
 				(polyline
 					(pts
 						(xy -2.54 2.286) (xy -2.54 3.556) (xy 2.54 3.556) (xy 2.54 2.286)
@@ -419,7 +419,7 @@
 					)
 				)
 			)
-			(symbol "Crystal_GND24_1_1"
+			(symbol "Crystal_GND24_M1_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 1.27)
@@ -1220,7 +1220,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000004-6b2a-4a3a-8c91-000000000004" (reference "#PWR0402") (unit 1))))
   )
   (symbol
-    (lib_id "Device:Crystal_GND24") (at 189.865 64.77 0) (unit 1)
+    (lib_id "Pajoniiir-M1:Crystal_GND24_M1") (at 189.865 64.77 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "d4000037-4444-4444-8444-000000000038")
     (property "Reference" "Y1" (at 187.865 56.77 0) (effects (font (size 1.27 1.27))))

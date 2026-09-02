@@ -114,7 +114,7 @@
 			)
 			(embedded_fonts no)
 		)
-(symbol "Regulator_Switching:TPS62132"
+(symbol "Pajoniiir-M1:TPS62132_M1"
 			(pin_names
 				(offset 0.254)
 			)
@@ -185,7 +185,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "TPS62132_0_1"
+			(symbol "TPS62132_M1_0_1"
 				(rectangle
 					(start -7.62 10.16)
 					(end 7.62 -10.16)
@@ -198,7 +198,7 @@
 					)
 				)
 			)
-			(symbol "TPS62132_1_1"
+			(symbol "TPS62132_M1_1_1"
 				(pin input line
 					(at -10.16 5.08 0)
 					(length 2.54)
@@ -1092,7 +1092,7 @@
 		)
   )
   (symbol
-    (lib_id "Regulator_Switching:TPS62132")
+    (lib_id "Pajoniiir-M1:TPS62132_M1")
     (at 120.015 55.245 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (fields_autoplaced yes) (uuid "b2000012-2222-4222-8222-000000000013")
