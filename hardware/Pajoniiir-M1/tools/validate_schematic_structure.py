@@ -357,6 +357,58 @@ def main() -> int:
             ):
                 errors.append(f"root sheet overlap: {a[0]} vs {b[0]}")
 
+    # Root sheet pins must lie on their sheet border. A local root label may
+    # share a sheet-pin coordinate only when an explicit wire endpoint is present.
+    root_wire_endpoints: set[tuple[str, str]] = set()
+    for wire_block in re.findall(r'\(wire \(pts \(xy [^)]+\) \(xy [^)]+\)\)[\s\S]*?\(uuid "[^"]+"\)\)', root_text):
+        for wx, wy in re.findall(r'\(xy ([\-\d.]+) ([\-\d.]+)\)', wire_block):
+            root_wire_endpoints.add((wx, wy))
+
+    root_pin_coords: dict[tuple[str, str], set[str]] = defaultdict(set)
+    for sheet_name, block in blocks.items():
+        at = re.search(r'\(at ([\-\d.]+) ([\-\d.]+)\)', block)
+        size = re.search(r'\(size ([\-\d.]+) ([\-\d.]+)\)', block)
+        if not at or not size:
+            continue
+        sx, sy = float(at.group(1)), float(at.group(2))
+        sw, sh = float(size.group(1)), float(size.group(2))
+        right, bottom = sx + sw, sy + sh
+        for pin_name, px_s, py_s in re.findall(
+            r'\(pin "([^"]+)" [a-z_]+ \(at ([\-\d.]+) ([\-\d.]+) [\-\d.]+\)',
+            block,
+        ):
+            px, py = float(px_s), float(py_s)
+            tol = 1e-6
+            on_border = (
+                (abs(px - sx) <= tol and sy - tol <= py <= bottom + tol)
+                or (abs(px - right) <= tol and sy - tol <= py <= bottom + tol)
+                or (abs(py - sy) <= tol and sx - tol <= px <= right + tol)
+                or (abs(py - bottom) <= tol and sx - tol <= px <= right + tol)
+            )
+            if not on_border:
+                errors.append(
+                    f"{sheet_name}: root sheet pin {pin_name} is off sheet border at {px_s},{py_s}"
+                )
+            root_pin_coords[(px_s, py_s)].add(pin_name)
+
+    root_label_seen: set[tuple[str, str, str]] = set()
+    for label_name, lx, ly in re.findall(
+        r'\(label "([^"]+)" \(at ([\-\d.]+) ([\-\d.]+) [\-\d.]+\)',
+        root_text,
+    ):
+        label_key = (label_name, lx, ly)
+        if label_key in root_label_seen:
+            errors.append(f"duplicate root label {label_name} at {lx},{ly}")
+        root_label_seen.add(label_key)
+        if (
+            label_name in root_pin_coords.get((lx, ly), set())
+            and (lx, ly) not in root_wire_endpoints
+        ):
+            errors.append(
+                f"root label {label_name} sits directly on hierarchical sheet pin at {lx},{ly} "
+                "without an explicit wire endpoint"
+            )
+
     # 6. Critical architecture invariants.
     p01 = child_text.get("01_POWER_INPUT", "")
     p14 = child_text.get("14_TEST_MONITORING", "")
