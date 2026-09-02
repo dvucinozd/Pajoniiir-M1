@@ -37,7 +37,7 @@ Za novi dizajn mora se koristiti ESP32-P4 v3.x-or-later referentna shema. Espres
 | U2 | 1 | Firmware QSPI NOR | Winbond | **W25Q128JVPIQ** | WSON-8, 6×5 mm | 128 Mbit / 16 MB, 2.7–3.6 V, 133 MHz, SPI/Dual/Quad | **LOCK-CANDIDATE** |
 | U3 | 1 | P4 VDD_HP core DCDC | Texas Instruments | **TLV62569DRLR** | SOT-563 / DRL-6 | 2.5–5.5 V in, 2 A, adjustable | **LOCK-CANDIDATE**, Espressif-verified family |
 | U4 | 1 | Wi-Fi coprocessor | Espressif | **ESP32-C6-WROOM-1-N4** | module, 18×25.5 mm | 4 MB flash, PCB antenna, 3.0–3.6 V | **LOCK-CANDIDATE** |
-| U5 | 1 | Stereo MAIN DAC | Texas Instruments | **PCM5102APWR** | TSSOP-20 | 2.1 Vrms class, 112 dB SNR, PLL, MCLK nije obavezan | **LOCKED by existing hardware path** |
+| U5 | 1 | Stereo MAIN DAC | Texas Instruments | **PCM5102APWR** | TSSOP-20 | 2.1 Vrms class, 112 dB SNR, 3-wire BCK PLL, active XSMT mute | **LOCKED by existing hardware path** |
 | U6 | 1 | USB0 VBUS power switch | Texas Instruments | **TPS25221DRVR** | WSON-6, 2×2 mm | 2 A continuous, adjustable ILIM, active-high, reverse blocking | **LOCK-CANDIDATE** |
 | U12 | 1 | USB1 VBUS power switch | Texas Instruments | **TPS25221DRVR** | WSON-6, 2×2 mm | independent 2 A channel, adjustable ILIM | **LOCK-CANDIDATE** |
 | U7 | 1 | 5V input eFuse | Texas Instruments | **TPS259474ARPWR** | VQFN-HR-10, 2×2 mm | 2.7–23 V, 5.5 A class, reverse blocking, OCP/OVP | **LOCK-CANDIDATE** |
@@ -527,7 +527,7 @@ Sljedeće stavke moraju čekati kućište i finalni panel:
 - TPS25947 family — TI ACTIVE.
 - TPS62132RGTR — TI ACTIVE.
 - TLV62569 family — TI ACTIVE; TI navodi i novije alternative, ali Espressif ga i dalje eksplicitno navodi kao verified P4 DCDC model.
-- PCM5102A — TI ACTIVE.
+- PCM5102A — TI ACTIVE; MAIN audio design locked around PCM5102APWR with hardware XSMT mute.
 - MP3202 — MPS ACTIVE.
 - ESP32-C6-WROOM-1 — aktualni Espressif modul; datasheet v1.4.
 - W25Q128JV family — nalazi se u Winbond 2025 product selection guide, mass-production označen.
