@@ -97,7 +97,7 @@
   )
   (sheet
     (at 130 20)
-    (size 45 18)
+    (size 45 68)
     (fields_autoplaced yes)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
@@ -239,18 +239,18 @@
     )
   )
   (sheet
-    (at 130 50)
+    (at 240 50)
     (size 45 18)
     (fields_autoplaced yes)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid "31000007-6b2a-4a3a-8c91-000000000007")
     (property "Sheetname" "07_USB0_STORAGE"
-      (at 130 49.2888 0)
+      (at 240 49.2888 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
     (property "Sheetfile" "07_USB0_STORAGE.kicad_sch"
-      (at 130 69.8246 0)
+      (at 240 69.8246 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (instances
@@ -323,18 +323,18 @@
     )
   )
   (sheet
-    (at 130 80)
+    (at 240 80)
     (size 45 18)
     (fields_autoplaced yes)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
     (uuid "3100000b-6b2a-4a3a-8c91-00000000000b")
     (property "Sheetname" "11_TOUCH_GT911"
-      (at 130 79.2888 0)
+      (at 240 79.2888 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
     )
     (property "Sheetfile" "11_TOUCH_GT911.kicad_sch"
-      (at 130 99.8246 0)
+      (at 240 99.8246 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (instances
