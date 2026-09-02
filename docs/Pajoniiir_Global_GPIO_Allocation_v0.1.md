@@ -73,8 +73,8 @@ Ovaj dokument ima prednost nad starim JC4880 pinoutom za novu Pajoniiir-M1 ploč
 | 42 | **SDMMC_D3** | LOCKED | microSD slot 0 |
 | 43 | **SDMMC_CLK** | LOCKED | microSD slot 0 |
 | 44 | **SDMMC_CMD** | LOCKED | microSD slot 0 |
-| 45 | SD_PWR_EN candidate | RESERVED | optional microSD power-cycle |
-| 46 | Spare | FREE | future |
+| 45 | **SD_PWR_EN** | LOCK-CANDIDATE | TPS22918 microSD power-cycle |
+| 46 | **SD_CARD_DETECT** | LOCK-CANDIDATE/OPTIONAL | only if selected socket provides CD switch |
 | 47 | Spare | FREE | future |
 | 48 | Spare | FREE | old ES8311 DIN removed |
 | 49 | **DAC_XSMT** | LOCK-CANDIDATE | PCM5102A deterministic mute |
@@ -262,7 +262,7 @@ Restricted/reserved spares:
 GPIO0/1  LP/RTC related
 GPIO28-31 future Ethernet
 GPIO34   strap
-GPIO45   SD power candidate
+GPIO45   SD power enable
 ~~~
 
 ---
