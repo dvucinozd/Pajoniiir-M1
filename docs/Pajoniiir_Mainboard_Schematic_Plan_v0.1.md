@@ -249,14 +249,14 @@ Ako nema dovoljno GPIO-a u Rev A, `EFUSE_EN` može biti hardware-on. Za TPS25947
 
 # 6. 02_POWER_3V3
 
-U8 = TPS62133RGTR.
+U8 = TPS62132RGTR.
 
 ## 6.1 Funkcija
 
 ```text
 5V_SYS
   |
-TPS62133
+TPS62132
   |
 3V3_SYS
 ```
@@ -1083,7 +1083,7 @@ Prije povezivanja footprinta treba imati “footprint lock” listu.
 - U5 PCM5102A TSSOP
 - U6 TPS2561 DRC
 - U7 TPS25947 RPW
-- U8 TPS62133 RGT
+- U8 TPS62132 RGT
 - U9 MP3202 DJ
 - LCD FPC
 - USB-A ×2
