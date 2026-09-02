@@ -46,7 +46,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "TPS259474ARPWR"
+			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tps25947.pdf"
 				(at 0 0 0)
 				(effects
 					(font
@@ -212,7 +212,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin power_out line
 					(at 38.1 0 180)
 					(length 5.08)
 					(name "OUT"
@@ -248,7 +248,7 @@
 						)
 					)
 				)
-				(pin output line
+				(pin open_collector line
 					(at 38.1 -10.16 180)
 					(length 5.08)
 					(name "PG"
