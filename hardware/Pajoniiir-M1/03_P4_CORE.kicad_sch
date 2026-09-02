@@ -3032,9 +3032,9 @@
   (hierarchical_label "DAC_LRCK" (shape output) (at 353.06 287.655 180) (effects (font (size 1.27 1.27))) (uuid "c300009d-3333-4333-8333-00000000009e"))
   (hierarchical_label "SYS_POWER_ALERT_N" (shape input) (at 353.06 290.195 180) (effects (font (size 1.27 1.27))) (uuid "c300009e-3333-4333-8333-00000000009f"))
   (hierarchical_label "C6_RESET" (shape output) (at 353.06 292.735 180) (effects (font (size 1.27 1.27))) (uuid "c300009f-3333-4333-8333-0000000000a0"))
-  (hierarchical_label "XTAL_N" (shape bidirectional) (at 134.62 120.65 180) (effects (font (size 1.27 1.27))) (uuid "c30000a0-3333-4333-8333-0000000000a1"))
-  (hierarchical_label "XTAL_P" (shape bidirectional) (at 134.62 133.35 180) (effects (font (size 1.27 1.27))) (uuid "c30000a1-3333-4333-8333-0000000000a2"))
-  (hierarchical_label "CHIP_PU" (shape input) (at 134.62 140.97 180) (effects (font (size 1.27 1.27))) (uuid "c30000a2-3333-4333-8333-0000000000a3"))
+  (hierarchical_label "XTAL_N" (shape bidirectional) (at 134.62 102.87 180) (effects (font (size 1.27 1.27))) (uuid "c30000a0-3333-4333-8333-0000000000a1"))
+  (hierarchical_label "XTAL_P" (shape bidirectional) (at 134.62 90.17 180) (effects (font (size 1.27 1.27))) (uuid "c30000a1-3333-4333-8333-0000000000a2"))
+  (hierarchical_label "CHIP_PU" (shape input) (at 134.62 82.55 180) (effects (font (size 1.27 1.27))) (uuid "c30000a2-3333-4333-8333-0000000000a3"))
   
   (symbol
     (lib_id "Device:R_US") (at 307.34 156.21 0) (unit 1)
@@ -3061,14 +3061,14 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0301") (unit 1))))
   )
   
-  (label "3V3_SYS" (at 88.9 133.35 0) (effects (font (size 1.27 1.27))) (uuid "c30000aa-3333-4333-8333-0000000000ab"))
-  (label "3V3_SYS" (at 88.9 130.81 0) (effects (font (size 1.27 1.27))) (uuid "c30000ab-3333-4333-8333-0000000000ac"))
-  (label "3V3_SYS" (at 88.9 128.27 0) (effects (font (size 1.27 1.27))) (uuid "c30000ac-3333-4333-8333-0000000000ad"))
-  (label "3V3_SYS" (at 88.9 125.73 0) (effects (font (size 1.27 1.27))) (uuid "c30000ad-3333-4333-8333-0000000000ae"))
-  (label "3V3_SYS" (at 88.9 87.63 0) (effects (font (size 1.27 1.27))) (uuid "c30000ae-3333-4333-8333-0000000000af"))
-  (label "3V3_SYS" (at 88.9 110.49 0) (effects (font (size 1.27 1.27))) (uuid "c30000af-3333-4333-8333-0000000000b0"))
-  (label "3V3_SYS" (at 88.9 102.87 0) (effects (font (size 1.27 1.27))) (uuid "c30000b0-3333-4333-8333-0000000000b1"))
-  (label "P4_VDD_ANA" (at 88.9 95.25 0) (effects (font (size 1.27 1.27))) (uuid "c30000b1-3333-4333-8333-0000000000b2"))
+  (label "3V3_SYS" (at 88.9 90.17 0) (effects (font (size 1.27 1.27))) (uuid "c30000aa-3333-4333-8333-0000000000ab"))
+  (label "3V3_SYS" (at 88.9 92.71 0) (effects (font (size 1.27 1.27))) (uuid "c30000ab-3333-4333-8333-0000000000ac"))
+  (label "3V3_SYS" (at 88.9 95.25 0) (effects (font (size 1.27 1.27))) (uuid "c30000ac-3333-4333-8333-0000000000ad"))
+  (label "3V3_SYS" (at 88.9 97.79 0) (effects (font (size 1.27 1.27))) (uuid "c30000ad-3333-4333-8333-0000000000ae"))
+  (label "3V3_SYS" (at 88.9 135.89 0) (effects (font (size 1.27 1.27))) (uuid "c30000ae-3333-4333-8333-0000000000af"))
+  (label "3V3_SYS" (at 88.9 113.03 0) (effects (font (size 1.27 1.27))) (uuid "c30000af-3333-4333-8333-0000000000b0"))
+  (label "3V3_SYS" (at 88.9 120.65 0) (effects (font (size 1.27 1.27))) (uuid "c30000b0-3333-4333-8333-0000000000b1"))
+  (label "P4_VDD_ANA" (at 88.9 128.27 0) (effects (font (size 1.27 1.27))) (uuid "c30000b1-3333-4333-8333-0000000000b2"))
   (symbol
     (lib_id "Device:R_US") (at 50.165 149.86 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -3108,11 +3108,11 @@
     (pin "1" (uuid "c30000bc-3333-4333-8333-0000000000bd"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0302") (unit 1))))
   )
-  (label "P4_VDD_HP" (at 88.9 80.01 0) (effects (font (size 1.27 1.27))) (uuid "c30000bd-3333-4333-8333-0000000000be"))
-  (label "P4_VDD_HP" (at 88.9 77.47 0) (effects (font (size 1.27 1.27))) (uuid "c30000be-3333-4333-8333-0000000000bf"))
-  (label "P4_VDD_HP" (at 88.9 74.93 0) (effects (font (size 1.27 1.27))) (uuid "c30000bf-3333-4333-8333-0000000000c0"))
-  (label "P4_VDD_HP" (at 88.9 72.39 0) (effects (font (size 1.27 1.27))) (uuid "c30000c0-3333-4333-8333-0000000000c1"))
-  (label "P4_VDD_USBPHY" (at 88.9 118.11 0) (effects (font (size 1.27 1.27))) (uuid "c30000c1-3333-4333-8333-0000000000c2"))
+  (label "P4_VDD_HP" (at 88.9 143.51 0) (effects (font (size 1.27 1.27))) (uuid "c30000bd-3333-4333-8333-0000000000be"))
+  (label "P4_VDD_HP" (at 88.9 146.05 0) (effects (font (size 1.27 1.27))) (uuid "c30000be-3333-4333-8333-0000000000bf"))
+  (label "P4_VDD_HP" (at 88.9 148.59 0) (effects (font (size 1.27 1.27))) (uuid "c30000bf-3333-4333-8333-0000000000c0"))
+  (label "P4_VDD_HP" (at 88.9 151.13 0) (effects (font (size 1.27 1.27))) (uuid "c30000c0-3333-4333-8333-0000000000c1"))
+  (label "P4_VDD_USBPHY" (at 88.9 105.41 0) (effects (font (size 1.27 1.27))) (uuid "c30000c1-3333-4333-8333-0000000000c2"))
   (symbol
     (lib_id "Device:R_US") (at 50.165 165.735 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -3203,7 +3203,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0392") (unit 1))))
   )
   
-  (label "FLASH_VCC" (at 134.62 97.79 180) (effects (font (size 1.27 1.27))) (uuid "c30000da-3333-4333-8333-0000000000db"))
+  (label "FLASH_VCC" (at 134.62 125.73 180) (effects (font (size 1.27 1.27))) (uuid "c30000da-3333-4333-8333-0000000000db"))
   (hierarchical_label "FLASH_VCC" (shape output) (at 168.275 36.195 0) (effects (font (size 1.27 1.27))) (uuid "c30000db-3333-4333-8333-0000000000dc"))
   (symbol
     (lib_id "Device:C") (at 168.275 40.005 0) (unit 1)
@@ -3255,9 +3255,9 @@
     (pin "1" (uuid "c30000e7-3333-4333-8333-0000000000e8"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0321") (unit 1))))
   )
-  (label "P4_VDDO_PSRAM" (at 134.62 113.03 180) (effects (font (size 1.27 1.27))) (uuid "c30000e8-3333-4333-8333-0000000000e9"))
-  (label "P4_VDDO_PSRAM" (at 134.62 110.49 180) (effects (font (size 1.27 1.27))) (uuid "c30000e9-3333-4333-8333-0000000000ea"))
-  (label "P4_VDDO_PSRAM" (at 134.62 107.95 180) (effects (font (size 1.27 1.27))) (uuid "c30000ea-3333-4333-8333-0000000000eb"))
+  (label "P4_VDDO_PSRAM" (at 134.62 110.49 180) (effects (font (size 1.27 1.27))) (uuid "c30000e8-3333-4333-8333-0000000000e9"))
+  (label "P4_VDDO_PSRAM" (at 134.62 113.03 180) (effects (font (size 1.27 1.27))) (uuid "c30000e9-3333-4333-8333-0000000000ea"))
+  (label "P4_VDDO_PSRAM" (at 134.62 115.57 180) (effects (font (size 1.27 1.27))) (uuid "c30000ea-3333-4333-8333-0000000000eb"))
   (symbol
     (lib_id "Device:C") (at 189.865 40.005 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -3384,7 +3384,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR033230") (unit 1))))
   )
   
-  (label "P4_LDO_MIPI_2V5" (at 88.9 64.77 0) (effects (font (size 1.27 1.27))) (uuid "c300010a-3333-4333-8333-00000000010b"))
+  (label "P4_LDO_MIPI_2V5" (at 88.9 158.75 0) (effects (font (size 1.27 1.27))) (uuid "c300010a-3333-4333-8333-00000000010b"))
   (hierarchical_label "P4_LDO_MIPI_2V5" (shape output) (at 250.19 36.195 0) (effects (font (size 1.27 1.27))) (uuid "c300010b-3333-4333-8333-00000000010c"))
   (symbol
     (lib_id "Device:C") (at 250.19 40.005 0) (unit 1)
@@ -3461,7 +3461,7 @@
     (pin "1" (uuid "c300011d-3333-4333-8333-00000000011e"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR034270") (unit 1))))
   )
-  (no_connect (at 134.62 67.31) (uuid "c300011e-3333-4333-8333-00000000011f"))
+  (no_connect (at 134.62 156.21) (uuid "c300011e-3333-4333-8333-00000000011f"))
   (symbol
     (lib_id "power:GND") (at 111.76 30.48 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -3514,7 +3514,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0304") (unit 1))))
   )
   (label "P4_EN_DCDC" (at 202.565 90.17 0) (effects (font (size 1.27 1.27))) (uuid "c300012f-3333-4333-8333-000000000130"))
-  (label "P4_EN_DCDC" (at 134.62 90.17 180) (effects (font (size 1.27 1.27))) (uuid "c3000130-3333-4333-8333-000000000131"))
+  (label "P4_EN_DCDC" (at 134.62 133.35 180) (effects (font (size 1.27 1.27))) (uuid "c3000130-3333-4333-8333-000000000131"))
   (symbol
     (lib_id "power:GND") (at 210.185 97.79 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -3568,7 +3568,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000003-6b2a-4a3a-8c91-000000000003" (reference "#PWR0306") (unit 1))))
   )
   (label "P4_FB_DCDC" (at 217.805 90.17 0) (effects (font (size 1.27 1.27))) (uuid "c300013f-3333-4333-8333-000000000140"))
-  (label "P4_FB_DCDC" (at 134.62 82.55 180) (effects (font (size 1.27 1.27))) (uuid "c3000140-3333-4333-8333-000000000141"))
+  (label "P4_FB_DCDC" (at 134.62 140.97 180) (effects (font (size 1.27 1.27))) (uuid "c3000140-3333-4333-8333-000000000141"))
   (symbol
     (lib_id "Device:R_US") (at 250.19 92.71 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
