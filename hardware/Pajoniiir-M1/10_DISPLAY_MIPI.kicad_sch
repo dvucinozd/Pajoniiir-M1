@@ -931,6 +931,8 @@
 			(embedded_fonts no)
 		)
   )
+  (label "LEDK" (at 222.885 57.785 0) (effects (font (size 1.27 1.27))) (uuid "ab100000-0000-4000-8000-000000000001"))
+  (label "BL_EN" (at 207.645 57.785 180) (effects (font (size 1.27 1.27))) (uuid "ab100000-0000-4000-8000-000000000002"))
   (junction (at 90.17 111.76) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000010"))
   (junction (at 245.11 52.705) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000011"))
   (junction (at 255.27 52.705) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000012"))
@@ -1266,12 +1268,12 @@
     (pin "4" (uuid "0a000077-a000-4a00-8a00-000000000078")) (pin "5" (uuid "0a000078-a000-4a00-8a00-000000000079")) (pin "6" (uuid "0a000079-a000-4a00-8a00-00000000007a"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000a-6b2a-4a3a-8c91-00000000000a" (reference "U_BL") (unit 1))))
   )
-  (wire (pts (xy 205.105 50.165) (xy 205.105 57.785)) (stroke (width 0) (type default)) (uuid "0a00007a-a000-4a00-8a00-00000000007b"))
-  (wire (pts (xy 205.105 57.785) (xy 222.885 57.785)) (stroke (width 0) (type default)) (uuid "0a00007b-a000-4a00-8a00-00000000007c"))
-  (label "BL_SW" (at 210.185 57.785 0) (effects (font (size 1.27 1.27))) (uuid "0a00007c-a000-4a00-8a00-00000000007d"))
-  (label "5V_SYS" (at 207.645 57.785 0) (effects (font (size 1.27 1.27))) (uuid "0a00007d-a000-4a00-8a00-00000000007e"))
+  
+  
+  (label "BL_SW" (at 222.885 52.705 0) (effects (font (size 1.27 1.27))) (uuid "0a00007c-a000-4a00-8a00-00000000007d"))
+  (label "5V_SYS" (at 207.645 52.705 180) (effects (font (size 1.27 1.27))) (uuid "0a00007d-a000-4a00-8a00-00000000007e"))
   (symbol
-    (lib_id "power:GND") (at 215.265 47.625 0) (unit 1)
+    (lib_id "power:GND") (at 215.265 62.865 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a00007e-a000-4a00-8a00-00000000007f")
     (property "Reference" "#PWR1006" (at 215.265 53.625 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 215.265 50.625 0) (effects (font (size 1.27 1.27))))
@@ -1357,7 +1359,7 @@
   )
   (label "LEDA" (at 290.195 57.785 0) (effects (font (size 1.27 1.27))) (uuid "0a000097-a000-4a00-8a00-000000000098"))
 
-  (wire (pts (xy 222.885 52.705) (xy 259.715 52.705)) (stroke (width 0) (type default)) (uuid "0a000098-a000-4a00-8a00-000000000099"))
+  
   (label "LEDK" (at 250.19 52.705 0) (effects (font (size 1.27 1.27))) (uuid "0a000099-a000-4a00-8a00-00000000009a"))
   (symbol
     (lib_id "Device:R_US") (at 245.11 48.895 0) (unit 1)
@@ -1432,8 +1434,8 @@
   )
   (wire (pts (xy 149.86 85.09) (xy 175.895 85.09)) (stroke (width 0) (type default)) (uuid "0a0000ad-a000-4a00-8a00-0000000000ae"))
   (wire (pts (xy 183.515 85.09) (xy 200.025 85.09)) (stroke (width 0) (type default)) (uuid "0a0000ae-a000-4a00-8a00-0000000000af"))
-  (wire (pts (xy 200.025 85.09) (xy 200.025 52.705)) (stroke (width 0) (type default)) (uuid "0a0000af-a000-4a00-8a00-0000000000b0"))
-  (wire (pts (xy 200.025 52.705) (xy 207.645 52.705)) (stroke (width 0) (type default)) (uuid "0a0000b0-a000-4a00-8a00-0000000000b1"))
+  
+  
   (label "BL_EN" (at 194.31 85.09 0) (effects (font (size 1.27 1.27))) (uuid "0a0000b1-a000-4a00-8a00-0000000000b2"))
   (symbol
     (lib_id "Device:R_US") (at 189.865 88.9 0) (unit 1)
