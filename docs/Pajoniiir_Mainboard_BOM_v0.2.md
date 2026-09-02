@@ -33,7 +33,7 @@ Za novi dizajn mora se koristiti ESP32-P4 v3.x-or-later referentna shema. Espres
 
 | RefDes | Qty | Funkcija | Manufacturer | MPN | Package | Ključni parametri | Status |
 |---|---:|---|---|---|---|---|---|
-| U1 | 1 | Main MCU + PSRAM | Espressif | **ESP32-P4NRW32X** | QFN104, 10×10 mm | ESP32-P4, 32 MB in-package PSRAM | **LOCK-CANDIDATE**; koristiti v3.x reference design |
+| U1 | 1 | Main MCU + PSRAM | Espressif | **ESP32-P4NRW32X** | QFN104, 10×10 mm | upgraded v3.x family, target v3.2+, 32 MB in-package PSRAM | **LOCKED FOR SCHEMATIC; verify actual revision/lot at procurement** |
 | U2 | 1 | Firmware QSPI NOR | Winbond | **W25Q128JVPIQ** | WSON-8, 6×5 mm | 128 Mbit / 16 MB, 2.7–3.6 V, 133 MHz, SPI/Dual/Quad | **LOCK-CANDIDATE** |
 | U3 | 1 | P4 VDD_HP core DCDC | Texas Instruments | **TLV62569DRLR** | SOT-563 / DRL-6 | 2.5–5.5 V in, 2 A, adjustable | **LOCK-CANDIDATE**, Espressif-verified family |
 | U4 | 1 | Wi-Fi coprocessor | Espressif | **ESP32-C6-WROOM-1-N4** | module, 18×25.5 mm | 4 MB flash, PCB antenna, 3.0–3.6 V | **LOCK-CANDIDATE** |
@@ -644,7 +644,7 @@ Sljedeće stavke moraju čekati kućište i finalni panel:
 
 Prije PCB layouta moraju se zatvoriti:
 
-- [ ] potvrda točnog orderable ESP32-P4 v3.x MPN-a
+- [x] ESP32-P4 v3.x MPN locked: **ESP32-P4NRW32X**; target actual rev v3.2+
 - [ ] potvrda P4 v3.x TLV62569 reference values/net topology
 - [x] Y1 candidate ECS-400-10-37B2-CKY-TR + 15 pF initial CL network; EVT frequency tuning remains
 - [ ] flash compatibility / boot test s W25Q128JV
@@ -720,8 +720,7 @@ INA238AIDGSR (EVT/DVT option)
 
 Najveći preostali hardverski rizici prije layouta ostaju:
 
-1. potvrda stvarne P4 v3.x orderable revizije,
-2. finalni LCD/FPC mechanics and exact panel procurement,
+1. finalni LCD/FPC mechanics and exact panel procurement,
 3. USB VBUS current-limit dimenzioniranje stvarnim mjerenjem,
 4. 5V_SYS transient/brownout margin,
 5. konačna mehanika konektora.
