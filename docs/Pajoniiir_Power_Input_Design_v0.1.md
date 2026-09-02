@@ -89,7 +89,7 @@ EXTERNAL 5V SOURCE
     5V_SYS
       |
       +---- 3V3 system buck
-      +---- TPS2561 dual USB VBUS switch
+      +---- 2× TPS25221 independent USB VBUS switches
       +---- LCD backlight boost
       +---- optional telemetry
 ```
@@ -517,7 +517,7 @@ TPS259474A OUT
       |                 |                  |
       |                 |                  |
       v                 v                  v
-  TPS62133          TPS2561            MP3202
+  TPS62133          TPS25221 x2            MP3202
    3V3              USB VBUS           LCD BL
 ```
 
@@ -533,7 +533,7 @@ Posebno:
 
 - eFuse GND
 - bulk capacitor return
-- TPS2561 return
+- TPS25221 x2 return
 - system buck return
 
 trebaju biti projektirani tako da USB current transient ne inducira ground bounce u audio području.
