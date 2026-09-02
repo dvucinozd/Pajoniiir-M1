@@ -1,0 +1,87 @@
+name: KiCad 9 schematic ERC
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "hardware/Pajoniiir-M1/**/*.kicad_sch"
+      - "hardware/Pajoniiir-M1/**/*.kicad_sym"
+      - "hardware/Pajoniiir-M1/**/*.kicad_mod"
+      - "hardware/Pajoniiir-M1/*.kicad_pro"
+      - "hardware/Pajoniiir-M1/sym-lib-table"
+      - "hardware/Pajoniiir-M1/fp-lib-table"
+      - "hardware/Pajoniiir-M1/tools/validate_schematic_structure.py"
+      - ".github/workflows/kicad-erc.yml"
+
+concurrency:
+  group: kicad-erc-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  schematic-erc:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install KiCad 9
+        shell: bash
+        run: |
+          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends kicad kicad-library-symbols kicad-library-footprints
+          kicad-cli version
+
+      - name: Structural schematic contracts
+        run: python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
+
+      - name: Native KiCad ERC
+        id: erc
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          set +e
+          kicad-cli sch erc \
+            --format json \
+            --severity-all \
+            --exit-code-violations \
+            --output artifacts/Pajoniiir-M1-erc.json \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          rc=$?
+          set -e
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          if [[ "$rc" -ne 0 && "$rc" -ne 5 ]]; then
+            echo "kicad-cli failed with unexpected exit code $rc"
+            exit "$rc"
+          fi
+
+      - name: Upload ERC report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Pajoniiir-M1-KiCad9-ERC
+          path: artifacts/Pajoniiir-M1-erc.json
+          if-no-files-found: warn
+
+      - name: Enforce zero ERC violations
+        if: always()
+        shell: bash
+        run: |
+          rc="${{ steps.erc.outputs.exit_code }}"
+          if [[ -z "$rc" ]]; then
+            echo "ERC step did not produce an exit code."
+            exit 1
+          fi
+          if [[ "$rc" -eq 5 ]]; then
+            echo "Native KiCad ERC found violations; inspect the uploaded JSON report."
+            exit 1
+          fi
+          if [[ "$rc" -ne 0 ]]; then
+            exit "$rc"
+          fi
