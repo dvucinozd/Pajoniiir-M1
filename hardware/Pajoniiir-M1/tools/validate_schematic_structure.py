@@ -162,6 +162,29 @@ def main() -> int:
 
     # 2. Child hierarchical labels must match root sheet pins by name AND shape.
     blocks = sheet_blocks(root_text)
+
+    # Root-level sheet instance metadata points to the parent root instance.
+    # Symbols inside each child use /<root_uuid>/<sheet_uuid>, but the sheet
+    # object's own instance record uses only /<root_uuid>.
+    root_uuid_m = re.search(r'\(uuid "([0-9a-fA-F-]{36})"\)', root_text)
+    if not root_uuid_m:
+        errors.append("ROOT: schematic UUID missing")
+        expected_sheet_parent_path = ""
+    else:
+        expected_sheet_parent_path = "/" + root_uuid_m.group(1)
+
+    for name, block in blocks.items():
+        instance_m = re.search(
+            r'\(instances\s+\(project "[^"]+"\s+\(path "([^"]+)"',
+            block,
+        )
+        if not instance_m:
+            errors.append(f"{name}: hierarchical sheet instance path missing")
+        elif instance_m.group(1) != expected_sheet_parent_path:
+            errors.append(
+                f"{name}: sheet instance path={instance_m.group(1)}; "
+                f"expected parent path={expected_sheet_parent_path}"
+            )
     for name, text in child_text.items():
         if name not in blocks:
             errors.append(f"{name}: sheet symbol missing in root")
