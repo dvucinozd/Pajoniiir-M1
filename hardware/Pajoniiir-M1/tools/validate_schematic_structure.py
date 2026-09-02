@@ -364,6 +364,274 @@ def main() -> int:
     if "PHYSICAL J_LCD IS INTENTIONALLY NOT INSTANTIATED" not in p10:
         errors.append("display FPC hard-gate annotation missing")
 
+
+    # 7. ESP32-P4 multi-unit GPIO connectivity contract.
+    p03 = child_text.get("03_P4_CORE", "")
+    if p03:
+        p4_instances: dict[int, str] = {}
+        for block in instantiated_symbol_blocks(p03):
+            if '(lib_id "Pajoniiir-M1:ESP32-P4X")' not in block:
+                continue
+            ref_m = re.search(r'\(property "Reference" "([^"]+)"', block)
+            unit_m = re.search(r'\(unit (\d+)\)', block)
+            if not ref_m or ref_m.group(1) != "U1" or not unit_m:
+                continue
+            unit = int(unit_m.group(1))
+            if unit in p4_instances:
+                errors.append(f"03_P4_CORE: duplicate U1 unit {unit} instance")
+            p4_instances[unit] = block
+
+        if set(p4_instances) != {1, 2}:
+            errors.append(
+                "03_P4_CORE: U1 ESP32-P4X must instantiate exactly units 1 and 2"
+            )
+        else:
+            def embedded_p4_pins(unit: int) -> dict[str, tuple[str, float, float]]:
+                names = (
+                    (f"ESP32-P4X_{unit}_0", f"ESP32-P4X_{unit}_1")
+                )
+                out: dict[str, tuple[str, float, float]] = {}
+                for symbol_name in names:
+                    start = p03.find(f'(symbol "{symbol_name}"')
+                    if start < 0:
+                        errors.append(
+                            f"03_P4_CORE: embedded symbol {symbol_name} missing"
+                        )
+                        continue
+                    symbol_block, _ = sexpr_at(p03, start)
+                    pos = 0
+                    while True:
+                        pin_start = symbol_block.find("(pin ", pos)
+                        if pin_start < 0:
+                            break
+                        pin_block, pin_end = sexpr_at(symbol_block, pin_start)
+                        name_m = re.search(r'\(name "([^"]+)"', pin_block)
+                        num_m = re.search(r'\(number "([^"]+)"', pin_block)
+                        at_m = re.search(
+                            r'\(at ([\-\d.]+) ([\-\d.]+) ([\-\d.]+)\)',
+                            pin_block,
+                        )
+                        if name_m and num_m and at_m:
+                            out[name_m.group(1)] = (
+                                num_m.group(1),
+                                float(at_m.group(1)),
+                                float(at_m.group(2)),
+                            )
+                        pos = pin_end
+                return out
+
+            unit1_pins = embedded_p4_pins(1)
+            unit2_pins = embedded_p4_pins(2)
+
+            instance_data: dict[int, tuple[float, float, set[str]]] = {}
+            for unit, block in p4_instances.items():
+                at_m = re.search(
+                    r'\(at ([\-\d.]+) ([\-\d.]+) ([\-\d.]+)\)', block
+                )
+                if not at_m:
+                    errors.append(f"03_P4_CORE: U1 unit {unit} placement missing")
+                    continue
+                if abs(float(at_m.group(3))) > 1e-9:
+                    errors.append(
+                        f"03_P4_CORE: U1 unit {unit} rotation must remain 0 degrees"
+                    )
+                pin_numbers = set(
+                    re.findall(r'\(pin "([^"]+)" \(uuid "[0-9a-fA-F-]{36}"\)\)', block)
+                )
+                instance_data[unit] = (
+                    float(at_m.group(1)),
+                    float(at_m.group(2)),
+                    pin_numbers,
+                )
+
+            expected_u1_numbers = {value[0] for value in unit1_pins.values()}
+            expected_u2_numbers = {value[0] for value in unit2_pins.values()}
+            if 1 in instance_data and instance_data[1][2] != expected_u1_numbers:
+                errors.append(
+                    "03_P4_CORE: U1 unit 1 instance pin UUID partition does not match "
+                    "embedded unit-1 pins"
+                )
+            if 2 in instance_data and instance_data[2][2] != expected_u2_numbers:
+                errors.append(
+                    "03_P4_CORE: U1 unit 2 instance pin UUID partition does not match "
+                    "embedded unit-2 pins"
+                )
+            if 1 in instance_data and 2 in instance_data:
+                if instance_data[1][:2] == instance_data[2][:2]:
+                    errors.append(
+                        "03_P4_CORE: U1 units 1 and 2 must not overlap geometrically"
+                    )
+
+            hlabel_points: dict[str, list[tuple[float, float]]] = defaultdict(list)
+            for match in re.finditer(
+                r'\(hierarchical_label "([^"]+)".*?'
+                r'\(at ([\-\d.]+) ([\-\d.]+) ([\-\d.]+)\)',
+                p03,
+            ):
+                hlabel_points[match.group(1)].append(
+                    (float(match.group(2)), float(match.group(3)))
+                )
+
+            expected_unit2 = {
+                "TOUCH_RST": "GPIO3",
+                "TOUCH_INT": "GPIO4",
+                "LCD_RST": "GPIO5",
+                "LCD_TE": "GPIO6",
+                "I2C_SDA": "GPIO7",
+                "I2C_SCL": "GPIO8",
+                "C6_SDIO_D0": "GPIO14",
+                "C6_SDIO_D1": "GPIO15",
+                "C6_SDIO_D2": "GPIO16/ADC1_CHANNEL0",
+                "C6_SDIO_D3": "GPIO17/ADC1_CHANNEL1",
+                "C6_SDIO_CLK": "GPIO18/ADC1_CHANNEL2",
+                "C6_SDIO_CMD": "GPIO19/ADC1_CHANNEL3",
+                "USB0_PWR_EN": "GPIO20/ADC1_CHANNEL4",
+                "USB0_FAULT_N": "GPIO21/ADC1_CHANNEL5",
+                "USB1_PWR_EN": "GPIO22/ADC1_CHANNEL6",
+                "LCD_BL_PWM": "GPIO23/ADC1_CHANNEL7",
+                "FLASH_CS": "FLASH_CS",
+                "FLASH_Q": "FLASH_Q",
+                "FLASH_WP": "FLASH_WP",
+                "FLASH_HOLD": "FLASH_HOLD",
+                "FLASH_CK": "FLASH_CK",
+                "FLASH_D": "FLASH_D",
+                "DSI_D1_P": "DSI_DATAP1",
+                "DSI_D1_N": "DSI_DATAN1",
+                "DSI_CLK_N": "DSI_CLKN",
+                "DSI_CLK_P": "DSI_CLKP",
+                "DSI_D0_P": "DSI_DATAP0",
+                "DSI_D0_N": "DSI_DATAN0",
+                "USB0_HS_DM": "USB-DM",
+                "USB0_HS_DP": "USB-DP",
+                "P4_USBJTAG_DM": "GPIO24/USB1P1_N0",
+                "P4_USBJTAG_DP": "GPIO25/USB1P1_P0",
+                "USB1_FS_DM": "GPIO26/USB1P1_N1",
+                "USB1_FS_DP": "GPIO27/USB1P1_P1",
+                "USB1_FAULT_N": "GPIO32",
+                "BOOT_GPIO35": "GPIO35",
+                "BOOT_GPIO36": "GPIO36",
+                "UART0_TX": "GPIO37",
+                "UART0_RX": "GPIO38",
+                "SDMMC_D0": "GPIO39",
+                "SDMMC_D1": "GPIO40",
+                "SDMMC_D2": "GPIO41",
+                "SDMMC_D3": "GPIO42",
+                "SDMMC_CLK": "GPIO43",
+                "SDMMC_CMD": "GPIO44",
+                "SD_PWR_EN": "GPIO45",
+                "SD_CARD_DETECT": "GPIO46",
+                "DAC_XSMT": "GPIO49/ADC2_CHANNEL0",
+                "DAC_BCLK": "GPIO50/ADC2_CHANNEL1",
+                "DAC_DATA": "GPIO51/ADC2_CHANNEL2",
+                "DAC_LRCK": "GPIO52/ADC2_CHANNEL3",
+                "SYS_POWER_ALERT_N": "GPIO53/ADC2_CHANNEL4",
+                "C6_RESET": "GPIO54/ADC2_CHANNEL5",
+            }
+
+            def close_xy(
+                point: tuple[float, float], target: tuple[float, float]
+            ) -> bool:
+                return (
+                    abs(point[0] - target[0]) < 0.001
+                    and abs(point[1] - target[1]) < 0.001
+                )
+
+            if 2 in instance_data:
+                ux, uy, _ = instance_data[2]
+                for net, pin_name in expected_unit2.items():
+                    pin = unit2_pins.get(pin_name)
+                    if not pin:
+                        errors.append(
+                            f"03_P4_CORE: unit-2 pin definition missing for {pin_name}"
+                        )
+                        continue
+                    target = (ux + pin[1], uy + pin[2])
+                    points = hlabel_points.get(net, [])
+                    if len(points) != 1 or not close_xy(points[0], target):
+                        errors.append(
+                            f"03_P4_CORE: {net} is not attached to U1/2 {pin_name} "
+                            f"(physical pin {pin[0]})"
+                        )
+
+                nc_points = [
+                    (float(match.group(1)), float(match.group(2)))
+                    for match in re.finditer(
+                        r'\(no_connect \(at ([\-\d.]+) ([\-\d.]+)\)', p03
+                    )
+                ]
+                unused_unit2 = {
+                    "GPIO0", "GPIO1", "GPIO2",
+                    "GPIO9", "GPIO10", "GPIO11", "GPIO12", "GPIO13",
+                    "CSI_DATAN0", "CSI_DATAP0", "CSI_CLKP", "CSI_CLKN",
+                    "CSI_DATAN1", "CSI_DATAP1", "CSI_REXT",
+                    "GPIO28", "GPIO29", "GPIO30", "GPIO31",
+                    "GPIO33", "GPIO34", "GPIO47", "GPIO48",
+                }
+                for pin_name in unused_unit2:
+                    pin = unit2_pins.get(pin_name)
+                    if not pin:
+                        continue
+                    target = (ux + pin[1], uy + pin[2])
+                    if not any(close_xy(point, target) for point in nc_points):
+                        errors.append(
+                            f"03_P4_CORE: unused U1/2 {pin_name} lacks explicit NC"
+                        )
+
+                dsi_rext = unit2_pins.get("DSI_REXT")
+                if dsi_rext:
+                    dsi_target = (ux + dsi_rext[1], uy + dsi_rext[2])
+                    xy_points = [
+                        (float(match.group(1)), float(match.group(2)))
+                        for match in re.finditer(
+                            r'\(xy ([\-\d.]+) ([\-\d.]+)\)', p03
+                        )
+                    ]
+                    if not any(close_xy(point, dsi_target) for point in xy_points):
+                        errors.append(
+                            "03_P4_CORE: DSI_REXT physical pin is not wired"
+                        )
+                if "R_DSI_REXT" not in p03 or "4.02k 1%" not in p03:
+                    errors.append(
+                        "03_P4_CORE: DSI_REXT 4.02k 1% pull-down invariant missing"
+                    )
+
+            allowed_unit1 = {
+                "XTAL_N": "XTAL_N",
+                "XTAL_P": "XTAL_P",
+                "CHIP_PU": "CHIP_PU",
+            }
+            if 1 in instance_data:
+                ux, uy, _ = instance_data[1]
+                unit1_targets = {
+                    pin_name: (ux + pin[1], uy + pin[2])
+                    for pin_name, pin in unit1_pins.items()
+                }
+                for net, points in hlabel_points.items():
+                    for point in points:
+                        hit = next(
+                            (
+                                pin_name
+                                for pin_name, target in unit1_targets.items()
+                                if close_xy(point, target)
+                            ),
+                            None,
+                        )
+                        if hit and allowed_unit1.get(net) != hit:
+                            errors.append(
+                                f"03_P4_CORE: hierarchical net {net} collides with "
+                                f"U1/1 {hit}"
+                            )
+                for net, pin_name in allowed_unit1.items():
+                    target = unit1_targets.get(pin_name)
+                    points = hlabel_points.get(net, [])
+                    if target is None or len(points) != 1 or not close_xy(
+                        points[0], target
+                    ):
+                        errors.append(
+                            f"03_P4_CORE: {net} is not attached to U1/1 {pin_name}"
+                        )
+
+
     print("Pajoniiir-M1 schematic structural validation")
     print(f"  root: {ROOT.name}")
     print(f"  child sheets: {len(child_text)}/{len(CHILDREN)}")
