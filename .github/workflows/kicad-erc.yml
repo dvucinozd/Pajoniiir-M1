@@ -35,7 +35,7 @@ jobs:
         run: |
           sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
           sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends kicad kicad-library-symbols kicad-library-footprints
+          sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints
           kicad-cli version
 
       - name: Structural schematic contracts
