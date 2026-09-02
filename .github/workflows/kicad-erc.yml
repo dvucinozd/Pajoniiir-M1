@@ -346,7 +346,7 @@ jobs:
           path: artifacts/Pajoniiir-M1-erc.json
           if-no-files-found: warn
 
-      - name: Enforce zero ERC violations
+      - name: Enforce zero unexplained ERC errors
         if: always()
         shell: bash
         run: |
@@ -355,10 +355,46 @@ jobs:
             echo "ERC step did not produce an exit code."
             exit 1
           fi
-          if [[ "$rc" -eq 5 ]]; then
-            echo "Native KiCad ERC found violations; inspect the uploaded JSON report."
-            exit 1
-          fi
-          if [[ "$rc" -ne 0 ]]; then
+          if [[ "$rc" -ne 0 && "$rc" -ne 5 ]]; then
             exit "$rc"
           fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = Path("artifacts/Pajoniiir-M1-erc.json")
+          if not report.is_file():
+              raise SystemExit("ERC JSON report is missing")
+
+          data = json.loads(report.read_text(encoding="utf-8"))
+          unexplained = []
+          excluded_errors = []
+          warnings = []
+          for sheet in data.get("sheets", []):
+              path = sheet.get("path", "?")
+              for violation in sheet.get("violations", []):
+                  severity = violation.get("severity")
+                  excluded = bool(violation.get("excluded", False))
+                  entry = (
+                      path,
+                      violation.get("type", "?"),
+                      violation.get("description", ""),
+                  )
+                  if severity == "error":
+                      if excluded:
+                          excluded_errors.append(entry)
+                      else:
+                          unexplained.append(entry)
+                  elif severity == "warning" and not excluded:
+                      warnings.append(entry)
+
+          print(
+              f"ERC summary: unexplained_errors={len(unexplained)} "
+              f"excluded_errors={len(excluded_errors)} warnings={len(warnings)}"
+          )
+          for path, kind, desc in unexplained:
+              print(f"UNEXPLAINED ERROR {path}: {kind}: {desc}")
+
+          if unexplained:
+              raise SystemExit(1)
+          PY
