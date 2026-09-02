@@ -9,7 +9,7 @@
     (date "2026-09-02")
     (rev "A / M1-SCH-A")
     (company "Pajoniiir")
-    (comment 1 "TPS259474ARPWR input protection and 5V_SYS generation")
+    (comment 1 "TPS259474ARPWR input protection and 5V_PROTECTED generation")
     (comment 2 "PGTH intentionally TBD-VALIDATE")
   )
   (lib_symbols
@@ -1972,7 +1972,7 @@
     (stroke (width 0) (type default))
     (uuid "a1000063-1111-4111-8111-000000000064")
   )
-  (hierarchical_label "5V_SYS"
+  (hierarchical_label "5V_PROTECTED"
     (shape output)
     (at 195 50 0)
     (effects (font (size 1.27 1.27)))
@@ -2011,7 +2011,7 @@
       )
     )
   )
-  (label "5V_SYS" (at 205 50 0)
+  (label "5V_PROTECTED" (at 205 50 0)
     (effects (font (size 1.27 1.27)))
     (uuid "a1000068-1111-4111-8111-000000000069")
   )
@@ -2080,7 +2080,7 @@
       )
     )
   )
-  (label "5V_SYS" (at 215 50 0)
+  (label "5V_PROTECTED" (at 215 50 0)
     (effects (font (size 1.27 1.27)))
     (uuid "a100006e-1111-4111-8111-00000000006f")
   )
@@ -2149,7 +2149,7 @@
       )
     )
   )
-  (label "5V_SYS" (at 225 50 0)
+  (label "5V_PROTECTED" (at 225 50 0)
     (effects (font (size 1.27 1.27)))
     (uuid "a1000074-1111-4111-8111-000000000075")
   )
@@ -2185,7 +2185,7 @@
       )
     )
   )
-  (text "Rev A targets: UVLO≈4.42V, OVLO≈5.70V, ILIM≈4.45A typ, ITIMER≈3.9ms, 5V rise≈11.8ms"
+  (text "Rev A targets: UVLO≈4.42V, OVLO≈5.70V, ILIM≈4.45A typ, ITIMER≈3.9ms, protected-rail rise≈11.8ms"
     (exclude_from_sim no)
     (at 95 88 0)
     (effects (font (size 1.27 1.27)))
