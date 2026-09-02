@@ -64,6 +64,31 @@
       (at 75 39.824600000000004 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
+    (pin "5V_SYS" output
+      (at 75 25 180)
+      (uuid "b2000070-2222-4222-8222-000000000071")
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (pin "3V3_SYS" input
+      (at 120 23 0)
+      (uuid "b2000071-2222-4222-8222-000000000072")
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "3V3_PG" input
+      (at 120 27 0)
+      (uuid "b2000072-2222-4222-8222-000000000073")
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "3V3_C6" input
+      (at 120 31 0)
+      (uuid "b2000073-2222-4222-8222-000000000074")
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "3V3_AUDIO" input
+      (at 120 35 0)
+      (uuid "b2000074-2222-4222-8222-000000000075")
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
     (instances
       (project "Pajoniiir-M1"
         (path "/31000002-6b2a-4a3a-8c91-000000000002" (page "3"))
@@ -343,6 +368,7 @@
       )
     )
   )
+  (wire (pts (xy 65 25) (xy 75 25)) (stroke (width 0) (type default)) (uuid "b2000075-2222-4222-8222-000000000076"))
   (sheet_instances (path "/" (page "1")))
   (embedded_fonts no)
 )
