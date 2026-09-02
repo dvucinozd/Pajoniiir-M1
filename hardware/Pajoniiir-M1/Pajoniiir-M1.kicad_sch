@@ -28,6 +28,21 @@
       (at 20 39.824600000000004 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
+    (pin "3V3_SYS" output
+      (at 20 25 180)
+      (uuid "a1000079-1111-4111-8111-00000000007a")
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (pin "5V_SYS" input
+      (at 65 25 0)
+      (uuid "a100007a-1111-4111-8111-00000000007b")
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
+    (pin "EFUSE_PG" input
+      (at 65 30 0)
+      (uuid "a100007b-1111-4111-8111-00000000007c")
+      (effects (font (size 1.27 1.27)) (justify right))
+    )
     (instances
       (project "Pajoniiir-M1"
         (path "/31000001-6b2a-4a3a-8c91-000000000001" (page "2"))
