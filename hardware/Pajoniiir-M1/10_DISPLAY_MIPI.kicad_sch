@@ -13,7 +13,7 @@
     (comment 2 "J_LCD physical pinout/footprint remains hard-gated pending authoritative panel/FPC")
   )
   (lib_symbols
-(symbol "MP3202DJ"
+(symbol "Pajoniiir-M1:MP3202DJ"
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)

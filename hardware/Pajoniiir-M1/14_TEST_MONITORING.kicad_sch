@@ -13,7 +13,7 @@
     (comment 2 "5mR shunt is in the real power path; monitor IC may be DNP for cost-down")
   )
   (lib_symbols
-(symbol "INA238"
+(symbol "Pajoniiir-M1:INA238"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)

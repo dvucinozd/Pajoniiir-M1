@@ -219,6 +219,41 @@ def main() -> int:
         for net in sorted(parent.keys() - child.keys()):
             errors.append(f"{name}: root pin {net} missing child label")
 
+    # Embedded symbol cache keys must match instantiated local library IDs.
+    # KiCad resolves lib_id references through the cached lib_symbols map during ERC.
+    for name, text in child_text.items():
+        lib_start = text.find("(lib_symbols")
+        if lib_start < 0:
+            errors.append(f"{name}: lib_symbols block missing")
+            continue
+        lib_block, _ = sexpr_at(text, lib_start)
+        outer_cached_symbols: set[str] = set()
+        pos = len("(lib_symbols")
+        while pos < len(lib_block):
+            while pos < len(lib_block) and lib_block[pos].isspace():
+                pos += 1
+            if pos >= len(lib_block) or lib_block[pos] == ")":
+                break
+            if lib_block[pos] != "(":
+                pos += 1
+                continue
+            block, end = sexpr_at(lib_block, pos)
+            symbol_m = re.match(r'\(symbol "([^"]+)"', block)
+            if symbol_m:
+                outer_cached_symbols.add(symbol_m.group(1))
+            pos = end
+
+        local_ids = {
+            lib_id
+            for lib_id in re.findall(r'\(lib_id "([^"]+)"\)', text)
+            if lib_id.startswith("Pajoniiir-M1:")
+        }
+        for lib_id in sorted(local_ids):
+            if lib_id not in outer_cached_symbols:
+                errors.append(
+                    f"{name}: local lib_id {lib_id} lacks exact embedded cache key"
+                )
+
     # 3. RefDes uniqueness across hierarchy.
     # Multi-unit symbols legitimately repeat a RefDes on the same sheet/library,
     # but each unit number must be unique. Cross-sheet/library repeats are errors.

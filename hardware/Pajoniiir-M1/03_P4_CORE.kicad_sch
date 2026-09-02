@@ -13,7 +13,7 @@
     (comment 2 "Physical pin 54 = VDD_HP_1; v3.x 499k/499k/22pF feedback populated")
   )
   (lib_symbols
-(symbol "ESP32-P4X"
+(symbol "Pajoniiir-M1:ESP32-P4X"
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)

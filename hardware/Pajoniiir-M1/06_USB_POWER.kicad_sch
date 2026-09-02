@@ -13,7 +13,7 @@
     (comment 2 "TPS25221 DRV pinout verified; EP7 grounded")
   )
   (lib_symbols
-(symbol "TPS25221DRV"
+(symbol "Pajoniiir-M1:TPS25221DRV"
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
