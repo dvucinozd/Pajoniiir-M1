@@ -796,6 +796,7 @@
 			(embedded_fonts no)
 		)
   )
+  (junction (at 194.945 67.31) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000027"))
   (hierarchical_label "5V_PROTECTED" (shape input) (at 34.925 45.085 0) (effects (font (size 1.27 1.27))) (uuid "0e000001-e000-4e00-8e00-000000000002"))
   (symbol
     (lib_id "Device:R_US") (at 85.09 45.085 90) (unit 1)

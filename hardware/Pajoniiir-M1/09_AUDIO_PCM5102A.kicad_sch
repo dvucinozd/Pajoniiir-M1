@@ -1105,6 +1105,7 @@
 			(embedded_fonts no)
 		)
   )
+  (junction (at 99.695 72.39) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000009"))
   (symbol
     (lib_id "Audio:PCM5102A") (at 125.095 80.01 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000001-9000-4900-8900-000000000002")

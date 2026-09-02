@@ -1046,6 +1046,12 @@
 			(embedded_fonts no)
 		)
   )
+  (junction (at 95.25 107.95) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000003"))
+  (junction (at 172.085 74.93) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000004"))
+  (junction (at 172.085 69.85) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000005"))
+  (junction (at 172.085 67.31) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000006"))
+  (junction (at 172.085 64.77) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000007"))
+  (junction (at 172.085 62.23) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000008"))
   (symbol
     (lib_id "Pajoniiir-M1:ESP32-C6-WROOM-1")
     (at 130.175 80.01 0)

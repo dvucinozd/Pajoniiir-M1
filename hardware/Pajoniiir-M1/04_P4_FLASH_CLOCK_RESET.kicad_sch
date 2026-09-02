@@ -1059,6 +1059,8 @@
 			(embedded_fonts no)
 		)
   )
+  (junction (at 111.76 72.39) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000001"))
+  (junction (at 184.15 64.77) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000002"))
   (symbol
     (lib_id "Memory_Flash:W25Q128JVS") (at 125.095 64.77 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)

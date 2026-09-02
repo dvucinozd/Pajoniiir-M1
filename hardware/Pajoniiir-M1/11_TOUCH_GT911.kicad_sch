@@ -534,6 +534,11 @@
 			(embedded_fonts no)
 		)
   )
+  (junction (at 80.01 55.245) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000014"))
+  (junction (at 95.25 64.77) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000015"))
+  (junction (at 109.855 55.245) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000016"))
+  (junction (at 125.095 64.77) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000017"))
+  (junction (at 90.17 85.09) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000018"))
   (hierarchical_label "3V3_LCD" (shape input) (at 29.845 29.845 0) (effects (font (size 1.27 1.27))) (uuid "0b000001-b000-4b00-8b00-000000000002"))
   (symbol
     (lib_id "Device:R_US") (at 59.69 29.845 90) (unit 1)
