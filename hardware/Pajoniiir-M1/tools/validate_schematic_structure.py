@@ -687,7 +687,7 @@ def main() -> int:
 
                 dsi_rext = unit2_pins.get("DSI_REXT")
                 if dsi_rext:
-                    dsi_target = (ux + dsi_rext[1], uy + dsi_rext[2])
+                    dsi_target = (ux + dsi_rext[1], uy - dsi_rext[2])
                     xy_points = [
                         (float(match.group(1)), float(match.group(2)))
                         for match in re.finditer(
