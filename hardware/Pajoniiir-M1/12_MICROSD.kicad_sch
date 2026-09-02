@@ -13,7 +13,7 @@
     (comment 2 "Socket footprint and optional low-C ESD remain TBD-MECH/TBD-ESD")
   )
   (lib_symbols
-(symbol "Power_Switch:TPS22918" (pin_names (offset 0.508)) (in_bom yes) (on_board yes)
+(symbol "Pajoniiir-M1:TPS22918" (pin_names (offset 0.508)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 6.35 0) (effects (font (size 1.27 1.27))))
       (property "Value" "TPS22918" (at 0 -8.89 0) (effects (font (size 1.27 1.27)) (hide yes)))
       (symbol "TPS22918_0_1"
@@ -820,7 +820,7 @@
 		)
   )
   (symbol
-    (lib_id "Power_Switch:TPS22918") (at 74.93 45.085 0) (unit 1)
+    (lib_id "Pajoniiir-M1:TPS22918") (at 74.93 45.085 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c000001-c000-4c00-8c00-000000000002")
     (property "Reference" "U_SD_PWR" (at 74.93 32.085 0) (effects (font (size 1.27 1.27))))
     (property "Value" "TPS22918DBVR" (at 74.93 34.585 0) (effects (font (size 1.27 1.27))))
