@@ -26,8 +26,11 @@ if "active_body = \"\".join(body)" not in text:
     if count != 1:
         raise SystemExit(f"failed to patch sheet10 active-symbol guard: {count}")
 
-if 'active_p10 = "\\n".join(instantiated_symbol_blocks(p10))' not in text:
-    replacement = '''    active_p10 = "\\n".join(instantiated_symbol_blocks(p10))
+# The replacement is raw on purpose. It must write two backslashes into the
+# migrator source so the migrator's triple-quoted validator template emits one
+# backslash and the final validator sees a normal "\n" string escape.
+if 'active_p10 = "\\\\n".join(instantiated_symbol_blocks(p10))' not in text:
+    replacement = r'''    active_p10 = "\\n".join(instantiated_symbol_blocks(p10))
     for legacy_ref in (
         "U9", "L3", "D4", "C95", "C96", "C97", "C98",
         "R88", "R89", "R90", "R91", "R92", "R93", "R94",
