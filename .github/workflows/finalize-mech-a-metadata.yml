@@ -1,0 +1,147 @@
+name: One-shot MECH-A metadata finalizer
+
+on:
+  push:
+    paths:
+      - '.github/workflows/finalize-mech-a-metadata.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  finalize-metadata:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Synchronize A11/A12 authority and documentation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+
+          def replace_exact(path: str, old: str, new: str) -> None:
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one exact match, found {count}: {old[:100]!r}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # Machine-readable MECH-A authority.
+          mech_path = Path('hardware/Pajoniiir-M1/mech_a.json')
+          mech = json.loads(mech_path.read_text(encoding='utf-8'))
+          gates = json.loads(Path('hardware/Pajoniiir-M1/mechanical_gates.json').read_text(encoding='utf-8'))
+          by_id = {g['id']: g for g in gates['gates']}
+          if by_id['FAB_STACKUP']['status'] != 'closed':
+              raise SystemExit('FAB_STACKUP must be closed before metadata finalization')
+          if by_id['D1_INPUT_TVS']['status'] != 'closed':
+              raise SystemExit('D1_INPUT_TVS must be closed before metadata finalization')
+          if by_id['D1_INPUT_TVS'].get('exact_mpn') != 'SMBJ6.0CA-TR':
+              raise SystemExit('D1 exact MPN drift')
+
+          mech['updated'] = '2026-09-03'
+          mech['fabrication_stackup_closure'] = {
+              'revision': 'M1-MECH-A11',
+              'status': 'closed',
+              'fabricator': 'JLCPCB',
+              'stackup_id': 'JLC04161H-7628',
+              'layer_count': 4,
+              'finished_thickness_mm': 1.6,
+              'outer_copper_oz': 1.0,
+              'inner_copper_oz': 0.5,
+              'controlled_impedance_targets': {'USB_diff_ohms': 90, 'MIPI_DSI_diff_ohms': 100},
+              'exact_width_gap_status': 'layout-stage calculation still required from current JLCPCB calculator; not a fabrication-stackup gate',
+              'authority': 'pcb_constraints.json'
+          }
+          mech['input_tvs_closure'] = {
+              'revision': 'M1-MECH-A12',
+              'status': 'closed',
+              'refdes': 'D1',
+              'manufacturer': 'STMicroelectronics',
+              'mpn': 'SMBJ6.0CA-TR',
+              'polarity': 'bidirectional',
+              'vrwm_v': 6.0,
+              'vbr_min_v': 6.7,
+              'clamp_10_1000_v': 10.3,
+              'clamp_8_20_v': 14.8,
+              'package': 'SMB',
+              'footprint': 'Diode_SMD:D_SMB',
+              'package_height_max_mm': 2.45,
+              'reason': '6 V standoff clears normal 5.25 V input; bidirectional device preserves reverse-polarity architecture; clamp remains below TPS25947 absolute input maximum.',
+              'schematic_status': 'locked in 01_POWER_INPUT.kicad_sch'
+          }
+          mech['next_closure_inputs'] = [
+              item for item in mech.get('next_closure_inputs', [])
+              if 'choose fabrication stackup' not in item.lower()
+          ]
+          open_blockers = [g['id'] for g in gates['gates'] if g.get('blocks_layout_freeze') and g.get('status') != 'closed']
+          mech['repo_only_analysis_boundary'] = {
+              'revision': 'M1-MECH-A12',
+              'status': 'all safely closable repo-only analytical/sourcing work complete',
+              'remaining_open_blockers': open_blockers,
+              'remaining_blocker_count': len(open_blockers),
+              'rule': 'Do not close remaining gates from assumptions. They require EVT measurement, direct physical measurement, authoritative final panel data, or enclosure/PCB CAD datums.'
+          }
+          mech['status'] = 'repo_only_analysis_complete__d1_and_fab_closed__physical_evt_display_and_enclosure_evidence_required'
+          mech_path.write_text(json.dumps(mech, indent=2) + '\n', encoding='utf-8')
+
+          # Power design: convert D1 from TBD to exact Rev-A source lock.
+          replace_exact(
+              'docs/Pajoniiir_Power_Input_Design_v0.1.md',
+              '''Exact MPN ostaje TBD dok se ne definiraju:\n\n- stvarni adapter\n- cable length\n- očekivani ESD nivo\n- surge cilj\n- maksimalni dopušteni clamping napon\n\nTVS mora biti dimenzioniran za 5 V rail i ne smije imati previsok leakage na normalnom 5.25 V maksimumu.''',
+              '''M1-MECH-A12 zaključava Rev-A input TVS:\n\n```text\nManufacturer   STMicroelectronics\nMPN            SMBJ6.0CA-TR\nPolarity       bidirectional\nVRWM           6.0 V\nVBR min        6.7 V\nVC 10/1000     10.3 V\nVC 8/20        14.8 V\nPackage        SMB / DO-214AA\nKiCad          Diode_SMD:D_SMB\n```\n\nBidirectional `CA` varijanta je namjerna: ne uvodi forward-diode put koji bi poništio TPS259474 reverse-polarity arhitekturu. 6 V standoff ostaje iznad normalnog 5.25 V maksimuma, a specificirani clamp ostaje ispod absolute input maksimuma eFusea. SMB kućište je maksimalno približno 2.45 mm visoko i prolazi M1 centralni 6.5 mm gross height screen.''' 
+          )
+          replace_exact('docs/Pajoniiir_Power_Input_Design_v0.1.md', '| D1 | 5V TVS | TBD |', '| D1 | SMBJ6.0CA-TR | ST, bidirectional 6 V TVS, SMB / `Diode_SMD:D_SMB` |')
+          replace_exact('docs/Pajoniiir_Power_Input_Design_v0.1.md', '- [ ] exact TVS', '- [x] exact TVS — ST SMBJ6.0CA-TR / SMB, M1-MECH-A12')
+
+          # Engineering BOM.
+          replace_exact('docs/Pajoniiir_Mainboard_BOM_v0.2.md', '| D_TVS_IN | 1 | 5 V rail TVS | TBD nakon surge/connector cilja |', '| D_TVS_IN | 1 | **ST SMBJ6.0CA-TR** | bidirectional 6 V TVS, SMB / `Diode_SMD:D_SMB`, locked M1-MECH-A12 |')
+
+          # Manufacturing contract snapshot after D1 footprint lock.
+          replace_exact('docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md', '- **11** intentional `in_bom=yes` blank-footprint gates', '- **10** intentional `in_bom=yes` blank-footprint gates')
+          replace_exact('docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md', 'Current source snapshot is therefore **269 in-BOM / 16 DNP / 11 intentional blank-footprint gates**.', 'After M1-MECH-A12 locks D1, the current source snapshot is **269 in-BOM / 16 DNP / 10 intentional blank-footprint gates**.')
+          replace_exact('docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md', 'J1\nC3\nD1\nC8', 'J1\nC3\nC8')
+
+          # Human gate summary: remove resolved D1/FAB uncertainty and currentize J_LCD evidence.
+          replace_exact('docs/Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md', '- input bulk/TVS tuning and sourcing: `C3`, `D1`, `C8`', '- input bulk EVT tuning still open: `C3`, `C8`\n- input TVS `D1` **CLOSED in M1-MECH-A12** — ST SMBJ6.0CA-TR / `Diode_SMD:D_SMB`')
+          replace_exact('docs/Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md', '- fabrication: stackup and controlled-impedance geometry', '- fabrication stackup **CLOSED in M1-MECH-A11** — JLCPCB `JLC04161H-7628`; exact routed impedance width/spacing remains a layout-stage calculation')
+          replace_exact(
+              'docs/Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md',
+              '''Remaining J_LCD evidence required before instantiation:\n\n1. authoritative purchased panel/assembly MPN\n2. contact-side orientation and FPC insertion direction\n3. mating height / Z envelope\n4. meaning of the original Altium references 31/32 vs the physical 30-contact connector\n5. pins 15/16/18/19\n6. confirmation that original FPC 3V3 pins 4/21/29 are internally common before combining M1's separately filtered LCD/touch rails''',
+              '''Remaining J_LCD evidence required before instantiation:\n\n1. authoritative purchased panel/assembly MPN\n2. top-vs-bottom electrical contact-side orientation\n3. exact connector housing / mated FPC Z height and final panel-tail geometry\n4. confirmation that original FPC 3V3 pins 4/21/29 are internally common before mapping M1's separately filtered LCD/touch rails\n\nAlready resolved by M1-MECH-A9/A10: physical sequence is 30 electrical contacts, 31/32 are GND shell/mount references, pins 15/16/18/19 are NC, and the original assembly uses component-side right-angle/side-entry insertion.'''
+          )
+          replace_exact(
+              'docs/Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md',
+              '''Before controlled-impedance routing can start, lock:\n\n- board X/Y and mounting holes\n- connector/display edge datums\n- chosen PCB fabricator\n- layer count and copper weights\n- finished thickness\n- actual dielectric stackup\n\nThen derive:\n\n- USB0 HS: 90 ohm differential target\n- USB1 FS: preserve differential geometry even though timing margin is larger\n- MIPI DSI: 100 ohm differential target\n- power/high-current copper from 5V input through eFuse/shunt/USB branches''',
+              '''Fabrication stackup is already locked by M1-MECH-A11:\n\n```text\nJLCPCB JLC04161H-7628\n4 layers / 1.6 mm\n1 oz outer / 0.5 oz inner\nL1 high-speed -> solid L2 GND reference\n```\n\nBefore controlled-impedance routing/final layout freeze:\n\n- lock board X/Y and mounting holes\n- lock connector/display edge datums\n- calculate and record exact width/spacing from the current JLCPCB impedance calculator for USB 90 ohm differential and MIPI DSI 100 ohm differential\n- size/review power/high-current copper from 5V input through eFuse/shunt/USB branches'''
+          )
+
+          # Sanity checks.
+          mech_check = json.loads(mech_path.read_text(encoding='utf-8'))
+          if mech_check['repo_only_analysis_boundary']['remaining_blocker_count'] != 12:
+              raise SystemExit(f"expected 12 physical/EVT blockers after A12, got {mech_check['repo_only_analysis_boundary']['remaining_blocker_count']}")
+          if 'D1' in Path('docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md').read_text(encoding='utf-8').split('## Intentional blank-footprint manufacturing gates',1)[1].split('~~~',2)[1].splitlines():
+              raise SystemExit('D1 still appears in manufacturing blank-gate code block')
+          print('A11/A12 metadata synchronization PASS')
+          PY
+
+      - name: Remove one-shot workflow and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/finalize-mech-a-metadata.yml
+          git add hardware/Pajoniiir-M1/mech_a.json docs/Pajoniiir_Power_Input_Design_v0.1.md docs/Pajoniiir_Mainboard_BOM_v0.2.md docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md docs/Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md
+          git diff --cached --check
+          git diff --cached --stat
+          git commit -m 'docs: synchronize A11 A12 closure metadata'
+          git push origin HEAD:main
