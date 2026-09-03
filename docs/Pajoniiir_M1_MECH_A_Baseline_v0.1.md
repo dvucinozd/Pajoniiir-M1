@@ -133,16 +133,16 @@ They do not lock J4/J5/J6 footprints because final connector center height, orie
 
 ## 6. Candidate M1 board bay
 
-A conservative pre-layout bay is now defined:
+A conservative pre-layout **rear mechanical working envelope** is now defined:
 
 ~~~text
-X max = 108.0 mm
-Y max =  60.0 mm
+X max = 108.00 mm
+Y max =  65.06 mm
 ~~~
 
-Reason: this stays inside the original rear-shell geometry and is compatible with the 102.6 × 60 mm original mounting reference.
+The original 102.6 × 60.0 mm mounting-center pattern then sits 2.70 mm from the X edges and 2.53 mm from the Y edges of that reference envelope. This is internally consistent with the manufacturer drawing and avoids the earlier incorrect interpretation of 60 mm as the full available Y envelope.
 
-This is a **design target**, not `Edge.Cuts`.
+This is a **candidate mechanical envelope**, not `Edge.Cuts`.
 
 The current KiCad PCB shell must remain without final outline while:
 
@@ -152,7 +152,42 @@ final_board_outline_locked = false
 
 ---
 
-## 7. What M1-MECH-A has closed
+## 7. Coordinate extents now available
+
+Relative to `M1_FRONT_CENTER`:
+
+~~~text
+validated legacy enclosure candidate:
+X = -60.504 .. +60.504
+Y = -36.704 .. +36.704
+Z =   0.000 ..  30.000
+
+bare display/front envelope:
+X = -57.200 .. +57.200
+Y = -33.400 .. +33.400
+Z = 0
+
+legacy module fit reference:
+X = -58.504 .. +58.504
+Y = -34.704 .. +34.704
+Z =   0.000 ..  13.900
+
+rear mechanical working-envelope candidate:
+X = -54.000 .. +54.000
+Y = -32.530 .. +32.530
+
+legacy/mounting candidate centers:
+(-51.3, -30.0)
+(+51.3, -30.0)
+(-51.3, +30.0)
+(+51.3, +30.0)
+~~~
+
+This gives us a real datum tree for later connector coordinates without pretending that the PCB outline has already been chosen.
+
+---
+
+## 8. What M1-MECH-A has closed
 
 - display/front-envelope family identified
 - bare front envelope quantified
@@ -167,7 +202,7 @@ final_board_outline_locked = false
 
 ---
 
-## 8. What remains open
+## 9. What remains open
 
 ### PCB
 
@@ -196,8 +231,8 @@ final_board_outline_locked = false
 
 ---
 
-## 9. Immediate next M1-MECH-A action
+## 10. Immediate next M1-MECH-A action
 
-Use the 121.008 × 73.408 × 30 mm enclosure candidate and 108 × 60 mm board-bay target to build the first connector-placement envelope.
+Use the 121.008 × 73.408 × 30 mm enclosure candidate and 108 × 65.06 mm rear mechanical working-envelope candidate to build the first connector-placement envelope.
 
 No connector footprint is considered production-locked until its panel datum and mating clearance are defined.

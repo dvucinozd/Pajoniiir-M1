@@ -127,7 +127,7 @@ U13 and J7 form a user-accessible edge domain after card insertion mechanics are
 
 ## 5. Mechanical dependency
 
-No user-facing connector may be assigned a final production location or footprint until the corresponding gate in `mechanical_gates.json` is closed.
+No user-facing connector may be assigned a final production location or footprint until the corresponding gate in `mechanical_gates.json` is closed. M1-MECH-A currently provides a candidate rear working envelope of 108.00 × 65.06 mm and candidate mounting centers at X=±51.3 mm, Y=±30.0 mm in `M1_FRONT_CENTER`; those coordinates are not yet Edge.Cuts.
 
 This specifically prevents provisional J1/J2/J3/J4/J5/J6/J7/SW1/SW2 choices from silently becoming manufacturing defaults.
 

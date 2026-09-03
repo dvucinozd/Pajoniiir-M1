@@ -217,5 +217,32 @@
     "chosen fabricator stackup committed",
     "90 ohm USB and 100 ohm MIPI geometries calculated from actual stackup",
     "final connector courtyards and enclosure clearance reviewed"
-  ]
+  ],
+  "mechanical_reference": {
+    "authority": "mech_a.json",
+    "coordinate_system": "M1_FRONT_CENTER",
+    "candidate_rear_working_envelope": {
+      "x_max": 108,
+      "y_max": 65.06
+    },
+    "candidate_mounting_centers": [
+      [
+        -51.3,
+        -30
+      ],
+      [
+        51.3,
+        -30
+      ],
+      [
+        -51.3,
+        30
+      ],
+      [
+        51.3,
+        30
+      ]
+    ],
+    "note": "candidate only; Edge.Cuts remain forbidden until PCB_OUTLINE gate closes"
+  }
 }

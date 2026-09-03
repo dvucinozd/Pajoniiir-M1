@@ -71,7 +71,11 @@
           30
         ]
       ],
-      "status": "authoritative_for_original_GUITION_shell__candidate_for_M1_reuse"
+      "status": "authoritative_for_original_GUITION_shell__candidate_for_M1_reuse",
+      "edge_margin_within_rear_shell": {
+        "x": 2.700000000000003,
+        "y": 2.530000000000001
+      }
     },
     "unresolved": [
       "numerical active-area offset relative to bare glass origin is not dimensioned in the public drawing",
@@ -126,29 +130,87 @@
       "x": 121.008,
       "y": 73.408,
       "z": 30,
-      "status": "candidate"
+      "status": "candidate",
+      "extents": {
+        "x_min": -60.504,
+        "x_max": 60.504,
+        "y_min": -36.704,
+        "y_max": 36.704,
+        "z_min": 0,
+        "z_max": 30
+      }
     },
     "display_front_reference": {
       "x": 114.4,
       "y": 66.8,
-      "status": "locked"
-    },
-    "board_bay_candidate": {
-      "x_max": 108,
-      "y_max": 60,
-      "rationale": "conservative rear-shell/mounting reference from the original GUITION geometry; not yet Edge.Cuts authority",
-      "status": "candidate"
+      "status": "locked",
+      "extents": {
+        "x_min": -57.2,
+        "x_max": 57.2,
+        "y_min": -33.4,
+        "y_max": 33.4,
+        "z": 0
+      }
     },
     "mounting_pattern_candidate": {
       "center_spacing_x": 102.6,
       "center_spacing_y": 60,
       "hole_diameter": 2,
-      "status": "candidate_pending explicit M1 enclosure reuse decision"
+      "status": "candidate_pending explicit M1 enclosure reuse decision",
+      "edge_margin_within_108x65_06": {
+        "x": 2.7,
+        "y": 2.53
+      },
+      "centers_relative_to_origin": [
+        [
+          -51.3,
+          -30
+        ],
+        [
+          51.3,
+          -30
+        ],
+        [
+          -51.3,
+          30
+        ],
+        [
+          51.3,
+          30
+        ]
+      ],
+      "main_standoff_height_candidate": 6,
+      "note": "6.0 mm is the final legacy standoff-height decision; M1 Z-stack still must validate it."
+    },
+    "legacy_module_shell_reference": {
+      "x": 117.008,
+      "y": 69.408,
+      "z": 13.9,
+      "extents": {
+        "x_min": -58.504,
+        "x_max": 58.504,
+        "y_min": -34.704,
+        "y_max": 34.704,
+        "z_min": 0,
+        "z_max": 13.9
+      },
+      "status": "validated legacy fit-test reference"
+    },
+    "rear_mechanical_envelope_candidate": {
+      "x_max": 108,
+      "y_max": 65.06,
+      "extents": {
+        "x_min": -54,
+        "x_max": 54,
+        "y_min": -32.53,
+        "y_max": 32.53
+      },
+      "status": "candidate maximum rear working envelope; not Edge.Cuts authority"
     }
   },
   "next_closure_inputs": [
     "confirm M1 reuses the validated legacy enclosure external envelope or define a replacement envelope",
-    "lock final M1 PCB X/Y inside the enclosure candidate",
+    "lock final M1 PCB X/Y inside the <=108 x 65.06 mm rear mechanical working envelope candidate",
     "lock M1 mounting-hole coordinates and screw/standoff system",
     "define user-facing panel assignment for J1/J2/J3/J4/J5/J6/J7/SW1/SW2",
     "resolve J_LCD FPC mating/contact/pin-domain gate",

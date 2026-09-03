@@ -219,6 +219,27 @@ def main() -> int:
             "active_x": 93.60,
             "active_y": 56.16,
         }
+        rear_shell = display.get("rear_shell_reference", {})
+        mount = display.get("legacy_mounting_pattern", {})
+        expected_rear_mount = {
+            "rear_x": 108.0,
+            "rear_y": 65.06,
+            "mount_x": 102.6,
+            "mount_y": 60.0,
+            "hole_diameter": 2.0,
+        }
+        observed_rear_mount = {
+            "rear_x": rear_shell.get("x"),
+            "rear_y": rear_shell.get("y"),
+            "mount_x": mount.get("center_spacing_x"),
+            "mount_y": mount.get("center_spacing_y"),
+            "hole_diameter": mount.get("hole_diameter"),
+        }
+        if observed_rear_mount != expected_rear_mount:
+            errors.append(
+                f"{MECH_A.name}: rear-shell/mount geometry drift: "
+                f"{observed_rear_mount} != {expected_rear_mount}"
+            )
         observed_display = {
             "bare_x": bare.get("x"),
             "bare_y": bare.get("y"),
