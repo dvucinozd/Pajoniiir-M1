@@ -8,6 +8,7 @@ footprint gates without duplicating policy in documentation.
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -16,6 +17,15 @@ GATES = BASE / "mechanical_gates.json"
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--json",
+        dest="as_json",
+        action="store_true",
+        help="emit the snapshot as machine-readable JSON",
+    )
+    args = parser.parse_args()
+
     data = json.loads(GATES.read_text(encoding="utf-8"))
     gates = data.get("gates", [])
 
@@ -47,7 +57,22 @@ def main() -> int:
             + ", ".join(open_blockers)
         )
 
+    snapshot = {
+        "layout_freeze_allowed": bool(data.get("layout_freeze_allowed")),
+        "open_layout_blocker_count": len(open_blockers),
+        "closed_gate_count": len(closed),
+        "intentional_blank_bom_gate_count": len(blank_bom),
+        "open_layout_blockers": open_blockers,
+        "closed_gates": closed,
+        "blank_bom_refdes": blank_bom,
+    }
+
+    if args.as_json:
+        print(json.dumps(snapshot, indent=2))
+        return 0
+
     print("M1-MECH-A gate snapshot")
+    print(f"  layout freeze allowed: {snapshot['layout_freeze_allowed']}")
     print(f"  open layout blockers: {len(open_blockers)}")
     print(f"  closed gates: {len(closed)}")
     print(f"  intentional blank BOM gates: {len(blank_bom)}")
