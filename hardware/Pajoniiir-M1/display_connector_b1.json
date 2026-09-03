@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "milestone": "M1-ELEC-B1",
+  "updated": "2026-09-04",
+  "authority": "Production host-side connector selection for the final DSI506/DYL0023 display interface.",
+  "connector": {
+    "manufacturer": "Amphenol Communications Solutions / FCI",
+    "mpn": "SFW15R-2STE1LF",
+    "series": "SFW-R",
+    "status": "ACTIVE",
+    "contacts": 15,
+    "pitch_mm": 1.0,
+    "contact_location": "top",
+    "orientation": "right-angle / side-entry",
+    "mount": "SMT",
+    "insertion": "ZIF",
+    "housing_height_mm": 2.70,
+    "current_rating_a_per_contact": 1.0,
+    "voltage_rating_v": 100,
+    "durability_mating_cycles": 20
+  },
+  "selection_basis": [
+    "Raspberry Pi Compute Module Camera/Display Adapter reference BOM uses SFW15R-2STE1LF for the standard 15-way 1.0 mm top-contact DSI/CSI interface.",
+    "Amphenol marks the exact part Active and provides a released customer drawing.",
+    "The final M1 display is the same DSI506/DYL0023 module already bench-accepted in Pajoniiir-M3 on a standard Raspberry-Pi-style 15-pin interface."
+  ],
+  "electrical_pin_map": [
+    {"pin": 1, "net": "GND"},
+    {"pin": 2, "net": "DSI_D1_N"},
+    {"pin": 3, "net": "DSI_D1_P"},
+    {"pin": 4, "net": "GND"},
+    {"pin": 5, "net": "DSI_CLK_N"},
+    {"pin": 6, "net": "DSI_CLK_P"},
+    {"pin": 7, "net": "GND"},
+    {"pin": 8, "net": "DSI_D0_N"},
+    {"pin": 9, "net": "DSI_D0_P"},
+    {"pin": 10, "net": "GND"},
+    {"pin": 11, "net": "DISPLAY_I2C_SCL", "gpio": 8},
+    {"pin": 12, "net": "DISPLAY_I2C_SDA", "gpio": 7},
+    {"pin": 13, "net": "GND"},
+    {"pin": 14, "net": "3V3_DISPLAY_MODULE"},
+    {"pin": 15, "net": "3V3_DISPLAY_MODULE"}
+  ],
+  "locked": {
+    "mpn": true,
+    "contact_count": true,
+    "pitch": true,
+    "top_contact": true,
+    "electrical_pin_map": true
+  },
+  "still_open": [
+    "manufacturer land pattern / verified ECAD footprint committed to the project library",
+    "actual DSI506 FFC conductor-side and host-to-module pin-1 orientation check",
+    "FFC bend and mating keepout in final enclosure",
+    "absolute connector XY/Z placement"
+  ],
+  "footprint_policy": "Do not derive production pads from a raster screenshot. Use the released Amphenol recommended PCB layout or verified manufacturer ECAD, checked against drawing 10172241.",
+  "sources": [
+    "https://www.amphenol-cs.com/product/sfw15r2ste1lf.html",
+    "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10172241.pdf",
+    "https://datasheets.raspberrypi.com/cmcd/CMCD-A-1P1.zip",
+    "https://github.com/dvucinozd/Pajoniiir-M3/tree/b3e2bee5ded0a836906ab6f689d79a6e6b49d541"
+  ]
+}
