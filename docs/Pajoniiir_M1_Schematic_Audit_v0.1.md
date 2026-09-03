@@ -257,7 +257,7 @@ Ne radi native ERC, footprint pin-to-pad validation, PCB DRC, impedance verifica
 
 ### Manufacturing-output CI
 
-Dodani su native KiCad exporti i source-parity provjera. CI sada generira manufacturing BOM CSV, hierarchy netlist, kompletni schematic PDF i Markdown BOM-audit. `validate_manufacturing_outputs.py` zahtijeva da KiCad BOM sadrži točno isti `in_bom=yes` RefDes skup kao 15 leaf sheetova te iste Value/Footprint podatke. Trenutni M1-MECH-A8 source baseline ima 269 `in_bom=yes` RefDes-a, 16 DNP stavki i 11 dopuštenih blank-footprint manufacturing gateova.
+Dodani su native KiCad exporti i source-parity provjera. CI sada generira manufacturing BOM CSV, hierarchy netlist, kompletni schematic PDF i Markdown BOM-audit. `validate_manufacturing_outputs.py` zahtijeva da KiCad BOM sadrži točno isti `in_bom=yes` RefDes skup kao 15 leaf sheetova te iste Value/Footprint podatke. Trenutni M1-MECH-A12 source baseline ima 269 `in_bom=yes` RefDes-a, 16 DNP stavki i 10 dopuštenih blank-footprint manufacturing gateova; D1 je sada stvarno footprint-lockan kao ST SMBJ6.0CA-TR / `Diode_SMD:D_SMB`.
 
 Detalji: `Pajoniiir_Manufacturing_Output_Contract_v0.1.md`.
 
@@ -289,7 +289,7 @@ KiCad 9 CI run #76 (`d8bffb3a`) je potpuno zelen nakon presentation cleanup-a. G
 - [x] schematic PDF generation in CI
 - [x] schematic PDF human review — run #76, 16/16 pages reviewed
 - [x] manufacturing BOM/netlist extraction + schematic-source parity check in CI
-- [x] historical run #76 engineering/manual BOM review — 270/270, 17 DNP, 12 intentional blank gates; M1-MECH-A8 source baseline is 269/16/11 after intentional J6 removal
+- [x] historical run #76 engineering/manual BOM review — 270/270, 17 DNP, 12 intentional blank gates; current M1-MECH-A12 source baseline is 269/16/10 after J6 removal and D1 footprint lock
 
 ---
 

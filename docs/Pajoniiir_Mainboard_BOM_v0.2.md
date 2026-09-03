@@ -370,7 +370,7 @@ Baseline:
 
 | RefDes | Qty | Vrijednost / funkcija |
 |---|---:|---|
-| J_LCD | 1 | **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120 — 30 contacts, 0.5 mm pitch; footprint still TBD-MECH pending contact-side/mating geometry, Altium 31/32 interpretation, pins 15/16/18/19 and panel 3V3 commonality** |
+| J_LCD | 1 | **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120 — 30 contacts, 0.5 mm pitch; A9 resolves 31/32 as GND shell/mount refs and 15/16/18/19 as NC; A10 confirms component-side side-entry; footprint remains blocked by final panel variant, top/bottom contact-side, exact mated Z and panel 3V3 commonality** |
 | R_DSI_REXT | 1 | **4.02 kΩ 1%** |
 | R_DSI_CLK_P/N | 2 | 0 Ω tuning |
 | R_DSI_D0_P/N | 2 | 0 Ω tuning |

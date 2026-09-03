@@ -484,13 +484,14 @@ Completed:
 - real hierarchical KiCad Rev A capture
 - symbol/power/GPIO structural review
 - KiCad 9.0.9 native ERC clean baseline
-- generated manufacturing BOM/netlist parity review complete (historical run #76: 270/270; current M1-MECH-A8 source baseline: 269 after intentional J6 removal)
+- generated manufacturing BOM/netlist parity review complete (historical run #76: 270/270; current M1-MECH-A12 source baseline: 269 in-BOM / 16 DNP / 10 intentional blank gates)
 - 16-page schematic PDF human review complete
 - hierarchy pin-sync equivalence complete: bidirectional root/child name+shape validation plus native KiCad root load/export
 
 Remaining before final manufacturing sign-off:
 
-- display and connector mechanical closure
+- 12 physical/EVT layout blockers listed in `Pajoniiir_M1_MECH_A_Physical_Evidence_Boundary_v0.1.md`
+- exact controlled-impedance width/spacing calculation for locked JLC04161H-7628 stackup before routing freeze
 
 
 Only after those physical/review gates close should the project enter final PCB placement/routing.

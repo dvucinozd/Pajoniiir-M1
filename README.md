@@ -11,9 +11,9 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **M1-SCH-A electrical capture:** PASS / COMPLETE WITH DOCUMENTED HARD GATES  
 **Structural schematic audit:** PASS  
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
-**Manufacturing output review:** PASS — current M1-MECH-A8 source baseline 269 in-BOM, 16 DNP, 11 intentional blank-footprint gates  
+**Manufacturing output review:** PASS — M1-MECH-A12 source baseline 269 in-BOM, 16 DNP, 10 intentional blank-footprint gates<br>
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
-**M1-MECH-A:** IN PROGRESS — M1-MECH-A10 additionally confirms the original LCD FPC is component-side right-angle/side-entry; J_LCD still waits for top/bottom contact-side, exact mating height, final panel variant and 3V3 commonality. J6/J9 are closed; external absolute wall datums and final PCB Z/outline remain open  
+**M1-MECH-A:** REPO-ONLY ANALYSIS COMPLETE THROUGH A12 — D1 TVS, fabrication stackup, J6 and J9 are closed; 12 blockers remain and all require physical/EVT/final-panel evidence. GO for production placement/routing freeze remains blocked.<br>
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -33,7 +33,7 @@ The electrical architecture is defined for:
 - P4/C6 recovery and factory programming
 - optional system power telemetry
 
-The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch** is identified; M1-MECH-A9 resolves symbol refs 31/32 as GND shell/mount pins and FPC pins 15/16/18/19 as NC. Remaining blockers are final panel variant, contact-side/mating geometry, and whether original ESP_3V3 contacts 4/21/29 are internally common before mapping M1's separately filtered 3V3_LCD / 3V3_TOUCH rails. CI exports and source-validates the manufacturing BOM, hierarchy netlist and complete schematic PDF. Human PDF/BOM review and hierarchy pin-sync equivalence are complete. Only exact connector/display mechanics, board outline/datums and fab stackup remain before final M1-SCH-A manufacturing sign-off.
+The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch** is identified; M1-MECH-A9 resolves symbol refs 31/32 as GND shell/mount pins and FPC pins 15/16/18/19 as NC. Remaining blockers are final panel variant, contact-side/mating geometry, and whether original ESP_3V3 contacts 4/21/29 are internally common before mapping M1's separately filtered 3V3_LCD / 3V3_TOUCH rails. CI exports and source-validates the manufacturing BOM, hierarchy netlist and complete schematic PDF. Human PDF/BOM review and hierarchy pin-sync equivalence are complete. Fabrication stackup is now locked to JLCPCB JLC04161H-7628. Remaining sign-off work is physical connector/display mechanics, final board outline/datums, C3/C8 EVT bulk selection, and exact controlled-impedance width/spacing for the locked stackup.
 
 ---
 
@@ -119,6 +119,8 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [M1-MECH-A J6 Rev A Removal Closure v0.1](docs/Pajoniiir_M1_MECH_A_J6_Removal_Closure_v0.1.md)
 - [M1-MECH-A Display FPC Forensic Narrowing v0.1](docs/Pajoniiir_M1_MECH_A_Display_FPC_Forensic_Narrowing_v0.1.md)
 - [M1-MECH-A Display FPC Physical Orientation v0.1](docs/Pajoniiir_M1_MECH_A_Display_FPC_Physical_Orientation_v0.1.md)
+- [M1-MECH-A Fabrication Stackup Closure v0.1](docs/Pajoniiir_M1_MECH_A_Fabrication_Stackup_Closure_v0.1.md)
+- [M1-MECH-A Physical Evidence Boundary v0.1](docs/Pajoniiir_M1_MECH_A_Physical_Evidence_Boundary_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
