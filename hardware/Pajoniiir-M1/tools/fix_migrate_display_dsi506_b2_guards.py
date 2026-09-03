@@ -51,3 +51,5 @@ if 'active_p10 = "\\\\n".join(instantiated_symbol_blocks(p10))' not in text:
 
 path.write_text(text)
 print("PASS: DSI506 B2 migrator guards are scoped to instantiated symbols")
+
+# M1-ELEC-B2 full-CI trigger marker; no design semantics.
