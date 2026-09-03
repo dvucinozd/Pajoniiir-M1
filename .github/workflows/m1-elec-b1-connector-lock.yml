@@ -1,0 +1,207 @@
+name: M1 ELEC B1 connector lock
+
+on:
+  push:
+    paths:
+      - '.github/workflows/m1-elec-b1-connector-lock.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply B1 connector authority
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          display_p = root/'hardware/Pajoniiir-M1/final_display_module.json'
+          gates_p = root/'hardware/Pajoniiir-M1/mechanical_gates.json'
+          readme_p = root/'README.md'
+
+          display = json.loads(display_p.read_text())
+          if 'M1-ELEC-B1' not in display['milestones']:
+              display['milestones'].append('M1-ELEC-B1')
+          display['updated'] = '2026-09-04'
+          display['status'] = 'final_5in_module_selected__m3_signal_map_locked__production_15pin_connector_mpn_locked__cable_orientation_and_enclosure_open'
+          display['production_connector'] = {
+              'revision': 'M1-ELEC-B1',
+              'manufacturer': 'Amphenol Communications Solutions / FCI',
+              'mpn': 'SFW15R-2STE1LF',
+              'series': 'SFW-R',
+              'contacts': 15,
+              'pitch_mm': 1.0,
+              'contact_location': 'top',
+              'orientation': 'right-angle / side-entry',
+              'mount': 'SMT',
+              'cable_insertion': 'ZIF',
+              'housing_height_mm': 2.70,
+              'current_rating_a_per_contact': 1.0,
+              'status': 'ACTIVE',
+              'selection_basis': [
+                  'Raspberry Pi Compute Module Camera/Display Adapter BOM identifies SFW15R-2STE1LF as the standard 15-way 1.0 mm top-contact connector.',
+                  'Amphenol currently marks the exact part Active and publishes the released customer drawing and 3D models.',
+                  'The M3-validated DSI506/DYL0023 uses the standard Raspberry-Pi-style 15-pin 1.0 mm interface.'
+              ],
+              'sources': [
+                  'https://www.amphenol-cs.com/product/sfw15r2ste1lf.html',
+                  'https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10172241.pdf',
+                  'https://datasheets.raspberrypi.com/cmcd/CMCD-A-1P1.zip'
+              ],
+              'pcb_land_pattern_policy': 'Use only the released Amphenol recommended PCB layout / verified manufacturer ECAD. Do not draw a footprint from approximate raster dimensions.',
+              'cable_orientation_policy': 'Before production placement, verify pin 1 and exposed-conductor side on the actual DSI506 cable/module combination. Top-contact connector selection is locked; cable inversion is not inferred.'
+          }
+          display['remaining_gates'] = [x for x in display.get('remaining_gates', []) if x not in (
+              'exact production 15-pin 1.0 mm FFC receptacle MPN',
+              'top/bottom contact orientation and cable inversion for the selected receptacle'
+          )]
+          for x in [
+              'verified manufacturer land pattern for SFW15R-2STE1LF committed to the project footprint library',
+              'actual DSI506 FFC conductor-side / pin-1 cable inversion check',
+          ]:
+              if x not in display['remaining_gates']:
+                  display['remaining_gates'].insert(0, x)
+          display['freeze']['production_connector_mpn_locked'] = True
+          display['freeze']['production_connector_contact_side_locked'] = True
+          display['freeze']['production_connector_footprint_locked'] = False
+          display['freeze']['actual_cable_orientation_verified'] = False
+          display_p.write_text(json.dumps(display, indent=2) + '\n')
+
+          gates = json.loads(gates_p.read_text())
+          gate = next(g for g in gates['gates'] if g['id'] == 'J_LCD_DISPLAY_FPC')
+          gate['display_architecture_revision'] = 'M1-ELEC-B1'
+          gate['legacy_30pin_status'] = 'superseded_by_final_DSI506_module'
+          gate['category'] = 'display_module_connector_mechanical'
+          gate['status'] = 'open'
+          gate['allow_blank_footprint'] = True
+          gate['blocks_layout_freeze'] = True
+          gate['exact_mpn'] = 'SFW15R-2STE1LF'
+          gate['manufacturer'] = 'Amphenol Communications Solutions / FCI'
+          gate['contact_count'] = 15
+          gate['pitch_mm'] = 1.0
+          gate['contact_location'] = 'top'
+          gate['connector_orientation'] = 'right-angle / side-entry SMT ZIF'
+          gate['housing_height_mm'] = 2.70
+          gate['mpn_status'] = 'LOCKED_M1-ELEC-B1'
+          gate['required_evidence'] = [
+              'verified manufacturer land pattern / ECAD footprint committed to project library',
+              'actual DSI506 FFC conductor-side and pin-1 cable inversion check',
+              'FFC approach/bend/mating keepout in final enclosure',
+              'absolute connector XY/Z datum relative to final display and custom mainboard'
+          ]
+          gate['closure'] = 'MPN/contact-side sourcing is locked in M1-ELEC-B1. Gate remains open only for verified land pattern plus physical cable/enclosure placement evidence.'
+          gate['sources'] = [
+              'https://www.amphenol-cs.com/product/sfw15r2ste1lf.html',
+              'https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10172241.pdf'
+          ]
+          gates['updated'] = '2026-09-04'
+          gates_p.write_text(json.dumps(gates, indent=2) + '\n')
+
+          doc = '''# Pajoniiir-M1 — M1-ELEC-B1 15-pin DSI Connector Lock v0.1
+
+**Date:** 2026-09-04  
+**Revision:** M1-ELEC-B1  
+**Status:** production connector MPN and contact side LOCKED; land pattern/cable placement still gated
+
+## Decision
+
+The final M1 host-side DSI connector is:
+
+```text
+Manufacturer: Amphenol Communications Solutions / FCI
+MPN:          SFW15R-2STE1LF
+Contacts:     15
+Pitch:        1.00 mm
+Contact side: TOP
+Entry:        right-angle / side-entry
+Mount:        SMT
+Insertion:    ZIF
+Height:       2.70 mm
+```
+
+This is the same 15-way 1.0 mm top-contact connector family identified by the Raspberry Pi Compute Module Camera/Display Adapter BOM for the standard Raspberry-Pi-style DSI/CSI interface. The exact Amphenol part remains Active and has a released product drawing.
+
+## Why this part
+
+The final DSI506/DYL0023 module is already hardware-accepted in Pajoniiir-M3 on the standard 15-pin Raspberry-Pi-style interface. Using the Pi reference connector removes an unnecessary connector-family ambiguity and preserves commodity cable compatibility.
+
+## Locked electrical pin map
+
+```text
+ 1 GND
+ 2 DSI_D1_N
+ 3 DSI_D1_P
+ 4 GND
+ 5 DSI_CLK_N
+ 6 DSI_CLK_P
+ 7 GND
+ 8 DSI_D0_N
+ 9 DSI_D0_P
+10 GND
+11 DISPLAY_I2C_SCL / GPIO8
+12 DISPLAY_I2C_SDA / GPIO7
+13 GND
+14 3V3_DISPLAY_MODULE
+15 3V3_DISPLAY_MODULE
+```
+
+## What is deliberately NOT inferred
+
+Top-contact describes the connector. It does not by itself prove whether the particular supplied FFC has same-side or opposite-side exposed conductors at both ends, nor which physical end orientation gives host pin 1 to module pin 1.
+
+Before production placement we therefore still require a simple continuity/pin-1 inspection of the actual cable/module assembly.
+
+## Footprint policy
+
+Do not hand-draw a footprint from a screenshot. The project footprint must come from either:
+
+1. the released Amphenol recommended PCB layout / manufacturer ECAD, or
+2. an independently reconstructed footprint checked dimension-by-dimension against drawing `10172241`.
+
+Until that footprint is committed and checked, the J_LCD/J_DSI connector mechanical gate remains open even though the MPN is selected.
+
+## Sources
+
+- Amphenol product page: https://www.amphenol-cs.com/product/sfw15r2ste1lf.html
+- Amphenol released drawing: https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10172241.pdf
+- Raspberry Pi Compute Module Camera/Display Adapter reference package: https://datasheets.raspberrypi.com/cmcd/CMCD-A-1P1.zip
+- Pajoniiir-M3 bench authority: `dvucinozd/Pajoniiir-M3@b3e2bee5ded0a836906ab6f689d79a6e6b49d541`
+'''
+          (root/'docs/Pajoniiir_M1_ELEC_B1_DSI15_Connector_Lock_v0.1.md').write_text(doc)
+
+          readme = readme_p.read_text()
+          marker = '- [M1-ELEC-B0 5-inch DSI Interface Migration v0.1](docs/Pajoniiir_M1_ELEC_B0_5in_DSI_Interface_Migration_v0.1.md)'
+          add = marker + '\n- [M1-ELEC-B1 15-pin DSI Connector Lock v0.1](docs/Pajoniiir_M1_ELEC_B1_DSI15_Connector_Lock_v0.1.md)'
+          if marker in readme and 'M1_ELEC_B1_DSI15_Connector_Lock' not in readme:
+              readme = readme.replace(marker, add)
+          readme_p.write_text(readme)
+
+          # Fail-fast invariants.
+          d2 = json.loads(display_p.read_text())
+          g2 = json.loads(gates_p.read_text())
+          gg = next(g for g in g2['gates'] if g['id'] == 'J_LCD_DISPLAY_FPC')
+          assert d2['production_connector']['mpn'] == 'SFW15R-2STE1LF'
+          assert d2['production_connector']['contact_location'] == 'top'
+          assert d2['freeze']['production_connector_mpn_locked'] is True
+          assert d2['freeze']['production_connector_footprint_locked'] is False
+          assert gg['exact_mpn'] == 'SFW15R-2STE1LF'
+          assert gg['status'] == 'open'
+
+      - name: Remove one-shot workflow and commit
+        shell: bash
+        run: |
+          rm .github/workflows/m1-elec-b1-connector-lock.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hardware/Pajoniiir-M1/final_display_module.json hardware/Pajoniiir-M1/mechanical_gates.json docs/Pajoniiir_M1_ELEC_B1_DSI15_Connector_Lock_v0.1.md README.md .github/workflows/m1-elec-b1-connector-lock.yml
+          git diff --cached --check
+          git commit -m "display: lock production 15-pin DSI connector"
+          git push origin HEAD:main
