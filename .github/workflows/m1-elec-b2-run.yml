@@ -1,0 +1,62 @@
+name: M1 ELEC B2 runner
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/m1-elec-b2-run.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 hardware/Pajoniiir-M1/tools/fix_migrate_display_dsi506_b2_guards.py
+          python3 hardware/Pajoniiir-M1/tools/migrate_display_dsi506_b2.py
+          python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
+
+      - name: Install KiCad 9
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases >/dev/null
+          sudo apt-get update -qq
+          sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints >/dev/null
+          kicad-cli version
+
+      - name: KiCad preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/m1-b2
+          kicad-cli sch export pdf -o /tmp/m1-b2/root.pdf hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          kicad-cli sch export netlist -o /tmp/m1-b2/root.net hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          test -s /tmp/m1-b2/root.pdf
+          test -s /tmp/m1-b2/root.net
+          grep -q J8 /tmp/m1-b2/root.net
+          grep -q SFW15R-2STE1LF /tmp/m1-b2/root.net
+
+      - name: Commit validated migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/m1-elec-b2-run.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hardware/Pajoniiir-M1 .github/workflows/m1-elec-b2-run.yml
+          git diff --cached --check
+          git commit -m "display: migrate schematic to final DSI506 module"
+          git push origin HEAD:main
