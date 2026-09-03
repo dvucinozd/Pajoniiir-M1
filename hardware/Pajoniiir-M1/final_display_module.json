@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "milestone": "M1-MECH-B0",
+  "updated": "2026-09-04",
+  "status": "final_display_module_selected__electrical_connector_and_new_enclosure_open",
+  "authority": "supersedes M1-MECH-A Guition 4.3-inch display/enclosure assumptions for final-product work",
+  "final_product_display": {
+    "manufacturer": "Elecrow",
+    "sku": "DSI05379I",
+    "description": "5-inch IPS capacitive-touch MIPI DSI display module",
+    "resolution_px": [800, 480],
+    "refresh_rate_hz": 60,
+    "active_area_mm": [108.0, 64.8],
+    "nominal_supply_v": 3.3,
+    "module_interface": "Raspberry Pi-style MIPI DSI",
+    "supplied_cable_family": "15-pin 1.0 mm FFC",
+    "public_module_size_mm": [121.1, 77.9],
+    "sources": [
+      "https://www.elecrow.com/5-inch-dsi-display-ips-800-480-touch-screen-compatible-with-raspberry-pi-4b-3b-3b.html",
+      "https://www.elecrow.com/download/product/DSI05379I/5inch-dsi-display_user_manual-v1.4.pdf"
+    ]
+  },
+  "user_dimensioned_image_evidence": {
+    "rear_pcb_envelope_mm": [121.109, 77.193],
+    "mount_hole_diameter_mm": 2.5,
+    "visible_mount_hole_count": 8,
+    "outer_hole_centers_from_rear_pcb_top_left_mm": [
+      [5.0, 5.0],
+      [116.109, 5.0],
+      [5.0, 72.93],
+      [116.109, 72.93]
+    ],
+    "outer_hole_center_spacing_mm": [111.109, 67.93],
+    "visible_interfaces": [
+      "15-pin DSI connector",
+      "Backlight On/Off switch",
+      "3V3/GND/PWM fan header region"
+    ],
+    "status": "authoritative preliminary M1-B0 evidence; physical caliper or official CAD required for production release"
+  },
+  "superseded_final_product_assumptions": [
+    "Guition JC4880 4.3-inch bare panel as final display",
+    "SOFNG 0.5TBQP-30P-1 30-contact FPC as final display interface",
+    "114.4 x 66.8 mm Guition front display datum",
+    "117.008 x 69.408 mm Guition module shell as final enclosure-fit object",
+    "121.008 x 73.408 mm old enclosure candidate as viable final product envelope",
+    "108 x 65.06 mm rear working envelope as production custom-mainboard authority"
+  ],
+  "old_enclosure_conflict": {
+    "old_external_envelope_mm": [121.008, 73.408],
+    "old_inner_cavity_mm": [117.008, 69.408],
+    "display_rear_pcb_mm": [121.109, 77.193],
+    "display_minus_old_external_mm": [0.101, 3.785],
+    "display_minus_old_inner_mm": [4.101, 7.785],
+    "verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED"
+  },
+  "electrical_migration": {
+    "old_architecture": "ESP32-P4 -> discrete M1 backlight/touch support -> 30-pin bare-panel FPC",
+    "new_intent": "ESP32-P4 -> protected/controlled 15-pin DSI interface -> complete Elecrow DSI05379I module",
+    "must_resolve_before_schematic_rewrite": [
+      "authoritative 15-pin DSI signal pinout for this module/cable orientation",
+      "ESP32-P4 DSI lane polarity/order mapping",
+      "touch transport and any reset/interrupt requirements",
+      "reliable module current/power budget; public storefront current text is inconsistent",
+      "whether M1 MP3202 backlight section is removed",
+      "whether M1 discrete GT911 touch section is removed",
+      "exact 15-pin 1.0 mm FFC connector MPN/contact orientation/cable inversion",
+      "ESD/EMI protection and MIPI controlled-impedance implementation"
+    ]
+  },
+  "mechanical_migration": {
+    "new_primary_datum": "final 5-inch display module",
+    "recommended_coordinate_origin": "center of final 5-inch display/front active envelope",
+    "next_steps": [
+      "obtain/import official DSI05379I 3D model or measure physical module",
+      "lock full front/rear Z envelope",
+      "lock all mounting-hole centers and structural-hole selection",
+      "lock DSI cable approach/mating keepout",
+      "redesign enclosure XY around 121.109 x 77.193 mm rear board plus positive clearance",
+      "place custom M1 mainboard relative to display module",
+      "re-run external connector wall packing",
+      "freeze PCB Z/standoffs",
+      "freeze final custom-mainboard Edge.Cuts"
+    ]
+  },
+  "freeze": {
+    "final_display_selected": true,
+    "old_4_3_display_baseline_superseded": true,
+    "display_interface_electrically_locked": false,
+    "new_enclosure_locked": false,
+    "custom_mainboard_outline_locked": false,
+    "placement_routing_freeze_allowed": false
+  }
+}
