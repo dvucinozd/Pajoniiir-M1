@@ -14,7 +14,7 @@
     "orientation": "right-angle / side-entry",
     "mount": "SMT",
     "insertion": "ZIF",
-    "housing_height_mm": 2.70,
+    "housing_height_mm": 2.7,
     "current_rating_a_per_contact": 1.0,
     "voltage_rating_v": 100,
     "durability_mating_cycles": 20
@@ -25,21 +25,68 @@
     "The final M1 display is the same DSI506/DYL0023 module already bench-accepted in Pajoniiir-M3 on a standard Raspberry-Pi-style 15-pin interface."
   ],
   "electrical_pin_map": [
-    {"pin": 1, "net": "GND"},
-    {"pin": 2, "net": "DSI_D1_N"},
-    {"pin": 3, "net": "DSI_D1_P"},
-    {"pin": 4, "net": "GND"},
-    {"pin": 5, "net": "DSI_CLK_N"},
-    {"pin": 6, "net": "DSI_CLK_P"},
-    {"pin": 7, "net": "GND"},
-    {"pin": 8, "net": "DSI_D0_N"},
-    {"pin": 9, "net": "DSI_D0_P"},
-    {"pin": 10, "net": "GND"},
-    {"pin": 11, "net": "DISPLAY_I2C_SCL", "gpio": 8},
-    {"pin": 12, "net": "DISPLAY_I2C_SDA", "gpio": 7},
-    {"pin": 13, "net": "GND"},
-    {"pin": 14, "net": "3V3_DISPLAY_MODULE"},
-    {"pin": 15, "net": "3V3_DISPLAY_MODULE"}
+    {
+      "pin": 1,
+      "net": "GND"
+    },
+    {
+      "pin": 2,
+      "net": "DSI_D1_N"
+    },
+    {
+      "pin": 3,
+      "net": "DSI_D1_P"
+    },
+    {
+      "pin": 4,
+      "net": "GND"
+    },
+    {
+      "pin": 5,
+      "net": "DSI_CLK_N"
+    },
+    {
+      "pin": 6,
+      "net": "DSI_CLK_P"
+    },
+    {
+      "pin": 7,
+      "net": "GND"
+    },
+    {
+      "pin": 8,
+      "net": "DSI_D0_N"
+    },
+    {
+      "pin": 9,
+      "net": "DSI_D0_P"
+    },
+    {
+      "pin": 10,
+      "net": "GND"
+    },
+    {
+      "pin": 11,
+      "net": "DISPLAY_I2C_SCL",
+      "gpio": 8
+    },
+    {
+      "pin": 12,
+      "net": "DISPLAY_I2C_SDA",
+      "gpio": 7
+    },
+    {
+      "pin": 13,
+      "net": "GND"
+    },
+    {
+      "pin": 14,
+      "net": "3V3_DISPLAY_MODULE"
+    },
+    {
+      "pin": 15,
+      "net": "3V3_DISPLAY_MODULE"
+    }
   ],
   "locked": {
     "mpn": true,
@@ -49,7 +96,7 @@
     "electrical_pin_map": true
   },
   "still_open": [
-    "manufacturer land pattern / verified ECAD footprint committed to the project library",
+    "final dimension-by-dimension pad/mounting-plate/courtyard audit against Amphenol drawing 10172241",
     "actual DSI506 FFC conductor-side and host-to-module pin-1 orientation check",
     "FFC bend and mating keepout in final enclosure",
     "absolute connector XY/Z placement"
@@ -60,5 +107,19 @@
     "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10172241.pdf",
     "https://datasheets.raspberrypi.com/cmcd/CMCD-A-1P1.zip",
     "https://github.com/dvucinozd/Pajoniiir-M3/tree/b3e2bee5ded0a836906ab6f689d79a6e6b49d541"
-  ]
+  ],
+  "footprint": {
+    "revision": "M1-ELEC-B2",
+    "library_id": "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
+    "source": "JLCPCB/EasyEDA C3167933 converted by easyeda2kicad",
+    "verification": [
+      "electrical SMT contacts exactly 1..15",
+      "two additional soldered mounting-plate pads 16/17 present",
+      "electrical contact pitch = 1.000 mm",
+      "electrical contact centre span = 14.000 mm",
+      "mounting plates bracket the contact row",
+      "part identity cross-checked against released Amphenol drawing 10172241"
+    ],
+    "status": "COMMITTED_CANDIDATE__FINAL_PAD_AND_COURTYARD_DRAWING_AUDIT_REQUIRED"
+  }
 }
