@@ -1141,8 +1141,8 @@
     (lib_id "Connector_Generic:Conn_01x05") (at 184.785 69.85 0) (unit 1)
     (exclude_from_sim no) (in_bom no) (on_board yes) (dnp yes) (uuid "0d000035-d000-4d00-8d00-000000000036")
     (property "Reference" "J9" (at 184.785 57.85 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "P4 USB SERIAL/JTAG POGO DNL" (at 184.785 60.35 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 184.785 69.85 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "P4 USB SERIAL/JTAG FACTORY POGO DNL" (at 184.785 60.35 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Pajoniiir-M1:Factory_Pogo_USBJTAG_1x05_P1.27_2Tooling" (at 184.785 69.85 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 184.785 69.85 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0d000036-d000-4d00-8d00-000000000037")) (pin "2" (uuid "0d000037-d000-4d00-8d00-000000000038")) (pin "3" (uuid "0d000038-d000-4d00-8d00-000000000039")) (pin "4" (uuid "0d000039-d000-4d00-8d00-00000000003a")) (pin "5" (uuid "0d00003a-d000-4d00-8d00-00000000003b"))

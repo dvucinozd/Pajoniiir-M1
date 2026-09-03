@@ -30,7 +30,7 @@ Key classes:
 
 - input bulk/TVS tuning and sourcing: `C3`, `D1`, `C8`
 - user-facing mechanics: `J1`, `J2`, `J3`, `J4`, `J5`, `J6`, `J7`, `SW1`, `SW2`
-- factory fixture: `J9`
+- factory fixture: `J9` **CLOSED in M1-MECH-A7** — project-local PCB-only 5-pad pogo footprint with asymmetric tooling holes
 - display/FPC: documentation alias `J_LCD`, intentionally not instantiated
 - global mechanics: PCB outline / mounting datums
 - fabrication: stackup and controlled-impedance geometry
@@ -90,9 +90,30 @@ Need enclosure cutout, board-edge orientation, locking/mating cable requirement 
 
 Need top/side actuation decision, access method and actuator height relative to enclosure.
 
-### Factory USB pogo J9
+### Factory USB pogo J9 — CLOSED
 
-Need fixture pogo pitch/pattern and pin-1 datum. This is PCB-only/DNL and is not part of the assembly BOM.
+Locked in M1-MECH-A7:
+
+~~~text
+Footprint: Pajoniiir-M1:Factory_Pogo_USBJTAG_1x05_P1.27_2Tooling
+5 pads @ 1.27 mm
+pad diameter: 1.0 mm
+pin 1: rectangular + silkscreen marker
+tooling: 2 × Ø1.2 mm NPTH, asymmetric coordinates
+assembly: DNL / PCB-only
+~~~
+
+Pin map:
+
+~~~text
+1  3V3_SYS VREF sense-only
+2  GND
+3  USBJTAG_DM_SERVICE
+4  USBJTAG_DP_SERVICE
+5  CHIP_PU
+~~~
+
+The fixture must power the board through the normal qualified 5 V path and must never source pin 1. No user-facing enclosure aperture is required.
 
 ---
 

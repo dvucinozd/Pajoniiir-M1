@@ -636,19 +636,61 @@
       "sheet": "13_DEBUG_SERVICE",
       "refdes": "J9",
       "category": "fixture_mechanical",
-      "status": "open",
-      "allow_blank_footprint": true,
+      "status": "closed",
+      "allow_blank_footprint": false,
       "bom_scope": false,
-      "blocks_layout_freeze": true,
+      "blocks_layout_freeze": false,
       "required_evidence": [
         "factory fixture pogo pitch/pattern",
         "pin-1 datum",
         "fixture keepout"
       ],
-      "closure": "Lock the PCB-only USB Serial/JTAG pogo footprint.",
+      "closure": "CLOSED: project-local PCB-only pogo footprint locked with pin-1 datum, asymmetric tooling alignment and fixture keepout. No enclosure aperture required.",
       "connector_cluster": "FACTORY_SERVICE",
-      "absolute_cutout_datum_status": "open",
-      "wall_class_preference": "REAR_OR_INTERNAL_FIXTURE"
+      "absolute_cutout_datum_status": "not_applicable_internal_factory_fixture",
+      "wall_class_preference": "REAR_OR_INTERNAL_FIXTURE",
+      "closed_revision": "M1-MECH-A7",
+      "closed_date": "2026-09-03",
+      "exact_footprint": "Pajoniiir-M1:Factory_Pogo_USBJTAG_1x05_P1.27_2Tooling",
+      "fixture_pattern": {
+        "electrical_pad_count": 5,
+        "electrical_pad_pitch_mm": 1.27,
+        "electrical_pad_diameter_mm": 1,
+        "pin1_pad_shape": "rectangular",
+        "alignment_holes": [
+          {
+            "x_mm": -4,
+            "y_mm": 2.4,
+            "diameter_mm": 1.2
+          },
+          {
+            "x_mm": 4.6,
+            "y_mm": -1.9,
+            "diameter_mm": 1.2
+          }
+        ],
+        "asymmetry": "tooling-hole coordinates intentionally asymmetric to key fixture orientation",
+        "courtyard_mm": {
+          "x_min": -5.35,
+          "x_max": 5.95,
+          "y_min": -3.35,
+          "y_max": 3.35
+        }
+      },
+      "pin_map": {
+        "1": "3V3_SYS VREF sense-only",
+        "2": "GND",
+        "3": "USBJTAG_DM_SERVICE",
+        "4": "USBJTAG_DP_SERVICE",
+        "5": "CHIP_PU"
+      },
+      "fixture_power_policy": "Board must be powered through normal J1/qualified 5 V path. Pin 1 is VREF sense-only; fixture must never source it.",
+      "evidence": [
+        "existing 13_DEBUG_SERVICE five-signal J9 schematic mapping preserved",
+        "project-local footprint locks 1.27 mm pitch, 1.0 mm pads, pin-1 marker, two asymmetric 1.2 mm NPTH tooling holes and courtyard",
+        "no populated connector and no assembly BOM item",
+        "VREF remains sense-only; no VBUS or fixture power injection"
+      ]
     },
     {
       "id": "PCB_OUTLINE",

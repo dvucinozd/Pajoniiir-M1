@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__pcb_envelope_candidate_defined__major_external_connector_candidates_preferred_conditional__wall_class_relations_screened__absolute_datums_and_z_stack_open",
+  "status": "display_datum_locked__pcb_envelope_candidate_defined__major_external_connector_candidates_preferred_conditional__factory_j9_fixture_closed__absolute_external_datums_and_z_stack_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -578,7 +578,7 @@
         "refs": [
           "J9"
         ],
-        "wall_assignment": "internal_or_rear_fixture_TBD",
+        "wall_assignment": "rear_internal_fixture",
         "front_forbidden": true,
         "allowed_surfaces": [
           "REAR_Z30"
@@ -587,7 +587,9 @@
           "DNL fixture access only",
           "no requirement for normal user access"
         ],
-        "wall_class_preference": "REAR_OR_INTERNAL_FIXTURE"
+        "wall_class_preference": "REAR_OR_INTERNAL_FIXTURE",
+        "exact_footprint": "Pajoniiir-M1:Factory_Pogo_USBJTAG_1x05_P1.27_2Tooling",
+        "mechanical_gate_status": "closed_M1-MECH-A7"
       }
     ],
     "next_required_absolute_data": [
@@ -1329,5 +1331,52 @@
       "note": "Screening reserves are engineering packing allowances only, not production cutout dimensions."
     },
     "promotion_rule": "A6 locks the opposite-wall relationship and preferred component families only. J7/SW1/SW2 remain open until absolute centers, slot/tool-hole geometry and local boss/body/card envelopes pass."
+  },
+  "factory_service_fixture": {
+    "revision": "M1-MECH-A7",
+    "status": "closed",
+    "refdes": "J9",
+    "function": "P4 USB Serial/JTAG production pogo fixture",
+    "footprint": "Pajoniiir-M1:Factory_Pogo_USBJTAG_1x05_P1.27_2Tooling",
+    "pin_map": {
+      "1": "3V3_SYS VREF sense-only",
+      "2": "GND",
+      "3": "USBJTAG_DM_SERVICE",
+      "4": "USBJTAG_DP_SERVICE",
+      "5": "CHIP_PU"
+    },
+    "geometry": {
+      "electrical_pad_count": 5,
+      "electrical_pad_pitch_mm": 1.27,
+      "electrical_pad_diameter_mm": 1,
+      "pin1_pad_shape": "rectangular",
+      "alignment_holes": [
+        {
+          "x_mm": -4,
+          "y_mm": 2.4,
+          "diameter_mm": 1.2
+        },
+        {
+          "x_mm": 4.6,
+          "y_mm": -1.9,
+          "diameter_mm": 1.2
+        }
+      ],
+      "asymmetry": "tooling-hole coordinates intentionally asymmetric to key fixture orientation",
+      "courtyard_mm": {
+        "x_min": -5.35,
+        "x_max": 5.95,
+        "y_min": -3.35,
+        "y_max": 3.35
+      }
+    },
+    "placement_policy": {
+      "enclosure_aperture_required": false,
+      "preferred_region": "rear/internal fixture-accessible PCB region",
+      "keepout_rule": "reserve full footprint courtyard plus vertical pogo-head approach volume",
+      "final_xy_position": "layout-dependent but no longer a footprint/mechanical sourcing gate"
+    },
+    "power_policy": "Board must be powered through normal J1/qualified 5 V path. Pin 1 is VREF sense-only; fixture must never source it.",
+    "result": "J9 mechanical gate closed; exact PCB XY placement remains normal layout work rather than a pre-layout hard gate."
   }
 }

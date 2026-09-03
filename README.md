@@ -13,7 +13,7 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **Manufacturing output review:** PASS — 270/270 BOM parity, 17 DNP, 12 intentional blank-footprint gates  
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
-**M1-MECH-A:** IN PROGRESS — M1-MECH-A6 selects Molex 503398-1892 for J7 and B3U-3000P-B for recessed RESET/BOOT, and locks MEDIA_SERVICE_WALL opposite POWER_WALL; major external connector families are now narrowed while absolute wall signs/centers, local body/boss clearances and PCB Z/standoff remain unfrozen  
+**M1-MECH-A:** IN PROGRESS — M1-MECH-A7 closes J9 with an exact project-local 5-pad production pogo footprint; J1/J2/J3/J4/J5/J7/SW1/SW2 are narrowed to preferred candidates, while external absolute wall datums, J6 decision, J_LCD and final PCB Z/outline remain open  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -115,6 +115,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [M1-MECH-A Panel Packing Feasibility v0.1](docs/Pajoniiir_M1_MECH_A_Panel_Packing_Feasibility_v0.1.md)
 - [M1-MECH-A Power Input Connector Strategy v0.1](docs/Pajoniiir_M1_MECH_A_Power_Input_Connector_Strategy_v0.1.md)
 - [M1-MECH-A Media & Recovery Service Strategy v0.1](docs/Pajoniiir_M1_MECH_A_Media_Recovery_Service_Strategy_v0.1.md)
+- [M1-MECH-A Factory USB/JTAG Pogo Closure v0.1](docs/Pajoniiir_M1_MECH_A_Factory_USBJTAG_Pogo_Closure_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 

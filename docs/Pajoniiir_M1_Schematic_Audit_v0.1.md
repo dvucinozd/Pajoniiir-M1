@@ -189,7 +189,6 @@ Mechanical / enclosure dependent:
 09_AUDIO_PCM5102A:J5 (RCA R)
 09_AUDIO_PCM5102A:J6 (optional 3.5 mm)
 12_MICROSD:J7 (microSD)
-13_DEBUG_SERVICE:J9 (USB pogo/service)
 ~~~
 
 Sourcing / exact land-pattern dependent:
@@ -205,6 +204,11 @@ U7 je sada zaključan kao **TPS259474ARPWR** s project-local footprintom `Pajoni
 `R_SYS_SHUNT` je zaključan kao **Vishay WSK25125L000FEA**, 5 mΩ, 1%, 1 W, 4-terminal, s footprintom `Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm`.
 
 Svaki novi blank footprint izvan ovog allowlista validator tretira kao error.
+
+
+### J9 factory pogo closure
+
+M1-MECH-A7 closes the former blank-footprint J9 gate with project-local footprint `Pajoniiir-M1:Factory_Pogo_USBJTAG_1x05_P1.27_2Tooling`. J9 remains DNL / `in_bom=no`, so manufacturing BOM parity/counts are unchanged. The footprint is a 5-pad 1.27 mm production pogo row with two asymmetric Ø1.2 mm tooling holes and explicit pin-1 datum. Existing signal mapping is preserved: 3V3_SYS VREF sense-only, GND, USBJTAG D-/D+, CHIP_PU. Fixture power injection through VREF is forbidden.
 
 ---
 
