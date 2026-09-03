@@ -555,12 +555,9 @@ RCA LEFT
 ### J5
 RCA RIGHT
 
-Opcionalno:
+### J6 — removed from Rev A
 
-### J6
-3.5 mm stereo line out
-
-Ako se koristi i RCA i 3.5 mm paralelno, treba potvrditi ukupno opterećenje i izlaznu topologiju.
+The optional 3.5 mm stereo line output was removed in M1-MECH-A8. MAIN remains RCA L/R; CUE/headphones remain on the DDJ-FLX4 USB Audio path.
 
 ---
 
@@ -1192,7 +1189,7 @@ Ovo nije još finalni manufacturing BOM, nego početni popis glavnih komponenti.
 | J3 | 1 | USB1 | USB-A host | obavezno |
 | J4 | 1 | MAIN L | RCA | obavezno |
 | J5 | 1 | MAIN R | RCA | obavezno |
-| J6 | 0/1 | Stereo line out | 3.5 mm | opcionalno |
+| J6 | 0 | Stereo line out | removed M1-MECH-A8 | not on Rev A PCB |
 | J7 | 1 | 5 V input | locking DC connector | obavezno |
 | SW1 | 1 | Reset | tactile | obavezno |
 | SW2 | 1 | Boot | tactile | obavezno |

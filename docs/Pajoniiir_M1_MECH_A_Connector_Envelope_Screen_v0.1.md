@@ -60,7 +60,7 @@ The calculation deliberately treats the module-back plane as continuous across t
 | J7 | Molex 503398-1892 | microSD, normal-mount SMT, push-push, card detect, 1.28 mm height, 10k cycles | global height screen passes; panel slot/card access still open |
 | SW1/SW2 | Omron B3U-3000P / B3U-3000PM family | side-actuated compact SMT tactile family | promising service-button family; exact suffix and actuator datum remain open |
 
-J6 remains intentionally unresolved until the project decides whether the 3.5 mm line output is populated or removed/DNP.
+J6 was subsequently resolved in M1-MECH-A8 by removal from the Rev A board. The earlier envelope discussion is retained as decision evidence.
 
 J_LCD remains the separate display/FPC hard gate.
 

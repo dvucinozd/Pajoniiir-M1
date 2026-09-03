@@ -29,7 +29,8 @@ The machine-readable manifest records every open gate, its current RefDes, requi
 Key classes:
 
 - input bulk/TVS tuning and sourcing: `C3`, `D1`, `C8`
-- user-facing mechanics: `J1`, `J2`, `J3`, `J4`, `J5`, `J6`, `J7`, `SW1`, `SW2`
+- user-facing mechanics still open: `J1`, `J2`, `J3`, `J4`, `J5`, `J7`, `SW1`, `SW2`
+- `J6` **CLOSED in M1-MECH-A8 by removal from Rev A**
 - factory fixture: `J9` **CLOSED in M1-MECH-A7** — project-local PCB-only 5-pad pogo footprint with asymmetric tooling holes
 - display/FPC: documentation alias `J_LCD`, intentionally not instantiated
 - global mechanics: PCB outline / mounting datums
@@ -74,9 +75,9 @@ Remaining J_LCD evidence required before instantiation:
 
 Need final board-edge X/Y datum, insertion direction, vertical/right-angle decision, enclosure cutout and shell-retention/keepout envelope.
 
-### RCA J4/J5 and optional 3.5 mm J6
+### RCA J4/J5
 
-Need panel datum, center height, horizontal spacing, connector orientation and whether isolated shell mechanics are required. J6 must be either assigned a real footprint or removed before final layout freeze.
+Need panel datum, center height, horizontal spacing, connector orientation and whether isolated shell mechanics are required. J6 is no longer part of the Rev A PCB: M1-MECH-A8 closes it by removal.
 
 ### microSD J7
 

@@ -130,7 +130,7 @@ The remaining 6.51 mm to the Ø2 hole edge is **not** enough to declare final cl
 
 ---
 
-## 6. J6 3.5 mm same-row test
+## 6. J6 3.5 mm same-row test — closure evidence
 
 Legacy J6 aperture:
 
@@ -159,11 +159,11 @@ to Ø2 mount-hole edge    = 50.300 - 49.775 = 0.525 mm
 
 ### Verdict
 
-**FAIL — J6 must not be added to the same primary PCB-edge row under the current mounting candidate.**
+**FAIL — this screen was one of the inputs to M1-MECH-A8, which removes J6 from the Rev A board.**
 
 Only 0.525 mm remains to the candidate mounting-hole edge before any boss, connector body or courtyard allowance.
 
-If J6 is retained, valid paths are:
+Before the A8 product decision, the theoretically valid alternatives were:
 
 1. different wall,
 2. separate Z row / panel-mounted or harness solution if enclosure geometry permits,
@@ -217,7 +217,7 @@ No normal user panel allocation is required.
 
 ### J6
 
-Not in the primary long-wall PCB-edge row.
+**Removed from Rev A in M1-MECH-A8. No wall or PCB-edge budget is reserved.**
 
 ---
 

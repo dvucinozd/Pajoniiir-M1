@@ -163,7 +163,7 @@ The physical LCD connector remains the unresolved documentation alias **`J_LCD`*
 | `C_OUT_R` | `C92` | `09_AUDIO_PCM5102A` |
 | `J_RCA_L` | `J4` | `09_AUDIO_PCM5102A` |
 | `J_RCA_R` | `J5` | `09_AUDIO_PCM5102A` |
-| `J_LINE_35` | `J6` | `09_AUDIO_PCM5102A` |
+| `J_LINE_35` | — | removed from Rev A in M1-MECH-A8; legacy J6 retained only as historical reference |
 | `FB_LCD` | `FB3` | `10_DISPLAY_MIPI` |
 | `C_LCD_HF` | `C93` | `10_DISPLAY_MIPI` |
 | `C_LCD_BULK` | `C94` | `10_DISPLAY_MIPI` |

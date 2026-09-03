@@ -127,7 +127,7 @@ main standoff height    6.00 mm
 
 These values are preserved as enclosure evidence.
 
-They do not lock J4/J5/J6 footprints because final connector center height, orientation, MPN and exact panel coordinates still depend on the M1 board.
+They do not lock J4/J5 footprints because final connector center height, orientation, MPN and exact panel coordinates still depend on the M1 board. The legacy 3.5 mm aperture remains historical evidence only; J6 was removed from Rev A in M1-MECH-A8.
 
 ---
 
@@ -248,7 +248,7 @@ This candidate exists only in mech_a.json / documentation. CI rejects real Edge.
 
 Front Z=0 is now explicitly reserved for display/touch. User-facing connectors must use a side or rear surface unless the enclosure is redesigned.
 
-### AUDIO_OUT — J4/J5/J6
+### AUDIO_OUT — J4/J5 (J6 removed in M1-MECH-A8)
 
 - legacy RCA hole diameter: 11.88 mm
 - RCA center spacing: 19.20 mm
@@ -353,7 +353,7 @@ A deterministic recovery procedure is now defined as **M1-MECH-A-D1** in `mech_a
 - J1 5 V input location/MPN
 - J2/J3 USB-A locations/MPNs
 - J4/J5 RCA center locations/MPNs
-- J6 retain/remove + MPN if retained
+- J6 resolved: removed from Rev A in M1-MECH-A8; legacy Ø6.97 mm aperture retained only as historical enclosure evidence
 - J7 microSD insertion datum/MPN
 - SW1/SW2 actuator access geometry/MPNs
 

@@ -727,13 +727,9 @@ GND
 
 Točan položaj RC mreže u odnosu na konektor treba uskladiti s TI Figure 33 referentnom topologijom.
 
-## 14.5 DNP 3.5 mm out
+## 14.5 3.5 mm out — removed from Rev A
 
-Ako ostavimo opcionalni stereo jack:
-
-- vezati ga nakon RC mreže
-- footprint DNP u Rev A
-- ne smije opteretiti RCA signal pri DNP stanju
+M1-MECH-A8 removes J6 from the Rev A board. No DNP footprint or panel aperture is reserved. MAIN remains RCA L/R; a future 3.5 mm option requires a new board/product revision.
 
 ---
 
@@ -948,7 +944,7 @@ Ovaj sheet sadrži stvari koje ne želimo u Rev A populaciji, ali mogu biti kori
 
 Primjeri:
 
-- optional 3.5 mm line out
+- 3.5 mm line out removed from Rev A (M1-MECH-A8)
 - optional SD load switch
 - optional current monitor
 - optional reset supervisor

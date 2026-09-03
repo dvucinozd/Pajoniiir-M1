@@ -484,7 +484,7 @@ Completed:
 - real hierarchical KiCad Rev A capture
 - symbol/power/GPIO structural review
 - KiCad 9.0.9 native ERC clean baseline
-- generated manufacturing BOM/netlist parity review complete (270/270)
+- generated manufacturing BOM/netlist parity review complete (historical run #76: 270/270; current M1-MECH-A8 source baseline: 269 after intentional J6 removal)
 - 16-page schematic PDF human review complete
 - hierarchy pin-sync equivalence complete: bidirectional root/child name+shape validation plus native KiCad root load/export
 
