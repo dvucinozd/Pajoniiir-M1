@@ -1,0 +1,136 @@
+name: M1 ELEC B2 import DSI15 footprint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/m1-elec-b2-import-dsi15-footprint.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  import-footprint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install converter
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user easyeda2kicad
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Import C3167933 and validate geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/dsi15
+          mkdir -p /tmp/dsi15
+          "$HOME/.local/bin/easyeda2kicad" --footprint --lcsc_id=C3167933 --output /tmp/dsi15/sfw
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, shutil
+
+          candidates = list(Path('/tmp/dsi15').glob('sfw.pretty/*.kicad_mod'))
+          if len(candidates) != 1:
+              raise SystemExit(f'expected exactly one generated footprint, got {candidates}')
+          src = candidates[0]
+          text = src.read_text(encoding='utf-8')
+
+          # Collect numbered SMT contact pads and their XY centres.
+          pads = []
+          for m in re.finditer(r'\(pad\s+"?(\d+)"?\s+smd\s+[^\n]*?\(at\s+([-+0-9.]+)\s+([-+0-9.]+)', text):
+              pads.append((int(m.group(1)), float(m.group(2)), float(m.group(3))))
+          by_num = {n:(x,y) for n,x,y in pads}
+          if set(by_num) != set(range(1,16)):
+              raise SystemExit(f'numbered SMT pads are not exactly 1..15: {sorted(by_num)}')
+
+          xs = [by_num[n][0] for n in range(1,16)]
+          ys = [by_num[n][1] for n in range(1,16)]
+          # Determine the varying axis, then verify 1.00 mm pitch and 14.00 mm span.
+          xspan = max(xs)-min(xs)
+          yspan = max(ys)-min(ys)
+          coords = xs if xspan >= yspan else ys
+          ordered = sorted(coords)
+          steps = [round(ordered[i+1]-ordered[i], 6) for i in range(14)]
+          span = round(ordered[-1]-ordered[0], 6)
+          if not all(abs(step-1.0) <= 0.001 for step in steps):
+              raise SystemExit(f'contact pitch mismatch: {steps}')
+          if abs(span-14.0) > 0.001:
+              raise SystemExit(f'contact span mismatch: {span}')
+
+          # The released drawing for SFW15R specifies 15 contacts at 1 mm pitch,
+          # overall body A=20.8, B=19.6, C=14.0, D=15.3 mm and 2.7 mm height.
+          # EasyEDA import is accepted only as a land-pattern source; drawing remains authority.
+          dst = Path('hardware/Pajoniiir-M1/libraries/footprints.pretty/Amphenol_SFW15R-2STE1LF.kicad_mod')
+          dst.parent.mkdir(parents=True, exist_ok=True)
+          # Normalize internal footprint name where converter format exposes one.
+          text = re.sub(r'^\(footprint\s+"[^"]+"', '(footprint "Amphenol_SFW15R-2STE1LF"', text, count=1)
+          text = re.sub(r'^\(module\s+[^\s]+', '(module Amphenol_SFW15R-2STE1LF', text, count=1)
+          dst.write_text(text, encoding='utf-8')
+
+          # Simple syntax sanity.
+          depth = 0; in_string = False; esc = False; minimum = 0
+          for ch in text:
+              if in_string:
+                  if esc: esc=False; continue
+                  if ch == '\\': esc=True; continue
+                  if ch == '"': in_string=False
+                  continue
+              if ch == '"': in_string=True
+              elif ch == '(': depth += 1
+              elif ch == ')': depth -= 1; minimum=min(minimum, depth)
+          if depth != 0 or minimum < 0:
+              raise SystemExit(f'footprint S-expression imbalance depth={depth} min={minimum}')
+
+          print(f'PASS: {src.name} -> {dst}')
+          print(f'PASS: contacts=15 pitch=1.000mm span={span:.3f}mm')
+          print(f'PASS: axis={"X" if xspan>=yspan else "Y"}; xspan={xspan:.3f}; yspan={yspan:.3f}')
+          PY
+
+      - name: Update B1 footprint authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+
+          p = Path('hardware/Pajoniiir-M1/display_connector_b1.json')
+          data = json.loads(p.read_text())
+          data['footprint'] = {
+              'revision': 'M1-ELEC-B2',
+              'library_id': 'Pajoniiir-M1:Amphenol_SFW15R-2STE1LF',
+              'source': 'JLCPCB/EasyEDA C3167933 converted by easyeda2kicad',
+              'verification': [
+                  'numbered SMT contacts exactly 1..15',
+                  'contact pitch = 1.000 mm',
+                  'contact centre span = 14.000 mm',
+                  'part identity cross-checked against released Amphenol drawing 10172241'
+              ],
+              'status': 'COMMITTED_CANDIDATE__FINAL_PAD_AND_COURTYARD_DRAWING_AUDIT_REQUIRED'
+          }
+          if 'manufacturer land pattern / verified ECAD footprint committed to the project library' in data['still_open']:
+              data['still_open'].remove('manufacturer land pattern / verified ECAD footprint committed to the project library')
+          data['still_open'].insert(0, 'final dimension-by-dimension pad/mounting-plate/courtyard audit against Amphenol drawing 10172241')
+          p.write_text(json.dumps(data, indent=2) + '\n')
+          PY
+
+      - name: Remove one-shot workflow and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/m1-elec-b2-import-dsi15-footprint.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hardware/Pajoniiir-M1/libraries/footprints.pretty/Amphenol_SFW15R-2STE1LF.kicad_mod hardware/Pajoniiir-M1/display_connector_b1.json .github/workflows/m1-elec-b2-import-dsi15-footprint.yml
+          git diff --cached --check
+          git commit -m 'display: import DSI15 connector footprint candidate'
+          git push origin HEAD:main
