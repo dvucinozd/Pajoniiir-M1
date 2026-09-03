@@ -252,7 +252,9 @@
         "rear/front panel datum",
         "vertical/right-angle orientation",
         "jack center height",
-        "plug spacing and shell isolation requirement"
+        "plug spacing and shell isolation requirement",
+        "local display/module perimeter relief at the intended RCA wall/board-edge region",
+        "full RCA plug/cable mating envelope"
       ],
       "closure": "Lock exact RCA LEFT connector MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
@@ -262,18 +264,43 @@
       "screened_candidates": [
         {
           "manufacturer": "Kycon",
-          "mpn": "KLPX-0848A-2-W-G",
+          "mpn": "KLPX-0848A-2-W",
+          "role": "preferred_conditional_mainboard_candidate",
           "status": "screened_not_locked",
           "evidence": [
-            "right-angle THT RCA",
-            "8.3 mm barrel",
-            "~10 mm body profile",
-            "legacy aperture 11.88 mm"
+            "right-angle THT",
+            "board lock",
+            "active distributor listing",
+            "Ø8.3 mm actual barrel",
+            "white"
           ],
-          "screen_result": "legacy aperture diameter compatible on first screen; global Z screen fails; local edge relief/alternate strategy required",
+          "screen_result": "aperture first-order pass; local Z/body/plug clearance must be proven",
+          "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x.pdf"
+        },
+        {
+          "manufacturer": "Kycon",
+          "mpn": "KLPX-0848A-2-W-G",
+          "role": "alternate_plating_same_geometry_family",
+          "status": "screened_not_locked",
+          "screen_result": "same mechanical closure requirements as preferred non-gold candidate",
           "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+        },
+        {
+          "manufacturer": "Same Sky",
+          "mpn": "RCJ-033",
+          "role": "panel_mount_fallback",
+          "status": "screened_not_locked",
+          "evidence": [
+            "panel mount",
+            "white",
+            "1/4-32 thread",
+            "solder eyelets"
+          ],
+          "screen_result": "removes main-PCB RCA Z conflict but requires new panel-mount/harness validation",
+          "source": "https://www.sameskydevices.com/product/interconnect/connectors/rca-connectors/rcj-033"
         }
-      ]
+      ],
+      "closure_path": "Prefer Kycon main-board candidate if exact local perimeter/body/plug clearance passes; otherwise use panel-mount fallback. Gate stays open until panel datum + MPN + courtyard/keepout are authoritative."
     },
     {
       "id": "J5_RCA_R",
@@ -288,7 +315,9 @@
         "rear/front panel datum",
         "vertical/right-angle orientation",
         "jack center height",
-        "plug spacing and shell isolation requirement"
+        "plug spacing and shell isolation requirement",
+        "local display/module perimeter relief at the intended RCA wall/board-edge region",
+        "full RCA plug/cable mating envelope"
       ],
       "closure": "Lock exact RCA RIGHT connector MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
@@ -298,18 +327,43 @@
       "screened_candidates": [
         {
           "manufacturer": "Kycon",
-          "mpn": "KLPX-0848A-2-R-G",
+          "mpn": "KLPX-0848A-2-R",
+          "role": "preferred_conditional_mainboard_candidate",
           "status": "screened_not_locked",
           "evidence": [
-            "right-angle THT RCA",
-            "8.3 mm barrel",
-            "~10 mm body profile",
-            "legacy aperture 11.88 mm"
+            "right-angle THT",
+            "board lock",
+            "active distributor listing",
+            "Ø8.3 mm actual barrel",
+            "red"
           ],
-          "screen_result": "legacy aperture diameter compatible on first screen; global Z screen fails; local edge relief/alternate strategy required",
+          "screen_result": "aperture first-order pass; local Z/body/plug clearance must be proven",
+          "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x.pdf"
+        },
+        {
+          "manufacturer": "Kycon",
+          "mpn": "KLPX-0848A-2-R-G",
+          "role": "alternate_plating_same_geometry_family",
+          "status": "screened_not_locked",
+          "screen_result": "same mechanical closure requirements as preferred non-gold candidate",
           "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+        },
+        {
+          "manufacturer": "Same Sky",
+          "mpn": "RCJ-032",
+          "role": "panel_mount_fallback",
+          "status": "screened_not_locked",
+          "evidence": [
+            "panel mount",
+            "red",
+            "1/4-32 thread",
+            "solder eyelets"
+          ],
+          "screen_result": "removes main-PCB RCA Z conflict but requires new panel-mount/harness validation",
+          "source": "https://www.sameskydevices.com/product/interconnect/connectors/rca-connectors/rcj-032"
         }
-      ]
+      ],
+      "closure_path": "Prefer Kycon main-board candidate if exact local perimeter/body/plug clearance passes; otherwise use panel-mount fallback. Gate stays open until panel datum + MPN + courtyard/keepout are authoritative."
     },
     {
       "id": "J6_LINE35",

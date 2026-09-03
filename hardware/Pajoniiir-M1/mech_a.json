@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__z_stack_candidate_defined__pcb_envelope_candidate_defined__critical_height_screen_pass__connector_envelope_screened__z_stack_rebalance_required__absolute_connector_datums_open",
+  "status": "display_datum_locked__pcb_envelope_candidate_defined__connector_envelope_screened__rca_strategy_preferred_conditional__z_stack_and_absolute_connector_datums_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -292,12 +292,12 @@
           ],
           "candidate": "Kycon KLPX-0848A-2-x-G",
           "screened_height_or_profile_mm": 10,
-          "basis": "manufacturer right-angle RCA body drawing",
+          "basis": "conservative envelope screen derived from Kycon drawing body-face dimensions; NOT an authoritative PCB-plane-to-top height",
           "required_front_clearance_with_screening_gap_mm": 10.5,
           "implied_pcb_front_z_mm": 24.4,
           "implied_pcb_rear_z_mm": 26,
           "implied_rear_clearance_mm": 2,
-          "result": "FAIL_GLOBAL_Z_SCREEN__DOMINANT_HEIGHT_DRIVER__LOCAL_EDGE_RELIEF_OR_ALTERNATE_RCA_STRATEGY_REQUIRED"
+          "result": "CONSERVATIVE_GLOBAL_SCREEN_FAIL__EXACT_LOCAL_EDGE_RELIEF_AND_BOARD_RELATIVE_HEIGHT_REQUIRED"
         },
         {
           "refdes": [
@@ -310,7 +310,7 @@
           "result": "PASS_GLOBAL_HEIGHT_SCREEN__CARD_ACCESS_DATUM_STILL_OPEN"
         }
       ],
-      "screening_note": "These calculations apply the central module-back plane globally as a conservative screen. Edge-mounted connectors may gain local Z space if the real display/module rear geometry is relieved near the perimeter; that must be demonstrated from CAD or physical measurement before promotion."
+      "screening_note": "M1-MECH-A1 global calculations intentionally screen edge connectors against the continuous module-back plane. For Kycon RCA, the 10.0 mm value is retained only as a conservative envelope screen from the manufacturer drawing, not as an authoritative PCB-plane-to-top height. Final pass/fail requires board-relative connector geometry plus local perimeter/module relief from CAD or physical measurement."
     },
     "front_face_policy": {
       "status": "baseline_constraint",
@@ -373,11 +373,11 @@
     }
   },
   "next_closure_inputs": [
-    "recover flx4_0407.blend, a dimensioned export, or direct physical measurements and execute M1-MECH-A-D1",
-    "decide RCA strategy first: prove local perimeter/module relief for board-mounted right-angle RCA, select a lower-profile alternative, use panel/harness RCA, or revise enclosure/Z-stack",
-    "rebalance PCB Z position / standoff height from connector envelopes; do not freeze the legacy 6.0 mm standoff",
-    "assign POWER_IN / USB_HOST_PAIR / AUDIO_OUT / REMOVABLE_STORAGE / RECOVERY_BUTTONS to physical walls and record cutout centers/insertion axes",
-    "promote screened candidates to exact production MPNs only after wall, body, mating and tolerance envelopes pass",
+    "recover local RCA wall/perimeter/module geometry through M1-MECH-A-D1 or direct physical measurement",
+    "prove or reject main-board Kycon KLPX-0848A-2-W/-R body and plug clearance at the intended wall while preserving the preferred 19.20 mm center spacing",
+    "if board-mounted RCA fails, validate Same Sky RCJ-033/RCJ-032 panel-mount hole/nut/washer geometry and internal harness route",
+    "rebalance PCB Z/standoff only after RCA local geometry is known; do not globally shift the PCB merely to satisfy the conservative 10.0 mm RCA screen",
+    "assign POWER_IN / USB_HOST_PAIR / AUDIO_OUT / REMOVABLE_STORAGE / RECOVERY_BUTTONS to physical walls and record absolute centers/insertion axes",
     "resolve J6 POP-vs-DNP/removal decision",
     "resolve J_LCD FPC mating/contact/pin-domain gate",
     "validate/revise M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
@@ -458,7 +458,10 @@
         "screened_candidates": [
           "Kycon KLPX-0848A-2-W-G",
           "Kycon KLPX-0848A-2-R-G"
-        ]
+        ],
+        "preferred_conditional_architecture": "main-board individual Kycon KLPX-0848A-2-W / -R at 19.20 mm centers",
+        "fallback_architecture": "panel-mounted Same Sky RCJ-033 / RCJ-032 with short internal audio harness",
+        "rejected_dual_module_example": "Switchcraft PJRAN2X1U__X: 15.0 mm centers mismatch legacy 19.20 mm"
       },
       {
         "id": "USB_HOST_PAIR",
@@ -740,12 +743,13 @@
         ],
         "function": "RCA left/white",
         "manufacturer": "Kycon",
-        "mpn": "KLPX-0848A-2-W-G",
-        "interface": "right-angle through-hole RCA jack",
+        "mpn": "KLPX-0848A-2-W",
+        "interface": "individual right-angle through-hole RCA jack with board lock",
         "electrical_screen": "audio-compatible candidate; exact grounding/isolation policy still belongs to layout review",
-        "mechanical_screen": "8.3 mm barrel vs legacy 11.88 mm aperture gives 1.79 mm nominal radial aperture clearance if concentric; ~10 mm body profile fails the global 6.5 mm central Z screen",
-        "result": "SCREENED_NOT_LOCKED__DOMINANT_Z_CONFLICT",
-        "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+        "mechanical_screen": "Ø8.3 mm mating barrel vs legacy Ø11.88 mm aperture gives 1.79 mm nominal radial aperture clearance if concentric; Kycon drawing carries 10.0 mm body-face dimensions, but exact PCB-plane-to-top height remains a CAD/drawing-coordinate closure item",
+        "result": "PREFERRED_CONDITIONAL_GEOMETRY_CANDIDATE__NOT_LOCKED",
+        "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x.pdf",
+        "alternate_plating": "KLPX-0848A-2-W-G"
       },
       {
         "refs": [
@@ -753,12 +757,13 @@
         ],
         "function": "RCA right/red",
         "manufacturer": "Kycon",
-        "mpn": "KLPX-0848A-2-R-G",
-        "interface": "right-angle through-hole RCA jack",
+        "mpn": "KLPX-0848A-2-R",
+        "interface": "individual right-angle through-hole RCA jack with board lock",
         "electrical_screen": "audio-compatible candidate; exact grounding/isolation policy still belongs to layout review",
-        "mechanical_screen": "8.3 mm barrel vs legacy 11.88 mm aperture gives 1.79 mm nominal radial aperture clearance if concentric; ~10 mm body profile fails the global 6.5 mm central Z screen",
-        "result": "SCREENED_NOT_LOCKED__DOMINANT_Z_CONFLICT",
-        "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+        "mechanical_screen": "same geometry as J4; preserves independent 19.20 mm legacy center spacing; exact PCB-plane-to-top height remains a CAD/drawing-coordinate closure item",
+        "result": "PREFERRED_CONDITIONAL_GEOMETRY_CANDIDATE__NOT_LOCKED",
+        "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x.pdf",
+        "alternate_plating": "KLPX-0848A-2-R-G"
       },
       {
         "refs": [
@@ -794,5 +799,82 @@
       "RCA implementation strategy is now the dominant connector-driven Z-stack decision: prove local edge relief, choose a lower-profile board connector, use panel/harness RCA, or revise enclosure/Z-stack.",
       "The legacy 6.0 mm standoff height is evidence only and must not be promoted to final M1 authority until connector-driven Z-stack is closed."
     ]
+  },
+  "rca_integration_strategy": {
+    "revision": "M1-MECH-A2",
+    "status": "preferred_conditional_route_selected__j4_j5_gates_remain_open",
+    "decision": "Prefer two individual main-PCB right-angle RCA jacks if local perimeter/module relief proves the bodies and mating plugs fit. Fall back to panel-mounted wired RCA only if that proof fails.",
+    "preferred_conditional": {
+      "architecture": "main_board_individual_right_angle_rca",
+      "refs": [
+        "J4",
+        "J5"
+      ],
+      "geometry_family": "Kycon KLPX-0848A-2-x",
+      "current_sourcing_candidates": {
+        "left_white": "KLPX-0848A-2-W",
+        "right_red": "KLPX-0848A-2-R",
+        "gold_flash_alternates": [
+          "KLPX-0848A-2-W-G",
+          "KLPX-0848A-2-R-G"
+        ]
+      },
+      "reasons": [
+        "individual jacks can preserve the 19.20 mm legacy RCA center spacing",
+        "Ø8.3 mm barrel is geometrically compatible with the recorded Ø11.88 mm legacy aperture on first-order concentric screening",
+        "keeps MAIN L/R on the mainboard with no internal audio harness",
+        "current non-gold red/white variants are active distributor-listed parts"
+      ],
+      "mandatory_closure_evidence": [
+        "absolute AUDIO_OUT wall assignment and J4/J5 cutout centers in M1_FRONT_CENTER",
+        "authoritative PCB-plane-to-top and rearward body envelope from drawing/CAD model",
+        "local display/module perimeter relief at the RCA board-edge region",
+        "minimum enclosure/body clearance including print and assembly tolerance",
+        "RCA plug/cable insertion envelope outside the enclosure",
+        "ground/shell isolation decision and PCB keepout/courtyard",
+        "confirmation that 19.20 mm center spacing is retained or intentionally revised"
+      ],
+      "promotion_rule": "Do not lock the footprint or standoff height until all mandatory closure evidence passes."
+    },
+    "fallback": {
+      "architecture": "panel_mount_rca_with_short_internal_audio_harness",
+      "candidates": {
+        "left_white": "Same Sky RCJ-033",
+        "right_red": "Same Sky RCJ-032"
+      },
+      "reasons": [
+        "panel mounting removes RCA body height from the main PCB Z-stack",
+        "red/white versions are current catalog parts",
+        "threaded panel mounting provides independent mechanical load transfer"
+      ],
+      "penalties": [
+        "adds two internal audio connections / assembly operations",
+        "legacy Ø11.88 mm holes are not automatically production-compatible with a 1/4-32 threaded bushing; centering, nut/washer bearing area and wall strength must be validated",
+        "requires harness routing, strain relief and ground/shield policy"
+      ],
+      "source": "https://www.sameskydevices.com/catalog/interconnect/connectors/rca-connectors"
+    },
+    "rejected_or_deprioritized": [
+      {
+        "candidate": "Switchcraft PJRAN2X1U01X / PJRAN2X1U02X dual RCA module",
+        "reason": "15.0 mm jack center spacing conflicts with the 19.20 mm legacy pair spacing by 4.20 mm and forces a new paired aperture/PCB pattern without solving the height problem.",
+        "source": "https://www.switchcraft.com/assets/1/24/pjran2x1u__x_series_cd.pdf"
+      },
+      {
+        "candidate": "single integrated dual-RCA footprint solely to reduce part count",
+        "reason": "not preferred while the legacy enclosure evidence already favors two independent 19.20 mm-spaced apertures; only reconsider if the enclosure is intentionally redesigned."
+      }
+    ],
+    "geometry_notes": {
+      "legacy_hole_diameter_mm": 11.88,
+      "kycon_barrel_diameter_mm": 8.3,
+      "first_order_diameter_slack_mm": 3.58,
+      "first_order_radial_slack_mm": 1.79,
+      "legacy_center_spacing_mm": 19.2,
+      "switchcraft_dual_center_spacing_mm": 15,
+      "switchcraft_spacing_mismatch_mm": 4.2,
+      "caution": "Aperture compatibility does not imply body, board-edge, Z, wall-thickness or mating-plug compatibility."
+    },
+    "next_decision": "Recover local RCA wall/perimeter geometry through M1-MECH-A-D1 or direct physical measurement. If Kycon family passes, promote exact red/white variants and footprints; if it fails, promote the panel-mount fallback and redesign the panel mounting holes."
   }
 }
