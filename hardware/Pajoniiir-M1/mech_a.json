@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__pcb_envelope_candidate_defined__major_external_connector_candidates_preferred_conditional__j9_closed__j6_removed_closed__absolute_external_datums_and_z_stack_open",
+  "status": "display_datum_locked__display_fpc_30v32_and_nc_pins_resolved__pcb_envelope_candidate_defined__j9_and_j6_closed__external_absolute_datums_z_stack_and_display_mating_3v3_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -383,7 +383,7 @@
     "prove or reject main-board Kycon KLPX-0848A-2-W/-R local Z/body/plug clearance",
     "validate Amphenol 87520-1010ALF shell/aperture/cable envelope and ~4.9 mm gross rear-clearance consequence",
     "rebalance PCB Z/standoff only after local RCA and USB geometry are known",
-    "resolve J_LCD FPC mating/contact/pin-domain gate",
+    "resolve remaining J_LCD gate: final panel variant + contact-side/mating geometry + internal-common status of 3V3 pins 4/21/29",
     "validate/revise M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
     "lock M1 mounting-hole coordinates and screw/standoff system",
     "choose fabrication stackup after board outline/connector datums are frozen"
@@ -1402,5 +1402,36 @@
     },
     "legacy_evidence_policy": "Ø6.97 mm legacy opening remains historical CAD evidence only; no Rev A cutout datum.",
     "reintroduction_policy": "Future reintroduction is a board/product revision, not a DNP population option."
+  },
+  "display_fpc_forensic_resolution": {
+    "revision": "M1-MECH-A9",
+    "status": "symbol_count_and_ambiguous_nc_pins_resolved__physical_mating_and_3v3_domain_open",
+    "connector": {
+      "manufacturer": "SOFNG",
+      "mpn": "0.5TBQP-30P-1",
+      "jlcpcb": "C3975120",
+      "pitch_mm": 0.5,
+      "physical_contacts": 30
+    },
+    "resolved": {
+      "symbol_refs_31_32": {
+        "role": "auxiliary shell/mount pins",
+        "electrical": "GND",
+        "evidence": "Original Guition raster shows pin refs 31 and 32 outside the 1..30 contact sequence, each tied to GND.",
+        "source": "https://github.com/wegi1/ESP32P4-JC4880P443C-I-W/blob/main/5-Schematic/2_LCD%26CSI.png"
+      },
+      "pins_15_16_18_19": {
+        "role": "NC",
+        "evidence": "Explicit no-connect markers in original Guition LCD schematic raster.",
+        "source": "https://github.com/wegi1/ESP32P4-JC4880P443C-I-W/blob/main/5-Schematic/2_LCD%26CSI.png"
+      }
+    },
+    "still_open": [
+      "authoritative final purchased panel MPN/variant",
+      "connector contact-side orientation",
+      "mating height / FPC insertion geometry / exact mechanical drawing",
+      "whether panel-side 3V3 contacts 4/21/29 are internally common and therefore safe mapping to M1 3V3_LCD / 3V3_TOUCH"
+    ],
+    "power_domain_caution": "Original Guition board drives FPC contacts 4, 21 and 29 from the same ESP_3V3 net. This proves board-side common drive, not internal panel commonality; do not split them across filtered rails until the panel assembly is proven."
   }
 }

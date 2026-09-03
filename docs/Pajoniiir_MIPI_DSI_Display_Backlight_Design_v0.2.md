@@ -632,7 +632,7 @@ Ako je potreban signal-integrity probing:
 
 | RefDes | Qty | Value / part | Status |
 |---|---:|---|---|
-| J_LCD | 1 | SOFNG 0.5TBQP-30P-1 / C3975120, 30 contacts, 0.5 mm pitch | ID/pitch confirmed; footprint still TBD-MECH pending contact-side/mating geometry, 31/32, pins 15/16/18/19 and 3V3-domain mapping |
+| J_LCD | 1 | SOFNG 0.5TBQP-30P-1 / C3975120, 30 contacts, 0.5 mm pitch | M1-MECH-A9 resolves 31/32 as GND shell/mount refs and pins 15/16/18/19 as NC; footprint still TBD-MECH pending final panel, contact-side/mating geometry and 3V3-domain mapping |
 | R_DSI_REXT | 1 | 4.02 kΩ 1% | LOCKED |
 | R_DSI_CLK_P | 1 | 0 Ω | tuning |
 | R_DSI_CLK_N | 1 | 0 Ω | tuning |
@@ -732,7 +732,7 @@ ali pripadaju zasebnom sheetu.
 # 29. Pre-layout hard gates
 
 - [ ] authoritative exact panel MPN
-- [ ] exact LCD FPC contact count/pitch
+- [x] exact LCD FPC contact count/pitch — 30 contacts / 0.5 mm
 - [ ] exact FPC pin-number order
 - [ ] connector top/bottom-contact choice
 - [ ] panel 3.3 V current
@@ -779,6 +779,6 @@ P4 internal 2.5V LDO -> MIPI DPHY
 5V_SYS -> MP3202 -> LEDA/LEDK
 ~~~
 
-Backlight power values are now lock-candidates from the original JC4880 schematic. The remaining display hard gate is the exact physical panel/FPC connector and resolution of the 30-pin MPN versus 32-pin schematic-symbol discrepancy.
+Backlight power values are now lock-candidates from the original JC4880 schematic. The 30-pin-vs-32-symbol discrepancy is resolved in M1-MECH-A9: 30 electrical contacts + GND shell/mount refs 31/32; pins 15/16/18/19 are NC. Remaining display gate is final panel variant, physical contact-side/mating geometry and safe 3V3-domain mapping.
 
 **Sljedeći blok:** 11_TOUCH_GT911 — I2C pull-ups, GPIO3 reset, GPIO4 interrupt, ESD, address-selection timing i firmware migration iz polling u interrupt-capable mode.

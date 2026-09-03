@@ -124,7 +124,7 @@ Already captured: 2-lane MIPI DSI, D0/D1/CLK P/N, šest inline 0R tuning footpri
 
 Tvornički trag sada identificira FPC1 kao **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120**, nominalno **30 kontakata, 0.5 mm pitch**. DSI parovi, LEDA/LEDK, TE, LCD reset i touch signali su rekonstruirani iz originalne Guition connectivity ekstrakcije.
 
-Prije J_LCD instanciranja još treba zatvoriti: finalni panel MPN/varijantu, contact-side i mating/mechanical drawing, ulogu Altium symbol referenci 31/32, pinove 15/16/18/19 te potvrdu jesu li originalni FPC 3V3 pinovi 4/21/29 interno zajednički. Ta zadnja stavka je važna jer M1 koristi odvojene filtrirane `3V3_LCD` i `3V3_TOUCH` domene.
+Prije J_LCD instanciranja još treba zatvoriti: finalni panel MPN/varijantu, contact-side i mating/mechanical drawing/insertion geometry te potvrdu jesu li originalni FPC 3V3 pinovi 4/21/29 interno zajednički. M1-MECH-A9 je zatvorio 30-vs-32 dilemu (31/32 su GND shell/mount reference) i pinove 15/16/18/19 (NC). Ta zadnja stavka je važna jer M1 koristi odvojene filtrirane `3V3_LCD` i `3V3_TOUCH` domene.
 
 Validator namjerno faila ako se `J_LCD` pojavi prije promjene ovog gatea.
 

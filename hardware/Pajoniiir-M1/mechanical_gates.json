@@ -580,20 +580,37 @@
         "0.5 mm pitch",
         "bare display/front envelope 114.40 x 66.80 mm",
         "active display area 93.60 x 56.16 mm",
-        "original shell mounting reference 4xD2 on 102.6 x 60.0 mm centers"
+        "original shell mounting reference 4xD2 on 102.6 x 60.0 mm centers",
+        "original FPC pins 15/16/18/19 = NC",
+        "Altium symbol refs 31/32 = auxiliary GND shell/mount pins, not contacts 31/32",
+        "physical electrical contact sequence = 1..30"
       ],
       "source": "https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120",
       "required_evidence": [
         "authoritative panel MPN/variant",
         "contact-side orientation",
         "mating height and FPC insertion geometry",
-        "interpret Altium references 31/32 vs 30 physical contacts",
-        "resolve pins 15/16/18/19",
         "confirm original common 3V3 pins 4/21/29 before mapping separate 3V3_LCD/3V3_TOUCH"
       ],
-      "closure": "Instantiate physical LCD connector only after pin-domain and mating geometry are authoritative.",
+      "closure": "Instantiate physical LCD connector only after final panel variant, contact-side/mating geometry, and safe 3V3-domain mapping are authoritative. 30-vs-32 and pins 15/16/18/19 are resolved in M1-MECH-A9.",
       "evidence_file": "mech_a.json",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "resolved_evidence": [
+        {
+          "item": "30-vs-32 symbol discrepancy",
+          "resolution": "SOFNG/JLC part is 30-contact. Original Guition schematic raster shows contacts 1..30 plus two separate auxiliary shell/mount references 31 and 32, both tied to GND.",
+          "sources": [
+            "https://github.com/wegi1/ESP32P4-JC4880P443C-I-W/blob/main/5-Schematic/2_LCD%26CSI.png",
+            "https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120"
+          ]
+        },
+        {
+          "item": "pins 15/16/18/19",
+          "resolution": "Original Guition LCD schematic raster marks FPC1 pins 15, 16, 18 and 19 with explicit no-connect markers. Treat as NC for the original JC4880 electrical variant.",
+          "source": "https://github.com/wegi1/ESP32P4-JC4880P443C-I-W/blob/main/5-Schematic/2_LCD%26CSI.png"
+        }
+      ],
+      "partial_closure_revision": "M1-MECH-A9"
     },
     {
       "id": "J7_MICROSD",

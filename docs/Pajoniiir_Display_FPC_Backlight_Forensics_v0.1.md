@@ -3,7 +3,7 @@
 **Projekt:** Pajoniiir-M1 Rev A  
 **Datum:** 2026-09-02  
 **Ažurirano:** 2026-09-03  
-**Status:** Electrical FPC mapping substantially reconstructed; exact physical mating/orientation and four ambiguous pins remain hard gates
+**Status:** M1-MECH-A9 resolves 30-vs-32 and pins 15/16/18/19; exact panel variant, physical mating/contact-side and 3V3 internal-common status remain hard gates
 
 ---
 
@@ -51,7 +51,7 @@ JLCPCB catalog za taj MPN potvrđuje:
 - pitch: **0.5 mm**
 - nominal electrical contact count: **30**
 
-Dakle **MPN, nominalni broj kontakata i pitch više nisu nepoznati**. Ono što još nije zaključano jest stvarna mating/contact-side geometrija i interpretacija dodatnih Altium symbol referenci 31/32.
+Dakle **MPN, nominalni broj kontakata i pitch više nisu nepoznati**. M1-MECH-A9 dodatno potvrđuje da Altium reference 31/32 nisu dodatni FPC kontakti nego auxiliary shell/mount reference vezane na GND. Stvarna mating/contact-side geometrija i dalje nije zaključana.
 
 ## Critical discrepancy
 
@@ -70,7 +70,9 @@ physical/electrical connector identity = 30 contacts, 0.5 mm
 Altium extracted symbol references      = 1 ... 32
 ```
 
-Najvjerojatnije objašnjenje je 30 električnih kontakata + 2 mounting/shield referencea, ali to još nije dovoljno autoritativno dokazano za finalni footprint. Zato se **J_LCD footprint ne zaključava** dok se ne potvrde contact-side, mating height/mechanical drawing i uloga 31/32.
+M1-MECH-A9 zatvara ovu dilemu: originalni Guition raster prikazuje **kontakte 1..30** unutar FPC1 te zasebne reference **31 i 32** izvan kontaktnog niza, obje vezane na GND. To odgovara 30 električnih kontakata + 2 shell/mount referencea.
+
+J_LCD footprint se i dalje ne zaključava jer contact-side, mating height/insertion geometry i konačna panel varijanta još nisu potvrđeni.
 
 ---
 
@@ -106,23 +108,23 @@ Iz extracted connectivity referenci možemo vrlo visoko pouzdano rekonstruirati 
 | 28 | TOUCH_INT | GT911 interrupt |
 | 29 | ESP_3V3 | panel/touch 3.3 V |
 | 30 | GND | ground |
-| 31 | GND / mechanical-symbol candidate | unresolved |
-| 32 | GND / mechanical-symbol candidate | unresolved |
+| 31 | GND | auxiliary shell/mount reference; resolved M1-MECH-A9 |
+| 32 | GND | auxiliary shell/mount reference; resolved M1-MECH-A9 |
 
-## Unresolved electrical pins
+## Pins 15/16/18/19 — resolved NC
 
-Pins:
+Text extraction alone was ambiguous, but the original Guition LCD schematic raster is explicit: FPC1 pins **15, 16, 18 and 19** carry no-connect markers.
+
+M1-MECH-A9 therefore records:
 
 ```text
-15
-16
-18
-19
+15 = NC
+16 = NC
+18 = NC
+19 = NC
 ```
 
-nisu dovoljno sigurno mapirani iz text extraction ordering alone.
-
-Ne smiju se pogađati.
+This resolution applies to the original JC4880 electrical variant and must still be cross-checked if a different final purchased panel variant is selected.
 
 ## 3.1. 3V3 supply-domain hard gate
 
@@ -438,11 +440,9 @@ Already resolved: **SOFNG 0.5TBQP-30P-1, C3975120, 30 contacts, 0.5 mm pitch**.
 ## MEDIUM confidence
 
 - SOFNG 0.5TBQP-30P-1 as the exact production connector variant until contact-side/mating geometry is checked against the physical panel
-- pin31/32 being mechanical/shield vs electrical GND contacts
 
 ## NOT YET LOCKED
 
-- FPC pins 15/16/18/19
 - FPC 3V3 pins 4/21/29 internal-common status / safe M1 rail mapping
 - exact final panel supplier MPN
 - connector contact-side/orientation/mating height
@@ -460,4 +460,18 @@ using the original JC4880 values above.
 
 **FPC FOOTPRINT = STILL BLOCKED**
 
-Nominal connector identity, 30-contact count and 0.5 mm pitch are now known. Final footprint lock still waits for mating/contact-side mechanics, 31/32 interpretation, pins 15/16/18/19, and safe 3V3 domain mapping for the actual purchased panel assembly.
+Nominal connector identity, 30-contact count, 0.5 mm pitch, 31/32 shell role and NC status of pins 15/16/18/19 are now known. Final footprint lock still waits for mating/contact-side mechanics, exact final panel variant, and safe 3V3 domain mapping for contacts 4/21/29.
+
+
+---
+
+## M1-MECH-A9 evidence update
+
+Primary visual evidence used for the two resolved sub-gates:
+
+- Original Guition LCD/CSI schematic raster mirrored from the board documentation package:  
+  https://github.com/wegi1/ESP32P4-JC4880P443C-I-W/blob/main/5-Schematic/2_LCD%26CSI.png
+- JLCPCB component record confirming SOFNG `0.5TBQP-30P-1`, `C3975120`, package `FPC0.5mm-30pin`:  
+  https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120
+
+The visual source is stronger than text-extraction ordering for NC markers and shell-pin interpretation.
