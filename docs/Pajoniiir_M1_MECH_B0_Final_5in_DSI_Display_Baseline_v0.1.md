@@ -1,230 +1,248 @@
-# Pajoniiir-M1 — M1-MECH-B0 Final 5-inch DSI Display Baseline v0.1
+# Pajoniiir-M1 — M1-MECH-B0 Final 5-inch DSI Display Baseline v0.2
 
 **Date:** 2026-09-04  
-**Revision:** M1-MECH-B0  
-**Status:** FINAL PRODUCT DISPLAY MODULE SELECTED  
+**Revision:** M1-MECH-B0 / corrected by M1-ELEC-B0  
+**Status:** FINAL PRODUCT DISPLAY MODULE SELECTED; M3 BENCH IDENTITY/PINOUT ADOPTED
 
 ---
 
 ## 1. Product decision
 
-Pajoniiir-M1 Rev A will use the complete **Elecrow DSI05379I 5-inch MIPI-DSI capacitive-touch display module** as the final production display assembly.
+Pajoniiir-M1 Rev A will use the same physical 5-inch MIPI-DSI capacitive-touch module already used and hardware-accepted in **Pajoniiir-M3**.
 
-This decision supersedes the earlier M1 assumption that the product would reuse a bare 4.3-inch Guition/JC4880 ST7701S display panel through the 30-contact SOFNG `0.5TBQP-30P-1` FPC interface.
+The authoritative project identity is therefore:
 
-The former Guition panel/FPC work remains useful historical/electrical-forensic evidence, but it is no longer the final product mechanical/display baseline.
+```text
+EYOYO DSI506 / DYL0023
+5.0 inch
+800 x 480 IPS
+MIPI DSI
+capacitive touch
+3.3 V
+15-pin 1.0 mm Raspberry-Pi-style FFC
+```
+
+The earlier B0 text used the visually/electrically similar Elecrow `DSI05379I` retail module as a public cross-reference. That retail identification is no longer the final-project authority. The user has confirmed that the final M1 display is the same display used in Pajoniiir-M3, where the DSI506/DYL0023 module has already passed real-hardware display/touch/backlight acceptance.
+
+The old 4.3-inch Guition/JC4880 bare-panel architecture remains superseded.
 
 ---
 
-## 2. New display authority
+## 2. Cross-project authority
 
-### Product
+Reference repository:
 
-- Manufacturer/brand: Elecrow
-- Product/SKU: `DSI05379I`
-- Display size: 5 inch
-- Resolution: 800 × 480
-- Refresh rate: 60 Hz
-- Display type: IPS
-- Touch: capacitive
-- Module interface: Raspberry Pi-style MIPI DSI
-- Cable family supplied with module: 15-pin, 1.0 mm pitch FFC
-- Nominal operating voltage: 3.3 V
-- Published active area: 108.00 × 64.80 mm
-- Published module size: approximately 121.1 × 77.9 mm
+```text
+dvucinozd/Pajoniiir-M3
+master @ b3e2bee5ded0a836906ab6f689d79a6e6b49d541
+```
 
-Primary public sources:
+Primary evidence:
 
-- Elecrow product page: https://www.elecrow.com/5-inch-dsi-display-ips-800-480-touch-screen-compatible-with-raspberry-pi-4b-3b-3b.html
-- Elecrow user manual v1.4: https://www.elecrow.com/download/product/DSI05379I/5inch-dsi-display_user_manual-v1.4.pdf
+- `firmware/main-deck-p4/components/bsp_p4_m3/include/bsp_p4_m3.h`
+- `firmware/main-deck-p4/components/bsp_p4_m3/bsp_p4_m3.c`
+- `docs/HARDWARE_WIRING.md`
+- `docs/DISPLAY_DSI506_BRINGUP.md`
+
+M3 records physical acceptance of image, backlight, native landscape orientation and focused capacitive touch on this module. This is stronger evidence for M1 than deriving the interface again from a generic Raspberry Pi display listing.
 
 ---
 
-## 3. User-provided dimensioned rear-view evidence
+## 3. Locked 15-pin electrical map
 
-The dimensioned rear image supplied for the final module is treated as current M1-MECH-B0 mechanical evidence.
+The M3 BSP explicitly records the J2 15-pin map:
 
-Visible/annotated dimensions:
+| Pin | DSI506 signal | M1 net |
+|---:|---|---|
+| 1 | GND | GND |
+| 2 | DSI DATA1− | `DSI_D1_N` |
+| 3 | DSI DATA1+ | `DSI_D1_P` |
+| 4 | GND | GND |
+| 5 | DSI CLK− | `DSI_CLK_N` |
+| 6 | DSI CLK+ | `DSI_CLK_P` |
+| 7 | GND | GND |
+| 8 | DSI DATA0− | `DSI_D0_N` |
+| 9 | DSI DATA0+ | `DSI_D0_P` |
+| 10 | GND | GND |
+| 11 | I2C SCL | `DISPLAY_I2C_SCL` / GPIO8 |
+| 12 | I2C SDA | `DISPLAY_I2C_SDA` / GPIO7 |
+| 13 | GND | GND |
+| 14 | 3V3 | `3V3_DISPLAY_MODULE` |
+| 15 | 3V3 | `3V3_DISPLAY_MODULE` |
 
-```text
-PCB/module rear board width      121.109 mm
-PCB/module rear board height      77.193 mm
-mounting-hole radius               1.250 mm
-mounting-hole diameter             2.500 mm
-outer top corner hole inset X       5.000 mm
-outer top corner hole inset Y       5.000 mm
-outer lower corner hole Y datum    72.930 mm from top reference
-```
-
-The same image shows:
-
-- a 15-pin DSI interface connector on the rear PCB,
-- a physical Backlight On/Off control,
-- a separate FAN header area marked with 3V3/GND/PWM functions,
-- eight visible Ø2.5 mm mounting holes,
-- integrated display/touch/backlight electronics on the display module PCB.
-
-The image-derived `121.109 × 77.193 mm` board envelope is preferred over the rounded public `121.1 × 77.9 mm` product-page value for preliminary CAD work, but physical caliper or official STEP/CAD verification is still required before final enclosure release.
+This signal map is now locked for M1. The remaining connector gate is **mechanical**: exact receptacle MPN, contact side, cable inversion and mating keepout.
 
 ---
 
-## 4. Immediate incompatibility with the previous enclosure baseline
+## 4. Bench-accepted operating profile
 
-Previous M1-MECH-A enclosure candidate:
-
-```text
-external enclosure envelope  121.008 × 73.408 mm
-modeled inner cavity          117.008 × 69.408 mm
-```
-
-Final 5-inch display rear board:
+Latest accepted M3 baseline:
 
 ```text
-121.109 × 77.193 mm
+resolution       800 x 480 native landscape
+DSI data lanes   1 active
+lane rate        800 Mbps
+pixel format     RGB888
+DPI clock        27.777 MHz
+HFP/HSW/HBP      59 / 2 / 45
+VFP/VSW/VBP      109 / 2 / 22
+refresh          ~50.0146 Hz
+video mode       burst with sync pulses
+frame ACK        disabled
 ```
 
-Therefore the previous enclosure candidate is invalid for the final product.
-
-Difference versus old *external* enclosure envelope:
-
-```text
-X: 121.109 - 121.008 = +0.101 mm
-Y:  77.193 -  73.408 = +3.785 mm
-```
-
-Difference versus old modeled *inner* cavity:
-
-```text
-X: 121.109 - 117.008 = +4.101 mm
-Y:  77.193 -  69.408 = +7.785 mm
-```
-
-This is a hard geometric contradiction, not a tolerance issue. M1 enclosure width/height must be redesigned around the 5-inch display module.
+M1 hardware will still route both physical DSI data lanes because the 15-pin connector exposes lane 1 and preserving it costs little compared with a board respin. Initial M1 firmware should start from the M3-accepted one-lane profile.
 
 ---
 
-## 5. Electrical architecture consequence
+## 5. Touch and module control
 
-The final product no longer needs the mainboard to replicate the Guition bare-panel support architecture blindly.
-
-The new intended interface becomes:
+The 15-pin cable carries a shared I2C bus:
 
 ```text
-ESP32-P4 mainboard
-    |
-    +-- MIPI DSI clock + two data lanes
-    +-- display/touch control signals required by the 15-pin module interface
-    +-- 3.3 V display-module power domain
-    |
-    +--> 15-pin 1.0 mm DSI FFC
-            |
-            +--> Elecrow DSI05379I module
-                    + integrated LCD interface electronics
-                    + integrated capacitive touch electronics
-                    + integrated backlight electronics
+GPIO7  SDA
+GPIO8  SCL
+100 kHz
 ```
 
-Consequences to be audited before changing the production schematic:
+Bench-observed/accepted devices include:
 
-1. derive the exact 15-pin Elecrow/Raspberry-Pi-compatible DSI pinout from authoritative documentation,
-2. map ESP32-P4 DSI lane polarity/order to that connector,
-3. determine exactly how touch I²C/reset/interrupt are carried on the module interface,
-4. determine actual display-module current requirement; public Elecrow pages contain inconsistent current text, so power budgeting must use the manual and/or measurement rather than an unverified storefront number,
-5. determine whether the existing M1 MP3202 backlight circuit is now unnecessary,
-6. determine whether the existing M1 discrete GT911 touch section is now unnecessary,
-7. select and lock the exact 15-pin 1.0 mm FFC connector and cable orientation on the M1 PCB,
-8. retain ESD/EMI protection and controlled-impedance requirements appropriate to MIPI DSI.
+```text
+0x38  FT5426 / FT5x06 touch path
+0x45  module power/backlight controller
+0x18  additional module-side I2C response; role not required for baseline operation
+```
 
-Until those items are completed, the current `10_DISPLAY_MIPI.kicad_sch` is historical/pre-B0 implementation evidence and must not be treated as final display-production capture.
+Accepted touch transform:
+
+```text
+swap_xy  = 0
+mirror_x = 1
+mirror_y = 1
+```
+
+The final module does not require host-side TOUCH_RST or TOUCH_INT wires on the 15-pin interface.
 
 ---
 
-## 6. Mechanical architecture consequence
+## 6. Backlight architecture consequence
 
-M1-MECH-B must be rebuilt around the 5-inch module first, then the custom mainboard and enclosure must be fitted behind/around it.
+M3 proves that the module controls panel power/backlight through its local controller at `0x45`.
 
-The 5-inch module becomes the primary XY datum object.
+Factory configuration does **not** require GPIO23 external PWM. The module's external PWM header requires moving a local 0-ohm selector and is not part of the M1 production baseline.
 
-Recommended new coordinate convention:
+Therefore the final M1 display path does not need:
 
-```text
-M1_FRONT_CENTER origin = center of final 5-inch active/display front envelope
-X = right in landscape orientation
-Y = down in landscape orientation
-Z = rear/inward
-```
+- MP3202 WLED boost,
+- LEDA/LEDK wiring,
+- current-sense network,
+- GPIO23 `LCD_BL_PWM`.
 
-The old `108.00 × 65.06 mm` custom-mainboard candidate and old 4.3-inch mounting pattern are no longer production authority. They may be reused only if a new fit study against the 5-inch module proves them valid.
+These are legacy 4.3-inch bare-panel provisions and should be removed during the B-series schematic migration.
 
 ---
 
-## 7. Mounting-hole evidence
+## 7. GPIO consequence
 
-The dimensioned image clearly supports the four outer hole centers as approximately:
-
-```text
-from rear-PCB top-left datum:
-
-upper-left       (  5.000,  5.000 ) mm
-upper-right      (116.109,  5.000 ) mm
-lower-left       (  5.000, 72.930 ) mm
-lower-right      (116.109, 72.930 ) mm
-
-hole diameter ≈ 2.50 mm
-```
-
-This gives an outer-hole center pattern of approximately:
+The final module also removes the need for the old bare-panel control pins:
 
 ```text
-111.109 × 67.930 mm
+GPIO3  old TOUCH_RST  -> released
+GPIO4  old TOUCH_INT  -> released
+GPIO5  old LCD_RST    -> released
+GPIO6  old LCD_TE     -> released
+GPIO23 old LCD_BL_PWM -> released
+
+GPIO7  DISPLAY_I2C_SDA -> retained/locked
+GPIO8  DISPLAY_I2C_SCL -> retained/locked
 ```
 
-The image also contains four inner mounting holes, but their complete authoritative Y-coordinate pattern is not promoted from the raster alone. The official 3D file or physical measurement should be used before assigning those four holes to enclosure or mainboard mounting.
+Dedicated ESP32-P4 MIPI DSI pins remain non-GPIO PHY signals.
 
 ---
 
-## 8. M1-MECH-B closure order
+## 8. Power
 
-The next deterministic work sequence is:
-
-1. obtain/import the Elecrow `DSI05379I` 3D model or measure the real module,
-2. lock full front/rear/display-PCB Z envelope,
-3. lock all eight mounting-hole centers and decide which holes M1 uses structurally,
-4. lock exact 15-pin DSI connector/cable orientation and mating keepout,
-5. redesign enclosure XY around the 5-inch board,
-6. place the custom M1 mainboard relative to display board, DSI connector and mounting hardware,
-7. re-run J1/J2/J3/J4/J5/J7/SW1/SW2 wall packing against the larger enclosure,
-8. freeze PCB Z/standoffs,
-9. freeze final custom-mainboard Edge.Cuts,
-10. only then begin production placement/routing freeze.
-
----
-
-## 9. Superseded assumptions
-
-The following M1-MECH-A assumptions are superseded for final-product mechanical design:
-
-- 4.3-inch Guition front envelope as product display datum,
-- Guition `117.008 × 69.408 mm` module shell as final enclosure-fit object,
-- `121.008 × 73.408 mm` enclosure as a viable final external envelope,
-- 30-pin SOFNG bare-panel FPC as final product display connector,
-- old display-driven 108 × 65.06 mm rear working envelope as production PCB authority.
-
-They remain historical design evidence only.
-
----
-
-## 10. Freeze status after B0
+The M3 display specification evidence records:
 
 ```text
-final display module selected             YES
-final display XY family                    YES
-old 4.3-inch product baseline superseded  YES
-final enclosure locked                     NO
-final DSI connector/pinout locked          NO
-final display power budget locked          NO
-final mainboard outline locked             NO
-placement/routing freeze allowed           NO
+3.3 V
+maximum current 340 mA
 ```
 
-M1-MECH-B0 is therefore a **baseline switch**, not a final mechanical freeze.
+M1 uses a TPS62132-class 3.3 V / 3 A system regulator, so the display passes a first-order regulator-capacity screen. Final all-on rail current, startup transient and local decoupling are still EVT requirements.
+
+Proposed M1 branch:
+
+```text
+3V3_SYS
+  |
+  +-- 0R / ferrite option
+  |
+3V3_DISPLAY_MODULE
+  +-- local bulk
+  +-- 100 nF HF
+  +-- pins 14 + 15 of DSI connector
+```
+
+Do not resurrect separate `3V3_LCD` / `3V3_TOUCH` domains unless measurement demonstrates a need.
+
+---
+
+## 9. Mechanical evidence
+
+The user-provided dimensioned rear image remains the current M1 mechanical authority for preliminary CAD:
+
+```text
+rear PCB envelope      121.109 x 77.193 mm
+outer hole diameter    ~2.50 mm
+outer hole centers     (5.000,5.000)
+                       (116.109,5.000)
+                       (5.000,72.930)
+                       (116.109,72.930)
+outer pattern          ~111.109 x 67.930 mm
+```
+
+There are eight visible mounting holes; all eight must be confirmed from physical measurement or official CAD before production enclosure release.
+
+---
+
+## 10. Old enclosure incompatibility
+
+Previous enclosure candidate:
+
+```text
+external 121.008 x 73.408 mm
+inner    117.008 x 69.408 mm
+```
+
+Display PCB:
+
+```text
+121.109 x 77.193 mm
+```
+
+Therefore the old enclosure remains a hard fail and must be redesigned.
+
+---
+
+## 11. Freeze state
+
+```text
+final display physical module selected       YES
+M3 bench signal map adopted                   YES
+15-pin electrical pin map locked              YES
+initial DSI operating profile known           YES
+shared I2C/touch/backlight behavior known     YES
+old 30-pin Guition FPC superseded             YES
+old MP3202 backlight architecture superseded  YES
+old GT911 RST/INT architecture superseded     YES
+production 15-pin receptacle MPN locked       NO
+FFC contact-side/cable inversion locked       NO
+3V3 all-on/transition EVT complete             NO
+new enclosure locked                           NO
+mainboard outline locked                       NO
+placement/routing freeze allowed               NO
+```
+
+The next electrical step is no longer reverse-engineering the display pinout. It is selecting the production 15-pin connector and migrating `10_DISPLAY_MIPI` / touch support to this already bench-proven module contract.

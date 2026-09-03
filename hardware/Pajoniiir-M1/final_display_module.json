@@ -1,51 +1,127 @@
 {
-  "schema_version": 1,
-  "milestone": "M1-MECH-B0",
+  "schema_version": 2,
+  "milestones": ["M1-MECH-B0", "M1-ELEC-B0"],
   "updated": "2026-09-04",
-  "status": "final_display_module_selected__electrical_connector_and_new_enclosure_open",
-  "authority": "supersedes M1-MECH-A Guition 4.3-inch display/enclosure assumptions for final-product work",
+  "status": "final_5in_module_selected__m3_bench_signal_map_locked__production_connector_and_new_enclosure_open",
+  "authority": "Supersedes the M1-MECH-A Guition 4.3-inch bare-panel architecture for final-product display work.",
   "final_product_display": {
-    "manufacturer": "Elecrow",
-    "sku": "DSI05379I",
-    "description": "5-inch IPS capacitive-touch MIPI DSI display module",
+    "identity": "EYOYO DSI506 / DYL0023 5-inch 800x480 IPS MIPI-DSI capacitive-touch module",
+    "identity_basis": "User confirmed the final M1 display is the same physical display used and accepted in Pajoniiir-M3.",
     "resolution_px": [800, 480],
-    "refresh_rate_hz": 60,
-    "active_area_mm": [108.0, 64.8],
-    "nominal_supply_v": 3.3,
-    "module_interface": "Raspberry Pi-style MIPI DSI",
-    "supplied_cable_family": "15-pin 1.0 mm FFC",
-    "public_module_size_mm": [121.1, 77.9],
-    "sources": [
-      "https://www.elecrow.com/5-inch-dsi-display-ips-800-480-touch-screen-compatible-with-raspberry-pi-4b-3b-3b.html",
-      "https://www.elecrow.com/download/product/DSI05379I/5inch-dsi-display_user_manual-v1.4.pdf"
-    ]
+    "native_orientation": "landscape",
+    "supply_v": 3.3,
+    "documented_max_current_ma": 340,
+    "module_interface": "15-pin 1.0 mm Raspberry-Pi-style MIPI DSI FFC",
+    "touch_family": "FT5426/FT5x06-compatible path",
+    "touch_i2c_address": "0x38",
+    "panel_power_backlight_i2c_address": "0x45",
+    "shared_i2c_hz": 100000,
+    "m3_reference": {
+      "repository": "dvucinozd/Pajoniiir-M3",
+      "commit": "b3e2bee5ded0a836906ab6f689d79a6e6b49d541",
+      "files": [
+        "firmware/main-deck-p4/components/bsp_p4_m3/include/bsp_p4_m3.h",
+        "firmware/main-deck-p4/components/bsp_p4_m3/bsp_p4_m3.c",
+        "docs/HARDWARE_WIRING.md",
+        "docs/DISPLAY_DSI506_BRINGUP.md"
+      ],
+      "acceptance": "Display image, backlight, native landscape orientation and focused touch were physically accepted; later waveform/integration validation uses the same module."
+    }
+  },
+  "electrical_interface": {
+    "status": "signal_map_locked_from_m3_bench_evidence",
+    "connector_contacts": 15,
+    "pitch_mm": 1.0,
+    "pin_map": [
+      {"pin": 1, "signal": "GND"},
+      {"pin": 2, "signal": "DSI_DATA1_N", "m1_net": "DSI_D1_N"},
+      {"pin": 3, "signal": "DSI_DATA1_P", "m1_net": "DSI_D1_P"},
+      {"pin": 4, "signal": "GND"},
+      {"pin": 5, "signal": "DSI_CLK_N", "m1_net": "DSI_CLK_N"},
+      {"pin": 6, "signal": "DSI_CLK_P", "m1_net": "DSI_CLK_P"},
+      {"pin": 7, "signal": "GND"},
+      {"pin": 8, "signal": "DSI_DATA0_N", "m1_net": "DSI_D0_N"},
+      {"pin": 9, "signal": "DSI_DATA0_P", "m1_net": "DSI_D0_P"},
+      {"pin": 10, "signal": "GND"},
+      {"pin": 11, "signal": "I2C_SCL", "m1_net": "DISPLAY_I2C_SCL", "esp32p4_gpio": 8},
+      {"pin": 12, "signal": "I2C_SDA", "m1_net": "DISPLAY_I2C_SDA", "esp32p4_gpio": 7},
+      {"pin": 13, "signal": "GND"},
+      {"pin": 14, "signal": "3V3", "m1_net": "3V3_DISPLAY_MODULE"},
+      {"pin": 15, "signal": "3V3", "m1_net": "3V3_DISPLAY_MODULE"}
+    ],
+    "lane_policy": {
+      "physical_route": "Route clock + lane0 + lane1 on M1 PCB.",
+      "initial_firmware_profile": "Use lane0 + clock only; lane1 remains physically routed for compatibility/future validation.",
+      "accepted_lane_count": 1,
+      "accepted_lane_rate_mbps": 800
+    },
+    "accepted_video_profile": {
+      "pixel_format": "RGB888",
+      "dpi_clock_mhz": 27.777,
+      "hfp": 59,
+      "hsw": 2,
+      "hbp": 45,
+      "vfp": 109,
+      "vsw": 2,
+      "vbp": 22,
+      "refresh_hz_approx": 50.0146,
+      "packetization": "burst with sync pulses",
+      "frame_ack": false,
+      "basis": "Latest accepted Pajoniiir-M3 BSP/profile, not a generic vendor guess."
+    },
+    "touch_profile": {
+      "address": "0x38",
+      "bus_hz": 100000,
+      "reset_gpio_required": false,
+      "interrupt_gpio_required": false,
+      "accepted_transform": {"swap_xy": false, "mirror_x": true, "mirror_y": true}
+    },
+    "panel_controller": {
+      "address": "0x45",
+      "role": "module-local power/backlight controller",
+      "external_pwm_required": false,
+      "factory_pwm_header_policy": "Do not move the module 0-ohm selector or wire external PWM in the M1 baseline.",
+      "known_registers_from_m3": {
+        "POWERON": "0x85",
+        "PWM": "0x86",
+        "PORTA": "0x81"
+      }
+    }
+  },
+  "m1_architecture_changes": {
+    "remove_from_final_display_path": [
+      "SOFNG 0.5TBQP-30P-1 30-pin bare-panel connector",
+      "MP3202 discrete WLED backlight boost section",
+      "LEDA/LEDK current-sense network",
+      "GT911-specific reset/interrupt hardware",
+      "LCD_RST GPIO5 path",
+      "LCD_TE GPIO6 path",
+      "LCD_BL_PWM GPIO23 path"
+    ],
+    "retain": [
+      "P4 internal 2.5 V MIPI DPHY LDO configuration",
+      "DSI_REXT network",
+      "clock/lane0/lane1 100-ohm differential routing constraints",
+      "optional inline 0-ohm DSI tuning footprints if SI/layout remains acceptable",
+      "GPIO7/GPIO8 shared display I2C"
+    ],
+    "gpio_releases": [3, 4, 5, 6, 23]
+  },
+  "power": {
+    "source": "3V3_SYS via dedicated display-module branch",
+    "proposed_net": "3V3_DISPLAY_MODULE",
+    "regulator_class": "TPS62132 3.3 V / 3 A system regulator",
+    "first_order_capacity_screen": "PASS: 340 mA module maximum is within regulator class, but total all-on M1 rail current and transient response remain EVT requirements.",
+    "production_rule": "Provide local bulk + HF decoupling at the 15-pin connector and preserve a 0-ohm/ferrite option; do not claim final power budget until all-on rail measurement."
   },
   "user_dimensioned_image_evidence": {
     "rear_pcb_envelope_mm": [121.109, 77.193],
     "mount_hole_diameter_mm": 2.5,
     "visible_mount_hole_count": 8,
-    "outer_hole_centers_from_rear_pcb_top_left_mm": [
-      [5.0, 5.0],
-      [116.109, 5.0],
-      [5.0, 72.93],
-      [116.109, 72.93]
-    ],
+    "outer_hole_centers_from_rear_pcb_top_left_mm": [[5.0, 5.0], [116.109, 5.0], [5.0, 72.93], [116.109, 72.93]],
     "outer_hole_center_spacing_mm": [111.109, 67.93],
-    "visible_interfaces": [
-      "15-pin DSI connector",
-      "Backlight On/Off switch",
-      "3V3/GND/PWM fan header region"
-    ],
     "status": "authoritative preliminary M1-B0 evidence; physical caliper or official CAD required for production release"
   },
-  "superseded_final_product_assumptions": [
-    "Guition JC4880 4.3-inch bare panel as final display",
-    "SOFNG 0.5TBQP-30P-1 30-contact FPC as final display interface",
-    "114.4 x 66.8 mm Guition front display datum",
-    "117.008 x 69.408 mm Guition module shell as final enclosure-fit object",
-    "121.008 x 73.408 mm old enclosure candidate as viable final product envelope",
-    "108 x 65.06 mm rear working envelope as production custom-mainboard authority"
-  ],
   "old_enclosure_conflict": {
     "old_external_envelope_mm": [121.008, 73.408],
     "old_inner_cavity_mm": [117.008, 69.408],
@@ -54,39 +130,23 @@
     "display_minus_old_inner_mm": [4.101, 7.785],
     "verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED"
   },
-  "electrical_migration": {
-    "old_architecture": "ESP32-P4 -> discrete M1 backlight/touch support -> 30-pin bare-panel FPC",
-    "new_intent": "ESP32-P4 -> protected/controlled 15-pin DSI interface -> complete Elecrow DSI05379I module",
-    "must_resolve_before_schematic_rewrite": [
-      "authoritative 15-pin DSI signal pinout for this module/cable orientation",
-      "ESP32-P4 DSI lane polarity/order mapping",
-      "touch transport and any reset/interrupt requirements",
-      "reliable module current/power budget; public storefront current text is inconsistent",
-      "whether M1 MP3202 backlight section is removed",
-      "whether M1 discrete GT911 touch section is removed",
-      "exact 15-pin 1.0 mm FFC connector MPN/contact orientation/cable inversion",
-      "ESD/EMI protection and MIPI controlled-impedance implementation"
-    ]
-  },
-  "mechanical_migration": {
-    "new_primary_datum": "final 5-inch display module",
-    "recommended_coordinate_origin": "center of final 5-inch display/front active envelope",
-    "next_steps": [
-      "obtain/import official DSI05379I 3D model or measure physical module",
-      "lock full front/rear Z envelope",
-      "lock all mounting-hole centers and structural-hole selection",
-      "lock DSI cable approach/mating keepout",
-      "redesign enclosure XY around 121.109 x 77.193 mm rear board plus positive clearance",
-      "place custom M1 mainboard relative to display module",
-      "re-run external connector wall packing",
-      "freeze PCB Z/standoffs",
-      "freeze final custom-mainboard Edge.Cuts"
-    ]
-  },
+  "remaining_gates": [
+    "exact production 15-pin 1.0 mm FFC receptacle MPN",
+    "top/bottom contact orientation and cable inversion for the selected receptacle",
+    "FFC approach/bend/mating keepout",
+    "local 3V3 display branch transient/decoupling EVT",
+    "full module Z envelope and all mounting-hole coordinates",
+    "new enclosure XY/Z and custom-mainboard placement"
+  ],
   "freeze": {
     "final_display_selected": true,
+    "m3_bench_signal_map_adopted": true,
+    "display_signal_map_locked": true,
+    "display_operating_profile_locked_as_bringup_baseline": true,
     "old_4_3_display_baseline_superseded": true,
-    "display_interface_electrically_locked": false,
+    "schematic_migration_allowed": true,
+    "production_connector_mpn_locked": false,
+    "display_power_evt_locked": false,
     "new_enclosure_locked": false,
     "custom_mainboard_outline_locked": false,
     "placement_routing_freeze_allowed": false
