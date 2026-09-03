@@ -27,6 +27,7 @@ jobs:
           python3 hardware/Pajoniiir-M1/tools/fix_migrate_display_dsi506_b2_guards.py
           python3 hardware/Pajoniiir-M1/tools/migrate_display_dsi506_b2.py
           python3 hardware/Pajoniiir-M1/tools/finalize_display_dsi506_b2_outputs.py
+          sed -i 's/[[:space:]]\+$//' hardware/Pajoniiir-M1/10_DISPLAY_MIPI.kicad_sch hardware/Pajoniiir-M1/11_TOUCH_GT911.kicad_sch
           python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 
       - name: Install KiCad 9
@@ -62,4 +63,4 @@ jobs:
           git commit -m "display: migrate schematic to final DSI506 module"
           git push origin HEAD:main
 
-# retry: dynamic connector RefDes allocator and GPIO23 NC contract
+# retry: normalize generated schematic trailing whitespace
