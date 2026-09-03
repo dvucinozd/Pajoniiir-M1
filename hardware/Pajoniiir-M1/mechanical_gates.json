@@ -147,7 +147,8 @@
         "actuation direction",
         "enclosure access method",
         "actuator height",
-        "keepout/courtyard"
+        "keepout/courtyard",
+        "separate recessed tool-hole geometry preventing accidental actuation"
       ],
       "closure": "Lock exact RESET momentary-NO switch MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
@@ -156,19 +157,29 @@
       "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
       "screened_candidates": [
         {
-          "manufacturer": "Omron",
-          "mpn_family": "B3U-3000P / B3U-3000PM",
-          "status": "family_screened_exact_mpn_open",
+          "manufacturer": "Aratas (formerly Omron Components)",
+          "mpn": "B3U-3000P-B",
+          "role": "preferred_conditional",
+          "status": "screened_not_locked",
           "evidence": [
-            "side-actuated SMT family",
-            "in-production family listing",
-            "compact service-button geometry"
+            "side-actuated SMT SPST-NO",
+            "with locating boss",
+            "4.0 x 2.5 mm body class",
+            "1.59 N / 162 gf",
+            "0.20 mm travel",
+            "100000 mechanical cycles",
+            "dust proof",
+            "current distributor listing Active"
           ],
-          "screen_result": "mechanically promising for recessed/tool-access use; exact suffix and wall/actuator datum required",
-          "source": "https://components.omron.com/eu-en/products/switches/B3U"
+          "screen_result": "mechanical family pass; exact recessed tool-hole center, wall gap and footprint/boss geometry open",
+          "sources": [
+            "https://omronfs.omron.com/en_US/ecb/products/pdf/en-b3u.pdf",
+            "https://www.digikey.com/en/products/detail/aratas-formerly-omron-components/B3U-3000P-B/2748498"
+          ]
         }
       ],
-      "wall_class_preference": "MEDIA_SERVICE_SIDE_OR_RECESSED_ACCESS_TBD"
+      "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
+      "closure_path": "Prefer B3U-3000P-B recessed/tool-access configuration; close only after exact actuator-to-wall/tool-hole/spacing and boss footprint geometry pass."
     },
     {
       "id": "SW2_BOOT",
@@ -183,7 +194,8 @@
         "actuation direction",
         "enclosure access method",
         "actuator height",
-        "keepout/courtyard"
+        "keepout/courtyard",
+        "separate recessed tool-hole geometry preventing accidental actuation"
       ],
       "closure": "Lock exact BOOT momentary-NO switch MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
@@ -192,19 +204,29 @@
       "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
       "screened_candidates": [
         {
-          "manufacturer": "Omron",
-          "mpn_family": "B3U-3000P / B3U-3000PM",
-          "status": "family_screened_exact_mpn_open",
+          "manufacturer": "Aratas (formerly Omron Components)",
+          "mpn": "B3U-3000P-B",
+          "role": "preferred_conditional",
+          "status": "screened_not_locked",
           "evidence": [
-            "side-actuated SMT family",
-            "in-production family listing",
-            "compact service-button geometry"
+            "side-actuated SMT SPST-NO",
+            "with locating boss",
+            "4.0 x 2.5 mm body class",
+            "1.59 N / 162 gf",
+            "0.20 mm travel",
+            "100000 mechanical cycles",
+            "dust proof",
+            "current distributor listing Active"
           ],
-          "screen_result": "mechanically promising for recessed/tool-access use; exact suffix and wall/actuator datum required",
-          "source": "https://components.omron.com/eu-en/products/switches/B3U"
+          "screen_result": "mechanical family pass; exact recessed tool-hole center, wall gap and footprint/boss geometry open",
+          "sources": [
+            "https://omronfs.omron.com/en_US/ecb/products/pdf/en-b3u.pdf",
+            "https://www.digikey.com/en/products/detail/aratas-formerly-omron-components/B3U-3000P-B/2748498"
+          ]
         }
       ],
-      "wall_class_preference": "MEDIA_SERVICE_SIDE_OR_RECESSED_ACCESS_TBD"
+      "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
+      "closure_path": "Prefer B3U-3000P-B recessed/tool-access configuration; close only after exact actuator-to-wall/tool-hole/spacing and boss footprint geometry pass."
     },
     {
       "id": "J2_USB0",
@@ -577,7 +599,8 @@
         "enclosure access/cutout",
         "push-push vs push-pull retention",
         "card-detect switch requirement",
-        "socket height and keepout"
+        "socket height and keepout",
+        "card insertion/ejection travel and finger clearance"
       ],
       "closure": "Lock exact microSD socket MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
@@ -588,20 +611,25 @@
         {
           "manufacturer": "Molex",
           "mpn": "503398-1892",
+          "role": "preferred_conditional",
           "status": "screened_not_locked",
           "evidence": [
-            "normal-mount SMT",
-            "push-push",
-            "card detect",
-            "1.28 mm height",
+            "microSD normal-mount SMT",
             "front entry",
-            "10,000 mating cycles"
+            "push-push",
+            "card detect open",
+            "1.28 mm height",
+            "13.10 mm width",
+            "14.05 mm depth",
+            "10000 mating cycles",
+            "PCB retention"
           ],
-          "screen_result": "height pass; card slot, insertion, extraction and exact panel datum remain open",
+          "screen_result": "height/durability/functional screen pass; exact slot/card/finger/PCB-edge datum open",
           "source": "https://www.molex.com/en-us/products/part-detail/5033981892"
         }
       ],
-      "wall_class_preference": "OPPOSITE_X_SIDE_OR_ACCESSIBLE_SIDE_TBD"
+      "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
+      "closure_path": "Prefer Molex 503398-1892; close only after exact wall sign, slot center/size, PCB edge, card travel/finger clearance and footprint review."
     },
     {
       "id": "J9_USB_SERVICE_POGO",
@@ -652,7 +680,8 @@
         "M1-MECH-A3 USB active-candidate screen: Amphenol 87520-1010ALF worst-case 7.1 mm profile implies ~4.9 mm gross rear spacing with temporary 0.5 mm front screening gap",
         "M1-MECH-A4 primary long-wall first-order packing: USB pair 48.50 mm + 8.00 mm reserve + RCA aperture pair 31.08 mm = 87.58 mm; centered on 108 mm PCB edge leaves 10.21 mm/end before body/boss keepouts",
         "M1-MECH-A4 J6 same-row screen fails candidate mounting clearance: total span 99.55 mm leaves only 0.525 mm to the candidate D2 hole edge before boss/courtyard allowance",
-        "M1-MECH-A5 J1 preferred architecture: Switchcraft 722RAHLP threaded panel/PCB jack + S760KHZ plug; 7.5 A, 10000 jack cycles / 5000 plug cycles; local X-side-wall envelope replaces old central-Z Micro-Fit screen"
+        "M1-MECH-A5 J1 preferred architecture: Switchcraft 722RAHLP threaded panel/PCB jack + S760KHZ plug; 7.5 A, 10000 jack cycles / 5000 plug cycles; local X-side-wall envelope replaces old central-Z Micro-Fit screen",
+        "M1-MECH-A6 wall relation: MEDIA_SERVICE_WALL is opposite POWER_WALL; first-order J7 + SW1/SW2 packing uses 49.10 mm of 73.408 mm wall, leaving 12.154 mm/end centered before exact body/boss/tool-hole validation"
       ],
       "evidence_file": "mech_a.json"
     },
