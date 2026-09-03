@@ -35,22 +35,7 @@ CHILDREN = [
     "15_DNP_OPTIONS",
 ]
 
-# Blank footprints intentionally blocked by mechanics/sourcing, not accidental omissions.
-ALLOWED_BLANK_FOOTPRINTS = {
-    ("01_POWER_INPUT", "J1"),
-    ("01_POWER_INPUT", "C3"),
-    ("01_POWER_INPUT", "D1"),
-    ("01_POWER_INPUT", "C8"),
-    ("04_P4_FLASH_CLOCK_RESET", "SW1"),
-    ("04_P4_FLASH_CLOCK_RESET", "SW2"),
-    ("07_USB0_STORAGE", "J2"),
-    ("08_USB1_FLX4", "J3"),
-    ("09_AUDIO_PCM5102A", "J4"),
-    ("09_AUDIO_PCM5102A", "J5"),
-    ("09_AUDIO_PCM5102A", "J6"),
-    ("12_MICROSD", "J7"),
-    ("13_DEBUG_SERVICE", "J9"),
-}
+MECHANICAL_GATES = BASE / "mechanical_gates.json"
 
 BANNED_LEGACY_VALUE_PATTERNS = (
     "ESP32-S3",
@@ -161,6 +146,47 @@ def main() -> int:
 
     root_text = ROOT.read_text(encoding="utf-8")
     child_text: dict[str, str] = {}
+
+    allowed_blank_footprints: set[tuple[str, str]] = set()
+    if not MECHANICAL_GATES.exists():
+        errors.append(f"missing mechanical gate manifest {MECHANICAL_GATES.name}")
+    else:
+        try:
+            mechanical = json.loads(MECHANICAL_GATES.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            errors.append(f"{MECHANICAL_GATES.name}: invalid JSON: {exc}")
+            mechanical = {}
+        gates = mechanical.get("gates", []) if isinstance(mechanical, dict) else []
+        for gate in gates:
+            if not isinstance(gate, dict):
+                errors.append(f"{MECHANICAL_GATES.name}: malformed gate entry {gate!r}")
+                continue
+            if gate.get("allow_blank_footprint"):
+                sheet = gate.get("sheet")
+                refdes = gate.get("refdes")
+                if not isinstance(sheet, str) or not isinstance(refdes, str):
+                    errors.append(
+                        f"{MECHANICAL_GATES.name}: blank-footprint gate lacks sheet/refdes: "
+                        f"{gate.get('id', '<unknown>')}"
+                    )
+                else:
+                    allowed_blank_footprints.add((sheet, refdes))
+        open_blockers = [
+            gate.get("id", "<unknown>")
+            for gate in gates
+            if isinstance(gate, dict)
+            and gate.get("blocks_layout_freeze")
+            and gate.get("status") != "closed"
+        ]
+        if mechanical.get("layout_freeze_allowed") and open_blockers:
+            errors.append(
+                f"{MECHANICAL_GATES.name}: layout_freeze_allowed=true with open blockers: "
+                + ", ".join(open_blockers)
+            )
+        if open_blockers:
+            notes.append(
+                f"layout freeze remains blocked by {len(open_blockers)} mechanical/sourcing gates"
+            )
 
     # ERC exclusions are allowed only for explicitly documented hard gates.
     # Any extra exclusion, UUID drift, or global severity downgrade is a CI error.
@@ -417,11 +443,11 @@ def main() -> int:
             )
 
     for name, ref, value in blank_footprints:
-        if (name, ref) not in ALLOWED_BLANK_FOOTPRINTS:
+        if (name, ref) not in allowed_blank_footprints:
             errors.append(f"{name}:{ref}: unexpected blank footprint ({value})")
 
     missing_allowlisted = sorted(
-        ALLOWED_BLANK_FOOTPRINTS
+        allowed_blank_footprints
         - {(name, ref) for name, ref, _ in blank_footprints}
     )
     if missing_allowlisted:

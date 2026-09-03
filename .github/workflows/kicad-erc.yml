@@ -13,6 +13,7 @@ on:
       - "hardware/Pajoniiir-M1/sym-lib-table"
       - "hardware/Pajoniiir-M1/fp-lib-table"
       - "hardware/Pajoniiir-M1/tools/*.py"
+      - "hardware/Pajoniiir-M1/mechanical_gates.json"
       - ".github/workflows/kicad-erc.yml"
 
 concurrency:

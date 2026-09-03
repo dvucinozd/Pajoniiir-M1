@@ -286,6 +286,12 @@ KiCad 9 CI run #76 (`d8bffb3a`) je potpuno zelen nakon presentation cleanup-a. G
 
 ---
 
+### Mechanical gate authority
+
+Open physical gates are now machine-readable in `hardware/Pajoniiir-M1/mechanical_gates.json` and described in `Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md`. Both structural and manufacturing validators derive blank-footprint policy from that manifest.
+
+---
+
 ## 15. PCB-layout status
 
 **GO for exploratory functional placement:** YES, uz placeholder mechanics.

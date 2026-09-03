@@ -103,6 +103,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [M1-SCH-A schematic audit v0.1](docs/Pajoniiir_M1_Schematic_Audit_v0.1.md)
 - [Manufacturing output contract v0.1](docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md)
 - [RefDes annotation map v0.1](docs/Pajoniiir_RefDes_Annotation_Map_v0.1.md)
+- [Mechanical & sourcing gate closure v0.1](docs/Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
 ## 01 — Input power

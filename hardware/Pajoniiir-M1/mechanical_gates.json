@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "updated": "2026-09-03",
+  "layout_freeze_allowed": false,
+  "policy": "Open gates are intentional. Do not assign arbitrary footprints or claim final layout freeze until required evidence is recorded and status is closed.",
+  "gates": [
+    {
+      "id": "C3_INPUT_BULK",
+      "sheet": "01_POWER_INPUT",
+      "refdes": "C3",
+      "category": "electrical_tuning",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "EVT bulk capacitance/inrush result",
+        "ESR/ripple-current target",
+        "available board height/diameter or SMD envelope"
+      ],
+      "closure": "Select exact capacitor MPN and footprint after EVT/mechanical envelope is known."
+    },
+    {
+      "id": "D1_INPUT_TVS",
+      "sheet": "01_POWER_INPUT",
+      "refdes": "D1",
+      "category": "surge_sourcing",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "input surge/transient requirement",
+        "VRWM/VBR/clamp target",
+        "package power/thermal target"
+      ],
+      "closure": "Select exact 5 V input TVS MPN and package from the defined surge requirement."
+    },
+    {
+      "id": "C8_PROTECTED_BULK",
+      "sheet": "01_POWER_INPUT",
+      "refdes": "C8",
+      "category": "electrical_tuning",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "EVT protected-rail transient result",
+        "ESR/ripple-current target",
+        "available board height/diameter or SMD envelope"
+      ],
+      "closure": "Select exact capacitor MPN and footprint after EVT/mechanical envelope is known."
+    },
+    {
+      "id": "J1_POWER_INPUT",
+      "sheet": "01_POWER_INPUT",
+      "refdes": "J1",
+      "category": "connector_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "enclosure cutout/datum",
+        "cable mating/locking requirement",
+        "board-edge orientation",
+        "connector height/depth envelope"
+      ],
+      "closure": "Lock exact 5 V locking connector MPN and courtyard from enclosure geometry."
+    },
+    {
+      "id": "SW1_RESET",
+      "sheet": "04_P4_FLASH_CLOCK_RESET",
+      "refdes": "SW1",
+      "category": "switch_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "actuation direction",
+        "enclosure access method",
+        "actuator height",
+        "keepout/courtyard"
+      ],
+      "closure": "Lock exact RESET momentary-NO switch MPN."
+    },
+    {
+      "id": "SW2_BOOT",
+      "sheet": "04_P4_FLASH_CLOCK_RESET",
+      "refdes": "SW2",
+      "category": "switch_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "actuation direction",
+        "enclosure access method",
+        "actuator height",
+        "keepout/courtyard"
+      ],
+      "closure": "Lock exact BOOT momentary-NO switch MPN."
+    },
+    {
+      "id": "J2_USB0",
+      "sheet": "07_USB0_STORAGE",
+      "refdes": "J2",
+      "category": "connector_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "USB-A board-edge datum",
+        "vertical/right-angle orientation",
+        "shell retention style",
+        "enclosure cutout and insertion clearance"
+      ],
+      "closure": "Lock exact USB-A receptacle MPN for storage port."
+    },
+    {
+      "id": "J3_USB1",
+      "sheet": "08_USB1_FLX4",
+      "refdes": "J3",
+      "category": "connector_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "USB-A board-edge datum",
+        "vertical/right-angle orientation",
+        "shell retention style",
+        "enclosure cutout and insertion clearance"
+      ],
+      "closure": "Lock exact USB-A receptacle MPN for FLX4 port."
+    },
+    {
+      "id": "J4_RCA_L",
+      "sheet": "09_AUDIO_PCM5102A",
+      "refdes": "J4",
+      "category": "connector_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "rear/front panel datum",
+        "vertical/right-angle orientation",
+        "jack center height",
+        "plug spacing and shell isolation requirement"
+      ],
+      "closure": "Lock exact RCA LEFT connector MPN."
+    },
+    {
+      "id": "J5_RCA_R",
+      "sheet": "09_AUDIO_PCM5102A",
+      "refdes": "J5",
+      "category": "connector_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "rear/front panel datum",
+        "vertical/right-angle orientation",
+        "jack center height",
+        "plug spacing and shell isolation requirement"
+      ],
+      "closure": "Lock exact RCA RIGHT connector MPN."
+    },
+    {
+      "id": "J6_LINE35",
+      "sheet": "09_AUDIO_PCM5102A",
+      "refdes": "J6",
+      "category": "optional_connector_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "production decision POP vs DNP/removal",
+        "panel datum if retained",
+        "jack center height and orientation"
+      ],
+      "closure": "Either lock exact 3.5 mm line-out jack footprint or remove the option before layout freeze."
+    },
+    {
+      "id": "J_LCD_DISPLAY_FPC",
+      "sheet": "10_DISPLAY_MIPI",
+      "refdes": null,
+      "documentation_alias": "J_LCD",
+      "category": "display_fpc",
+      "status": "open",
+      "allow_blank_footprint": false,
+      "bom_scope": false,
+      "blocks_layout_freeze": true,
+      "known": [
+        "SOFNG 0.5TBQP-30P-1",
+        "JLCPCB C3975120",
+        "30 contacts",
+        "0.5 mm pitch"
+      ],
+      "source": "https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120",
+      "required_evidence": [
+        "authoritative panel MPN/variant",
+        "contact-side orientation",
+        "mating height and FPC insertion geometry",
+        "interpret Altium references 31/32 vs 30 physical contacts",
+        "resolve pins 15/16/18/19",
+        "confirm original common 3V3 pins 4/21/29 before mapping separate 3V3_LCD/3V3_TOUCH"
+      ],
+      "closure": "Instantiate physical LCD connector only after pin-domain and mating geometry are authoritative."
+    },
+    {
+      "id": "J7_MICROSD",
+      "sheet": "12_MICROSD",
+      "refdes": "J7",
+      "category": "connector_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": true,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "card insertion direction",
+        "enclosure access/cutout",
+        "push-push vs push-pull retention",
+        "card-detect switch requirement",
+        "socket height and keepout"
+      ],
+      "closure": "Lock exact microSD socket MPN."
+    },
+    {
+      "id": "J9_USB_SERVICE_POGO",
+      "sheet": "13_DEBUG_SERVICE",
+      "refdes": "J9",
+      "category": "fixture_mechanical",
+      "status": "open",
+      "allow_blank_footprint": true,
+      "bom_scope": false,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "factory fixture pogo pitch/pattern",
+        "pin-1 datum",
+        "fixture keepout"
+      ],
+      "closure": "Lock the PCB-only USB Serial/JTAG pogo footprint."
+    },
+    {
+      "id": "PCB_OUTLINE",
+      "sheet": null,
+      "refdes": null,
+      "category": "board_mechanical",
+      "status": "open",
+      "allow_blank_footprint": false,
+      "bom_scope": false,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "final PCB X/Y dimensions",
+        "mounting-hole coordinates",
+        "edge clearances",
+        "connector/display/enclosure datums"
+      ],
+      "closure": "Commit authoritative Edge.Cuts and mounting datums."
+    },
+    {
+      "id": "FAB_STACKUP",
+      "sheet": null,
+      "refdes": null,
+      "category": "fabrication",
+      "status": "open",
+      "allow_blank_footprint": false,
+      "bom_scope": false,
+      "blocks_layout_freeze": true,
+      "required_evidence": [
+        "chosen PCB fabricator",
+        "layer count/copper weights",
+        "dielectric stackup",
+        "finished thickness",
+        "controlled-impedance capability"
+      ],
+      "closure": "Lock stackup and derive 90 ohm USB / 100 ohm MIPI geometry."
+    }
+  ]
+}

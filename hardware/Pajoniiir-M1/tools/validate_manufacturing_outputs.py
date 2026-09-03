@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -33,22 +34,25 @@ CHILDREN = [
     "15_DNP_OPTIONS",
 ]
 
-# Blank footprints that are intentionally still present in the manufacturing BOM.
-# J9 is excluded because that pogo/service connector is in_bom=no.
-ALLOWED_BOM_BLANK_FOOTPRINTS = {
-    "J1",
-    "C3",
-    "D1",
-    "C8",
-    "SW1",
-    "SW2",
-    "J2",
-    "J3",
-    "J4",
-    "J5",
-    "J6",
-    "J7",
-}
+MECHANICAL_GATES = BASE / "mechanical_gates.json"
+
+
+def allowed_bom_blank_footprints() -> set[str]:
+    try:
+        data = json.loads(MECHANICAL_GATES.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f"cannot read {MECHANICAL_GATES.name}: {exc}")
+    allowed: set[str] = set()
+    for gate in data.get("gates", []):
+        if gate.get("allow_blank_footprint") and gate.get("bom_scope"):
+            refdes = gate.get("refdes")
+            if not isinstance(refdes, str) or not refdes:
+                raise SystemExit(
+                    f"{MECHANICAL_GATES.name}: BOM blank gate lacks RefDes: "
+                    f"{gate.get('id', '<unknown>')}"
+                )
+            allowed.add(refdes)
+    return allowed
 
 
 @dataclass(frozen=True)
@@ -198,8 +202,9 @@ def main() -> int:
             )
 
     blank_refs = {ref for ref, comp in expected.items() if not comp.footprint}
-    unexpected_blank = sorted(blank_refs - ALLOWED_BOM_BLANK_FOOTPRINTS)
-    stale_allowlist = sorted(ALLOWED_BOM_BLANK_FOOTPRINTS - blank_refs)
+    allowed_blank = allowed_bom_blank_footprints()
+    unexpected_blank = sorted(blank_refs - allowed_blank)
+    stale_allowlist = sorted(allowed_blank - blank_refs)
 
     problems: list[str] = []
     if missing:
