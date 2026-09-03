@@ -187,7 +187,6 @@ Mechanical / enclosure dependent:
 08_USB1_FLX4:J3 (USB1)
 09_AUDIO_PCM5102A:J4 (RCA L)
 09_AUDIO_PCM5102A:J5 (RCA R)
-09_AUDIO_PCM5102A:J6 (optional 3.5 mm)
 12_MICROSD:J7 (microSD)
 ~~~
 
@@ -205,6 +204,10 @@ U7 je sada zaključan kao **TPS259474ARPWR** s project-local footprintom `Pajoni
 
 Svaki novi blank footprint izvan ovog allowlista validator tretira kao error.
 
+
+### J6 Rev A removal closure
+
+M1-MECH-A8 removes optional J6 3.5 mm line-out from the Rev A schematic/PCB baseline. MAIN remains RCA J4/J5 and CUE/headphones remain via DDJ-FLX4 USB Audio. J6 was already production-default DNP and not a headphone output; M1-MECH-A4 additionally showed only 0.525 mm to the candidate mounting-hole edge in the same primary I/O row before boss/courtyard allowance.
 
 ### J9 factory pogo closure
 
@@ -254,7 +257,7 @@ Ne radi native ERC, footprint pin-to-pad validation, PCB DRC, impedance verifica
 
 ### Manufacturing-output CI
 
-Dodani su native KiCad exporti i source-parity provjera. CI sada generira manufacturing BOM CSV, hierarchy netlist, kompletni schematic PDF i Markdown BOM-audit. `validate_manufacturing_outputs.py` zahtijeva da KiCad BOM sadrži točno isti `in_bom=yes` RefDes skup kao 15 leaf sheetova te iste Value/Footprint podatke. Trenutni source baseline ima 270 `in_bom=yes` RefDes-a, 17 DNP stavki i 12 dopuštenih blank-footprint manufacturing gateova.
+Dodani su native KiCad exporti i source-parity provjera. CI sada generira manufacturing BOM CSV, hierarchy netlist, kompletni schematic PDF i Markdown BOM-audit. `validate_manufacturing_outputs.py` zahtijeva da KiCad BOM sadrži točno isti `in_bom=yes` RefDes skup kao 15 leaf sheetova te iste Value/Footprint podatke. Trenutni M1-MECH-A8 source baseline ima 269 `in_bom=yes` RefDes-a, 16 DNP stavki i 11 dopuštenih blank-footprint manufacturing gateova.
 
 Detalji: `Pajoniiir_Manufacturing_Output_Contract_v0.1.md`.
 
@@ -286,7 +289,7 @@ KiCad 9 CI run #76 (`d8bffb3a`) je potpuno zelen nakon presentation cleanup-a. G
 - [x] schematic PDF generation in CI
 - [x] schematic PDF human review — run #76, 16/16 pages reviewed
 - [x] manufacturing BOM/netlist extraction + schematic-source parity check in CI
-- [x] engineering/manual review of generated manufacturing BOM — 270/270, 17 DNP, 12 intentional blank gates
+- [x] historical run #76 engineering/manual BOM review — 270/270, 17 DNP, 12 intentional blank gates; M1-MECH-A8 source baseline is 269/16/11 after intentional J6 removal
 
 ---
 

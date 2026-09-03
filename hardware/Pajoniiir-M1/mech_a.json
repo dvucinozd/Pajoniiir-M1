@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__pcb_envelope_candidate_defined__major_external_connector_candidates_preferred_conditional__factory_j9_fixture_closed__absolute_external_datums_and_z_stack_open",
+  "status": "display_datum_locked__pcb_envelope_candidate_defined__major_external_connector_candidates_preferred_conditional__j9_closed__j6_removed_closed__absolute_external_datums_and_z_stack_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -380,7 +380,6 @@
     "choose which X side is POWER_WALL; the opposite X side is now locked as MEDIA_SERVICE_WALL",
     "validate Switchcraft 722RAHLP panel hole/nut/washer/body/cable geometry on POWER_WALL",
     "validate Molex 503398-1892 card slot/travel/finger envelope and B3U-3000P-B recessed tool-access geometry on MEDIA_SERVICE_WALL",
-    "decide J6 closure path because same long-wall PCB-edge-row placement fails candidate mounting clearance",
     "prove or reject main-board Kycon KLPX-0848A-2-W/-R local Z/body/plug clearance",
     "validate Amphenol 87520-1010ALF shell/aperture/cable envelope and ~4.9 mm gross rear-clearance consequence",
     "rebalance PCB Z/standoff only after local RCA and USB geometry are known",
@@ -436,8 +435,7 @@
         "id": "AUDIO_OUT",
         "refs": [
           "J4",
-          "J5",
-          "J6"
+          "J5"
         ],
         "wall_assignment": "TBD",
         "front_forbidden": true,
@@ -453,11 +451,11 @@
           "rca_center_spacing": 19.2,
           "rca_pair_min_aperture_span": 31.08,
           "line_35_hole_diameter": 6.97,
-          "absolute_centers": "not recovered in current session"
+          "absolute_centers": "not recovered in current session",
+          "line_35_hole_status": "historical enclosure evidence only; no Rev A connector"
         },
         "rules": [
           "keep J4/J5 as one RCA pair cluster",
-          "J6 remains optional and must either receive a real MPN/cutout datum or be removed",
           "keep audio cluster away from the high-current/power connector cluster where enclosure routing permits"
         ],
         "screened_candidates": [
@@ -468,7 +466,8 @@
         "fallback_architecture": "panel-mounted Same Sky RCJ-033 / RCJ-032 with short internal audio harness",
         "rejected_dual_module_example": "Switchcraft PJRAN2X1U__X: 15.0 mm centers mismatch legacy 19.20 mm",
         "wall_class_preference": "Y_LONG_WALL_SIGN_TBD for J4/J5",
-        "j6_same_edge_row_policy": "not allowed under M1-MECH-A4 candidate mounting pattern"
+        "j6_same_edge_row_policy": "not allowed under M1-MECH-A4 candidate mounting pattern",
+        "rev_a_optional_line35": "removed_M1-MECH-A8"
       },
       {
         "id": "USB_HOST_PAIR",
@@ -681,7 +680,6 @@
           "J3",
           "J4",
           "J5",
-          "J6",
           "J7",
           "SW1",
           "SW2"
@@ -823,7 +821,6 @@
     ],
     "unresolved": [
       "No candidate closes a gate without an absolute wall/cutout datum and verified mating keepout.",
-      "J6 remains an explicit POP-vs-DNP/removal decision before layout freeze.",
       "J_LCD remains the highest-priority display/FPC hard gate.",
       "RCA implementation strategy is now the dominant connector-driven Z-stack decision: prove local edge relief, choose a lower-profile board connector, use panel/harness RCA, or revise enclosure/Z-stack.",
       "The legacy 6.0 mm standoff height is evidence only and must not be promoted to final M1 authority until connector-driven Z-stack is closed."
@@ -1052,13 +1049,15 @@
       "centered_candidate_pcb_edge_margin_each_side_mm": 4.225,
       "nearest_packed_end_to_mount_hole_center_mm": 1.525,
       "nearest_packed_end_to_d2_hole_edge_mm": 0.525,
-      "verdict": "FAIL_CANDIDATE_MOUNTING_CLEARANCE__DO_NOT_PLACE_J6_IN_SAME_EDGE_ROW",
+      "verdict": "CLOSED_BY_REMOVAL__A4_MECHANICAL_CONFLICT_PRESERVED_AS_EVIDENCE",
       "allowed_closure_paths": [
         "place J6 on a different wall",
         "use a different Z-row/panel-mounted or harness implementation if enclosure geometry supports it",
         "remove/DNP J6 for Rev A",
         "revise mounting pattern/PCB envelope only if J6 is a firm product requirement"
-      ]
+      ],
+      "closure_revision": "M1-MECH-A8",
+      "closure_decision": "removed_from_rev_a"
     },
     "preferred_wall_class_topology": {
       "LONG_IO_WALL": {
@@ -1092,11 +1091,9 @@
         "rationale": "factory pogo access does not require normal user panel space."
       },
       "J6_OPTION": {
-        "wall_class": "not in primary long-wall PCB-edge row",
-        "clusters": [
-          "J6"
-        ],
-        "rationale": "same-row packing leaves only 0.525 mm from the packed aperture envelope to the candidate D2 mounting-hole edge before boss/courtyard allowance."
+        "wall_class": "none",
+        "clusters": [],
+        "rationale": "J6 removed from Rev A in M1-MECH-A8; no panel allocation required."
       }
     },
     "promotion_rule": "A4 selects wall classes/topology only. It does not assign Y_NEG vs Y_POS, X_NEG vs X_POS, exact connector centers, Z centers, cutout dimensions beyond known evidence, or final footprints.",
@@ -1378,5 +1375,32 @@
     },
     "power_policy": "Board must be powered through normal J1/qualified 5 V path. Pin 1 is VREF sense-only; fixture must never source it.",
     "result": "J9 mechanical gate closed; exact PCB XY placement remains normal layout work rather than a pre-layout hard gate."
+  },
+  "j6_rev_a_decision": {
+    "revision": "M1-MECH-A8",
+    "status": "closed_by_removal",
+    "refdes": "J6",
+    "function": "optional 3.5 mm stereo line output",
+    "decision": "remove_from_rev_a",
+    "product_basis": {
+      "main_output": "PCM5102A -> RCA J4/J5",
+      "cue_headphones": "DDJ-FLX4 USB Audio headphone output",
+      "three_point_five_mm_role": "not required; formerly DNP-only line output and never a headphone driver"
+    },
+    "mechanical_basis": {
+      "legacy_aperture_diameter_mm": 6.97,
+      "a4_same_row_total_span_mm": 99.55,
+      "a4_clearance_to_candidate_d2_mount_hole_edge_mm": 0.525
+    },
+    "manufacturing_effect": {
+      "source_in_bom_refdes_before": 270,
+      "source_in_bom_refdes_after": 269,
+      "dnp_refdes_before": 17,
+      "dnp_refdes_after": 16,
+      "intentional_blank_bom_gates_before": 12,
+      "intentional_blank_bom_gates_after": 11
+    },
+    "legacy_evidence_policy": "Ø6.97 mm legacy opening remains historical CAD evidence only; no Rev A cutout datum.",
+    "reintroduction_policy": "Future reintroduction is a board/product revision, not a DNP population option."
   }
 }

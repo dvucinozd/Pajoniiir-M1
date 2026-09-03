@@ -115,7 +115,7 @@ J2/J3 are mechanical-edge anchors once their MPNs are known. D2/D3 live directly
 
 ### Audio zone
 
-U5 plus output RC network and J4/J5/J6 form a quiet edge domain. Keep it away from U8/U9 switch nodes and from USB VBUS high-current bottlenecks.
+U5 plus output RC network and J4/J5 form a quiet edge domain. Keep it away from U8/U9 switch nodes and from USB VBUS high-current bottlenecks.
 
 ### Display zone
 
@@ -150,7 +150,7 @@ These are not production height limits. Until safety margin and local enclosure 
 
 No user-facing connector may be assigned a final production location or footprint until the corresponding gate in `mechanical_gates.json` is closed. M1-MECH-A currently provides a candidate rear working envelope of 108.00 × 65.06 mm and candidate mounting centers at X=±51.3 mm, Y=±30.0 mm in `M1_FRONT_CENTER`; those coordinates are not yet Edge.Cuts.
 
-This specifically prevents provisional J1/J2/J3/J4/J5/J6/J7/SW1/SW2 choices from silently becoming manufacturing defaults.
+This specifically prevents provisional J1/J2/J3/J4/J5/J7/SW1/SW2 choices from silently becoming manufacturing defaults.
 
 ---
 
@@ -167,3 +167,10 @@ Final layout freeze requires all of the following:
 7. KiCad PCB DRC and manufacturing output review
 
 Until then, exploratory electrical clustering is allowed, but Gerbers/EVT ordering is not.
+
+
+---
+
+## M1-MECH-A8 audio-option update
+
+J6 was removed from the Rev A PCB baseline in M1-MECH-A8. Do not reserve a J6 footprint, panel aperture or courtyard. The recorded legacy Ø6.97 mm opening remains enclosure-history evidence only.

@@ -350,7 +350,7 @@ Support BOM:
 | C_OUT_R | 1 | **2.2 nF C0G** |
 | J_RCA_L | 1 | RCA **TBD-MECH** |
 | J_RCA_R | 1 | RCA **TBD-MECH** |
-| J_LINE_35 | 0/1 | 3.5 mm line out DNP |
+| J_LINE_35 | 0 | removed from Rev A in M1-MECH-A8 |
 
 Nema DC-blocking capacitors na RCA outputima.
 

@@ -527,19 +527,19 @@
       "sheet": "09_AUDIO_PCM5102A",
       "refdes": "J6",
       "category": "optional_connector_mechanical",
-      "status": "open",
-      "allow_blank_footprint": true,
-      "bom_scope": true,
-      "blocks_layout_freeze": true,
+      "status": "closed",
+      "allow_blank_footprint": false,
+      "bom_scope": false,
+      "blocks_layout_freeze": false,
       "required_evidence": [
         "production decision POP vs DNP/removal",
         "panel datum if retained",
         "jack center height and orientation"
       ],
-      "closure": "Either lock exact 3.5 mm line-out jack footprint or remove the option before layout freeze.",
+      "closure": "CLOSED BY REMOVAL: optional 3.5 mm line-out is not part of the Rev A product/PCB baseline.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
-      "absolute_cutout_datum_status": "open",
+      "absolute_cutout_datum_status": "not_applicable_removed_from_rev_a",
       "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
       "wall_class_preference": "NOT_PRIMARY_LONG_WALL_SAME_PCB_EDGE_ROW",
       "panel_packing_screen": {
@@ -551,7 +551,17 @@
           "remove/DNP",
           "revise mounting pattern/outline only if required"
         ]
-      }
+      },
+      "closed_revision": "M1-MECH-A8",
+      "closed_date": "2026-09-03",
+      "closure_reason": [
+        "Rev A MAIN output is RCA J4/J5 and CUE/headphones use DDJ-FLX4 USB Audio",
+        "J6 was production-default DNP and explicitly not a headphone output",
+        "M1-MECH-A4 same-row packing left only 0.525 mm to the candidate mounting-hole edge before boss/courtyard allowance",
+        "retaining a dormant connector would consume panel, courtyard and sourcing budget without a required Rev A function"
+      ],
+      "schematic_action": "J6 symbol and its direct MAIN_L/MAIN_R/GND branch removed from 09_AUDIO_PCM5102A",
+      "reintroduction_policy": "Future 3.5 mm line output requires a deliberate board/product revision with fresh load, ESD, connector and enclosure validation."
     },
     {
       "id": "J_LCD_DISPLAY_FPC",

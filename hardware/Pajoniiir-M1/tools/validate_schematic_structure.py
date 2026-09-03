@@ -277,7 +277,7 @@ def main() -> int:
                 f"{MECH_A.name}: FRONT_Z0 must remain reserved for display/touch"
             )
         expected_cluster_refs = {
-            "AUDIO_OUT": {"J4", "J5", "J6"},
+            "AUDIO_OUT": {"J4", "J5"},
             "USB_HOST_PAIR": {"J2", "J3"},
             "POWER_IN": {"J1"},
             "REMOVABLE_STORAGE": {"J7"},

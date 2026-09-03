@@ -86,7 +86,7 @@ No CMC populated by default.
 
 # 6. Audio DNP
 
-- optional 3.5 mm stereo line-out
+- J6 3.5 mm stereo line-out: **removed from Rev A in M1-MECH-A8; no DNP footprint reserved**
 - optional analog ESD protectors
 - FB_AUDIO ferrite alternative
 
@@ -181,7 +181,7 @@ i biti pravilno excluded/flagged u manufacturing BOM-u.
 | touch extra pullups | tune | selected/DNP | selected/DNP |
 | analog ESD | evaluate | compliance dependent | compliance dependent |
 | LCD TE link | DNP/experiment | TBD | DNP unless used |
-| 3.5 mm line out | DNP | DNP | DNP |
+| 3.5 mm line out | removed | removed | removed from Rev A (M1-MECH-A8) |
 | ferrites | 0 Ω first | tune | selected |
 | debug footprints | DNL pads | DNL pads | DNL pads |
 

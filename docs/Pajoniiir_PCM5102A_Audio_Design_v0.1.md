@@ -17,7 +17,7 @@ Njegova uloga:
 - stereo MAIN OUT
 - 2.1 Vrms nominalni full-scale single-ended line output
 - RCA LEFT / RIGHT
-- opcionalni 3.5 mm stereo line out kao DNP
+- 3.5 mm stereo line out **removed from Rev A in M1-MECH-A8**
 
 CUE/PFL ne ide preko ovog DAC-a. Cue ostaje USB Audio Class ch3/ch4 prema DDJ-FLX4 headphone izlazu.
 
@@ -477,21 +477,19 @@ Mehaniku zaključati zajedno s kućištem.
 
 ---
 
-# 21. Optional 3.5 mm line out
+# 21. 3.5 mm line out — removed from Rev A
 
-J_LINE_35:
+M1-MECH-A8 removes J6 / J_LINE_35 from the Rev A schematic and PCB baseline.
 
-**DNP default**
+Razlozi:
 
-Ako ostavimo footprint:
+- MAIN product output is RCA LEFT/RIGHT
+- CUE/headphones remain DDJ-FLX4 USB Audio
+- J6 was production-default DNP and was never a headphone output
+- M1-MECH-A4 exposed a real panel/mounting conflict
+- retaining a dormant connector would consume enclosure, courtyard and sourcing budget without a required Rev A function
 
-- signal uzeti iza 470 Ω / 2.2 nF output networka
-- ne smije mijenjati RCA opterećenje kada je DNP
-- provjeriti combined load ako RCA i 3.5 mm rade istovremeno
-
-PCM5102A line driver može voziti niske line-loadove, ali ovo nije headphone output.
-
-Ne koristiti 3.5 mm jack za direktne slušalice kao proizvodnu funkciju.
+The legacy Ø6.97 mm opening remains historical mechanical evidence only. Reintroduction requires a future board/product revision with fresh combined-load, ESD and panel validation.
 
 ---
 
@@ -651,7 +649,7 @@ Analog testpointovi mali i bez dugih stubova.
 | C_OUT_R | 1 | 2.2 nF C0G/NP0 |
 | J_RCA_L | 1 | RCA TBD-MECH |
 | J_RCA_R | 1 | RCA TBD-MECH |
-| J_LINE_35 | 0/1 | stereo 3.5 mm DNP |
+| J_LINE_35 | 0 | removed from Rev A in M1-MECH-A8 |
 | D_AUDIO_L | 0/1 | low-C ESD DNP |
 | D_AUDIO_R | 0/1 | low-C ESD DNP |
 
@@ -790,7 +788,7 @@ Ako postoji:
 - [ ] no output DC-block caps
 - [ ] solid shared ground
 - [ ] RCA mechanical MPN pending
-- [ ] optional 3.5 mm marked DNP
+- [x] J6 optional 3.5 mm removed from Rev A — M1-MECH-A8
 
 ---
 

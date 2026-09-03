@@ -315,5 +315,13 @@
       "RECOVERY_BUTTONS",
       "FACTORY_SERVICE"
     ]
-  }
+  },
+  "rev_a_removed_features": [
+    {
+      "refdes": "J6",
+      "feature": "optional 3.5 mm line out",
+      "revision": "M1-MECH-A8",
+      "rule": "No footprint, panel aperture, courtyard or placement budget is reserved in Rev A."
+    }
+  ]
 }
