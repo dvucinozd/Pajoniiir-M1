@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__pcb_envelope_candidate_defined__rca_and_usb_candidates_preferred_conditional__panel_wall_class_topology_screened__absolute_datums_and_z_stack_open",
+  "status": "display_datum_locked__pcb_envelope_candidate_defined__rca_usb_power_candidates_preferred_conditional__panel_wall_class_topology_screened__absolute_datums_and_z_stack_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -278,14 +278,14 @@
           "refdes": [
             "J1"
           ],
-          "candidate": "Molex 43650-0200",
-          "screened_height_or_profile_mm": 6.98,
-          "basis": "manufacturer mated-height value used conservatively for envelope screening; exact housing-above-board profile still requires drawing review",
-          "required_front_clearance_with_screening_gap_mm": 7.48,
-          "implied_pcb_front_z_mm": 21.38,
-          "implied_pcb_rear_z_mm": 22.98,
-          "implied_rear_clearance_mm": 5.02,
-          "result": "FAIL_CURRENT_MARGIN__LIKELY_RECOVERABLE_BY_Z_SHIFT_OR_LOCAL_EDGE_RELIEF"
+          "candidate": "Switchcraft 722RAHLP",
+          "screened_height_or_profile_mm": null,
+          "basis": "M1-MECH-A5 changes J1 architecture to a side-wall threaded barrel jack; global central-under-display height arithmetic is not a valid authoritative fit model for this insertion axis.",
+          "required_front_clearance_with_screening_gap_mm": null,
+          "implied_pcb_front_z_mm": null,
+          "implied_pcb_rear_z_mm": null,
+          "implied_rear_clearance_mm": null,
+          "result": "LOCAL_SIDE_WALL_ENVELOPE_REQUIRED__GLOBAL_Z_SCREEN_SUPERSEDED"
         },
         {
           "refdes": [
@@ -377,10 +377,10 @@
   "next_closure_inputs": [
     "recover or explicitly define which Y wall is the primary long I/O wall and assign exact J2/J3/J4/J5 centers",
     "verify the M1-MECH-A4 87.58 mm USB+RCA packing against real boss OD, connector bodies, plug/cable keepouts and board functional placement",
+    "assign J1 POWER_IN to X_NEG or X_POS and validate Switchcraft 722RAHLP panel hole/nut/washer/body/cable geometry with the 2.0 mm enclosure wall",
     "decide J6 closure path because same long-wall PCB-edge-row placement fails candidate mounting clearance",
     "prove or reject main-board Kycon KLPX-0848A-2-W/-R local Z/body/plug clearance",
     "validate Amphenol 87520-1010ALF shell/aperture/cable envelope and ~4.9 mm gross rear-clearance consequence",
-    "assign J1 POWER_IN to an X-side wall and validate exact Micro-Fit/body/plug geometry",
     "assign J7/SW1/SW2 service/media access wall and validate card/finger/actuator geometry",
     "rebalance PCB Z/standoff only after local RCA and USB geometry are known",
     "resolve J_LCD FPC mating/contact/pin-domain gate",
@@ -519,7 +519,11 @@
           "do not place where the power plug blocks USB or microSD access"
         ],
         "screened_candidate": "Molex 43650-0200",
-        "wall_class_preference": "X_SIDE_WALL_SIGN_TBD"
+        "wall_class_preference": "X_SIDE_WALL_SIGN_TBD",
+        "preferred_conditional_candidate": "Switchcraft 722RAHLP + S760KHZ",
+        "alternate_candidate": "Kycon KLDLX-0202-A + KLDLX-P-0202-A-M8 family",
+        "locking_policy": "threaded locking",
+        "durability_policy": ">=5000 mating cycles at system level"
       },
       {
         "id": "REMOVABLE_STORAGE",
@@ -1090,5 +1094,110 @@
     },
     "promotion_rule": "A4 selects wall classes/topology only. It does not assign Y_NEG vs Y_POS, X_NEG vs X_POS, exact connector centers, Z centers, cutout dimensions beyond known evidence, or final footprints.",
     "next_closure": "Recover or explicitly define wall sign/absolute centers and verify connector-body/boss/cable envelopes in CAD/physical geometry."
+  },
+  "power_input_connector_strategy": {
+    "revision": "M1-MECH-A5",
+    "status": "preferred_conditional_threaded_locking_dc_selected__j1_gate_remains_open",
+    "decision": "Use a high-cycle, high-current threaded locking DC barrel architecture for J1 rather than an internal-style latching wire-to-board connector.",
+    "preferred_conditional": {
+      "jack": {
+        "manufacturer": "Switchcraft",
+        "mpn": "722RAHLP",
+        "interface": "2.0 mm center-pin locking DC power jack",
+        "mounting": "panel mount + right-angle through-hole PCB",
+        "current_rating_a": 7.5,
+        "voltage_rating_vdc": 24,
+        "jack_life_cycles": 10000,
+        "locking": "threaded",
+        "temperature_c": {
+          "min": -40,
+          "max": 105
+        },
+        "contact_resistance_ohm": 0.01,
+        "bushing_thread": "5/16-32 UNEF 2A",
+        "bushing_length_mm": 5.5,
+        "supplied_hardware": [
+          "hex nut",
+          "flat washer"
+        ],
+        "source": "https://www.switchcraft.com/2-0mm-pin-meter-5-5mm-bushing-length-temp-max-105-c-7-5a/722rahlp/"
+      },
+      "mating_plug": {
+        "manufacturer": "Switchcraft",
+        "mpn": "S760KHZ",
+        "interface": "2.0 mm locking DC power plug, short barrel, high-temp",
+        "current_rating_a": 7.5,
+        "voltage_rating_vdc": 24,
+        "plug_life_cycles": 5000,
+        "locking": "threaded",
+        "temperature_c": {
+          "min": -40,
+          "max": 105
+        },
+        "source": "https://www.switchcraft.com/standard-dc-power-jacks-and-plugs/2-0mm-center-pin-short-barrel-locking-high-temp/s760khz/"
+      },
+      "system_durability_basis": "mated-system service life is limited by the lower-rated replaceable plug at 5000 cycles; chassis jack is rated 10000 cycles",
+      "electrical_margin": {
+        "m1_efuse_ilim_min_a": 3.96,
+        "m1_efuse_ilim_typ_a": 4.45,
+        "m1_efuse_ilim_max_a": 4.84,
+        "connector_rating_a": 7.5,
+        "absolute_margin_vs_efuse_max_a": 2.66,
+        "relative_margin_vs_efuse_max_percent": 54.96,
+        "result": "PASS_FIRST_ORDER_CURRENT_SCREEN"
+      },
+      "mechanical_rationale": [
+        "threaded locking satisfies the Rev A retention requirement",
+        "panel mounting transfers user cable load into the enclosure instead of relying only on PCB solder joints",
+        "right-angle PCB termination supports a short J1-to-eFuse high-current path near a board edge",
+        "7.5 A connector rating provides meaningful margin above the 4.84 A worst-case current-limit threshold documented for the 750 ohm RILM baseline",
+        "10000-cycle jack / 5000-cycle plug durability is appropriate for a user-accessible power connector"
+      ],
+      "mechanical_open_items": [
+        "choose exact X side wall sign",
+        "absolute J1 center in M1_FRONT_CENTER",
+        "panel hole / anti-rotation / nut-washer bearing geometry",
+        "validate 2.0 mm printed wall with 5.5 mm bushing and final nut/washer stack",
+        "board edge and connector body keepout",
+        "plug shell and cable bend/strain envelope",
+        "local Z clearance to display/module and rear enclosure",
+        "verify exact mating plug retention/thread engagement on production sample",
+        "confirm center-positive polarity labeling and keyed assembly controls"
+      ],
+      "result": "PREFERRED_CONDITIONAL__NOT_FOOTPRINT_LOCKED"
+    },
+    "alternate": {
+      "manufacturer": "Kycon",
+      "jack_mpn": "KLDLX-0202-A",
+      "mating_plug_family": "KLDLX-P-0202-A-M8",
+      "architecture": "right-angle panel-mount locking DC jack with threaded mating plug",
+      "manufacturer_drawing_evidence": {
+        "current_rating_a": 5,
+        "voltage_rating_vdc": 24,
+        "durability_cycles": 5000,
+        "jack_thread": "M8x0.75",
+        "minimum_panel_thickness_mm": 1.5
+      },
+      "metadata_conflict": "Current distributor metadata for KLDLX-0202-A still shows 3 A on some listings while Kycon's current manufacturer drawing states 5 A. Do not promote this alternate until Kycon/current-production rating is confirmed.",
+      "sources": [
+        "https://www.kycon.com/Pub_Eng_Draw/KLDLX-0202-x.pdf",
+        "https://www.kycon.com/website/Products/DCPower/dcpower.html"
+      ],
+      "result": "MECHANICALLY_STRONG_ALTERNATE__RATING_METADATA_CONFLICT_OPEN"
+    },
+    "demoted_candidates": [
+      {
+        "candidate": "Molex 43650-0200 Micro-Fit 3.0",
+        "reason": "electrically capable but only ~30 mating cycles; unsuitable as the preferred frequently user-accessible power inlet",
+        "policy": "retain only as historical electrical/envelope reference"
+      },
+      {
+        "candidate": "Switchcraft RAPC722BKZ",
+        "reason": "5 A / 5000-cycle bayonet candidate is valid but superseded by 722RAHLP's higher 7.5 A current margin and 10000-cycle chassis-jack durability",
+        "policy": "not preferred unless the threaded 722RAHLP geometry later conflicts with enclosure packaging"
+      }
+    ],
+    "topology_effect": "J1 remains on a dedicated X-side POWER_WALL class from M1-MECH-A4. Because the selected connector insertion axis is normal to that side wall, the old Micro-Fit central-under-display Z screen is no longer an authoritative J1 fit test; J1 requires a local side-wall/body keepout study.",
+    "promotion_rule": "J1 can move to exact footprint/cutout lock only after side-wall sign, cutout center, nut/washer/panel engagement, PCB-edge/body keepout and plug/cable envelope pass."
   }
 }

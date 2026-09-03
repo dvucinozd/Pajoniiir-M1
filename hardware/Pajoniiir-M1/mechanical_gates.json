@@ -70,7 +70,10 @@
         "enclosure cutout/datum",
         "cable mating/locking requirement",
         "board-edge orientation",
-        "connector height/depth envelope"
+        "connector height/depth envelope",
+        "panel nut/washer/bushing engagement in 2.0 mm candidate wall",
+        "plug cable bend/strain envelope",
+        "production polarity labeling / center-positive control"
       ],
       "closure": "Lock exact 5 V locking connector MPN and courtyard from enclosure geometry.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
@@ -79,20 +82,57 @@
       "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
       "screened_candidates": [
         {
-          "manufacturer": "Molex",
-          "mpn": "43650-0200",
+          "manufacturer": "Switchcraft",
+          "mpn": "722RAHLP",
+          "mating_plug": "S760KHZ",
+          "role": "preferred_conditional",
           "status": "screened_not_locked",
           "evidence": [
-            "8.5 A max/contact",
-            "right-angle THT",
-            "recommended 1.60 mm PCB",
-            "6.98 mm mated-height screening basis"
+            "7.5 A",
+            "24 VDC",
+            "right-angle through-hole panel mount",
+            "threaded locking",
+            "10000 jack cycles",
+            "5000 plug cycles",
+            "5.5 mm bushing",
+            "5/16-32 UNEF thread",
+            "nut and washer supplied"
           ],
-          "screen_result": "electrical pass; current conservative central Z margin fail; exact panel/body/mating envelope open",
-          "source": "https://www.molex.com/en-us/products/part-detail/436500200"
+          "screen_result": "electrical current/durability pass; exact side-wall panel/body/cable/PCB-edge geometry still open",
+          "sources": [
+            "https://www.switchcraft.com/2-0mm-pin-meter-5-5mm-bushing-length-temp-max-105-c-7-5a/722rahlp/",
+            "https://www.switchcraft.com/standard-dc-power-jacks-and-plugs/2-0mm-center-pin-short-barrel-locking-high-temp/s760khz/"
+          ]
+        },
+        {
+          "manufacturer": "Kycon",
+          "mpn": "KLDLX-0202-A",
+          "mating_plug_family": "KLDLX-P-0202-A-M8",
+          "role": "alternate_pending_rating_confirmation",
+          "status": "screened_not_locked",
+          "evidence": [
+            "manufacturer drawing: 5 A / 24 VDC / 5000 cycles",
+            "right-angle panel mount",
+            "M8x0.75 locking interface",
+            "minimum panel thickness 1.5 mm"
+          ],
+          "screen_result": "mechanically attractive; distributor metadata conflict (3 A vs 5 A manufacturer drawing) must be resolved",
+          "sources": [
+            "https://www.kycon.com/Pub_Eng_Draw/KLDLX-0202-x.pdf",
+            "https://www.kycon.com/website/Products/DCPower/dcpower.html"
+          ]
+        },
+        {
+          "manufacturer": "Molex",
+          "mpn": "43650-0200",
+          "role": "historical_reference_only",
+          "status": "do_not_use_as_preferred_user_inlet",
+          "screen_result": "demoted because ~30 mating-cycle durability is not appropriate for the primary user-accessible power inlet"
         }
       ],
-      "wall_class_preference": "X_SIDE_WALL_SIGN_TBD"
+      "wall_class_preference": "X_SIDE_WALL_SIGN_TBD",
+      "closure_path": "Prefer Switchcraft 722RAHLP + S760KHZ. Gate closes only after exact X wall sign, center/cutout, nut/washer engagement, PCB body keepout and plug/cable envelope are authoritative.",
+      "durability_requirement": ">=5000 mating cycles at system level"
     },
     {
       "id": "SW1_RESET",
@@ -611,7 +651,8 @@
         "M1-MECH-A1 connector envelope screen: USB-A is margin-limited, Micro-Fit power is marginal under conservative central Z screen, and ~10 mm right-angle RCA is the dominant Z-stack driver",
         "M1-MECH-A3 USB active-candidate screen: Amphenol 87520-1010ALF worst-case 7.1 mm profile implies ~4.9 mm gross rear spacing with temporary 0.5 mm front screening gap",
         "M1-MECH-A4 primary long-wall first-order packing: USB pair 48.50 mm + 8.00 mm reserve + RCA aperture pair 31.08 mm = 87.58 mm; centered on 108 mm PCB edge leaves 10.21 mm/end before body/boss keepouts",
-        "M1-MECH-A4 J6 same-row screen fails candidate mounting clearance: total span 99.55 mm leaves only 0.525 mm to the candidate D2 hole edge before boss/courtyard allowance"
+        "M1-MECH-A4 J6 same-row screen fails candidate mounting clearance: total span 99.55 mm leaves only 0.525 mm to the candidate D2 hole edge before boss/courtyard allowance",
+        "M1-MECH-A5 J1 preferred architecture: Switchcraft 722RAHLP threaded panel/PCB jack + S760KHZ plug; 7.5 A, 10000 jack cycles / 5000 plug cycles; local X-side-wall envelope replaces old central-Z Micro-Fit screen"
       ],
       "evidence_file": "mech_a.json"
     },

@@ -13,7 +13,7 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **Manufacturing output review:** PASS — 270/270 BOM parity, 17 DNP, 12 intentional blank-footprint gates  
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
-**M1-MECH-A:** IN PROGRESS — M1-MECH-A4 proves first-order USB+RCA packing on one 121.008 mm long wall (87.58 mm occupied span) and rejects J6 in that same PCB-edge row under the candidate mount pattern; wall signs/absolute centers, connector body/boss clearances and PCB Z/standoff remain unfrozen  
+**M1-MECH-A:** IN PROGRESS — M1-MECH-A5 selects Switchcraft 722RAHLP + S760KHZ as the preferred conditional J1 threaded locking power interface (7.5 A, 10k/5k cycle jack/plug); USB+RCA long-wall packing remains feasible, while wall signs/absolute centers, local body/boss clearances and PCB Z/standoff remain unfrozen  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -113,6 +113,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [M1-MECH-A RCA Integration Strategy v0.1](docs/Pajoniiir_M1_MECH_A_RCA_Integration_Strategy_v0.1.md)
 - [M1-MECH-A USB Host Connector Strategy v0.1](docs/Pajoniiir_M1_MECH_A_USB_Host_Connector_Strategy_v0.1.md)
 - [M1-MECH-A Panel Packing Feasibility v0.1](docs/Pajoniiir_M1_MECH_A_Panel_Packing_Feasibility_v0.1.md)
+- [M1-MECH-A Power Input Connector Strategy v0.1](docs/Pajoniiir_M1_MECH_A_Power_Input_Connector_Strategy_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
