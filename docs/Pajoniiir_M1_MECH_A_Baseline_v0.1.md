@@ -301,7 +301,21 @@ Remaining height risks are already represented by open gates: C3/C8 bulk capacit
 
 ---
 
-## 12. What M1-MECH-A has closed
+## 12. Legacy relative connector evidence
+
+The original Blender work confirms a final qualitative correction sequence:
+
+- RCA openings moved upward
+- 3.5 mm opening moved downward
+- USB opening(s) stayed at the existing location
+
+This is preserved only as relative legacy evidence. It does not reveal the absolute wall or M1_FRONT_CENTER coordinates, so no connector datum is promoted from it.
+
+A deterministic recovery procedure is now defined as **M1-MECH-A-D1** in `mech_a.json` and `Pajoniiir_M1_MECH_A_Datum_Extraction_v0.1.md`.
+
+---
+
+## 13. What M1-MECH-A has closed
 
 - display/front-envelope family identified
 - bare front envelope quantified
@@ -316,7 +330,7 @@ Remaining height risks are already represented by open gates: C3/C8 bulk capacit
 
 ---
 
-## 13. What remains open
+## 14. What remains open
 
 ### PCB
 
@@ -345,7 +359,7 @@ Remaining height risks are already represented by open gates: C3/C8 bulk capacit
 
 ---
 
-## 14. Immediate next M1-MECH-A action
+## 15. Immediate next M1-MECH-A action
 
 Use the 121.008 × 73.408 × 30 mm enclosure candidate and M1-MECH-A0 108 × 65.06 mm PCB envelope candidate to build the first connector-placement envelope and verify that connector bodies/bosses do not invalidate the candidate outline.
 

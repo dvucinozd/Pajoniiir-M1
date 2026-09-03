@@ -38,3 +38,9 @@ legacy dual-USB spacing     34.00 mm   (USB-C legacy reference only)
 5. mating-plug/card/finger clearance
 
 Until those values exist, connector footprints and Edge.Cuts remain intentionally unfrozen.
+
+## Legacy relative ordering evidence
+
+The earlier Blender correction history records: RCA openings up, 3.5 mm opening down, USB unchanged. This constrains relative legacy placement but not an absolute M1 wall datum.
+
+Absolute positions must be recovered through M1-MECH-A-D1 before a cutout is treated as authoritative.

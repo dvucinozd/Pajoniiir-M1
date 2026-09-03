@@ -108,6 +108,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [M1-MECH-A Mechanical Baseline v0.1](docs/Pajoniiir_M1_MECH_A_Baseline_v0.1.md)
 - [M1-MECH-A Height Audit v0.1](docs/Pajoniiir_M1_MECH_A_Height_Audit_v0.1.md)
 - [M1-MECH-A Connector Clusters v0.1](docs/Pajoniiir_M1_MECH_A_Connector_Clusters_v0.1.md)
+- [M1-MECH-A Datum Extraction v0.1](docs/Pajoniiir_M1_MECH_A_Datum_Extraction_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 

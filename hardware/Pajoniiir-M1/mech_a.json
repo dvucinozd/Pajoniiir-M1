@@ -123,7 +123,21 @@
       "Legacy Blender envelope matches manufacturer shell geometry closely enough to reuse as M1-MECH-A evidence.",
       "Legacy board/standoff coordinates are not promoted to M1 PCB mounting authority because the M1 mainboard is a new custom board.",
       "RCA/3.5 mm cutout diameters remain useful enclosure evidence, but exact M1 connector MPN and panel centers remain open."
-    ]
+    ],
+    "relative_connector_layout": {
+      "source_file": "D:\\AI\\BLENDER\\flx4_0407.blend",
+      "status": "confirmed qualitative legacy evidence; absolute centers unavailable in current session",
+      "confirmed_sequence": [
+        "RCA openings were moved upward",
+        "3.5 mm opening was moved downward",
+        "USB opening(s) remained at their existing position"
+      ],
+      "interpretation": [
+        "preserve RCA pair as a common cluster",
+        "preserve vertical separation between RCA and 3.5 mm opening if the legacy wall layout is reused",
+        "do not infer absolute M1 coordinates or wall assignment from these qualitative instructions"
+      ]
+    }
   },
   "m1_enclosure_baseline": {
     "external_envelope_candidate": {
@@ -301,6 +315,7 @@
     }
   },
   "next_closure_inputs": [
+    "execute M1-MECH-A-D1 datum extraction when flx4_0407.blend or a dimensioned export becomes available",
     "recover or provide the legacy flx4_0407.blend model to extract absolute cutout centers, or explicitly assign M1 connector clusters to enclosure walls",
     "confirm M1 reuses the validated legacy enclosure external envelope or define a replacement envelope",
     "validate/revise the M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
@@ -585,5 +600,38 @@
       }
     ],
     "conclusion": "Known tallest fixed central parts are <=3.25 mm, leaving >=3.25 mm gross headroom inside the 6.5 mm candidate cavity. Height is not currently a blocker for the fixed compute/power/RF core; remaining height blockers are the already-open bulk/connector/FPC gates."
+  },
+  "datum_extraction_plan": {
+    "revision": "M1-MECH-A-D1",
+    "source_preference": [
+      "original flx4_0407.blend scene",
+      "dimensioned enclosure CAD/export generated from that scene",
+      "direct physical measurement of printed enclosure if CAD cannot be recovered"
+    ],
+    "required_for_each_user_io": [
+      "wall/surface ID in M1_FRONT_CENTER",
+      "cutout center X/Y/Z",
+      "cutout width/height or diameter",
+      "insertion-axis unit vector",
+      "nearest enclosure edge distance",
+      "nearest mounting boss/standoff clearance",
+      "internal connector-body keepout",
+      "external mating-plug/card/finger clearance"
+    ],
+    "required_objects_or_features": [
+      "RCA_L cutout",
+      "RCA_R cutout",
+      "3.5 mm cutout",
+      "legacy USB cutout(s)",
+      "display/module reference body",
+      "all main-board standoffs/bosses",
+      "case inner and outer wall surfaces"
+    ],
+    "coordinate_transform": {
+      "target_frame": "M1_FRONT_CENTER",
+      "method": "derive enclosure/display center and orientation from the validated 117.008 x 69.408 module reference, then transform legacy feature centers into the M1 landscape frame",
+      "acceptance": "transformed module envelope must reproduce the locked M1-MECH-A display/module reference within 0.1 mm before any connector datum is promoted"
+    },
+    "promotion_rule": "A recovered legacy cutout datum remains evidence until the chosen M1 connector MPN fits the cutout/body/mating envelope; only then can the corresponding mechanical gate close."
   }
 }
