@@ -475,3 +475,33 @@ Primary visual evidence used for the two resolved sub-gates:
   https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120
 
 The visual source is stronger than text-extraction ordering for NC markers and shell-pin interpretation.
+
+
+---
+
+## M1-MECH-A10 physical orientation evidence
+
+The official Guition specification, page 5, includes a component-side photograph of the original JC4880 assembly. The LCD flex and its board connector are visible.
+
+What this safely proves:
+
+~~~text
+board side      component side
+architecture    right-angle / side-entry
+flex approach   lateral, approximately parallel to PCB plane
+~~~
+
+What it does **not** safely prove:
+
+~~~text
+top vs bottom electrical contact side
+connector housing height
+mated FPC Z height
+exact production land pattern
+final panel-tail mechanical dimensions
+~~~
+
+Therefore M1-MECH-A10 narrows the insertion-geometry gate but does not instantiate J_LCD.
+
+Manufacturer source:
+https://www.guition.com/icms/upload/fb081940d6fc11f09850077a33e1404f/FTPData/UEditor/file/2026121/1768961095795/JC4880P443C_I_W%20Specifications-EN-V1.0.pdf

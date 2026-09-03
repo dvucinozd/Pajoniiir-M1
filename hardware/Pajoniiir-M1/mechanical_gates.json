@@ -583,13 +583,15 @@
         "original shell mounting reference 4xD2 on 102.6 x 60.0 mm centers",
         "original FPC pins 15/16/18/19 = NC",
         "Altium symbol refs 31/32 = auxiliary GND shell/mount pins, not contacts 31/32",
-        "physical electrical contact sequence = 1..30"
+        "physical electrical contact sequence = 1..30",
+        "original JC4880 assembly uses component-side right-angle/side-entry LCD FPC connection",
+        "original flex insertion direction is lateral relative to PCB surface"
       ],
       "source": "https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120",
       "required_evidence": [
         "authoritative panel MPN/variant",
         "contact-side orientation",
-        "mating height and FPC insertion geometry",
+        "exact connector body/mating height and top-vs-bottom contact-side geometry; side-entry architecture is already confirmed",
         "confirm original common 3V3 pins 4/21/29 before mapping separate 3V3_LCD/3V3_TOUCH"
       ],
       "closure": "Instantiate physical LCD connector only after final panel variant, contact-side/mating geometry, and safe 3V3-domain mapping are authoritative. 30-vs-32 and pins 15/16/18/19 are resolved in M1-MECH-A9.",
@@ -608,9 +610,16 @@
           "item": "pins 15/16/18/19",
           "resolution": "Original Guition LCD schematic raster marks FPC1 pins 15, 16, 18 and 19 with explicit no-connect markers. Treat as NC for the original JC4880 electrical variant.",
           "source": "https://github.com/wegi1/ESP32P4-JC4880P443C-I-W/blob/main/5-Schematic/2_LCD%26CSI.png"
+        },
+        {
+          "item": "original assembly insertion architecture",
+          "resolution": "Official Guition product photo shows the LCD flex entering laterally into a right-angle/side-entry FPC connector mounted on the component side of the original PCB.",
+          "limitation": "Photo does not reliably prove top-vs-bottom electrical contact side or exact connector/mated Z height.",
+          "source": "https://www.guition.com/icms/upload/fb081940d6fc11f09850077a33e1404f/FTPData/UEditor/file/2026121/1768961095795/JC4880P443C_I_W%20Specifications-EN-V1.0.pdf",
+          "page": 5
         }
       ],
-      "partial_closure_revision": "M1-MECH-A9"
+      "partial_closure_revision": "M1-MECH-A10"
     },
     {
       "id": "J7_MICROSD",

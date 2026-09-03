@@ -13,7 +13,7 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **Manufacturing output review:** PASS — current M1-MECH-A8 source baseline 269 in-BOM, 16 DNP, 11 intentional blank-footprint gates  
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
-**M1-MECH-A:** IN PROGRESS — M1-MECH-A9 resolves J_LCD 30-vs-32 and pins 15/16/18/19; J6/J9 are closed. Remaining blockers are final LCD panel/mating/3V3-domain evidence, external absolute wall datums and final PCB Z/outline  
+**M1-MECH-A:** IN PROGRESS — M1-MECH-A10 additionally confirms the original LCD FPC is component-side right-angle/side-entry; J_LCD still waits for top/bottom contact-side, exact mating height, final panel variant and 3V3 commonality. J6/J9 are closed; external absolute wall datums and final PCB Z/outline remain open  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -118,6 +118,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [M1-MECH-A Factory USB/JTAG Pogo Closure v0.1](docs/Pajoniiir_M1_MECH_A_Factory_USBJTAG_Pogo_Closure_v0.1.md)
 - [M1-MECH-A J6 Rev A Removal Closure v0.1](docs/Pajoniiir_M1_MECH_A_J6_Removal_Closure_v0.1.md)
 - [M1-MECH-A Display FPC Forensic Narrowing v0.1](docs/Pajoniiir_M1_MECH_A_Display_FPC_Forensic_Narrowing_v0.1.md)
+- [M1-MECH-A Display FPC Physical Orientation v0.1](docs/Pajoniiir_M1_MECH_A_Display_FPC_Physical_Orientation_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 

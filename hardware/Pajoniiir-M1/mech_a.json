@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__display_fpc_30v32_and_nc_pins_resolved__pcb_envelope_candidate_defined__j9_and_j6_closed__external_absolute_datums_z_stack_and_display_mating_3v3_open",
+  "status": "display_datum_locked__display_fpc_side_entry_confirmed__display_contact_side_height_and_3v3_open__pcb_envelope_candidate_defined__j9_j6_closed__external_absolute_datums_and_z_stack_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -383,7 +383,7 @@
     "prove or reject main-board Kycon KLPX-0848A-2-W/-R local Z/body/plug clearance",
     "validate Amphenol 87520-1010ALF shell/aperture/cable envelope and ~4.9 mm gross rear-clearance consequence",
     "rebalance PCB Z/standoff only after local RCA and USB geometry are known",
-    "resolve remaining J_LCD gate: final panel variant + contact-side/mating geometry + internal-common status of 3V3 pins 4/21/29",
+    "resolve remaining J_LCD gate: final panel variant + top/bottom contact-side + exact connector/mated height + internal-common status of 3V3 pins 4/21/29",
     "validate/revise M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
     "lock M1 mounting-hole coordinates and screw/standoff system",
     "choose fabrication stackup after board outline/connector datums are frozen"
@@ -1433,5 +1433,28 @@
       "whether panel-side 3V3 contacts 4/21/29 are internally common and therefore safe mapping to M1 3V3_LCD / 3V3_TOUCH"
     ],
     "power_domain_caution": "Original Guition board drives FPC contacts 4, 21 and 29 from the same ESP_3V3 net. This proves board-side common drive, not internal panel commonality; do not split them across filtered rails until the panel assembly is proven."
+  },
+  "display_fpc_physical_orientation_evidence": {
+    "revision": "M1-MECH-A10",
+    "status": "side_entry_component_side_confirmed__contact_side_and_height_open",
+    "source": {
+      "type": "manufacturer_specification_photo",
+      "title": "JC4880P443C_I_W Specifications-EN-V1.0",
+      "page": 5,
+      "url": "https://www.guition.com/icms/upload/fb081940d6fc11f09850077a33e1404f/FTPData/UEditor/file/2026121/1768961095795/JC4880P443C_I_W%20Specifications-EN-V1.0.pdf"
+    },
+    "confirmed": [
+      "LCD FPC connector is mounted on the component side of the original JC4880 PCB",
+      "connector architecture is horizontal/right-angle side-entry",
+      "flex approaches connector laterally, parallel to PCB plane"
+    ],
+    "not_confirmed": [
+      "top-contact vs bottom-contact electrical orientation",
+      "exact connector housing height",
+      "mated FPC stack height",
+      "production footprint dimensions",
+      "final purchased panel tail geometry"
+    ],
+    "design_rule": "Do not infer contact-side or Z height from the photograph. Final J_LCD footprint remains blocked until a SOFNG drawing, authoritative EDA mechanical definition, or direct physical measurement resolves those dimensions."
   }
 }
