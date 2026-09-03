@@ -1429,15 +1429,15 @@
       (effects (font (size 1.27 1.27)))
     )
 
-    (property "Value" "5V_TVS_TBD" (at 62.69 61.69 0)
+    (property "Value" "SMBJ6.0CA-TR" (at 62.69 61.69 0)
       (effects (font (size 1.27 1.27)))
     )
 
-    (property "Footprint" "" (at 59.69 59.69 0)
+    (property "Footprint" "Diode_SMD:D_SMB" (at 59.69 59.69 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
 
-    (property "Datasheet" "~" (at 59.69 59.69 0)
+    (property "Datasheet" "https://www.st.com/resource/en/datasheet/smbj.pdf" (at 59.69 59.69 0)
       (effects (font (size 1.27 1.27)) (hide yes))
     )
 
@@ -2365,7 +2365,7 @@
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid "a1000077-1111-4111-8111-000000000078")
   )
-  (text "J1 and D1 exact MPN/footprints remain TBD-MECH/TBD-SURGE. Bulk 220/330/470uF is EVT tuning."
+  (text "J1 exact mechanical footprint remains TBD-MECH. D1 = ST SMBJ6.0CA-TR / SMB is locked in M1-MECH-A12. Bulk 220/330/470uF remains EVT tuning."
     (exclude_from_sim no)
     (at 95 93 0)
     (effects (font (size 1.27 1.27)) (justify left))
