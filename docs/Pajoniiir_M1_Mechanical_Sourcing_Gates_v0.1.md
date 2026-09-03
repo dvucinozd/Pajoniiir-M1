@@ -28,13 +28,14 @@ The machine-readable manifest records every open gate, its current RefDes, requi
 
 Key classes:
 
-- input bulk/TVS tuning and sourcing: `C3`, `D1`, `C8`
+- input bulk EVT tuning still open: `C3`, `C8`
+- input TVS `D1` **CLOSED in M1-MECH-A12** — ST SMBJ6.0CA-TR / `Diode_SMD:D_SMB`
 - user-facing mechanics still open: `J1`, `J2`, `J3`, `J4`, `J5`, `J7`, `SW1`, `SW2`
 - `J6` **CLOSED in M1-MECH-A8 by removal from Rev A**
 - factory fixture: `J9` **CLOSED in M1-MECH-A7** — project-local PCB-only 5-pad pogo footprint with asymmetric tooling holes
 - display/FPC: documentation alias `J_LCD`, intentionally not instantiated
 - global mechanics: PCB outline / mounting datums
-- fabrication: stackup and controlled-impedance geometry
+- fabrication stackup **CLOSED in M1-MECH-A11** — JLCPCB `JLC04161H-7628`; exact routed impedance width/spacing remains a layout-stage calculation
 
 ---
 
@@ -61,11 +62,11 @@ https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120
 Remaining J_LCD evidence required before instantiation:
 
 1. authoritative purchased panel/assembly MPN
-2. contact-side orientation and FPC insertion direction
-3. mating height / Z envelope
-4. meaning of the original Altium references 31/32 vs the physical 30-contact connector
-5. pins 15/16/18/19
-6. confirmation that original FPC 3V3 pins 4/21/29 are internally common before combining M1's separately filtered LCD/touch rails
+2. top-vs-bottom electrical contact-side orientation
+3. exact connector housing / mated FPC Z height and final panel-tail geometry
+4. confirmation that original FPC 3V3 pins 4/21/29 are internally common before mapping M1's separately filtered LCD/touch rails
+
+Already resolved by M1-MECH-A9/A10: physical sequence is 30 electrical contacts, 31/32 are GND shell/mount references, pins 15/16/18/19 are NC, and the original assembly uses component-side right-angle/side-entry insertion.
 
 ---
 
@@ -120,21 +121,21 @@ The fixture must power the board through the normal qualified 5 V path and must 
 
 ## Board/fabrication closure inputs
 
-Before controlled-impedance routing can start, lock:
+Fabrication stackup is already locked by M1-MECH-A11:
 
-- board X/Y and mounting holes
-- connector/display edge datums
-- chosen PCB fabricator
-- layer count and copper weights
-- finished thickness
-- actual dielectric stackup
+```text
+JLCPCB JLC04161H-7628
+4 layers / 1.6 mm
+1 oz outer / 0.5 oz inner
+L1 high-speed -> solid L2 GND reference
+```
 
-Then derive:
+Before controlled-impedance routing/final layout freeze:
 
-- USB0 HS: 90 ohm differential target
-- USB1 FS: preserve differential geometry even though timing margin is larger
-- MIPI DSI: 100 ohm differential target
-- power/high-current copper from 5V input through eFuse/shunt/USB branches
+- lock board X/Y and mounting holes
+- lock connector/display edge datums
+- calculate and record exact width/spacing from the current JLCPCB impedance calculator for USB 90 ohm differential and MIPI DSI 100 ohm differential
+- size/review power/high-current copper from 5V input through eFuse/shunt/USB branches
 
 ---
 

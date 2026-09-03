@@ -148,15 +148,21 @@ RefDes:
 
 `D_TVS_IN`
 
-Exact MPN ostaje TBD dok se ne definiraju:
+M1-MECH-A12 zaključava Rev-A input TVS:
 
-- stvarni adapter
-- cable length
-- očekivani ESD nivo
-- surge cilj
-- maksimalni dopušteni clamping napon
+```text
+Manufacturer   STMicroelectronics
+MPN            SMBJ6.0CA-TR
+Polarity       bidirectional
+VRWM           6.0 V
+VBR min        6.7 V
+VC 10/1000     10.3 V
+VC 8/20        14.8 V
+Package        SMB / DO-214AA
+KiCad          Diode_SMD:D_SMB
+```
 
-TVS mora biti dimenzioniran za 5 V rail i ne smije imati previsok leakage na normalnom 5.25 V maksimumu.
+Bidirectional `CA` varijanta je namjerna: ne uvodi forward-diode put koji bi poništio TPS259474 reverse-polarity arhitekturu. 6 V standoff ostaje iznad normalnog 5.25 V maksimuma, a specificirani clamp ostaje ispod absolute input maksimuma eFusea. SMB kućište je maksimalno približno 2.45 mm visoko i prolazi M1 centralni 6.5 mm gross height screen.
 
 ---
 
@@ -672,7 +678,7 @@ EFUSE_PGTH
 | RefDes | Part/value | Status |
 |---|---|---|
 | J1 | 5V locking power connector | TBD-MECH |
-| D1 | 5V TVS | TBD |
+| D1 | SMBJ6.0CA-TR | ST, bidirectional 6 V TVS, SMB / `Diode_SMD:D_SMB` |
 | U1 | TPS259474ARPWR | LOCK-CANDIDATE |
 | R1 | 402 kΩ 1% | UVLO top |
 | R2 | 150 kΩ 1% | UVLO bottom |
@@ -697,7 +703,7 @@ EFUSE_PGTH
 Prije finalnog schematic locka:
 
 - [ ] exact input connector
-- [ ] exact TVS
+- [x] exact TVS — ST SMBJ6.0CA-TR / SMB, M1-MECH-A12
 - [x] PGTH values — 100 kΩ / 36.5 kΩ, VPG rising ≈ 4.49 V typ
 - [ ] confirm PG pull-up voltage/rating
 - [ ] confirm 5V_SYS output bulk vs dVdt/inrush

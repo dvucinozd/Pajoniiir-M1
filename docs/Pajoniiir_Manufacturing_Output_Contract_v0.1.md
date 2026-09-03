@@ -16,14 +16,14 @@ Current source baseline contains:
 
 - **269** unique RefDes with `in_bom=yes`
 - **16** DNP RefDes included for assembly-option visibility
-- **11** intentional `in_bom=yes` blank-footprint gates
+- **10** intentional `in_bom=yes` blank-footprint gates
 - additional DNL/service elements such as `JDBG_USB` may remain `in_bom=no`
 
 These counts are a snapshot, not a hard-coded invariant. CI derives the current expected set from the 15 leaf schematics and compares it against the KiCad-generated BOM.
 
 ### M1-MECH-A8 source-baseline update
 
-J6 / optional 3.5 mm line-out was removed from the Rev A schematic rather than carried as a permanent DNP mechanical gate. Current source snapshot is therefore **269 in-BOM / 16 DNP / 11 intentional blank-footprint gates**. Older run #76 figures later in this document remain historical evidence for the pre-A8 source state.
+J6 / optional 3.5 mm line-out was removed from the Rev A schematic rather than carried as a permanent DNP mechanical gate. After M1-MECH-A12 locks D1, the current source snapshot is **269 in-BOM / 16 DNP / 10 intentional blank-footprint gates**. Older run #76 figures later in this document remain historical evidence for the pre-A8 source state.
 
 ---
 
@@ -71,7 +71,6 @@ Current `in_bom=yes` gates:
 ~~~text
 J1
 C3
-D1
 C8
 SW1
 SW2

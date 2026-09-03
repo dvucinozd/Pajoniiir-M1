@@ -214,7 +214,7 @@ Rev A baseline:
 | RefDes | Qty | Vrijednost | Napomena |
 |---|---:|---|---|
 | J_PWR | 1 | 5 V regulated input, ≥4 A source target | **TBD-MECH** locking connector |
-| D_TVS_IN | 1 | 5 V rail TVS | TBD nakon surge/connector cilja |
+| D_TVS_IN | 1 | **ST SMBJ6.0CA-TR** | bidirectional 6 V TVS, SMB / `Diode_SMD:D_SMB`, locked M1-MECH-A12 |
 | C_IN_HF | 1 | 100 nF X7R | uz eFuse |
 | C_IN_MID | 1 | 10 µF | input |
 | C_IN_BULK | 1 | 330 µF initial | 220–470 µF tuning |

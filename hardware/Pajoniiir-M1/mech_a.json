@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__display_fpc_side_entry_confirmed__display_contact_side_height_and_3v3_open__pcb_envelope_candidate_defined__j9_j6_closed__external_absolute_datums_and_z_stack_open",
+  "status": "repo_only_analysis_complete__d1_and_fab_closed__physical_evt_display_and_enclosure_evidence_required",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -385,8 +385,7 @@
     "rebalance PCB Z/standoff only after local RCA and USB geometry are known",
     "resolve remaining J_LCD gate: final panel variant + top/bottom contact-side + exact connector/mated height + internal-common status of 3V3 pins 4/21/29",
     "validate/revise M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
-    "lock M1 mounting-hole coordinates and screw/standoff system",
-    "choose fabrication stackup after board outline/connector datums are frozen"
+    "lock M1 mounting-hole coordinates and screw/standoff system"
   ],
   "connector_cluster_baseline": {
     "status": "relative_topology_defined__candidate_mpn_envelopes_screened__absolute_wall_datums_open__z_stack_rebalance_required",
@@ -494,7 +493,7 @@
         ],
         "screened_candidate": "Amphenol 87520-1010ALF",
         "preferred_conditional_candidate": "Amphenol 87520-1010ALF",
-        "alternate_candidate": "Würth 614004190021",
+        "alternate_candidate": "W\u00fcrth 614004190021",
         "demoted_reference": "GCT USB1125-GF-B (NRND)",
         "z_screen_status": "preferred active candidate requires ~7.6 mm front screening clearance including temporary 0.5 mm gap; current 6.5 mm gross stack requires rebalance",
         "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
@@ -762,7 +761,7 @@
         "result": "HISTORICAL_SCREEN_REFERENCE_ONLY__NRND__SUPERSEDED_BY_M1_MECH_A3",
         "source": "https://gct.co/usb-connector/usb-a-type",
         "lifecycle_update": "GCT currently marks USB1125 Not Recommended for New Designs",
-        "superseded_by": "M1-MECH-A3 Amphenol 87520-1010ALF preferred / Würth 614004190021 alternate"
+        "superseded_by": "M1-MECH-A3 Amphenol 87520-1010ALF preferred / W\u00fcrth 614004190021 alternate"
       },
       {
         "refs": [
@@ -773,7 +772,7 @@
         "mpn": "KLPX-0848A-2-W",
         "interface": "individual right-angle through-hole RCA jack with board lock",
         "electrical_screen": "audio-compatible candidate; exact grounding/isolation policy still belongs to layout review",
-        "mechanical_screen": "Ø8.3 mm mating barrel vs legacy Ø11.88 mm aperture gives 1.79 mm nominal radial aperture clearance if concentric; Kycon drawing carries 10.0 mm body-face dimensions, but exact PCB-plane-to-top height remains a CAD/drawing-coordinate closure item",
+        "mechanical_screen": "\u00d88.3 mm mating barrel vs legacy \u00d811.88 mm aperture gives 1.79 mm nominal radial aperture clearance if concentric; Kycon drawing carries 10.0 mm body-face dimensions, but exact PCB-plane-to-top height remains a CAD/drawing-coordinate closure item",
         "result": "PREFERRED_CONDITIONAL_GEOMETRY_CANDIDATE__NOT_LOCKED",
         "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x.pdf",
         "alternate_plating": "KLPX-0848A-2-W-G"
@@ -847,7 +846,7 @@
       },
       "reasons": [
         "individual jacks can preserve the 19.20 mm legacy RCA center spacing",
-        "Ø8.3 mm barrel is geometrically compatible with the recorded Ø11.88 mm legacy aperture on first-order concentric screening",
+        "\u00d88.3 mm barrel is geometrically compatible with the recorded \u00d811.88 mm legacy aperture on first-order concentric screening",
         "keeps MAIN L/R on the mainboard with no internal audio harness",
         "current non-gold red/white variants are active distributor-listed parts"
       ],
@@ -875,7 +874,7 @@
       ],
       "penalties": [
         "adds two internal audio connections / assembly operations",
-        "legacy Ø11.88 mm holes are not automatically production-compatible with a 1/4-32 threaded bushing; centering, nut/washer bearing area and wall strength must be validated",
+        "legacy \u00d811.88 mm holes are not automatically production-compatible with a 1/4-32 threaded bushing; centering, nut/washer bearing area and wall strength must be validated",
         "requires harness routing, strain relief and ground/shield policy"
       ],
       "source": "https://www.sameskydevices.com/catalog/interconnect/connectors/rca-connectors"
@@ -906,7 +905,7 @@
   "usb_host_connector_strategy": {
     "revision": "M1-MECH-A3",
     "status": "preferred_conditional_active_candidate_selected__j2_j3_gates_remain_open",
-    "decision": "Demote GCT USB1125-GF-B to a historical envelope reference because the manufacturer currently marks the USB1125 series NRND. Prefer Amphenol 87520-1010ALF for both host ports, with Würth 614004190021 as the lifecycle-stable alternate.",
+    "decision": "Demote GCT USB1125-GF-B to a historical envelope reference because the manufacturer currently marks the USB1125 series NRND. Prefer Amphenol 87520-1010ALF for both host ports, with W\u00fcrth 614004190021 as the lifecycle-stable alternate.",
     "common_part_policy": "Prefer one identical USB-A receptacle MPN for J2 and J3 unless later panel/placement constraints require different mechanics.",
     "preferred_conditional": {
       "manufacturer": "Amphenol Communications Solutions / FCI",
@@ -939,7 +938,7 @@
       "result": "PREFERRED_CONDITIONAL__NOT_FOOTPRINT_LOCKED"
     },
     "alternate": {
-      "manufacturer": "Würth Elektronik",
+      "manufacturer": "W\u00fcrth Elektronik",
       "mpn": "614004190021",
       "interface": "WR-USB USB 2.0 Type-A horizontal THT, high-current",
       "lifecycle": "Manufacturer status Active; expected lifetime >10 years",
@@ -1400,7 +1399,7 @@
       "intentional_blank_bom_gates_before": 12,
       "intentional_blank_bom_gates_after": 11
     },
-    "legacy_evidence_policy": "Ø6.97 mm legacy opening remains historical CAD evidence only; no Rev A cutout datum.",
+    "legacy_evidence_policy": "\u00d86.97 mm legacy opening remains historical CAD evidence only; no Rev A cutout datum.",
     "reintroduction_policy": "Future reintroduction is a board/product revision, not a DNP population option."
   },
   "display_fpc_forensic_resolution": {
@@ -1456,5 +1455,58 @@
       "final purchased panel tail geometry"
     ],
     "design_rule": "Do not infer contact-side or Z height from the photograph. Final J_LCD footprint remains blocked until a SOFNG drawing, authoritative EDA mechanical definition, or direct physical measurement resolves those dimensions."
+  },
+  "fabrication_stackup_closure": {
+    "revision": "M1-MECH-A11",
+    "status": "closed",
+    "fabricator": "JLCPCB",
+    "stackup_id": "JLC04161H-7628",
+    "layer_count": 4,
+    "finished_thickness_mm": 1.6,
+    "outer_copper_oz": 1.0,
+    "inner_copper_oz": 0.5,
+    "controlled_impedance_targets": {
+      "USB_diff_ohms": 90,
+      "MIPI_DSI_diff_ohms": 100
+    },
+    "exact_width_gap_status": "layout-stage calculation still required from current JLCPCB calculator; not a fabrication-stackup gate",
+    "authority": "pcb_constraints.json"
+  },
+  "input_tvs_closure": {
+    "revision": "M1-MECH-A12",
+    "status": "closed",
+    "refdes": "D1",
+    "manufacturer": "STMicroelectronics",
+    "mpn": "SMBJ6.0CA-TR",
+    "polarity": "bidirectional",
+    "vrwm_v": 6.0,
+    "vbr_min_v": 6.7,
+    "clamp_10_1000_v": 10.3,
+    "clamp_8_20_v": 14.8,
+    "package": "SMB",
+    "footprint": "Diode_SMD:D_SMB",
+    "package_height_max_mm": 2.45,
+    "reason": "6 V standoff clears normal 5.25 V input; bidirectional device preserves reverse-polarity architecture; clamp remains below TPS25947 absolute input maximum.",
+    "schematic_status": "locked in 01_POWER_INPUT.kicad_sch"
+  },
+  "repo_only_analysis_boundary": {
+    "revision": "M1-MECH-A12",
+    "status": "all safely closable repo-only analytical/sourcing work complete",
+    "remaining_open_blockers": [
+      "C3_INPUT_BULK",
+      "C8_PROTECTED_BULK",
+      "J1_POWER_INPUT",
+      "SW1_RESET",
+      "SW2_BOOT",
+      "J2_USB0",
+      "J3_USB1",
+      "J4_RCA_L",
+      "J5_RCA_R",
+      "J_LCD_DISPLAY_FPC",
+      "J7_MICROSD",
+      "PCB_OUTLINE"
+    ],
+    "remaining_blocker_count": 12,
+    "rule": "Do not close remaining gates from assumptions. They require EVT measurement, direct physical measurement, authoritative final panel data, or enclosure/PCB CAD datums."
   }
 }
