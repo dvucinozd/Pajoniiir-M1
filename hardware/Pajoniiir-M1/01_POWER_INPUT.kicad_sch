@@ -2146,6 +2146,9 @@
     (stroke (width 0) (type default))
     (uuid "a1000063-1111-4111-8111-000000000064")
   )
+  (junction (at 165.735 50.165) (diameter 0) (color 0 0 0 0)
+    (uuid "a1010012-1111-4111-8111-000000000012")
+  )
   (hierarchical_label "5V_PROTECTED"
     (shape output)
     (at 194.945 50.165 0)
