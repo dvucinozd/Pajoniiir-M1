@@ -279,12 +279,15 @@
         "edge clearances",
         "connector/display/enclosure datums"
       ],
-      "closure": "Commit authoritative Edge.Cuts and mounting datums.",
+      "closure": "Validate connector/boss/edge clearances, then commit authoritative Edge.Cuts and final mounting datums; M1-MECH-A0 is not final.",
       "known_evidence": [
         "validated legacy enclosure candidate 121.008 x 73.408 x 30.000 mm",
         "2.0 mm legacy wall thickness",
         "conservative M1 board-bay candidate <=108 x 60 mm",
-        "original GUITION shell mounting reference 102.6 x 60.0 mm, 4xD2"
+        "original GUITION shell mounting reference 102.6 x 60.0 mm, 4xD2",
+        "M1-MECH-A0 placement-feasibility PCB envelope 108.00 x 65.06 mm",
+        "candidate outline cavity clearance 4.504 mm/side X and 2.174 mm/side Y",
+        "candidate mounting centers X=+/-51.3 mm, Y=+/-30.0 mm"
       ],
       "evidence_file": "mech_a.json"
     },

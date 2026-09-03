@@ -254,6 +254,22 @@ def main() -> int:
                 f"{MECH_A.name}: candidate Z-stack drift: "
                 f"{observed_z} != {expected_z}"
             )
+        pcb_candidate = mech_a.get("m1_enclosure_baseline", {}).get(
+            "pcb_envelope_candidate", {}
+        )
+        expected_pcb_candidate = {
+            "width": 108.0,
+            "height": 65.06,
+            "area_mm2": 7026.48,
+        }
+        observed_pcb_candidate = {
+            key: pcb_candidate.get(key) for key in expected_pcb_candidate
+        }
+        if observed_pcb_candidate != expected_pcb_candidate:
+            errors.append(
+                f"{MECH_A.name}: M1-MECH-A0 PCB envelope drift: "
+                f"{observed_pcb_candidate} != {expected_pcb_candidate}"
+            )
         observed_display = {
             "bare_x": bare.get("x"),
             "bare_y": bare.get("y"),
@@ -313,6 +329,21 @@ def main() -> int:
             errors.append(
                 f"{PCB.name}: copper layer count={len(copper_layers)}; "
                 f"pcb_constraints expects {expected_layers}"
+            )
+        outline_locked = bool(
+            mech_a.get("final_board_outline_locked")
+            if isinstance(mech_a, dict)
+            else False
+        )
+        edge_graphics_present = '(layer "Edge.Cuts")' in pcb_text
+        if not outline_locked and edge_graphics_present:
+            errors.append(
+                f"{PCB.name}: Edge.Cuts geometry present while "
+                f"{MECH_A.name} final_board_outline_locked=false"
+            )
+        if outline_locked and not edge_graphics_present:
+            errors.append(
+                f"{PCB.name}: final board outline is locked but no Edge.Cuts geometry exists"
             )
 
     # ERC exclusions are allowed only for explicitly documented hard gates.

@@ -21,6 +21,8 @@ What is locked before mechanics:
 - sensitive/switching-domain separation rules
 - Kelvin shunt measurement topology
 
+A placement-feasibility envelope **M1-MECH-A0 = 108.00 × 65.06 mm** is defined in `mech_a.json`; it is not Edge.Cuts.
+
 What is **not** locked:
 
 - Edge.Cuts

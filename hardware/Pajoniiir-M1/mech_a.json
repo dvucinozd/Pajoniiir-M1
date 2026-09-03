@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__enclosure_candidate_validated__pcb_outline_open",
+  "status": "display_datum_locked__z_stack_candidate_defined__pcb_envelope_candidate_defined__final_outline_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -244,11 +244,65 @@
       "status": "baseline_constraint",
       "rule": "reserve front face for display/touch; place user-facing connectors and service apertures on side/rear walls unless enclosure geometry is explicitly redesigned",
       "rationale": "only 3.304 mm nominal case margin remains around the centered bare display envelope"
+    },
+    "pcb_envelope_candidate": {
+      "revision": "M1-MECH-A0",
+      "width": 108,
+      "height": 65.06,
+      "area_mm2": 7026.48,
+      "centered_on": "M1_FRONT_CENTER",
+      "extents": {
+        "x_min": -54,
+        "x_max": 54,
+        "y_min": -32.53,
+        "y_max": 32.53
+      },
+      "clearance_to_modeled_inner_cavity_each_side": {
+        "x": 4.504,
+        "y": 2.174
+      },
+      "mounting_candidate": {
+        "hole_count": 4,
+        "hole_diameter": 2,
+        "centers": [
+          [
+            -51.3,
+            -30
+          ],
+          [
+            51.3,
+            -30
+          ],
+          [
+            -51.3,
+            30
+          ],
+          [
+            51.3,
+            30
+          ]
+        ],
+        "center_to_board_edge": {
+          "x": 2.7,
+          "y": 2.53
+        },
+        "hole_edge_to_board_edge": {
+          "x": 1.7,
+          "y": 1.53
+        },
+        "status": "candidate; verify screw standard, fabrication edge rules and enclosure boss geometry"
+      },
+      "status": "placement_feasibility_only__not_Edge_Cuts",
+      "rationale": [
+        "matches the manufacturer rear-shell reference envelope",
+        "fits inside the validated 117.008 x 69.408 mm modeled inner cavity with positive XY margin",
+        "keeps the original 102.6 x 60.0 mm mounting-center reference mechanically consistent"
+      ]
     }
   },
   "next_closure_inputs": [
     "confirm M1 reuses the validated legacy enclosure external envelope or define a replacement envelope",
-    "lock final M1 PCB X/Y inside the <=108 x 65.06 mm rear mechanical working envelope candidate",
+    "validate/revise the M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
     "lock M1 mounting-hole coordinates and screw/standoff system",
     "define user-facing panel assignment for J1/J2/J3/J4/J5/J6/J7/SW1/SW2",
     "resolve J_LCD FPC mating/contact/pin-domain gate",

@@ -217,7 +217,34 @@ The legacy Blender fit also modeled exactly 117.008 × 69.408 mm of inner XY spa
 
 ---
 
-## 9. What M1-MECH-A has closed
+## 9. M1-MECH-A0 PCB envelope candidate
+
+For placement-feasibility work only, M1 now has a candidate PCB rectangle:
+
+~~~text
+108.00 x 65.06 mm
+area = 7026.48 mm2
+
+X = -54.000 .. +54.000
+Y = -32.530 .. +32.530
+~~~
+
+Centered inside the modeled 117.008 x 69.408 mm inner cavity, this leaves nominal cavity clearance:
+
+~~~text
+X: 4.504 mm per side
+Y: 2.174 mm per side
+~~~
+
+Candidate mounting centers remain X=+/-51.3 mm and Y=+/-30.0 mm with the original 2.0 mm hole reference. Relative to the candidate PCB, hole-center margins are 2.70 mm in X and 2.53 mm in Y. For an O2.0 mm hole this leaves 1.70 mm and 1.53 mm of geometric material from hole edge to board edge.
+
+These values are not fabrication approval. Final screw size, plated/non-plated treatment, boss geometry and board-house edge rules still need review.
+
+This candidate exists only in mech_a.json / documentation. CI rejects real Edge.Cuts while final_board_outline_locked=false.
+
+---
+
+## 10. What M1-MECH-A has closed
 
 - display/front-envelope family identified
 - bare front envelope quantified
@@ -232,7 +259,7 @@ The legacy Blender fit also modeled exactly 117.008 × 69.408 mm of inner XY spa
 
 ---
 
-## 10. What remains open
+## 11. What remains open
 
 ### PCB
 
@@ -261,8 +288,8 @@ The legacy Blender fit also modeled exactly 117.008 × 69.408 mm of inner XY spa
 
 ---
 
-## 11. Immediate next M1-MECH-A action
+## 12. Immediate next M1-MECH-A action
 
-Use the 121.008 × 73.408 × 30 mm enclosure candidate and 108 × 65.06 mm rear mechanical working-envelope candidate to build the first connector-placement envelope.
+Use the 121.008 × 73.408 × 30 mm enclosure candidate and M1-MECH-A0 108 × 65.06 mm PCB envelope candidate to build the first connector-placement envelope and verify that connector bodies/bosses do not invalidate the candidate outline.
 
 No connector footprint is considered production-locked until its panel datum and mating clearance are defined.
