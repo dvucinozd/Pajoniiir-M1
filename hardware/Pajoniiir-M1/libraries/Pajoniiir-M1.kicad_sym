@@ -3436,7 +3436,7 @@
 	          (number "2" (effects (font (size 1.27 1.27)))))
 	      )
 	    )
-(symbol "TPS62132_M1_M1" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+(symbol "TPS62132_M1" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (at 3.81 13.97 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
