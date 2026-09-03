@@ -96,7 +96,6 @@
     "electrical_pin_map": true
   },
   "still_open": [
-    "final dimension-by-dimension pad/mounting-plate/courtyard audit against Amphenol drawing 10172241",
     "actual DSI506 FFC conductor-side and host-to-module pin-1 orientation check",
     "FFC bend and mating keepout in final enclosure",
     "absolute connector XY/Z placement"
@@ -120,6 +119,14 @@
       "mounting plates bracket the contact row",
       "part identity cross-checked against released Amphenol drawing 10172241"
     ],
-    "status": "COMMITTED_CANDIDATE__FINAL_PAD_AND_COURTYARD_DRAWING_AUDIT_REQUIRED"
+    "status": "DRAWING_VERIFIED_AND_COMMITTED_M1-ELEC-B2",
+    "drawing_checks": [
+      "15 contacts at 1.00 mm pitch / 14.00 mm centre span",
+      "signal pads 0.60 x 2.00 mm",
+      "two unnumbered mounting-plate solder pads 0.70 x 4.20 mm at +/-8.00 mm",
+      "mounting plates bracket contact row",
+      "temporary converter 3D path removed",
+      "footprint attr normalized to SMD"
+    ]
   }
 }

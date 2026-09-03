@@ -954,9 +954,9 @@
     (pin "1" (uuid "0e00003c-e000-4e00-8e00-00000000003d"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "#PWR1405") (unit 1))))
   )
-  (hierarchical_label "I2C_SDA" (shape bidirectional) (at 215.265 74.93 0) (effects (font (size 1.27 1.27))) (uuid "0e00003d-e000-4e00-8e00-00000000003e"))
+  (hierarchical_label "DISPLAY_I2C_SDA" (shape bidirectional) (at 215.265 74.93 0) (effects (font (size 1.27 1.27))) (uuid "0e00003d-e000-4e00-8e00-00000000003e"))
   (wire (pts (xy 175.26 74.93) (xy 215.265 74.93)) (stroke (width 0) (type default)) (uuid "0e00003e-e000-4e00-8e00-00000000003f"))
-  (hierarchical_label "I2C_SCL" (shape input) (at 215.265 77.47 0) (effects (font (size 1.27 1.27))) (uuid "0e00003f-e000-4e00-8e00-000000000040"))
+  (hierarchical_label "DISPLAY_I2C_SCL" (shape input) (at 215.265 77.47 0) (effects (font (size 1.27 1.27))) (uuid "0e00003f-e000-4e00-8e00-000000000040"))
   (wire (pts (xy 175.26 77.47) (xy 215.265 77.47)) (stroke (width 0) (type default)) (uuid "0e000040-e000-4e00-8e00-000000000041"))
   (hierarchical_label "SYS_POWER_ALERT_N" (shape output) (at 175.26 82.55 0) (effects (font (size 1.27 1.27))) (uuid "0e000041-e000-4e00-8e00-000000000042"))
   

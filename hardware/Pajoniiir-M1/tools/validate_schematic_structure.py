@@ -805,23 +805,36 @@ def main() -> int:
             errors.append("RPW0010A footprint must retain 16 TI stencil paste primitives")
         if rpw_text.count("(solder_mask_margin 0.05)") != 14:
             errors.append("RPW0010A footprint must retain +0.05 mm NSMD mask expansion")
-    if '(property "Reference" "J_LCD"' in p10:
-        errors.append("J_LCD must remain uninstantiated until authoritative FPC gate closes")
-    if "PHYSICAL J_LCD IS INTENTIONALLY NOT INSTANTIATED" not in p10:
-        errors.append("display FPC hard-gate annotation missing")
-    display_identity_tokens = (
-        "SOFNG 0.5TBQP-30P-1 / C3975120",
-        "30 contacts",
-        "0.5mm",
-    )
-    if not all(token in p10 for token in display_identity_tokens):
-        errors.append("display FPC confirmed connector identity/count/pitch annotation missing")
-    if "31/32 are GND shell/mount refs" not in p10:
-        errors.append("display FPC A9 shell/mount resolution annotation missing")
-    if "15/16/18/19 are NC" not in p10:
-        errors.append("display FPC A9 NC-pin resolution annotation missing")
-    if "Original FPC pins 4/21/29 share ESP_3V3" not in p10:
-        errors.append("display FPC 3V3-domain hard-gate annotation missing")
+    # M1-ELEC-B2 final DSI506 display contract.
+    if '(property "Reference" "J6"' not in p10:
+        errors.append("final DSI506 J6 connector missing")
+    for token in (
+        "DSI506 / DYL0023",
+        "SFW15R-2STE1LF",
+        "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
+        "DISPLAY_I2C_SDA",
+        "DISPLAY_I2C_SCL",
+    ):
+        if token not in p10:
+            errors.append(f"final DSI506 display contract token missing: {token}")
+    active_p10 = "\n".join(instantiated_symbol_blocks(p10))
+    for legacy_ref in (
+        "U9", "L3", "D4", "C95", "C96", "C97", "C98",
+        "R88", "R89", "R90", "R91", "R92", "R93", "R94",
+        "TP3", "TP4", "TP5", "TP6",
+    ):
+        if f'(property "Reference" "{legacy_ref}"' in active_p10:
+            errors.append(f"legacy 4.3-inch display component remains instantiated: {legacy_ref}")
+    if any(True for _ in instantiated_symbol_blocks(child_text.get("11_TOUCH_GT911", ""))):
+        errors.append("retired 11_TOUCH_GT911 sheet must contain no instantiated components")
+    if "separate GT911 support retired" not in child_text.get("11_TOUCH_GT911", ""):
+        errors.append("retired GT911 sheet migration annotation missing")
+    p03 = child_text.get("03_P4_CORE", "")
+    for legacy_hier in ("TOUCH_RST", "TOUCH_INT", "LCD_RST", "LCD_TE", "LCD_BL_PWM"):
+        if f'hierarchical_label "{legacy_hier}"' in p03:
+            errors.append(f"released display GPIO still exported by P4 core: {legacy_hier}")
+    if "DISPLAY_I2C_SDA" not in p03 or "DISPLAY_I2C_SCL" not in p03:
+        errors.append("P4 final display I2C hierarchy missing")
 
 
     # 7. ESP32-P4 multi-unit GPIO connectivity contract.
@@ -934,12 +947,8 @@ def main() -> int:
                 )
 
             expected_unit2 = {
-                "TOUCH_RST": "GPIO3",
-                "TOUCH_INT": "GPIO4",
-                "LCD_RST": "GPIO5",
-                "LCD_TE": "GPIO6",
-                "I2C_SDA": "GPIO7",
-                "I2C_SCL": "GPIO8",
+                "DISPLAY_I2C_SDA": "GPIO7",
+                "DISPLAY_I2C_SCL": "GPIO8",
                 "C6_SDIO_D0": "GPIO14",
                 "C6_SDIO_D1": "GPIO15",
                 "C6_SDIO_D2": "GPIO16/ADC1_CHANNEL0",
@@ -949,7 +958,6 @@ def main() -> int:
                 "USB0_PWR_EN": "GPIO20/ADC1_CHANNEL4",
                 "USB0_FAULT_N": "GPIO21/ADC1_CHANNEL5",
                 "USB1_PWR_EN": "GPIO22/ADC1_CHANNEL6",
-                "LCD_BL_PWM": "GPIO23/ADC1_CHANNEL7",
                 "FLASH_CS": "FLASH_CS",
                 "FLASH_Q": "FLASH_Q",
                 "FLASH_WP": "FLASH_WP",
@@ -1022,7 +1030,9 @@ def main() -> int:
                 ]
                 unused_unit2 = {
                     "GPIO0", "GPIO1", "GPIO2",
+                    "GPIO3", "GPIO4", "GPIO5", "GPIO6",
                     "GPIO9", "GPIO10", "GPIO11", "GPIO12", "GPIO13",
+                    "GPIO23/ADC1_CHANNEL7",
                     "CSI_DATAN0", "CSI_DATAP0", "CSI_CLKP", "CSI_CLKN",
                     "CSI_DATAN1", "CSI_DATAP1", "CSI_REXT",
                     "GPIO28", "GPIO29", "GPIO30", "GPIO31",

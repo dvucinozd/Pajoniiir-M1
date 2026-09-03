@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-09-03",
+  "updated": "2026-09-04",
   "layout_freeze_allowed": false,
   "policy": "Open gates are intentional. Do not assign arbitrary footprints or claim final layout freeze until required evidence is recorded and status is closed.",
   "gates": [
@@ -591,12 +591,12 @@
     {
       "id": "J_LCD_DISPLAY_FPC",
       "sheet": "10_DISPLAY_MIPI",
-      "refdes": null,
+      "refdes": "J6",
       "documentation_alias": "J_LCD",
-      "category": "display_fpc",
+      "category": "display_module_connector_mechanical",
       "status": "open",
       "allow_blank_footprint": false,
-      "bom_scope": false,
+      "bom_scope": true,
       "blocks_layout_freeze": true,
       "known": [
         "SOFNG 0.5TBQP-30P-1",
@@ -614,12 +614,11 @@
       ],
       "source": "https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120",
       "required_evidence": [
-        "authoritative panel MPN/variant",
-        "contact-side orientation",
-        "exact connector body/mating height and top-vs-bottom contact-side geometry; side-entry architecture is already confirmed",
-        "confirm original common 3V3 pins 4/21/29 before mapping separate 3V3_LCD/3V3_TOUCH"
+        "actual DSI506 FFC conductor-side / host-to-module pin-1 continuity check",
+        "FFC bend/insertion keepout in final enclosure",
+        "absolute J6 XY/Z placement relative to final display and custom mainboard"
       ],
-      "closure": "Instantiate physical LCD connector only after final panel variant, contact-side/mating geometry, and safe 3V3-domain mapping are authoritative. 30-vs-32 and pins 15/16/18/19 are resolved in M1-MECH-A9.",
+      "closure": "Electrical connector, MPN and footprint are locked/instantiated. Gate remains open only for actual cable orientation and final enclosure placement evidence.",
       "evidence_file": "mech_a.json",
       "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
       "partial_closure_revision": "M1-MECH-A10",
@@ -644,7 +643,17 @@
           "source": "https://www.guition.com/icms/upload/fb081940d6fc11f09850077a33e1404f/FTPData/UEditor/file/2026121/1768961095795/JC4880P443C_I_W%20Specifications-EN-V1.0.pdf",
           "page": 5
         }
-      ]
+      ],
+      "exact_mpn": "SFW15R-2STE1LF",
+      "manufacturer": "Amphenol Communications Solutions / FCI",
+      "exact_footprint": "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
+      "contact_count": 15,
+      "pitch_mm": 1.0,
+      "contact_location": "top",
+      "connector_orientation": "right-angle / side-entry SMT ZIF",
+      "electrical_pin_map_status": "LOCKED_M1-ELEC-B0",
+      "schematic_status": "INSTANTIATED_M1-ELEC-B2",
+      "footprint_status": "DRAWING_VERIFIED_M1-ELEC-B2"
     },
     {
       "id": "J7_MICROSD",

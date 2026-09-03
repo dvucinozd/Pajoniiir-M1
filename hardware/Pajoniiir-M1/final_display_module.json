@@ -1,13 +1,20 @@
 {
   "schema_version": 2,
-  "milestones": ["M1-MECH-B0", "M1-ELEC-B0"],
+  "milestones": [
+    "M1-MECH-B0",
+    "M1-ELEC-B0",
+    "M1-ELEC-B2"
+  ],
   "updated": "2026-09-04",
-  "status": "final_5in_module_selected__m3_bench_signal_map_locked__production_connector_and_new_enclosure_open",
+  "status": "final_DSI506_selected__M3_pinout_locked__J6_schematic_and_footprint_instantiated__cable_and_enclosure_open",
   "authority": "Supersedes the M1-MECH-A Guition 4.3-inch bare-panel architecture for final-product display work.",
   "final_product_display": {
     "identity": "EYOYO DSI506 / DYL0023 5-inch 800x480 IPS MIPI-DSI capacitive-touch module",
     "identity_basis": "User confirmed the final M1 display is the same physical display used and accepted in Pajoniiir-M3.",
-    "resolution_px": [800, 480],
+    "resolution_px": [
+      800,
+      480
+    ],
     "native_orientation": "landscape",
     "supply_v": 3.3,
     "documented_max_current_ma": 340,
@@ -33,21 +40,78 @@
     "connector_contacts": 15,
     "pitch_mm": 1.0,
     "pin_map": [
-      {"pin": 1, "signal": "GND"},
-      {"pin": 2, "signal": "DSI_DATA1_N", "m1_net": "DSI_D1_N"},
-      {"pin": 3, "signal": "DSI_DATA1_P", "m1_net": "DSI_D1_P"},
-      {"pin": 4, "signal": "GND"},
-      {"pin": 5, "signal": "DSI_CLK_N", "m1_net": "DSI_CLK_N"},
-      {"pin": 6, "signal": "DSI_CLK_P", "m1_net": "DSI_CLK_P"},
-      {"pin": 7, "signal": "GND"},
-      {"pin": 8, "signal": "DSI_DATA0_N", "m1_net": "DSI_D0_N"},
-      {"pin": 9, "signal": "DSI_DATA0_P", "m1_net": "DSI_D0_P"},
-      {"pin": 10, "signal": "GND"},
-      {"pin": 11, "signal": "I2C_SCL", "m1_net": "DISPLAY_I2C_SCL", "esp32p4_gpio": 8},
-      {"pin": 12, "signal": "I2C_SDA", "m1_net": "DISPLAY_I2C_SDA", "esp32p4_gpio": 7},
-      {"pin": 13, "signal": "GND"},
-      {"pin": 14, "signal": "3V3", "m1_net": "3V3_DISPLAY_MODULE"},
-      {"pin": 15, "signal": "3V3", "m1_net": "3V3_DISPLAY_MODULE"}
+      {
+        "pin": 1,
+        "signal": "GND"
+      },
+      {
+        "pin": 2,
+        "signal": "DSI_DATA1_N",
+        "m1_net": "DSI_D1_N"
+      },
+      {
+        "pin": 3,
+        "signal": "DSI_DATA1_P",
+        "m1_net": "DSI_D1_P"
+      },
+      {
+        "pin": 4,
+        "signal": "GND"
+      },
+      {
+        "pin": 5,
+        "signal": "DSI_CLK_N",
+        "m1_net": "DSI_CLK_N"
+      },
+      {
+        "pin": 6,
+        "signal": "DSI_CLK_P",
+        "m1_net": "DSI_CLK_P"
+      },
+      {
+        "pin": 7,
+        "signal": "GND"
+      },
+      {
+        "pin": 8,
+        "signal": "DSI_DATA0_N",
+        "m1_net": "DSI_D0_N"
+      },
+      {
+        "pin": 9,
+        "signal": "DSI_DATA0_P",
+        "m1_net": "DSI_D0_P"
+      },
+      {
+        "pin": 10,
+        "signal": "GND"
+      },
+      {
+        "pin": 11,
+        "signal": "I2C_SCL",
+        "m1_net": "DISPLAY_I2C_SCL",
+        "esp32p4_gpio": 8
+      },
+      {
+        "pin": 12,
+        "signal": "I2C_SDA",
+        "m1_net": "DISPLAY_I2C_SDA",
+        "esp32p4_gpio": 7
+      },
+      {
+        "pin": 13,
+        "signal": "GND"
+      },
+      {
+        "pin": 14,
+        "signal": "3V3",
+        "m1_net": "3V3_DISPLAY_MODULE"
+      },
+      {
+        "pin": 15,
+        "signal": "3V3",
+        "m1_net": "3V3_DISPLAY_MODULE"
+      }
     ],
     "lane_policy": {
       "physical_route": "Route clock + lane0 + lane1 on M1 PCB.",
@@ -74,7 +138,11 @@
       "bus_hz": 100000,
       "reset_gpio_required": false,
       "interrupt_gpio_required": false,
-      "accepted_transform": {"swap_xy": false, "mirror_x": true, "mirror_y": true}
+      "accepted_transform": {
+        "swap_xy": false,
+        "mirror_x": true,
+        "mirror_y": true
+      }
     },
     "panel_controller": {
       "address": "0x45",
@@ -105,7 +173,13 @@
       "optional inline 0-ohm DSI tuning footprints if SI/layout remains acceptable",
       "GPIO7/GPIO8 shared display I2C"
     ],
-    "gpio_releases": [3, 4, 5, 6, 23]
+    "gpio_releases": [
+      3,
+      4,
+      5,
+      6,
+      23
+    ]
   },
   "power": {
     "source": "3V3_SYS via dedicated display-module branch",
@@ -115,19 +189,57 @@
     "production_rule": "Provide local bulk + HF decoupling at the 15-pin connector and preserve a 0-ohm/ferrite option; do not claim final power budget until all-on rail measurement."
   },
   "user_dimensioned_image_evidence": {
-    "rear_pcb_envelope_mm": [121.109, 77.193],
+    "rear_pcb_envelope_mm": [
+      121.109,
+      77.193
+    ],
     "mount_hole_diameter_mm": 2.5,
     "visible_mount_hole_count": 8,
-    "outer_hole_centers_from_rear_pcb_top_left_mm": [[5.0, 5.0], [116.109, 5.0], [5.0, 72.93], [116.109, 72.93]],
-    "outer_hole_center_spacing_mm": [111.109, 67.93],
+    "outer_hole_centers_from_rear_pcb_top_left_mm": [
+      [
+        5.0,
+        5.0
+      ],
+      [
+        116.109,
+        5.0
+      ],
+      [
+        5.0,
+        72.93
+      ],
+      [
+        116.109,
+        72.93
+      ]
+    ],
+    "outer_hole_center_spacing_mm": [
+      111.109,
+      67.93
+    ],
     "status": "authoritative preliminary M1-B0 evidence; physical caliper or official CAD required for production release"
   },
   "old_enclosure_conflict": {
-    "old_external_envelope_mm": [121.008, 73.408],
-    "old_inner_cavity_mm": [117.008, 69.408],
-    "display_rear_pcb_mm": [121.109, 77.193],
-    "display_minus_old_external_mm": [0.101, 3.785],
-    "display_minus_old_inner_mm": [4.101, 7.785],
+    "old_external_envelope_mm": [
+      121.008,
+      73.408
+    ],
+    "old_inner_cavity_mm": [
+      117.008,
+      69.408
+    ],
+    "display_rear_pcb_mm": [
+      121.109,
+      77.193
+    ],
+    "display_minus_old_external_mm": [
+      0.101,
+      3.785
+    ],
+    "display_minus_old_inner_mm": [
+      4.101,
+      7.785
+    ],
     "verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED"
   },
   "remaining_gates": [
@@ -145,10 +257,13 @@
     "display_operating_profile_locked_as_bringup_baseline": true,
     "old_4_3_display_baseline_superseded": true,
     "schematic_migration_allowed": true,
-    "production_connector_mpn_locked": false,
+    "production_connector_mpn_locked": true,
     "display_power_evt_locked": false,
     "new_enclosure_locked": false,
     "custom_mainboard_outline_locked": false,
-    "placement_routing_freeze_allowed": false
+    "placement_routing_freeze_allowed": false,
+    "production_connector_contact_side_locked": true,
+    "production_connector_footprint_locked": true,
+    "schematic_migrated_to_final_display": true
   }
 }

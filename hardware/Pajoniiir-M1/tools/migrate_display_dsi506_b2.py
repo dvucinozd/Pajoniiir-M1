@@ -172,7 +172,7 @@ def tp(ref: str, val: str, x: float, y: float, key: str) -> str:
 
 def rebuild_sheet10() -> None:
     old = P10.read_text()
-    if 'rev "B / M1-ELEC-B2"' in old and '(property "Reference" "J8"' in old:
+    if 'rev "B / M1-ELEC-B2"' in old and '(property "Reference" "J6"' in old:
         print("sheet10 already migrated")
         return
     if "MP3202DJ-LF-Z" not in old or "SOFNG 0.5TBQP-30P-1" not in old:
@@ -260,12 +260,12 @@ def rebuild_sheet10() -> None:
     body.append(label("P4_LDO_MIPI_2V5", 120, 40, "l-tp2"))
 
     dsi = [
-        ("DSI_D0_P", "R82", "J8_DSI_D0_P", 50),
-        ("DSI_D0_N", "R83", "J8_DSI_D0_N", 58),
-        ("DSI_D1_P", "R84", "J8_DSI_D1_P", 66),
-        ("DSI_D1_N", "R85", "J8_DSI_D1_N", 74),
-        ("DSI_CLK_P", "R86", "J8_DSI_CLK_P", 82),
-        ("DSI_CLK_N", "R87", "J8_DSI_CLK_N", 90),
+        ("DSI_D0_P", "R82", "J6_DSI_D0_P", 50),
+        ("DSI_D0_N", "R83", "J6_DSI_D0_N", 58),
+        ("DSI_D1_P", "R84", "J6_DSI_D1_P", 66),
+        ("DSI_D1_N", "R85", "J6_DSI_D1_N", 74),
+        ("DSI_CLK_P", "R86", "J6_DSI_CLK_P", 82),
+        ("DSI_CLK_N", "R87", "J6_DSI_CLK_N", 90),
     ]
     for net, ref, out, y in dsi:
         body.append(hier(net, "bidirectional", 30, y, "h-" + net))
@@ -275,8 +275,8 @@ def rebuild_sheet10() -> None:
         body.append(label(out, 100, y, "l-" + out))
 
     for net, ref, out, y in [
-        ("DISPLAY_I2C_SDA", "R95", "J8_I2C_SDA", 108),
-        ("DISPLAY_I2C_SCL", "R96", "J8_I2C_SCL", 118),
+        ("DISPLAY_I2C_SDA", "R95", "J6_I2C_SDA", 108),
+        ("DISPLAY_I2C_SCL", "R96", "J6_I2C_SCL", 118),
     ]:
         body.append(hier(net, "bidirectional", 30, y, "h-" + net))
         body.append(inst("Device:R_US", 65, y, 90, ref, "22R", "Resistor_SMD:R_0402_1005Metric", "~", 2, False, ref))
@@ -285,10 +285,10 @@ def rebuild_sheet10() -> None:
         body.append(label(out, 100, y, "l-" + out))
 
     for ref, x, y, out, dnp in [
-        ("R97", 110, 104.19, "J8_I2C_SDA", False),
-        ("R99", 120, 104.19, "J8_I2C_SDA", True),
-        ("R98", 110, 114.19, "J8_I2C_SCL", False),
-        ("R100", 120, 114.19, "J8_I2C_SCL", True),
+        ("R97", 110, 104.19, "J6_I2C_SDA", False),
+        ("R99", 120, 104.19, "J6_I2C_SDA", True),
+        ("R98", 110, 114.19, "J6_I2C_SCL", False),
+        ("R100", 120, 114.19, "J6_I2C_SCL", True),
     ]:
         body.append(
             inst(
@@ -307,10 +307,10 @@ def rebuild_sheet10() -> None:
         )
         body.append(label("3V3_DISPLAY_MODULE", x, y - 3.81, "l-" + ref + "-v"))
         body.append(label(out, x, y + 3.81, "l-" + ref + "-bus"))
-    body.append(tp("TP9", "J8_I2C_SDA", 135, 108, "TP9"))
-    body.append(label("J8_I2C_SDA", 135, 108, "l-tp9"))
-    body.append(tp("TP10", "J8_I2C_SCL", 145, 118, "TP10"))
-    body.append(label("J8_I2C_SCL", 145, 118, "l-tp10"))
+    body.append(tp("TP9", "J6_I2C_SDA", 135, 108, "TP9"))
+    body.append(label("J6_I2C_SDA", 135, 108, "l-tp9"))
+    body.append(tp("TP10", "J6_I2C_SCL", 145, 118, "TP10"))
+    body.append(label("J6_I2C_SCL", 145, 118, "l-tp10"))
 
     body.append(
         inst(
@@ -318,28 +318,28 @@ def rebuild_sheet10() -> None:
             210,
             90,
             0,
-            "J8",
+            "J6",
             "DSI506 / DYL0023 15-pin DSI",
             "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
             "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10172241.pdf",
             15,
             False,
-            "J8",
+            "J6",
         )
     )
     jmap = {
         1: "GND",
-        2: "J8_DSI_D1_N",
-        3: "J8_DSI_D1_P",
+        2: "J6_DSI_D1_N",
+        3: "J6_DSI_D1_P",
         4: "GND",
-        5: "J8_DSI_CLK_N",
-        6: "J8_DSI_CLK_P",
+        5: "J6_DSI_CLK_N",
+        6: "J6_DSI_CLK_P",
         7: "GND",
-        8: "J8_DSI_D0_N",
-        9: "J8_DSI_D0_P",
+        8: "J6_DSI_D0_N",
+        9: "J6_DSI_D0_P",
         10: "GND",
-        11: "J8_I2C_SCL",
-        12: "J8_I2C_SDA",
+        11: "J6_I2C_SCL",
+        12: "J6_I2C_SDA",
         13: "GND",
         14: "3V3_DISPLAY_MODULE",
         15: "3V3_DISPLAY_MODULE",
@@ -353,33 +353,30 @@ def rebuild_sheet10() -> None:
 
     notes = [
         "FINAL DISPLAY: EYOYO DSI506 / DYL0023, 5in 800x480; interface bench-accepted in Pajoniiir-M3.",
-        "J8 = Amphenol SFW15R-2STE1LF, 15P 1.0mm TOP contact. Pin map follows M3 accepted J2: GND/D1/CLK/D0/I2C/3V3.",
+        "J6 = Amphenol SFW15R-2STE1LF, 15P 1.0mm TOP contact. Pin map follows M3 accepted J2: GND/D1/CLK/D0/I2C/3V3.",
         "Backlight/panel power are controlled inside the module over I2C 0x45; touch is 0x38 at 100kHz. No MP3202, LEDA/LEDK, LCD_RST, TE or external BL PWM on M1.",
         "Initial firmware: 1 data lane @ 800Mbps, RGB888, 27.777MHz, H 59/2/45, V 109/2/22; both physical data lanes are routed.",
         "DSI routing target 100R differential; MIPI DPHY 2.5V LDO and 4.02k DSI_REXT remain in 03_P4_CORE.",
     ]
     for i, text in enumerate(notes):
         body.append(
-            f'  (text "{text}" (exclude_from_sim no) (at 145 {135+i*5} 0) {EFF} (uuid "{U("note-"+str(i))}"))\n'
+            f'  (text "{text}" (exclude_from_sim no) (at 145 {135+i*5} 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "{U("note-"+str(i))}"))\n'
         )
     body.append('  (sheet_instances (path "/" (page "11")))\n  (embedded_fonts no)\n)\n')
 
     new = prefix + lib + "\n" + "".join(body)
     if balance(new) != (0, 0):
         raise SystemExit(f"10 balance {balance(new)}")
-    for forbidden in [
-        "MP3202DJ-LF-Z",
-        "LEDA",
-        "LEDK",
-        "PANEL_LCD_RST",
-        "PANEL_LCD_TE",
-        "SOFNG 0.5TBQP-30P-1",
-        "LCD_BL_PWM",
-    ]:
-        if forbidden in new:
-            raise SystemExit(f"legacy display token remains in active sheet10: {forbidden}")
+    active_body = "".join(body)
+    for legacy_ref in (
+        "U9", "L3", "D4", "C95", "C96", "C97", "C98",
+        "R88", "R89", "R90", "R91", "R92", "R93", "R94",
+        "TP3", "TP4", "TP5", "TP6",
+    ):
+        if f'(property "Reference" "{legacy_ref}"' in active_body:
+            raise SystemExit(f"legacy 4.3-inch component remains instantiated in sheet10: {legacy_ref}")
     for required in [
-        '(property "Reference" "J8"',
+        '(property "Reference" "J6"',
         "SFW15R-2STE1LF",
         "DSI506 / DYL0023",
         "DISPLAY_I2C_SDA",
@@ -403,7 +400,7 @@ def retire_sheet11() -> None:
     prefix = re.sub(r'\(rev "[^"]*"\)', '(rev "B / M1-ELEC-B2")', prefix, count=1)
     prefix = re.sub(
         r'\(comment 1 "[^"]*"\)',
-        '(comment 1 "Retired: final DSI506 touch is integrated through J8 shared I2C")',
+        '(comment 1 "Retired: final DSI506 touch is integrated through J6 shared I2C")',
         prefix,
         count=1,
     )
@@ -414,9 +411,9 @@ def retire_sheet11() -> None:
         count=1,
     )
     stub = f'''
-  (text "M1-ELEC-B2: separate GT911 support retired. Final DSI506/DYL0023 touch is module-integrated at I2C 0x38." (exclude_from_sim no) (at 35 55 0) {EFF} (uuid "{U('stub1')}"))
-  (text "GPIO7/8 I2C conditioning, pull-ups and test points moved into 10_DISPLAY_MIPI next to final J8 connector." (exclude_from_sim no) (at 35 60 0) {EFF} (uuid "{U('stub2')}"))
-  (text "GPIO3 TOUCH_RST and GPIO4 TOUCH_INT are released/NC in final M1 architecture." (exclude_from_sim no) (at 35 65 0) {EFF} (uuid "{U('stub3')}"))
+  (text "M1-ELEC-B2: separate GT911 support retired. Final DSI506/DYL0023 touch is module-integrated at I2C 0x38." (exclude_from_sim no) (at 35 55 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "{U('stub1')}"))
+  (text "GPIO7/8 I2C conditioning, pull-ups and test points moved into 10_DISPLAY_MIPI next to final J6 connector." (exclude_from_sim no) (at 35 60 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "{U('stub2')}"))
+  (text "GPIO3 TOUCH_RST and GPIO4 TOUCH_INT are released/NC in final M1 architecture." (exclude_from_sim no) (at 35 65 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "{U('stub3')}"))
   (sheet_instances (path "/" (page "12")))
   (embedded_fonts no)
 )
@@ -542,7 +539,7 @@ def migrate_authorities() -> None:
     gate.update(
         {
             "sheet": "10_DISPLAY_MIPI",
-            "refdes": "J8",
+            "refdes": "J6",
             "category": "display_module_connector_mechanical",
             "status": "open",
             "allow_blank_footprint": False,
@@ -561,7 +558,7 @@ def migrate_authorities() -> None:
             "required_evidence": [
                 "actual DSI506 FFC conductor-side / host-to-module pin-1 continuity check",
                 "FFC bend/insertion keepout in final enclosure",
-                "absolute J8 XY/Z placement relative to final display and custom mainboard",
+                "absolute J6 XY/Z placement relative to final display and custom mainboard",
             ],
             "closure": "Electrical connector, MPN and footprint are locked/instantiated. Gate remains open only for actual cable orientation and final enclosure placement evidence.",
         }
@@ -572,7 +569,7 @@ def migrate_authorities() -> None:
     fd = json.loads(FD.read_text())
     if "M1-ELEC-B2" not in fd["milestones"]:
         fd["milestones"].append("M1-ELEC-B2")
-    fd["status"] = "final_DSI506_selected__M3_pinout_locked__J8_schematic_and_footprint_instantiated__cable_and_enclosure_open"
+    fd["status"] = "final_DSI506_selected__M3_pinout_locked__J6_schematic_and_footprint_instantiated__cable_and_enclosure_open"
     fd["freeze"]["production_connector_mpn_locked"] = True
     fd["freeze"]["production_connector_contact_side_locked"] = True
     fd["freeze"]["production_connector_footprint_locked"] = True
@@ -606,8 +603,8 @@ def migrate_validator() -> None:
     start = val.index(marker)
     end = val.index("\n\n    # 7. ESP32-P4 multi-unit GPIO connectivity contract.", start)
     newcheck = '''    # M1-ELEC-B2 final DSI506 display contract.
-    if '(property "Reference" "J8"' not in p10:
-        errors.append("final DSI506 J8 connector missing")
+    if '(property "Reference" "J6"' not in p10:
+        errors.append("final DSI506 J6 connector missing")
     for token in (
         "DSI506 / DYL0023",
         "SFW15R-2STE1LF",
@@ -617,17 +614,14 @@ def migrate_validator() -> None:
     ):
         if token not in p10:
             errors.append(f"final DSI506 display contract token missing: {token}")
-    for legacy in (
-        "SOFNG 0.5TBQP-30P-1",
-        "MP3202DJ-LF-Z",
-        "LEDA",
-        "LEDK",
-        "PANEL_LCD_RST",
-        "PANEL_LCD_TE",
-        "LCD_BL_PWM",
+    active_p10 = "\\n".join(instantiated_symbol_blocks(p10))
+    for legacy_ref in (
+        "U9", "L3", "D4", "C95", "C96", "C97", "C98",
+        "R88", "R89", "R90", "R91", "R92", "R93", "R94",
+        "TP3", "TP4", "TP5", "TP6",
     ):
-        if legacy in p10:
-            errors.append(f"legacy 4.3-inch display implementation remains active: {legacy}")
+        if f'(property "Reference" "{legacy_ref}"' in active_p10:
+            errors.append(f"legacy 4.3-inch display component remains instantiated: {legacy_ref}")
     if any(True for _ in instantiated_symbol_blocks(child_text.get("11_TOUCH_GT911", ""))):
         errors.append("retired 11_TOUCH_GT911 sheet must contain no instantiated components")
     if "separate GT911 support retired" not in child_text.get("11_TOUCH_GT911", ""):
@@ -653,7 +647,7 @@ def main() -> None:
         if balance(path.read_text()) != (0, 0):
             raise SystemExit(f"post-write imbalance: {path}")
     print("PASS: M1-ELEC-B2 source migration complete")
-    print("PASS: J8 instantiated; legacy MP3202/GT911 control paths removed")
+    print("PASS: J6 instantiated; legacy MP3202/GT911 control paths removed")
 
 
 if __name__ == "__main__":

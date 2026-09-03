@@ -128,12 +128,12 @@
   (wire (pts (xy 175.26 31.115) (xy 177.8 31.115)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000101"))
   (wire (pts (xy 175.26 59.055) (xy 177.8 59.055)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000102"))
   (wire (pts (xy 74.93 111.125) (xy 72.39 111.125)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000103"))
-  (wire (pts (xy 74.93 114.935) (xy 72.39 114.935)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000104"))
+
   (wire (pts (xy 74.93 118.745) (xy 72.39 118.745)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000105"))
-  (wire (pts (xy 120.015 111.125) (xy 122.555 111.125)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000106"))
+
   (wire (pts (xy 120.015 116.84) (xy 122.555 116.84)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000107"))
   (wire (pts (xy 120.015 121.285) (xy 122.555 121.285)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000108"))
-  (wire (pts (xy 120.015 125.095) (xy 122.555 125.095)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000109"))
+
   (wire (pts (xy 74.93 130.81) (xy 72.39 130.81)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000110"))
   (wire (pts (xy 74.93 135.255) (xy 72.39 135.255)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000111"))
   (wire (pts (xy 74.93 139.065) (xy 72.39 139.065)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000112"))
@@ -141,22 +141,22 @@
   (wire (pts (xy 120.015 135.255) (xy 122.555 135.255)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000114"))
   (wire (pts (xy 120.015 139.065) (xy 122.555 139.065)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000115"))
   (wire (pts (xy 130.175 83.185) (xy 127.635 83.185)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000116"))
-  (wire (pts (xy 175.26 24.765) (xy 177.8 24.765)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000117"))
-  (wire (pts (xy 175.26 27.305) (xy 177.8 27.305)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000118"))
-  (wire (pts (xy 130.175 43.18) (xy 127.635 43.18)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000119"))
+
+
+
   (wire (pts (xy 130.175 71.12) (xy 127.635 71.12)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000120"))
   (wire (pts (xy 130.175 73.025) (xy 127.635 73.025)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000121"))
   (wire (pts (xy 130.175 74.93) (xy 127.635 74.93)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000122"))
   (wire (pts (xy 130.175 76.835) (xy 127.635 76.835)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000123"))
   (wire (pts (xy 130.175 78.74) (xy 127.635 78.74)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000124"))
   (wire (pts (xy 130.175 81.28) (xy 127.635 81.28)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000125"))
-  (wire (pts (xy 240.03 111.125) (xy 237.49 111.125)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000126"))
-  (wire (pts (xy 240.03 116.84) (xy 237.49 116.84)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000127"))
-  (wire (pts (xy 240.03 121.285) (xy 237.49 121.285)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000128"))
-  (wire (pts (xy 285.115 111.125) (xy 287.655 111.125)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000129"))
-  (wire (pts (xy 285.115 116.84) (xy 287.655 116.84)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000130"))
-  (wire (pts (xy 175.26 20.955) (xy 177.8 20.955)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000131"))
-  (wire (pts (xy 175.26 22.86) (xy 177.8 22.86)) (stroke (width 0) (type default)) (uuid "5a1b0000-0000-4000-8000-000000000132"))
+
+
+
+
+
+
+
 
   (wire (pts (xy 19.685 24.765) (xy 17.145 24.765)) (stroke (width 0) (type default)) (uuid "b6a10000-0000-4000-8000-000000000001"))
   (wire (pts (xy 64.77 29.845) (xy 67.31 29.845)) (stroke (width 0) (type default)) (uuid "b6a10000-0000-4000-8000-000000000002"))
@@ -294,22 +294,22 @@
   (label "5V_PROTECTED" (at 72.39 201.295 180) (effects (font (size 1.27 1.27))) (uuid "0e100007-e100-4e10-8e10-000000000008"))
   (label "5V_SYS" (at 122.555 201.295 0) (effects (font (size 1.27 1.27))) (uuid "0e100008-e100-4e10-8e10-000000000009"))
   (label "3V3_SYS" (at 72.39 207.645 180) (effects (font (size 1.27 1.27))) (uuid "0e100009-e100-4e10-8e10-00000000000a"))
-  (label "I2C_SDA" (at 122.555 207.645 0) (effects (font (size 1.27 1.27))) (uuid "0e10000a-e100-4e10-8e10-00000000000b"))
-  (label "I2C_SCL" (at 122.555 213.995 0) (effects (font (size 1.27 1.27))) (uuid "0e10000b-e100-4e10-8e10-00000000000c"))
+  (label "DISPLAY_I2C_SDA" (at 122.555 207.645 0) (effects (font (size 1.27 1.27))) (uuid "0e10000a-e100-4e10-8e10-00000000000b"))
+  (label "DISPLAY_I2C_SCL" (at 122.555 213.995 0) (effects (font (size 1.27 1.27))) (uuid "0e10000b-e100-4e10-8e10-00000000000c"))
   (label "SYS_POWER_ALERT_N" (at 122.555 220.345 0) (effects (font (size 1.27 1.27))) (uuid "0e10000c-e100-4e10-8e10-00000000000d"))
   (label "5V_PROTECTED" (at 67.31 24.765 0) (effects (font (size 1.27 1.27))) (uuid "0e10000d-e100-4e10-8e10-00000000000e"))
   (label "5V_SYS" (at 72.39 24.765 180) (effects (font (size 1.27 1.27))) (uuid "0e10000e-e100-4e10-8e10-00000000000f"))
   
-  (label "I2C_SDA" (at 177.8 29.21 0) (effects (font (size 1.27 1.27))) (uuid "0e100010-e100-4e10-8e10-000000000011"))
-  (label "I2C_SCL" (at 177.8 31.115 0) (effects (font (size 1.27 1.27))) (uuid "0e100011-e100-4e10-8e10-000000000012"))
+  (label "DISPLAY_I2C_SDA" (at 177.8 29.21 0) (effects (font (size 1.27 1.27))) (uuid "0e100010-e100-4e10-8e10-000000000011"))
+  (label "DISPLAY_I2C_SCL" (at 177.8 31.115 0) (effects (font (size 1.27 1.27))) (uuid "0e100011-e100-4e10-8e10-000000000012"))
   (label "SYS_POWER_ALERT_N" (at 177.8 59.055 0) (effects (font (size 1.27 1.27))) (uuid "0e100012-e100-4e10-8e10-000000000013"))
   (label "3V3_SYS" (at 72.39 111.125 180) (effects (font (size 1.27 1.27))) (uuid "0a10000e-a100-4a10-8a10-00000000000f"))
   (label "5V_SYS" (at 72.39 114.935 180) (effects (font (size 1.27 1.27))) (uuid "0a10000f-a100-4a10-8a10-000000000010"))
   (label "P4_LDO_MIPI_2V5" (at 72.39 118.745 180) (effects (font (size 1.27 1.27))) (uuid "0a100010-a100-4a10-8a10-000000000011"))
-  (label "3V3_LCD" (at 122.555 111.125 0) (effects (font (size 1.27 1.27))) (uuid "0a100011-a100-4a10-8a10-000000000012"))
-  (label "LCD_RST" (at 122.555 116.84 0) (effects (font (size 1.27 1.27))) (uuid "0a100012-a100-4a10-8a10-000000000013"))
-  (label "LCD_TE" (at 122.555 121.285 0) (effects (font (size 1.27 1.27))) (uuid "0a100013-a100-4a10-8a10-000000000014"))
-  (label "LCD_BL_PWM" (at 122.555 125.095 0) (effects (font (size 1.27 1.27))) (uuid "0a100014-a100-4a10-8a10-000000000015"))
+
+  (label "DISPLAY_I2C_SDA" (at 122.555 116.84 0) (effects (font (size 1.27 1.27))) (uuid "0a100012-a100-4a10-8a10-000000000013"))
+  (label "DISPLAY_I2C_SCL" (at 122.555 121.285 0) (effects (font (size 1.27 1.27))) (uuid "0a100013-a100-4a10-8a10-000000000014"))
+
   (label "DSI_D0_P" (at 72.39 130.81 180) (effects (font (size 1.27 1.27))) (uuid "0a100015-a100-4a10-8a10-000000000016"))
   (label "DSI_D0_N" (at 72.39 135.255 180) (effects (font (size 1.27 1.27))) (uuid "0a100016-a100-4a10-8a10-000000000017"))
   (label "DSI_D1_P" (at 72.39 139.065 180) (effects (font (size 1.27 1.27))) (uuid "0a100017-a100-4a10-8a10-000000000018"))
@@ -319,25 +319,25 @@
   
   
   (label "P4_LDO_MIPI_2V5" (at 127.635 83.185 180) (effects (font (size 1.27 1.27))) (uuid "0a10001d-a100-4a10-8a10-00000000001e"))
-  (label "LCD_RST" (at 177.8 24.765 0) (effects (font (size 1.27 1.27))) (uuid "0a10001e-a100-4a10-8a10-00000000001f"))
-  (label "LCD_TE" (at 177.8 27.305 0) (effects (font (size 1.27 1.27))) (uuid "0a10001f-a100-4a10-8a10-000000000020"))
-  (label "LCD_BL_PWM" (at 127.635 43.18 180) (effects (font (size 1.27 1.27))) (uuid "0a100020-a100-4a10-8a10-000000000021"))
+  (label "DISPLAY_I2C_SDA" (at 177.8 24.765 0) (effects (font (size 1.27 1.27))) (uuid "0a10001e-a100-4a10-8a10-00000000001f"))
+  (label "DISPLAY_I2C_SCL" (at 177.8 27.305 0) (effects (font (size 1.27 1.27))) (uuid "0a10001f-a100-4a10-8a10-000000000020"))
+
   (label "DSI_D1_P" (at 127.635 71.12 180) (effects (font (size 1.27 1.27))) (uuid "0a100021-a100-4a10-8a10-000000000022"))
   (label "DSI_D1_N" (at 127.635 73.025 180) (effects (font (size 1.27 1.27))) (uuid "0a100022-a100-4a10-8a10-000000000023"))
   (label "DSI_CLK_N" (at 127.635 74.93 180) (effects (font (size 1.27 1.27))) (uuid "0a100023-a100-4a10-8a10-000000000024"))
   (label "DSI_CLK_P" (at 127.635 76.835 180) (effects (font (size 1.27 1.27))) (uuid "0a100024-a100-4a10-8a10-000000000025"))
   (label "DSI_D0_P" (at 127.635 78.74 180) (effects (font (size 1.27 1.27))) (uuid "0a100025-a100-4a10-8a10-000000000026"))
   (label "DSI_D0_N" (at 127.635 81.28 180) (effects (font (size 1.27 1.27))) (uuid "0a100026-a100-4a10-8a10-000000000027"))
-  (label "3V3_LCD" (at 237.49 111.125 180) (effects (font (size 1.27 1.27))) (uuid "0b100006-b100-4b10-8b10-000000000007"))
-  (label "I2C_SDA" (at 237.49 116.84 180) (effects (font (size 1.27 1.27))) (uuid "0b100007-b100-4b10-8b10-000000000008"))
-  (label "I2C_SCL" (at 237.49 121.285 180) (effects (font (size 1.27 1.27))) (uuid "0b100008-b100-4b10-8b10-000000000009"))
-  (label "TOUCH_RST" (at 287.655 111.125 0) (effects (font (size 1.27 1.27))) (uuid "0b100009-b100-4b10-8b10-00000000000a"))
-  (label "TOUCH_INT" (at 287.655 116.84 0) (effects (font (size 1.27 1.27))) (uuid "0b10000a-b100-4b10-8b10-00000000000b"))
+
+  (label "DISPLAY_I2C_SDA" (at 237.49 116.84 180) (effects (font (size 1.27 1.27))) (uuid "0b100007-b100-4b10-8b10-000000000008"))
+  (label "DISPLAY_I2C_SCL" (at 237.49 121.285 180) (effects (font (size 1.27 1.27))) (uuid "0b100008-b100-4b10-8b10-000000000009"))
+
+
   
   
   
-  (label "TOUCH_RST" (at 177.8 20.955 0) (effects (font (size 1.27 1.27))) (uuid "0b10000e-b100-4b10-8b10-00000000000f"))
-  (label "TOUCH_INT" (at 177.8 22.86 0) (effects (font (size 1.27 1.27))) (uuid "0b10000f-b100-4b10-8b10-000000000010"))
+
+
   (sheet
     (at 19.685 19.685)
     (size 45.085 18.415)
@@ -448,12 +448,8 @@
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (pin "3V3_SYS" input (at 130.175 24.765 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c30001d4-3333-4333-8333-0000000001d5"))
-    (pin "TOUCH_RST" output (at 175.26 20.955 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001d5-3333-4333-8333-0000000001d6"))
-    (pin "TOUCH_INT" input (at 175.26 22.86 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001d6-3333-4333-8333-0000000001d7"))
-    (pin "LCD_RST" output (at 175.26 24.765 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001d7-3333-4333-8333-0000000001d8"))
-    (pin "LCD_TE" bidirectional (at 175.26 27.305 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001d8-3333-4333-8333-0000000001d9"))
-    (pin "I2C_SDA" bidirectional (at 175.26 29.21 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001d9-3333-4333-8333-0000000001da"))
-    (pin "I2C_SCL" bidirectional (at 175.26 31.115 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001da-3333-4333-8333-0000000001db"))
+    (pin "DISPLAY_I2C_SDA" bidirectional (at 175.26 29.21 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001d9-3333-4333-8333-0000000001da"))
+    (pin "DISPLAY_I2C_SCL" bidirectional (at 175.26 31.115 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001da-3333-4333-8333-0000000001db"))
     (pin "C6_SDIO_D0" bidirectional (at 130.175 31.115 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c30001db-3333-4333-8333-0000000001dc"))
     (pin "C6_SDIO_D1" bidirectional (at 130.175 33.02 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c30001dc-3333-4333-8333-0000000001dd"))
     (pin "C6_SDIO_D2" bidirectional (at 130.175 34.925 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c30001dd-3333-4333-8333-0000000001de"))
@@ -465,7 +461,6 @@
     (pin "USB0_FAULT_N" input (at 130.175 41.275 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c30001e3-3333-4333-8333-0000000001e4"))
     (pin "USB1_PWR_EN" output (at 175.26 38.735 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001e4-3333-4333-8333-0000000001e5"))
     (pin "USB1_FAULT_N" input (at 175.26 41.275 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001e5-3333-4333-8333-0000000001e6"))
-    (pin "LCD_BL_PWM" output (at 130.175 43.18 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c30001e6-3333-4333-8333-0000000001e7"))
     (pin "P4_USBJTAG_DM" bidirectional (at 175.26 43.18 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001e7-3333-4333-8333-0000000001e8"))
     (pin "P4_USBJTAG_DP" bidirectional (at 175.26 45.085 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c30001e8-3333-4333-8333-0000000001e9"))
     (pin "USB0_HS_DM" bidirectional (at 130.175 45.085 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c30001e9-3333-4333-8333-0000000001ea"))
@@ -731,12 +726,9 @@
       (effects (font (size 1.27 1.27)) (justify left top))
     )
     (pin "3V3_SYS" input (at 74.93 111.125 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0a100001-a100-4a10-8a10-000000000002"))
-    (pin "5V_SYS" input (at 74.93 114.935 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0a100002-a100-4a10-8a10-000000000003"))
     (pin "P4_LDO_MIPI_2V5" input (at 74.93 118.745 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0a100003-a100-4a10-8a10-000000000004"))
-    (pin "3V3_LCD" output (at 120.015 111.125 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0a100004-a100-4a10-8a10-000000000005"))
-    (pin "LCD_RST" input (at 120.015 116.84 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0a100005-a100-4a10-8a10-000000000006"))
-    (pin "LCD_TE" bidirectional (at 120.015 121.285 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0a100006-a100-4a10-8a10-000000000007"))
-    (pin "LCD_BL_PWM" input (at 120.015 125.095 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0a100007-a100-4a10-8a10-000000000008"))
+    (pin "DISPLAY_I2C_SDA" bidirectional (at 120.015 116.84 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0a100005-a100-4a10-8a10-000000000006"))
+    (pin "DISPLAY_I2C_SCL" bidirectional (at 120.015 121.285 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0a100006-a100-4a10-8a10-000000000007"))
     (pin "DSI_D0_P" bidirectional (at 74.93 130.81 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0a100008-a100-4a10-8a10-000000000009"))
     (pin "DSI_D0_N" bidirectional (at 74.93 135.255 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0a100009-a100-4a10-8a10-00000000000a"))
     (pin "DSI_D1_P" bidirectional (at 74.93 139.065 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0a10000a-a100-4a10-8a10-00000000000b"))
@@ -768,11 +760,6 @@
       (at 240.03 136.5996 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
-    (pin "3V3_LCD" input (at 240.03 111.125 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0b100001-b100-4b10-8b10-000000000002"))
-    (pin "I2C_SDA" bidirectional (at 240.03 116.84 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0b100002-b100-4b10-8b10-000000000003"))
-    (pin "I2C_SCL" bidirectional (at 240.03 121.285 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0b100003-b100-4b10-8b10-000000000004"))
-    (pin "TOUCH_RST" input (at 285.115 111.125 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0b100004-b100-4b10-8b10-000000000005"))
-    (pin "TOUCH_INT" bidirectional (at 285.115 116.84 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0b100005-b100-4b10-8b10-000000000006"))
     (instances
       (project "Pajoniiir-M1"
         (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100" (page "12"))
@@ -874,8 +861,8 @@
     (pin "5V_PROTECTED" input (at 74.93 201.295 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0e100001-e100-4e10-8e10-000000000002"))
     (pin "5V_SYS" output (at 120.015 201.295 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0e100002-e100-4e10-8e10-000000000003"))
     (pin "3V3_SYS" input (at 74.93 207.645 180) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0e100003-e100-4e10-8e10-000000000004"))
-    (pin "I2C_SDA" bidirectional (at 120.015 207.645 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0e100004-e100-4e10-8e10-000000000005"))
-    (pin "I2C_SCL" input (at 120.015 213.995 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0e100005-e100-4e10-8e10-000000000006"))
+    (pin "DISPLAY_I2C_SDA" bidirectional (at 120.015 207.645 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0e100004-e100-4e10-8e10-000000000005"))
+    (pin "DISPLAY_I2C_SCL" input (at 120.015 213.995 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0e100005-e100-4e10-8e10-000000000006"))
     (pin "SYS_POWER_ALERT_N" output (at 120.015 220.345 0) (effects (font (size 1.27 1.27)) (justify right)) (uuid "0e100006-e100-4e10-8e10-000000000007"))
     (instances
       (project "Pajoniiir-M1"
