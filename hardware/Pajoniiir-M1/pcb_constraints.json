@@ -262,7 +262,15 @@
         "use only low-profile components until mechanical safety margin is validated",
         "do not place unselected C3/C8 bulk packages here unless their final height is proven",
         "avoid tall connector bodies under the display/module footprint"
-      ]
+      ],
+      "verified_critical_screen": {
+        "gross_clearance_mm": 6.5,
+        "highest_verified_fixed_part_max_mm": 3.25,
+        "minimum_verified_gross_headroom_mm": 3.25,
+        "result": "PASS_GEOMETRY_SCREEN",
+        "production_limit_locked": false,
+        "source": "mech_a.json mechanical_height_audit"
+      }
     },
     "pcb_back_side": {
       "gross_clearance_mm": 6,

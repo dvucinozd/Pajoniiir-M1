@@ -280,7 +280,28 @@ No cluster receives an absolute wall assignment in this commit. The remaining da
 
 ---
 
-## 11. What M1-MECH-A has closed
+## 11. Critical fixed-part height screen
+
+The 6.5 mm under-display value is a gross geometric cavity, not a production component-height limit.
+
+Verified height-critical fixed parts:
+
+| RefDes | Part | Datasheet/package max | Gross headroom vs 6.5 mm | Screen |
+|---|---|---:|---:|---|
+| U1 | ESP32-P4NRW32X / QFN104 | 0.90 mm | 5.60 mm | PASS |
+| U4 | ESP32-C6-WROOM-1-N4 | 3.25 mm (3.1 +/- 0.15) | 3.25 mm | PASS |
+| L1/L2 | XGL4030-222MEC | 3.10 mm Cmax | 3.40 mm | PASS |
+| L3 | XGL4030-103MEC | 3.10 mm Cmax | 3.40 mm | PASS |
+
+The known tallest fixed central part is therefore the C6 module at 3.25 mm maximum physical height, leaving 3.25 mm of gross geometric headroom.
+
+This does **not** include solder/assembly tolerance, adhesive, FPC motion, printed enclosure variation, ribs/bosses or an engineering safety gap. The production allowable component height remains deliberately unlocked.
+
+Remaining height risks are already represented by open gates: C3/C8 bulk capacitors, D1 package selection, all user-facing connectors/switches, and J_LCD mating geometry.
+
+---
+
+## 12. What M1-MECH-A has closed
 
 - display/front-envelope family identified
 - bare front envelope quantified
@@ -295,7 +316,7 @@ No cluster receives an absolute wall assignment in this commit. The remaining da
 
 ---
 
-## 12. What remains open
+## 13. What remains open
 
 ### PCB
 
@@ -324,7 +345,7 @@ No cluster receives an absolute wall assignment in this commit. The remaining da
 
 ---
 
-## 13. Immediate next M1-MECH-A action
+## 14. Immediate next M1-MECH-A action
 
 Use the 121.008 × 73.408 × 30 mm enclosure candidate and M1-MECH-A0 108 × 65.06 mm PCB envelope candidate to build the first connector-placement envelope and verify that connector bodies/bosses do not invalidate the candidate outline.
 

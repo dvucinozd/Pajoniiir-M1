@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__z_stack_candidate_defined__pcb_envelope_candidate_defined__final_outline_open",
+  "status": "display_datum_locked__z_stack_candidate_defined__pcb_envelope_candidate_defined__critical_height_screen_pass__absolute_connector_datums_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -485,5 +485,105 @@
       "connector insertion axis and board-edge projection",
       "exact MPN body/courtyard/mating-clearance envelope"
     ]
+  },
+  "mechanical_height_audit": {
+    "revision": "M1-MECH-A-H1",
+    "status": "critical_fixed_central_parts_screened__production_height_limit_open",
+    "gross_under_display_clearance_mm": 6.5,
+    "production_allowable_component_height_mm": null,
+    "rule": "PASS below is a geometry screen only; it does not include assembly tolerance, solder stand-off, flex motion, adhesive, enclosure ribs/bosses, or required safety clearance.",
+    "verified_critical_fixed_parts": [
+      {
+        "refs": [
+          "U1"
+        ],
+        "part": "ESP32-P4NRW32X",
+        "package": "QFN104 10x10",
+        "height_basis": "A total thickness, datasheet max",
+        "height_nom_mm": 0.85,
+        "height_max_mm": 0.9,
+        "gross_headroom_mm": 5.6,
+        "result": "PASS_GEOMETRY_SCREEN",
+        "source": "https://documentation.espressif.com/esp32-p4_datasheet_en.pdf"
+      },
+      {
+        "refs": [
+          "U4"
+        ],
+        "part": "ESP32-C6-WROOM-1-N4",
+        "package": "ESP32-C6-WROOM-1 module",
+        "height_basis": "physical dimensions 3.1 +/- 0.15 mm",
+        "height_nom_mm": 3.1,
+        "height_max_mm": 3.25,
+        "gross_headroom_mm": 3.25,
+        "result": "PASS_GEOMETRY_SCREEN",
+        "source": "https://documentation.espressif.com/esp32-c6-wroom-1_wroom-1u_datasheet_en.html"
+      },
+      {
+        "refs": [
+          "L1",
+          "L2"
+        ],
+        "part": "XGL4030-222MEC",
+        "package": "Coilcraft XGL4030",
+        "height_basis": "series Cmax",
+        "height_max_mm": 3.1,
+        "gross_headroom_mm": 3.4,
+        "result": "PASS_GEOMETRY_SCREEN",
+        "source": "https://www.coilcraft.com/en-us/products/power/high-voltage-inductors/xgl/xgl4030/"
+      },
+      {
+        "refs": [
+          "L3"
+        ],
+        "part": "XGL4030-103MEC",
+        "package": "Coilcraft XGL4030",
+        "height_basis": "series Cmax",
+        "height_max_mm": 3.1,
+        "gross_headroom_mm": 3.4,
+        "result": "PASS_GEOMETRY_SCREEN",
+        "source": "https://www.coilcraft.com/en-us/products/power/high-voltage-inductors/xgl/xgl4030/"
+      }
+    ],
+    "open_height_risks": [
+      {
+        "refs": [
+          "C3",
+          "C8"
+        ],
+        "reason": "bulk capacitor MPN/package/height not selected",
+        "action": "keep out of central under-display zone unless final package height and safety margin are proven"
+      },
+      {
+        "refs": [
+          "D1"
+        ],
+        "reason": "TVS package not selected",
+        "action": "confirm package height when surge/sourcing gate closes"
+      },
+      {
+        "refs": [
+          "J1",
+          "J2",
+          "J3",
+          "J4",
+          "J5",
+          "J6",
+          "J7",
+          "SW1",
+          "SW2"
+        ],
+        "reason": "user-facing connector/switch body and actuator heights are MPN-dependent",
+        "action": "perimeter only until exact MPN/cutout/Z envelope is locked"
+      },
+      {
+        "refs": [
+          "J_LCD"
+        ],
+        "reason": "display FPC mating height/contact geometry unresolved",
+        "action": "resolve before final display/PCB Z-stack sign-off"
+      }
+    ],
+    "conclusion": "Known tallest fixed central parts are <=3.25 mm, leaving >=3.25 mm gross headroom inside the 6.5 mm candidate cavity. Height is not currently a blocker for the fixed compute/power/RF core; remaining height blockers are the already-open bulk/connector/FPC gates."
   }
 }

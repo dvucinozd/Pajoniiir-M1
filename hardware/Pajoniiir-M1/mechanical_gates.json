@@ -19,7 +19,8 @@
         "available board height/diameter or SMD envelope"
       ],
       "closure": "Select exact capacitor MPN and footprint after EVT/mechanical envelope is known.",
-      "known_mechanical_constraint": "central under-display gross front-side clearance candidate = 6.5 mm; perimeter placement may allow more only with explicit enclosure keepout"
+      "known_mechanical_constraint": "central under-display gross front-side clearance candidate = 6.5 mm; perimeter placement may allow more only with explicit enclosure keepout",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "D1_INPUT_TVS",
@@ -35,7 +36,8 @@
         "VRWM/VBR/clamp target",
         "package power/thermal target"
       ],
-      "closure": "Select exact 5 V input TVS MPN and package from the defined surge requirement."
+      "closure": "Select exact 5 V input TVS MPN and package from the defined surge requirement.",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "C8_PROTECTED_BULK",
@@ -52,7 +54,8 @@
         "available board height/diameter or SMD envelope"
       ],
       "closure": "Select exact capacitor MPN and footprint after EVT/mechanical envelope is known.",
-      "known_mechanical_constraint": "central under-display gross front-side clearance candidate = 6.5 mm; perimeter placement may allow more only with explicit enclosure keepout"
+      "known_mechanical_constraint": "central under-display gross front-side clearance candidate = 6.5 mm; perimeter placement may allow more only with explicit enclosure keepout",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J1_POWER_INPUT",
@@ -72,7 +75,8 @@
       "closure": "Lock exact 5 V locking connector MPN and courtyard from enclosure geometry.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "POWER_IN",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "SW1_RESET",
@@ -92,7 +96,8 @@
       "closure": "Lock exact RESET momentary-NO switch MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "RECOVERY_BUTTONS",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "SW2_BOOT",
@@ -112,7 +117,8 @@
       "closure": "Lock exact BOOT momentary-NO switch MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "RECOVERY_BUTTONS",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J2_USB0",
@@ -132,7 +138,8 @@
       "closure": "Lock exact USB-A receptacle MPN for storage port.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "USB_HOST_PAIR",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J3_USB1",
@@ -152,7 +159,8 @@
       "closure": "Lock exact USB-A receptacle MPN for FLX4 port.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "USB_HOST_PAIR",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J4_RCA_L",
@@ -172,7 +180,8 @@
       "closure": "Lock exact RCA LEFT connector MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J5_RCA_R",
@@ -192,7 +201,8 @@
       "closure": "Lock exact RCA RIGHT connector MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J6_LINE35",
@@ -211,7 +221,8 @@
       "closure": "Either lock exact 3.5 mm line-out jack footprint or remove the option before layout freeze.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J_LCD_DISPLAY_FPC",
@@ -242,7 +253,8 @@
         "confirm original common 3V3 pins 4/21/29 before mapping separate 3V3_LCD/3V3_TOUCH"
       ],
       "closure": "Instantiate physical LCD connector only after pin-domain and mating geometry are authoritative.",
-      "evidence_file": "mech_a.json"
+      "evidence_file": "mech_a.json",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J7_MICROSD",
@@ -263,7 +275,8 @@
       "closure": "Lock exact microSD socket MPN.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "REMOVABLE_STORAGE",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
     },
     {
       "id": "J9_USB_SERVICE_POGO",

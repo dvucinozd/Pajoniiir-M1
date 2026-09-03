@@ -294,6 +294,32 @@ def main() -> int:
                 f"{MECH_A.name}: connector cluster membership drift: "
                 f"{observed_cluster_refs} != {expected_cluster_refs}"
             )
+        height_audit = mech_a.get("mechanical_height_audit", {})
+        if height_audit.get("gross_under_display_clearance_mm") != 6.5:
+            errors.append(
+                f"{MECH_A.name}: under-display gross clearance must remain 6.5 mm "
+                "until the Z-stack is intentionally revised"
+            )
+        expected_height_max = {
+            "ESP32-P4NRW32X": 0.90,
+            "ESP32-C6-WROOM-1-N4": 3.25,
+            "XGL4030-222MEC": 3.10,
+            "XGL4030-103MEC": 3.10,
+        }
+        observed_height_max = {}
+        for entry in height_audit.get("verified_critical_fixed_parts", []):
+            if isinstance(entry, dict) and isinstance(entry.get("part"), str):
+                observed_height_max[entry["part"]] = entry.get("height_max_mm")
+        if observed_height_max != expected_height_max:
+            errors.append(
+                f"{MECH_A.name}: verified critical height baseline drift: "
+                f"{observed_height_max} != {expected_height_max}"
+            )
+        if height_audit.get("production_allowable_component_height_mm") is not None:
+            errors.append(
+                f"{MECH_A.name}: production allowable height must remain unlocked "
+                "until tolerance/safety clearance is defined"
+            )
         observed_display = {
             "bare_x": bare.get("x"),
             "bare_y": bare.get("y"),

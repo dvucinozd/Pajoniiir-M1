@@ -13,7 +13,7 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **Manufacturing output review:** PASS — 270/270 BOM parity, 17 DNP, 12 intentional blank-footprint gates  
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
-**M1-MECH-A:** IN PROGRESS — display datum/Z-stack/M1-MECH-A0 PCB envelope and connector cluster baseline defined; absolute wall/cutout datums still open  
+**M1-MECH-A:** IN PROGRESS — display datum/Z-stack/M1-MECH-A0 PCB envelope, connector clusters and critical fixed-part height screen defined; absolute wall/cutout datums still open  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -106,6 +106,8 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [RefDes annotation map v0.1](docs/Pajoniiir_RefDes_Annotation_Map_v0.1.md)
 - [Mechanical & sourcing gate closure v0.1](docs/Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md)
 - [M1-MECH-A Mechanical Baseline v0.1](docs/Pajoniiir_M1_MECH_A_Baseline_v0.1.md)
+- [M1-MECH-A Height Audit v0.1](docs/Pajoniiir_M1_MECH_A_Height_Audit_v0.1.md)
+- [M1-MECH-A Connector Clusters v0.1](docs/Pajoniiir_M1_MECH_A_Connector_Clusters_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
@@ -445,7 +447,7 @@ Current sign-off gates:
 - [x] display/touch electrical capture
 - [x] DNP/DNL policy captured
 - [x] local structural validator committed
-- [ ] native KiCad Sync Sheet Pins
+- [x] hierarchy pin-sync equivalence enforced in CI
 - [x] native KiCad 9.0.9 ERC — 0 unexplained errors, 6 approved J_LCD exclusions, 0 warnings
 - [x] CI manufacturing BOM/netlist/PDF export + source-parity validation
 - [ ] final LCD/FPC physical definition
@@ -454,9 +456,9 @@ Current sign-off gates:
 - [x] L_BL exact sourcing/footprint — XGL4030-103MEC / `Inductor_SMD:L_Coilcraft_XxL4030`
 - [x] Kelvin shunt sourcing/footprint — WSK25125L000FEA / `Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm`
 - [x] schematic PDF generation in CI
-- [ ] schematic PDF human review
+- [x] schematic PDF human review — 16/16 pages
 - [x] manufacturing BOM/netlist extraction + source-parity cross-check
-- [ ] engineering/manual review of generated manufacturing BOM
+- [x] engineering/manual review of generated manufacturing BOM — 270/270 parity
 
 Use:
 
