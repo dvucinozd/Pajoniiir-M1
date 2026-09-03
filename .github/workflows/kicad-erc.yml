@@ -38,6 +38,41 @@ jobs:
           sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints
           kicad-cli version
 
+      - name: Dump TPS62130 base symbol
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          src = Path("/usr/share/kicad/symbols/Regulator_Switching.kicad_sym").read_text(encoding="utf-8")
+          name = "TPS62130"
+          start = src.index(f'(symbol "{name}"')
+          depth = 0
+          ins = False
+          esc = False
+          for i in range(start, len(src)):
+              ch = src[i]
+              if ins:
+                  if esc:
+                      esc = False
+                  elif ch == "\\":
+                      esc = True
+                  elif ch == '"':
+                      ins = False
+                  continue
+              if ch == '"':
+                  ins = True
+              elif ch == "(":
+                  depth += 1
+              elif ch == ")":
+                  depth -= 1
+                  if depth == 0:
+                      block = src[start:i+1]
+                      break
+          print("BEGIN_TPS62130")
+          print(block)
+          print("END_TPS62130")
+          PY
+
       - name: Structural schematic contracts
         run: python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 
