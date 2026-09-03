@@ -176,7 +176,9 @@
         "USB-A board-edge datum",
         "vertical/right-angle orientation",
         "shell retention style",
-        "enclosure cutout and insertion clearance"
+        "enclosure cutout and insertion clearance",
+        "rear-side clearance after connector-driven PCB Z rebalance",
+        "exact production MPN lifecycle/availability confirmation"
       ],
       "closure": "Lock exact USB-A receptacle MPN for storage port.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
@@ -185,21 +187,61 @@
       "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
       "screened_candidates": [
         {
-          "manufacturer": "GCT",
-          "mpn": "USB1125-GF-B",
+          "manufacturer": "Amphenol Communications Solutions / FCI",
+          "mpn": "87520-1010ALF",
+          "role": "preferred_conditional",
           "status": "screened_not_locked",
           "evidence": [
             "USB 2.0 Type-A",
-            "right-angle THT",
+            "right-angle through-hole",
+            "board lock",
             "3 A",
-            "6.48 mm profile",
-            "10.00 mm body",
-            "1.6 mm PCB distributor metadata"
+            "5000 mating cycles",
+            "released 87520 family drawing",
+            "7.0 +0.10/-0.30 mm profile screen"
           ],
-          "screen_result": "electrical pass; only 0.02 mm gross margin against current 6.5 mm conservative central clearance, therefore no production margin",
+          "screen_result": "electrical pass; active exact part per distributor; mechanical screen needs PCB Z rebalance and absolute panel datum",
+          "sources": [
+            "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/87520.pdf",
+            "https://www.digikey.com/en/products/detail/amphenol-cs-fci/87520-1010ALF/1528948"
+          ]
+        },
+        {
+          "manufacturer": "Würth Elektronik",
+          "mpn": "614004190021",
+          "role": "active_lifecycle_stable_alternate",
+          "status": "screened_not_locked",
+          "evidence": [
+            "manufacturer Active",
+            "expected lifetime >10 years",
+            "USB 2.0 Type-A horizontal THT",
+            "3 A on power contacts",
+            "1.6 mm recommended PCB",
+            "15.7 x 14.15 x 6.9 mm envelope",
+            "1500 mating cycles"
+          ],
+          "screen_result": "electrical/mechanical/lifecycle pass on first screen; lower mating-cycle rating than preferred Amphenol",
+          "sources": [
+            "https://www.we-online.com/components/products/datasheet/614004190021.pdf",
+            "https://www.we-online.com/en/components/products/em/connectors/input_output_connectors/input_output_wr_usb_sub"
+          ]
+        },
+        {
+          "manufacturer": "GCT",
+          "mpn": "USB1125-GF-B",
+          "role": "historical_envelope_reference_only",
+          "status": "do_not_use_for_new_design",
+          "evidence": [
+            "6.48 mm profile",
+            "3 A",
+            "5000 mating cycles",
+            "10.0 mm body"
+          ],
+          "screen_result": "manufacturer currently marks USB1125 Not Recommended for New Designs",
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
-      ]
+      ],
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND."
     },
     {
       "id": "J3_USB1",
@@ -214,7 +256,9 @@
         "USB-A board-edge datum",
         "vertical/right-angle orientation",
         "shell retention style",
-        "enclosure cutout and insertion clearance"
+        "enclosure cutout and insertion clearance",
+        "rear-side clearance after connector-driven PCB Z rebalance",
+        "exact production MPN lifecycle/availability confirmation"
       ],
       "closure": "Lock exact USB-A receptacle MPN for FLX4 port.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
@@ -223,21 +267,61 @@
       "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
       "screened_candidates": [
         {
-          "manufacturer": "GCT",
-          "mpn": "USB1125-GF-B",
+          "manufacturer": "Amphenol Communications Solutions / FCI",
+          "mpn": "87520-1010ALF",
+          "role": "preferred_conditional",
           "status": "screened_not_locked",
           "evidence": [
             "USB 2.0 Type-A",
-            "right-angle THT",
+            "right-angle through-hole",
+            "board lock",
             "3 A",
-            "6.48 mm profile",
-            "10.00 mm body",
-            "1.6 mm PCB distributor metadata"
+            "5000 mating cycles",
+            "released 87520 family drawing",
+            "7.0 +0.10/-0.30 mm profile screen"
           ],
-          "screen_result": "electrical pass; only 0.02 mm gross margin against current 6.5 mm conservative central clearance, therefore no production margin",
+          "screen_result": "electrical pass; active exact part per distributor; mechanical screen needs PCB Z rebalance and absolute panel datum",
+          "sources": [
+            "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/87520.pdf",
+            "https://www.digikey.com/en/products/detail/amphenol-cs-fci/87520-1010ALF/1528948"
+          ]
+        },
+        {
+          "manufacturer": "Würth Elektronik",
+          "mpn": "614004190021",
+          "role": "active_lifecycle_stable_alternate",
+          "status": "screened_not_locked",
+          "evidence": [
+            "manufacturer Active",
+            "expected lifetime >10 years",
+            "USB 2.0 Type-A horizontal THT",
+            "3 A on power contacts",
+            "1.6 mm recommended PCB",
+            "15.7 x 14.15 x 6.9 mm envelope",
+            "1500 mating cycles"
+          ],
+          "screen_result": "electrical/mechanical/lifecycle pass on first screen; lower mating-cycle rating than preferred Amphenol",
+          "sources": [
+            "https://www.we-online.com/components/products/datasheet/614004190021.pdf",
+            "https://www.we-online.com/en/components/products/em/connectors/input_output_connectors/input_output_wr_usb_sub"
+          ]
+        },
+        {
+          "manufacturer": "GCT",
+          "mpn": "USB1125-GF-B",
+          "role": "historical_envelope_reference_only",
+          "status": "do_not_use_for_new_design",
+          "evidence": [
+            "6.48 mm profile",
+            "3 A",
+            "5000 mating cycles",
+            "10.0 mm body"
+          ],
+          "screen_result": "manufacturer currently marks USB1125 Not Recommended for New Designs",
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
-      ]
+      ],
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND."
     },
     {
       "id": "J4_RCA_L",
@@ -500,7 +584,8 @@
         "M1-MECH-A0 placement-feasibility PCB envelope 108.00 x 65.06 mm",
         "candidate outline cavity clearance 4.504 mm/side X and 2.174 mm/side Y",
         "candidate mounting centers X=+/-51.3 mm, Y=+/-30.0 mm",
-        "M1-MECH-A1 connector envelope screen: USB-A is margin-limited, Micro-Fit power is marginal under conservative central Z screen, and ~10 mm right-angle RCA is the dominant Z-stack driver"
+        "M1-MECH-A1 connector envelope screen: USB-A is margin-limited, Micro-Fit power is marginal under conservative central Z screen, and ~10 mm right-angle RCA is the dominant Z-stack driver",
+        "M1-MECH-A3 USB active-candidate screen: Amphenol 87520-1010ALF worst-case 7.1 mm profile implies ~4.9 mm gross rear spacing with temporary 0.5 mm front screening gap"
       ],
       "evidence_file": "mech_a.json"
     },

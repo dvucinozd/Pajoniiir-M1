@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__pcb_envelope_candidate_defined__connector_envelope_screened__rca_strategy_preferred_conditional__z_stack_and_absolute_connector_datums_open",
+  "status": "display_datum_locked__pcb_envelope_candidate_defined__rca_strategy_preferred_conditional__usb_active_candidate_preferred_conditional__z_stack_and_absolute_connector_datums_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -256,21 +256,23 @@
       "connector_driven_rebalance_required": true,
       "screening_safety_gap_mm": 0.5,
       "screening_safety_gap_status": "engineering screening value only; not a production clearance freeze",
-      "front_connector_margin_status": "current 6.5 mm gross central clearance has no production margin for screened USB-A and is insufficient for screened Micro-Fit/RCA heights",
+      "front_connector_margin_status": "Preferred active Amphenol USB-A requires 7.6 mm front screening clearance including the temporary 0.5 mm engineering gap; current 6.5 mm gross central clearance is insufficient. Equivalent gross rear spacing becomes about 4.9 mm before rear-side component/screw/boss allowances.",
       "connector_screening_cases": [
         {
           "refdes": [
             "J2",
             "J3"
           ],
-          "candidate": "GCT USB1125-GF-B",
-          "screened_height_or_profile_mm": 6.48,
-          "basis": "manufacturer USB1125 series profile",
-          "required_front_clearance_with_screening_gap_mm": 6.98,
-          "implied_pcb_front_z_mm": 20.88,
-          "implied_pcb_rear_z_mm": 22.48,
-          "implied_rear_clearance_mm": 5.52,
-          "result": "FAIL_CURRENT_MARGIN__RECOVERABLE_BY_SMALL_Z_SHIFT_OR_LOCAL_EDGE_RELIEF"
+          "candidate": "Amphenol 87520-1010ALF",
+          "screened_height_or_profile_mm": 7.1,
+          "basis": "worst-case profile screen from released Amphenol 87520 family drawing: 7.0 +0.10/-0.30 mm; exact part is distributor-listed Active, 3 A, 5000 mating cycles",
+          "required_front_clearance_with_screening_gap_mm": 7.6,
+          "implied_pcb_front_z_mm": 21.5,
+          "implied_pcb_rear_z_mm": 23.1,
+          "implied_rear_clearance_mm": 4.9,
+          "result": "ACTIVE_CANDIDATE_REQUIRES_Z_REBALANCE__GEOMETRICALLY_PLAUSIBLE",
+          "equivalent_gross_rear_support_spacing_mm": 4.9,
+          "prior_reference": "GCT USB1125-GF-B 6.48 mm / 3 A / 5000 cycles; demoted because GCT currently marks USB1125 Not Recommended for New Designs"
         },
         {
           "refdes": [
@@ -310,7 +312,7 @@
           "result": "PASS_GLOBAL_HEIGHT_SCREEN__CARD_ACCESS_DATUM_STILL_OPEN"
         }
       ],
-      "screening_note": "M1-MECH-A1 global calculations intentionally screen edge connectors against the continuous module-back plane. For Kycon RCA, the 10.0 mm value is retained only as a conservative envelope screen from the manufacturer drawing, not as an authoritative PCB-plane-to-top height. Final pass/fail requires board-relative connector geometry plus local perimeter/module relief from CAD or physical measurement."
+      "screening_note": "USB current screen now uses active preferred Amphenol 87520-1010ALF at 7.1 mm worst-case family-drawing profile. The 0.5 mm screening gap is not a production tolerance. Final Z/standoff freeze still requires exact wall/board-edge datum, rear-side placement constraints, shell/cable clearance, and physical/CAD validation."
     },
     "front_face_policy": {
       "status": "baseline_constraint",
@@ -375,9 +377,10 @@
   "next_closure_inputs": [
     "recover local RCA wall/perimeter/module geometry through M1-MECH-A-D1 or direct physical measurement",
     "prove or reject main-board Kycon KLPX-0848A-2-W/-R body and plug clearance at the intended wall while preserving the preferred 19.20 mm center spacing",
-    "if board-mounted RCA fails, validate Same Sky RCJ-033/RCJ-032 panel-mount hole/nut/washer geometry and internal harness route",
-    "rebalance PCB Z/standoff only after RCA local geometry is known; do not globally shift the PCB merely to satisfy the conservative 10.0 mm RCA screen",
-    "assign POWER_IN / USB_HOST_PAIR / AUDIO_OUT / REMOVABLE_STORAGE / RECOVERY_BUTTONS to physical walls and record absolute centers/insertion axes",
+    "assign USB_HOST_PAIR to a physical wall and validate Amphenol 87520-1010ALF shell/aperture/cable envelope plus the ~4.9 mm gross rear-clearance consequence",
+    "if Amphenol sourcing/lifecycle or placement fails, evaluate Würth 614004190021 as the active >10-year alternate",
+    "rebalance PCB Z/standoff only after RCA and USB local geometry are known",
+    "assign POWER_IN / AUDIO_OUT / REMOVABLE_STORAGE / RECOVERY_BUTTONS to physical walls and record absolute centers/insertion axes",
     "resolve J6 POP-vs-DNP/removal decision",
     "resolve J_LCD FPC mating/contact/pin-domain gate",
     "validate/revise M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
@@ -486,7 +489,11 @@
           "keep both host ports on a common service/user wall unless cable-clearance study proves otherwise",
           "do not freeze center spacing until exact USB-A MPN shell/cutout dimensions are selected"
         ],
-        "screened_candidate": "GCT USB1125-GF-B"
+        "screened_candidate": "Amphenol 87520-1010ALF",
+        "preferred_conditional_candidate": "Amphenol 87520-1010ALF",
+        "alternate_candidate": "Würth 614004190021",
+        "demoted_reference": "GCT USB1125-GF-B (NRND)",
+        "z_screen_status": "preferred active candidate requires ~7.6 mm front screening clearance including temporary 0.5 mm gap; current 6.5 mm gross stack requires rebalance"
       },
       {
         "id": "POWER_IN",
@@ -734,8 +741,10 @@
         "interface": "USB 2.0 Type-A receptacle, right-angle through-hole, 1.6 mm PCB",
         "electrical_screen": "3 A current rating exceeds USB0 ~1.0 A and USB1 ~1.6 A initial VBUS limits",
         "mechanical_screen": "6.48 mm profile, 10.00 mm body length; only 0.02 mm gross margin exists against the current 6.5 mm central clearance before any tolerance/safety allowance",
-        "result": "SCREENED_NOT_LOCKED__Z_MARGIN_FAIL",
-        "source": "https://gct.co/usb-connector/usb-a-type"
+        "result": "HISTORICAL_SCREEN_REFERENCE_ONLY__NRND__SUPERSEDED_BY_M1_MECH_A3",
+        "source": "https://gct.co/usb-connector/usb-a-type",
+        "lifecycle_update": "GCT currently marks USB1125 Not Recommended for New Designs",
+        "superseded_by": "M1-MECH-A3 Amphenol 87520-1010ALF preferred / Würth 614004190021 alternate"
       },
       {
         "refs": [
@@ -876,5 +885,95 @@
       "caution": "Aperture compatibility does not imply body, board-edge, Z, wall-thickness or mating-plug compatibility."
     },
     "next_decision": "Recover local RCA wall/perimeter geometry through M1-MECH-A-D1 or direct physical measurement. If Kycon family passes, promote exact red/white variants and footprints; if it fails, promote the panel-mount fallback and redesign the panel mounting holes."
+  },
+  "usb_host_connector_strategy": {
+    "revision": "M1-MECH-A3",
+    "status": "preferred_conditional_active_candidate_selected__j2_j3_gates_remain_open",
+    "decision": "Demote GCT USB1125-GF-B to a historical envelope reference because the manufacturer currently marks the USB1125 series NRND. Prefer Amphenol 87520-1010ALF for both host ports, with Würth 614004190021 as the lifecycle-stable alternate.",
+    "common_part_policy": "Prefer one identical USB-A receptacle MPN for J2 and J3 unless later panel/placement constraints require different mechanics.",
+    "preferred_conditional": {
+      "manufacturer": "Amphenol Communications Solutions / FCI",
+      "mpn": "87520-1010ALF",
+      "interface": "USB 2.0 Type-A receptacle, right-angle through-hole, board lock",
+      "lifecycle": "Exact part distributor-listed Active; released manufacturer 87520 family drawing. Final manufacturer lifecycle confirmation remains a sourcing closure item.",
+      "electrical": {
+        "current_rating_a": 3,
+        "relation_to_m1": "exceeds USB0 ~1.0 A and USB1 ~1.6 A initial VBUS limits"
+      },
+      "mechanical": {
+        "profile_nominal_mm": 7,
+        "profile_worst_case_mm": 7.1,
+        "profile_tolerance_basis": "+0.10/-0.30 mm from released 87520 family drawing",
+        "front_face_width_mm": 14.5,
+        "recommended_pcb_thickness_mm": 1.57,
+        "mating_cycles": 5000,
+        "board_lock": true,
+        "z_screen_with_0_5mm_gap": {
+          "required_front_clearance_mm": 7.6,
+          "pcb_front_z_mm": 21.5,
+          "pcb_rear_z_mm": 23.1,
+          "gross_rear_clearance_mm": 4.9
+        }
+      },
+      "sources": [
+        "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/87520.pdf",
+        "https://www.digikey.com/en/products/detail/amphenol-cs-fci/87520-1010ALF/1528948"
+      ],
+      "result": "PREFERRED_CONDITIONAL__NOT_FOOTPRINT_LOCKED"
+    },
+    "alternate": {
+      "manufacturer": "Würth Elektronik",
+      "mpn": "614004190021",
+      "interface": "WR-USB USB 2.0 Type-A horizontal THT, high-current",
+      "lifecycle": "Manufacturer status Active; expected lifetime >10 years",
+      "electrical": {
+        "rated_current_power_contacts_a": 3,
+        "rated_current_other_contacts_a": 1
+      },
+      "mechanical": {
+        "envelope_mm": [
+          15.7,
+          14.15,
+          6.9
+        ],
+        "recommended_pcb_thickness_mm": 1.6,
+        "mating_cycles": 1500,
+        "z_screen_with_0_5mm_gap": {
+          "required_front_clearance_mm": 7.4,
+          "pcb_front_z_mm": 21.3,
+          "pcb_rear_z_mm": 22.9,
+          "gross_rear_clearance_mm": 5.1
+        }
+      },
+      "sources": [
+        "https://www.we-online.com/components/products/datasheet/614004190021.pdf",
+        "https://www.we-online.com/en/components/products/em/connectors/input_output_connectors/input_output_wr_usb_sub"
+      ],
+      "result": "ACTIVE_LIFECYCLE_STABLE_ALTERNATE__LOWER_MATING_CYCLE_RATING"
+    },
+    "demoted_reference": {
+      "manufacturer": "GCT",
+      "mpn": "USB1125-GF-B",
+      "interface": "USB 2.0 Type-A RA THT",
+      "lifecycle": "Not Recommended for New Designs",
+      "useful_reference": {
+        "profile_mm": 6.48,
+        "current_rating_a": 3,
+        "mating_cycles": 5000,
+        "body_length_mm": 10
+      },
+      "policy": "Do not promote to production BOM. Retain only as historical envelope evidence.",
+      "source": "https://gct.co/usb-connector/usb-a-type"
+    },
+    "closure_evidence_required": [
+      "absolute USB_HOST_PAIR wall assignment and J2/J3 connector-face centers in M1_FRONT_CENTER",
+      "PCB edge relative to enclosure inside wall",
+      "connector shell/body keepout and panel aperture",
+      "external USB plug + cable bend/strain envelope",
+      "rear-side PCB component and screw/boss clearance after Z rebalance",
+      "manufacturer lifecycle/availability confirmation for exact production MPN",
+      "final footprint land pattern and shell-stake drill review"
+    ],
+    "mechanical_consequence": "The active preferred candidate is ~0.62 mm taller than the old GCT NRND reference at worst-case profile. With the temporary 0.5 mm screen the PCB would move rearward from Z=20.4 to about Z=21.5, reducing gross rear clearance from 6.0 to ~4.9 mm. This is plausible but not yet a standoff freeze."
   }
 }

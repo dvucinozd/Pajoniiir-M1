@@ -13,7 +13,7 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **Manufacturing output review:** PASS — 270/270 BOM parity, 17 DNP, 12 intentional blank-footprint gates  
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
-**M1-MECH-A:** IN PROGRESS — M1-MECH-A2 selects individual main-board Kycon RCA as the preferred conditional route with Same Sky panel-mount fallback; J4/J5 remain open until local perimeter/body/plug clearance is proven; legacy 6 mm standoff and absolute wall/cutout datums remain unfrozen  
+**M1-MECH-A:** IN PROGRESS — M1-MECH-A3 replaces the NRND GCT USB-A screen with active Amphenol 87520-1010ALF as preferred conditional J2/J3 candidate and Würth 614004190021 as active alternate; RCA remains preferred-conditional Kycon with panel-mount fallback; absolute wall/cutout datums and PCB Z/standoff remain unfrozen  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -111,6 +111,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [M1-MECH-A Datum Extraction v0.1](docs/Pajoniiir_M1_MECH_A_Datum_Extraction_v0.1.md)
 - [M1-MECH-A Connector Envelope Screen v0.1](docs/Pajoniiir_M1_MECH_A_Connector_Envelope_Screen_v0.1.md)
 - [M1-MECH-A RCA Integration Strategy v0.1](docs/Pajoniiir_M1_MECH_A_RCA_Integration_Strategy_v0.1.md)
+- [M1-MECH-A USB Host Connector Strategy v0.1](docs/Pajoniiir_M1_MECH_A_USB_Host_Connector_Strategy_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
