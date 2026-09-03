@@ -1126,9 +1126,9 @@
   )
   (label "3V3_SYS" (at 219.71 50.165 0) (effects (font (size 1.27 1.27))) (uuid "b200006b-2222-4222-8222-00000000006c"))
   (hierarchical_label "3V3_AUDIO" (shape output) (at 219.71 57.785 90) (effects (font (size 1.27 1.27))) (uuid "b200006c-2222-4222-8222-00000000006d"))
-  (text "Rev A: TPS62132 fixed 3.3V, 2.2uH, CIN 10uF+100nF, COUT 22uF + DNP 22uF + 100nF, SS/TR 3.3nF" (exclude_from_sim no) (at 80 85 0) (effects (font (size 1.27 1.27))) (uuid "b200006d-2222-4222-8222-00000000006e"))
-  (text "FSW=LOW (~2.5MHz), DEF=LOW (nominal 3.3V), FB=GND on fixed-output part; VOS senses quiet 3V3 output node." (exclude_from_sim no) (at 80 90 0) (effects (font (size 1.27 1.27))) (uuid "b200006e-2222-4222-8222-00000000006f"))
-  (text "L2 locked: Coilcraft XGL4030-222MEC, 2.2uH, Isat 5.0A at 20% drop / 7.0A at 30% drop, Irms 8.7A at 40C rise. Keep SW copper compact and away from audio/MIPI/USB HS." (exclude_from_sim no) (at 80 95 0) (effects (font (size 1.27 1.27))) (uuid "b200006f-2222-4222-8222-000000000070"))
+  (text "Rev A: TPS62132 fixed 3.3V, 2.2uH, CIN 10uF+100nF, COUT 22uF + DNP 22uF + 100nF, SS/TR 3.3nF" (exclude_from_sim no) (at 80 85 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b200006d-2222-4222-8222-00000000006e"))
+  (text "FSW=LOW (~2.5MHz), DEF=LOW (nominal 3.3V), FB=GND on fixed-output part; VOS senses quiet 3V3 output node." (exclude_from_sim no) (at 80 90 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b200006e-2222-4222-8222-00000000006f"))
+  (text "L2 locked: Coilcraft XGL4030-222MEC, 2.2uH, Isat 5.0A at 20% drop / 7.0A at 30% drop, Irms 8.7A at 40C rise. Keep SW copper compact and away from audio/MIPI/USB HS." (exclude_from_sim no) (at 80 95 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b200006f-2222-4222-8222-000000000070"))
   (symbol
     (lib_id "power:PWR_FLAG")
     (at 120.015 42.545 0)
