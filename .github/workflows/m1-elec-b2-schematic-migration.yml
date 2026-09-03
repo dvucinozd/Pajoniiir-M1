@@ -1,11 +1,10 @@
-name: M1 ELEC B2 DSI506 schematic migration
+name: M1 ELEC B2 DSI506 migration
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
-      - ".github/workflows/m1-elec-b2-schematic-migration.yml"
+      - .github/workflows/m1-elec-b2-schematic-migration.yml
 
 permissions:
   contents: write
@@ -15,111 +14,39 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Fix migrator legacy-scope guards
-        shell: bash
+      - name: Migrate and validate structure
         run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          path = Path('hardware/Pajoniiir-M1/tools/migrate_display_dsi506_b2.py')
-          text = path.read_text()
-
-          replacement = '''    active_body = "".join(body)
-    for legacy_ref in (
-        "U9", "L3", "D4", "C95", "C96", "C97", "C98",
-        "R88", "R89", "R90", "R91", "R92", "R93", "R94",
-        "TP3", "TP4", "TP5", "TP6",
-    ):
-        if f'(property "Reference" "{legacy_ref}"' in active_body:
-            raise SystemExit(f"legacy 4.3-inch component remains instantiated in sheet10: {legacy_ref}")
-    for required in ['''
-          text, count = re.subn(
-              r'    for forbidden in \[\n.*?    for required in \[',
-              replacement,
-              text,
-              count=1,
-              flags=re.S,
-          )
-          if count != 1:
-              raise SystemExit(f'failed to patch sheet10 active-symbol guard: {count}')
-
-          replacement = '''    active_p10 = "\\n".join(instantiated_symbol_blocks(p10))
-    for legacy_ref in (
-        "U9", "L3", "D4", "C95", "C96", "C97", "C98",
-        "R88", "R89", "R90", "R91", "R92", "R93", "R94",
-        "TP3", "TP4", "TP5", "TP6",
-    ):
-        if f'(property "Reference" "{legacy_ref}"' in active_p10:
-            errors.append(f"legacy 4.3-inch display component remains instantiated: {legacy_ref}")
-    if any(True for _ in instantiated_symbol_blocks'''
-          text, count = re.subn(
-              r'    for legacy in \(\n.*?    if any\(True for _ in instantiated_symbol_blocks',
-              replacement,
-              text,
-              count=1,
-              flags=re.S,
-          )
-          if count != 1:
-              raise SystemExit(f'failed to patch generated structural validator guard: {count}')
-
-          path.write_text(text)
-          print('PASS: migrator guards now distinguish instantiated symbols from embedded libraries/notes')
-          PY
-
-      - name: Run audited migrator
-        shell: bash
-        run: |
-          set -euo pipefail
+          python3 hardware/Pajoniiir-M1/tools/fix_migrate_display_dsi506_b2_guards.py
           python3 hardware/Pajoniiir-M1/tools/migrate_display_dsi506_b2.py
           python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 
-      - name: Install KiCad 9
-        shell: bash
+      - name: Install KiCad
         run: |
-          set -euo pipefail
           sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases >/dev/null
           sudo apt-get update -qq
           sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints >/dev/null
           kicad-cli version
 
-      - name: KiCad hierarchy preflight
-        shell: bash
+      - name: KiCad preflight
         run: |
-          set -euo pipefail
           mkdir -p /tmp/m1-b2
           kicad-cli sch export pdf -o /tmp/m1-b2/root.pdf hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
-          test -s /tmp/m1-b2/root.pdf
           kicad-cli sch export netlist -o /tmp/m1-b2/root.net hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          test -s /tmp/m1-b2/root.pdf
           test -s /tmp/m1-b2/root.net
-          grep -q 'J8' /tmp/m1-b2/root.net
-          grep -q 'SFW15R-2STE1LF' /tmp/m1-b2/root.net
-          echo "PASS: migrated hierarchy loads and J8 is present"
+          grep -q J8 /tmp/m1-b2/root.net
+          grep -q SFW15R-2STE1LF /tmp/m1-b2/root.net
 
       - name: Commit validated migration
-        shell: bash
         run: |
-          set -euo pipefail
           rm .github/workflows/m1-elec-b2-schematic-migration.yml
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            hardware/Pajoniiir-M1/03_P4_CORE.kicad_sch \
-            hardware/Pajoniiir-M1/10_DISPLAY_MIPI.kicad_sch \
-            hardware/Pajoniiir-M1/11_TOUCH_GT911.kicad_sch \
-            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch \
-            hardware/Pajoniiir-M1/tools/migrate_display_dsi506_b2.py \
-            hardware/Pajoniiir-M1/tools/validate_schematic_structure.py \
-            hardware/Pajoniiir-M1/mechanical_gates.json \
-            hardware/Pajoniiir-M1/final_display_module.json \
-            hardware/Pajoniiir-M1/display_connector_b1.json \
-            .github/workflows/m1-elec-b2-schematic-migration.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add hardware/Pajoniiir-M1 .github/workflows/m1-elec-b2-schematic-migration.yml
           git diff --cached --check
           git commit -m "display: migrate schematic to final DSI506 module"
           git push origin HEAD:main
