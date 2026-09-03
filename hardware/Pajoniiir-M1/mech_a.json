@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__pcb_envelope_candidate_defined__rca_strategy_preferred_conditional__usb_active_candidate_preferred_conditional__z_stack_and_absolute_connector_datums_open",
+  "status": "display_datum_locked__pcb_envelope_candidate_defined__rca_and_usb_candidates_preferred_conditional__panel_wall_class_topology_screened__absolute_datums_and_z_stack_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -375,13 +375,14 @@
     }
   },
   "next_closure_inputs": [
-    "recover local RCA wall/perimeter/module geometry through M1-MECH-A-D1 or direct physical measurement",
-    "prove or reject main-board Kycon KLPX-0848A-2-W/-R body and plug clearance at the intended wall while preserving the preferred 19.20 mm center spacing",
-    "assign USB_HOST_PAIR to a physical wall and validate Amphenol 87520-1010ALF shell/aperture/cable envelope plus the ~4.9 mm gross rear-clearance consequence",
-    "if Amphenol sourcing/lifecycle or placement fails, evaluate Würth 614004190021 as the active >10-year alternate",
-    "rebalance PCB Z/standoff only after RCA and USB local geometry are known",
-    "assign POWER_IN / AUDIO_OUT / REMOVABLE_STORAGE / RECOVERY_BUTTONS to physical walls and record absolute centers/insertion axes",
-    "resolve J6 POP-vs-DNP/removal decision",
+    "recover or explicitly define which Y wall is the primary long I/O wall and assign exact J2/J3/J4/J5 centers",
+    "verify the M1-MECH-A4 87.58 mm USB+RCA packing against real boss OD, connector bodies, plug/cable keepouts and board functional placement",
+    "decide J6 closure path because same long-wall PCB-edge-row placement fails candidate mounting clearance",
+    "prove or reject main-board Kycon KLPX-0848A-2-W/-R local Z/body/plug clearance",
+    "validate Amphenol 87520-1010ALF shell/aperture/cable envelope and ~4.9 mm gross rear-clearance consequence",
+    "assign J1 POWER_IN to an X-side wall and validate exact Micro-Fit/body/plug geometry",
+    "assign J7/SW1/SW2 service/media access wall and validate card/finger/actuator geometry",
+    "rebalance PCB Z/standoff only after local RCA and USB geometry are known",
     "resolve J_LCD FPC mating/contact/pin-domain gate",
     "validate/revise M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
     "lock M1 mounting-hole coordinates and screw/standoff system",
@@ -464,7 +465,9 @@
         ],
         "preferred_conditional_architecture": "main-board individual Kycon KLPX-0848A-2-W / -R at 19.20 mm centers",
         "fallback_architecture": "panel-mounted Same Sky RCJ-033 / RCJ-032 with short internal audio harness",
-        "rejected_dual_module_example": "Switchcraft PJRAN2X1U__X: 15.0 mm centers mismatch legacy 19.20 mm"
+        "rejected_dual_module_example": "Switchcraft PJRAN2X1U__X: 15.0 mm centers mismatch legacy 19.20 mm",
+        "wall_class_preference": "Y_LONG_WALL_SIGN_TBD for J4/J5",
+        "j6_same_edge_row_policy": "not allowed under M1-MECH-A4 candidate mounting pattern"
       },
       {
         "id": "USB_HOST_PAIR",
@@ -493,7 +496,9 @@
         "preferred_conditional_candidate": "Amphenol 87520-1010ALF",
         "alternate_candidate": "Würth 614004190021",
         "demoted_reference": "GCT USB1125-GF-B (NRND)",
-        "z_screen_status": "preferred active candidate requires ~7.6 mm front screening clearance including temporary 0.5 mm gap; current 6.5 mm gross stack requires rebalance"
+        "z_screen_status": "preferred active candidate requires ~7.6 mm front screening clearance including temporary 0.5 mm gap; current 6.5 mm gross stack requires rebalance",
+        "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
+        "co_pack_with": "AUDIO_OUT J4/J5 only"
       },
       {
         "id": "POWER_IN",
@@ -513,7 +518,8 @@
           "prefer shortest practical connection to the J1-U7-R120 high-current spine",
           "do not place where the power plug blocks USB or microSD access"
         ],
-        "screened_candidate": "Molex 43650-0200"
+        "screened_candidate": "Molex 43650-0200",
+        "wall_class_preference": "X_SIDE_WALL_SIGN_TBD"
       },
       {
         "id": "REMOVABLE_STORAGE",
@@ -533,7 +539,8 @@
           "card insertion axis must be straight and unobstructed",
           "reserve finger/card extraction clearance outside the enclosure"
         ],
-        "screened_candidate": "Molex 503398-1892"
+        "screened_candidate": "Molex 503398-1892",
+        "wall_class_preference": "OPPOSITE_X_SIDE_OR_ACCESSIBLE_SIDE_TBD"
       },
       {
         "id": "RECOVERY_BUTTONS",
@@ -554,7 +561,8 @@
           "RESET/BOOT should be recessed or tool-accessible rather than exposed as primary UI controls",
           "actuation direction must match final switch MPN"
         ],
-        "screened_candidate_family": "Omron B3U-3000P / B3U-3000PM"
+        "screened_candidate_family": "Omron B3U-3000P / B3U-3000PM",
+        "wall_class_preference": "MEDIA_SERVICE_SIDE_OR_RECESSED_ACCESS_TBD"
       },
       {
         "id": "FACTORY_SERVICE",
@@ -569,7 +577,8 @@
         "rules": [
           "DNL fixture access only",
           "no requirement for normal user access"
-        ]
+        ],
+        "wall_class_preference": "REAR_OR_INTERNAL_FIXTURE"
       }
     ],
     "next_required_absolute_data": [
@@ -975,5 +984,111 @@
       "final footprint land pattern and shell-stake drill review"
     ],
     "mechanical_consequence": "The active preferred candidate is ~0.62 mm taller than the old GCT NRND reference at worst-case profile. With the temporary 0.5 mm screen the PCB would move rearward from Z=20.4 to about Z=21.5, reducing gross rear clearance from 6.0 to ~4.9 mm. This is plausible but not yet a standoff freeze."
+  },
+  "panel_packing_feasibility": {
+    "revision": "M1-MECH-A4",
+    "status": "wall_class_topology_screened__absolute_wall_sign_and_centers_open",
+    "purpose": "Prove a compact connector cluster topology fits the candidate enclosure/PCB edge before exact legacy datums are recovered.",
+    "primary_long_io_wall": {
+      "wall_class": "Y_LONG_WALL",
+      "sign": "TBD_Y_NEG_OR_Y_POS",
+      "enclosure_wall_length_mm": 121.008,
+      "candidate_pcb_edge_length_mm": 108,
+      "intended_clusters": [
+        "USB_HOST_PAIR",
+        "AUDIO_OUT_RCA_PAIR"
+      ],
+      "ordering": "USB and RCA occupy opposite halves; left/right order remains TBD pending board functional placement",
+      "inputs": {
+        "usb": {
+          "candidate": "Amphenol 87520-1010ALF",
+          "connector_face_width_mm": 14.5,
+          "pair_center_spacing_mm": 34,
+          "spacing_status": "legacy USB spacing reference retained only for first-order packing; final center spacing open",
+          "pair_span_mm": 48.5
+        },
+        "rca": {
+          "candidate_family": "Kycon KLPX-0848A-2-W / -R",
+          "panel_hole_diameter_mm": 11.88,
+          "pair_center_spacing_mm": 19.2,
+          "aperture_pair_span_mm": 31.08
+        },
+        "intercluster_reserved_gap_mm": 8
+      },
+      "result": {
+        "occupied_span_mm": 87.58,
+        "centered_wall_end_margin_each_side_mm": 16.714,
+        "centered_candidate_pcb_edge_margin_each_side_mm": 10.21,
+        "centered_occupied_half_span_mm": 43.79,
+        "candidate_mount_hole_center_abs_x_mm": 51.3,
+        "nearest_packed_end_to_mount_hole_center_mm": 7.51,
+        "nearest_packed_end_to_d2_hole_edge_mm": 6.51,
+        "verdict": "PASS_FIRST_ORDER_PACKING__BOSS_DIAMETER_AND_INTERNAL_BODY_KEEPOUT_STILL_OPEN"
+      },
+      "constraints": [
+        "RCA and USB clusters must remain separated internally for audio-vs-high-speed/high-current routing, even if panel gap could be reduced.",
+        "Exact boss OD, screw head/driver keepout and connector shell/body courtyards can still invalidate the centered packing.",
+        "Absolute Y wall sign and X centers are not authoritative until CAD/physical datum extraction or an explicit enclosure redesign decision."
+      ]
+    },
+    "optional_j6_same_row_screen": {
+      "refdes": "J6",
+      "assumption": "retain 3.5 mm line output on same long-wall PCB-edge row after RCA pair",
+      "legacy_aperture_diameter_mm": 6.97,
+      "reserved_gap_from_rca_cluster_mm": 5,
+      "resulting_total_occupied_span_mm": 99.55,
+      "centered_wall_end_margin_each_side_mm": 10.729,
+      "centered_candidate_pcb_edge_margin_each_side_mm": 4.225,
+      "nearest_packed_end_to_mount_hole_center_mm": 1.525,
+      "nearest_packed_end_to_d2_hole_edge_mm": 0.525,
+      "verdict": "FAIL_CANDIDATE_MOUNTING_CLEARANCE__DO_NOT_PLACE_J6_IN_SAME_EDGE_ROW",
+      "allowed_closure_paths": [
+        "place J6 on a different wall",
+        "use a different Z-row/panel-mounted or harness implementation if enclosure geometry supports it",
+        "remove/DNP J6 for Rev A",
+        "revise mounting pattern/PCB envelope only if J6 is a firm product requirement"
+      ]
+    },
+    "preferred_wall_class_topology": {
+      "LONG_IO_WALL": {
+        "wall_class": "one Y wall, sign TBD",
+        "clusters": [
+          "USB_HOST_PAIR",
+          "AUDIO_OUT RCA J4/J5"
+        ],
+        "rationale": "121.008 mm wall provides the only clean first-order single-edge packing of the two largest user I/O clusters."
+      },
+      "POWER_WALL": {
+        "wall_class": "one X wall, sign TBD",
+        "clusters": [
+          "POWER_IN J1"
+        ],
+        "rationale": "keeps the locking power plug out of the dense USB/RCA long-wall pack and allows the J1-U7 high-current spine to be placed near a board corner/edge."
+      },
+      "MEDIA_SERVICE_WALL": {
+        "wall_class": "opposite X wall or separate accessible wall, exact sign TBD",
+        "clusters": [
+          "REMOVABLE_STORAGE J7",
+          "RECOVERY_BUTTONS SW1/SW2"
+        ],
+        "rationale": "microSD requires unobstructed finger/card access; recovery buttons can be recessed/tool-accessible nearby without consuming the main cable wall."
+      },
+      "FACTORY_SERVICE": {
+        "wall_class": "rear/internal fixture access",
+        "clusters": [
+          "J9"
+        ],
+        "rationale": "factory pogo access does not require normal user panel space."
+      },
+      "J6_OPTION": {
+        "wall_class": "not in primary long-wall PCB-edge row",
+        "clusters": [
+          "J6"
+        ],
+        "rationale": "same-row packing leaves only 0.525 mm from the packed aperture envelope to the candidate D2 mounting-hole edge before boss/courtyard allowance."
+      }
+    },
+    "promotion_rule": "A4 selects wall classes/topology only. It does not assign Y_NEG vs Y_POS, X_NEG vs X_POS, exact connector centers, Z centers, cutout dimensions beyond known evidence, or final footprints.",
+    "next_closure": "Recover or explicitly define wall sign/absolute centers and verify connector-body/boss/cable envelopes in CAD/physical geometry."
   }
 }

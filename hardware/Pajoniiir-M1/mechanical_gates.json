@@ -91,7 +91,8 @@
           "screen_result": "electrical pass; current conservative central Z margin fail; exact panel/body/mating envelope open",
           "source": "https://www.molex.com/en-us/products/part-detail/436500200"
         }
-      ]
+      ],
+      "wall_class_preference": "X_SIDE_WALL_SIGN_TBD"
     },
     {
       "id": "SW1_RESET",
@@ -126,7 +127,8 @@
           "screen_result": "mechanically promising for recessed/tool-access use; exact suffix and wall/actuator datum required",
           "source": "https://components.omron.com/eu-en/products/switches/B3U"
         }
-      ]
+      ],
+      "wall_class_preference": "MEDIA_SERVICE_SIDE_OR_RECESSED_ACCESS_TBD"
     },
     {
       "id": "SW2_BOOT",
@@ -161,7 +163,8 @@
           "screen_result": "mechanically promising for recessed/tool-access use; exact suffix and wall/actuator datum required",
           "source": "https://components.omron.com/eu-en/products/switches/B3U"
         }
-      ]
+      ],
+      "wall_class_preference": "MEDIA_SERVICE_SIDE_OR_RECESSED_ACCESS_TBD"
     },
     {
       "id": "J2_USB0",
@@ -241,7 +244,9 @@
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
       ],
-      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND."
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
+      "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
+      "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve"
     },
     {
       "id": "J3_USB1",
@@ -321,7 +326,9 @@
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
       ],
-      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND."
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
+      "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
+      "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve"
     },
     {
       "id": "J4_RCA_L",
@@ -384,7 +391,9 @@
           "source": "https://www.sameskydevices.com/product/interconnect/connectors/rca-connectors/rcj-033"
         }
       ],
-      "closure_path": "Prefer Kycon main-board candidate if exact local perimeter/body/plug clearance passes; otherwise use panel-mount fallback. Gate stays open until panel datum + MPN + courtyard/keepout are authoritative."
+      "closure_path": "Prefer Kycon main-board candidate if exact local perimeter/body/plug clearance passes; otherwise use panel-mount fallback. Gate stays open until panel datum + MPN + courtyard/keepout are authoritative.",
+      "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
+      "panel_packing_screen": "PASS as RCA pair co-packed with USB_HOST_PAIR: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve"
     },
     {
       "id": "J5_RCA_R",
@@ -447,7 +456,9 @@
           "source": "https://www.sameskydevices.com/product/interconnect/connectors/rca-connectors/rcj-032"
         }
       ],
-      "closure_path": "Prefer Kycon main-board candidate if exact local perimeter/body/plug clearance passes; otherwise use panel-mount fallback. Gate stays open until panel datum + MPN + courtyard/keepout are authoritative."
+      "closure_path": "Prefer Kycon main-board candidate if exact local perimeter/body/plug clearance passes; otherwise use panel-mount fallback. Gate stays open until panel datum + MPN + courtyard/keepout are authoritative.",
+      "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
+      "panel_packing_screen": "PASS as RCA pair co-packed with USB_HOST_PAIR: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve"
     },
     {
       "id": "J6_LINE35",
@@ -467,7 +478,18 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "wall_class_preference": "NOT_PRIMARY_LONG_WALL_SAME_PCB_EDGE_ROW",
+      "panel_packing_screen": {
+        "result": "fail_same_edge_row",
+        "reason": "USB pair + RCA pair + 5 mm reserve + legacy Ø6.97 J6 aperture yields 99.55 mm occupied span; centered on 108 mm candidate PCB edge leaves only 0.525 mm from packed envelope to candidate D2 mounting-hole edge before any boss/courtyard allowance",
+        "closure_paths": [
+          "different wall",
+          "different Z row / panel-mounted or harness",
+          "remove/DNP",
+          "revise mounting pattern/outline only if required"
+        ]
+      }
     },
     {
       "id": "J_LCD_DISPLAY_FPC",
@@ -538,7 +560,8 @@
           "screen_result": "height pass; card slot, insertion, extraction and exact panel datum remain open",
           "source": "https://www.molex.com/en-us/products/part-detail/5033981892"
         }
-      ]
+      ],
+      "wall_class_preference": "OPPOSITE_X_SIDE_OR_ACCESSIBLE_SIDE_TBD"
     },
     {
       "id": "J9_USB_SERVICE_POGO",
@@ -556,7 +579,8 @@
       ],
       "closure": "Lock the PCB-only USB Serial/JTAG pogo footprint.",
       "connector_cluster": "FACTORY_SERVICE",
-      "absolute_cutout_datum_status": "open"
+      "absolute_cutout_datum_status": "open",
+      "wall_class_preference": "REAR_OR_INTERNAL_FIXTURE"
     },
     {
       "id": "PCB_OUTLINE",
@@ -585,7 +609,9 @@
         "candidate outline cavity clearance 4.504 mm/side X and 2.174 mm/side Y",
         "candidate mounting centers X=+/-51.3 mm, Y=+/-30.0 mm",
         "M1-MECH-A1 connector envelope screen: USB-A is margin-limited, Micro-Fit power is marginal under conservative central Z screen, and ~10 mm right-angle RCA is the dominant Z-stack driver",
-        "M1-MECH-A3 USB active-candidate screen: Amphenol 87520-1010ALF worst-case 7.1 mm profile implies ~4.9 mm gross rear spacing with temporary 0.5 mm front screening gap"
+        "M1-MECH-A3 USB active-candidate screen: Amphenol 87520-1010ALF worst-case 7.1 mm profile implies ~4.9 mm gross rear spacing with temporary 0.5 mm front screening gap",
+        "M1-MECH-A4 primary long-wall first-order packing: USB pair 48.50 mm + 8.00 mm reserve + RCA aperture pair 31.08 mm = 87.58 mm; centered on 108 mm PCB edge leaves 10.21 mm/end before body/boss keepouts",
+        "M1-MECH-A4 J6 same-row screen fails candidate mounting clearance: total span 99.55 mm leaves only 0.525 mm to the candidate D2 hole edge before boss/courtyard allowance"
       ],
       "evidence_file": "mech_a.json"
     },
