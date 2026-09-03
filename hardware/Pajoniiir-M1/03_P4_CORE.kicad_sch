@@ -3096,7 +3096,7 @@
   (hierarchical_label "USB0_PWR_EN" (shape output) (at 307.34 239.395 0) (effects (font (size 1.27 1.27))) (uuid "c3000077-3333-4333-8333-000000000078"))
   (hierarchical_label "USB0_FAULT_N" (shape input) (at 307.34 241.935 0) (effects (font (size 1.27 1.27))) (uuid "c3000078-3333-4333-8333-000000000079"))
   (hierarchical_label "USB1_PWR_EN" (shape output) (at 307.34 244.475 0) (effects (font (size 1.27 1.27))) (uuid "c3000079-3333-4333-8333-00000000007a"))
-  (hierarchical_label "LCD4_PWM" (shape output) (at 307.34 247.015 0) (effects (font (size 1.27 1.27))) (uuid "c300007a-3333-4333-8333-00000000007b"))
+  (hierarchical_label "LCD_BL_PWM" (shape output) (at 307.34 247.015 0) (effects (font (size 1.27 1.27))) (uuid "c300007a-3333-4333-8333-00000000007b"))
   (hierarchical_label "FLASH_CS" (shape bidirectional) (at 307.34 252.095 0) (effects (font (size 1.27 1.27))) (uuid "c300007b-3333-4333-8333-00000000007c"))
   (hierarchical_label "FLASH_Q" (shape bidirectional) (at 307.34 254.635 0) (effects (font (size 1.27 1.27))) (uuid "c300007c-3333-4333-8333-00000000007d"))
   (hierarchical_label "FLASH_WP" (shape bidirectional) (at 307.34 257.175 0) (effects (font (size 1.27 1.27))) (uuid "c300007d-3333-4333-8333-00000000007e"))

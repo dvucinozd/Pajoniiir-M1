@@ -1054,13 +1054,13 @@
   (symbol
     (lib_id "power:GND") (at 85.09 42.545 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0d00001a-d000-4d00-8d00-00000000001b")
-    (property "Reference" "#PWR_J8_5" (at 85.09 48.545 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Reference" "#PWR_JDBG_P4_5" (at 85.09 48.545 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 85.09 45.545 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 85.09 42.545 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "" (at 85.09 42.545 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0d00001b-d000-4d00-8d00-00000000001c"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000d-6b2a-4a3a-8c91-00000000000d" (reference "#PWR_J8_5") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000d-6b2a-4a3a-8c91-00000000000d" (reference "#PWR_JDBG_P4_5") (unit 1))))
   )
   
   (symbol
@@ -1182,13 +1182,13 @@
   (symbol
     (lib_id "power:GND") (at 85.09 92.71 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0d00004c-d000-4d00-8d00-00000000004d")
-    (property "Reference" "#PWR_J10_5" (at 85.09 98.71 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Reference" "#PWR_JDBG_C6_5" (at 85.09 98.71 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Value" "GND" (at 85.09 95.71 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 85.09 92.71 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "" (at 85.09 92.71 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0d00004d-d000-4d00-8d00-00000000004e"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000d-6b2a-4a3a-8c91-00000000000d" (reference "#PWR_J10_5") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000d-6b2a-4a3a-8c91-00000000000d" (reference "#PWR_JDBG_C6_5") (unit 1))))
   )
   
   (symbol
@@ -1295,7 +1295,7 @@
   )
   (label "C6_EN" (at 234.95 95.25 0) (effects (font (size 1.27 1.27))) (uuid "0d000066-d000-4d00-8d00-000000000067"))
 
-  (text "J8 and J10 are no-parts Tag-Connect footprints (DNL). Pin-1 VREF is sense/reference only, never a board power input." (exclude_from_sim no) (at 35 120 0) (effects (font (size 1.27 1.27))) (uuid "0d000067-d000-4d00-8d00-000000000068"))
+  (text "JDBG_P4 and JDBG_C6 are no-parts Tag-Connect footprints (DNL). Pin-1 VREF is sense/reference only, never a board power input." (exclude_from_sim no) (at 35 120 0) (effects (font (size 1.27 1.27))) (uuid "0d000067-d000-4d00-8d00-000000000068"))
   (text "P4 UART conditioning is already in sheet 04; C6 UART conditioning is already in sheet 05. Do not duplicate those series resistors here." (exclude_from_sim no) (at 35 125 0) (effects (font (size 1.27 1.27))) (uuid "0d000068-d000-4d00-8d00-000000000069"))
   (text "P4 USB Serial/JTAG uses GPIO24/25 through 22R/22R. DNP shunt capacitors are symmetrical tuning-only footprints." (exclude_from_sim no) (at 35 130 0) (effects (font (size 1.27 1.27))) (uuid "0d000069-d000-4d00-8d00-00000000006a"))
   (text "Factory recovery is independent of display/Wi-Fi/application firmware: P4 UART0, P4 USB Serial/JTAG and C6 UART/boot all remain accessible." (exclude_from_sim no) (at 35 135 0) (effects (font (size 1.27 1.27))) (uuid "0d00006a-d000-4d00-8d00-00000000006b"))

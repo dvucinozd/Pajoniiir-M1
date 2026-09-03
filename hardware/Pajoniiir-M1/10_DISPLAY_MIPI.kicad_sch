@@ -1412,7 +1412,7 @@
   )
   (label "LEDK" (at 290.195 52.705 0) (effects (font (size 1.27 1.27))) (uuid "0a0000a8-a000-4a00-8a00-0000000000a9"))
 
-  (hierarchical_label "LCD4_PWM" (shape input) (at 149.86 85.09 0) (effects (font (size 1.27 1.27))) (uuid "0a0000a9-a000-4a00-8a00-0000000000aa"))
+  (hierarchical_label "LCD_BL_PWM" (shape input) (at 149.86 85.09 0) (effects (font (size 1.27 1.27))) (uuid "0a0000a9-a000-4a00-8a00-0000000000aa"))
   (symbol
     (lib_id "Device:R_US") (at 179.705 85.09 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0a0000aa-a000-4a00-8a00-0000000000ab")
@@ -1469,7 +1469,7 @@
   (text "Panel-side nets prepared. Original FPC pins 4/21/29 share ESP_3V3; do not bridge M1 3V3_LCD and 3V3_TOUCH until panel internal-common status is confirmed." (exclude_from_sim no) (at 145 118 0) (effects (font (size 1.27 1.27))) (uuid "0a0000bd-a000-4a00-8a00-0000000000be"))
   (text "MIPI DPHY 2.5V generation/decoupling and 4.02k DSI_REXT are already implemented in sheet 03_P4_CORE; do not duplicate them here." (exclude_from_sim no) (at 145 123 0) (effects (font (size 1.27 1.27))) (uuid "0a0000be-a000-4a00-8a00-0000000000bf"))
   (text "DSI layout target: 100R differential ±10%; intra-pair skew <10mil; pair-to-pair target <30mil; continuous GND reference." (exclude_from_sim no) (at 145 128 0) (effects (font (size 1.27 1.27))) (uuid "0a0000bf-a000-4a00-8a00-0000000000c0"))
-  (text "M1 backlight baseline: direct EN PWM at 1kHz in BSP, ~74mA nominal LED current from 3.9R || 2.2R and 104mV FB. L3 = XGL4030-103MEC, 10uH." (exclude_from_sim no) (at 145 133 0) (effects (font (size 1.27 1.27))) (uuid "0a0000c0-a000-4a00-8a00-0000000000c1"))
+  (text "M1 backlight baseline: direct EN PWM at 1kHz in BSP, ~74mA nominal LED current from 3.9R || 2.2R and 104mV FB. L_BL = XGL4030-103MEC, 10uH." (exclude_from_sim no) (at 145 133 0) (effects (font (size 1.27 1.27))) (uuid "0a0000c0-a000-4a00-8a00-0000000000c1"))
   (sheet_instances (path "/" (page "11")))
   (embedded_fonts no)
 )

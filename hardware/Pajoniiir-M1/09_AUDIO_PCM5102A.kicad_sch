@@ -1316,8 +1316,8 @@
   (label "DAC_DATA_DAC" (at 85.725 72.39 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000001"))
   (label "DAC_DATA_DAC" (at 112.395 72.39 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000002"))
   (label "MAIN_L" (at 219.71 90.17 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000003"))
-  (label "DAC89" (at 137.795 92.71 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000001"))
-  (label "DAC90_1V8" (at 137.795 90.17 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000002"))
+  (label "DAC_VNEG" (at 137.795 92.71 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000001"))
+  (label "DAC_LDOO_1V8" (at 137.795 90.17 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000002"))
   (label "MAIN_L" (at 163.83 69.85 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000003"))
   (label "MAIN_R" (at 163.83 72.39 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000004"))
   (junction (at 99.695 72.39) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000009"))
@@ -1701,7 +1701,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C89") (unit 1))))
   )
   
-  (label "DAC89" (at 146.05 67.31 0) (effects (font (size 1.27 1.27))) (uuid "0900007d-9000-4900-8900-00000000007e"))
+  (label "DAC_VNEG" (at 146.05 67.31 0) (effects (font (size 1.27 1.27))) (uuid "0900007d-9000-4900-8900-00000000007e"))
   (symbol
     (lib_id "power:GND") (at 146.05 74.93 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900007e-9000-4900-8900-00000000007f")
@@ -1725,7 +1725,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C90") (unit 1))))
   )
   
-  (label "DAC90_1V8" (at 170.18 69.85 0) (effects (font (size 1.27 1.27))) (uuid "09000084-9000-4900-8900-000000000085"))
+  (label "DAC_LDOO_1V8" (at 170.18 69.85 0) (effects (font (size 1.27 1.27))) (uuid "09000084-9000-4900-8900-000000000085"))
   (symbol
     (lib_id "power:GND") (at 170.18 77.47 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000085-9000-4900-8900-000000000086")
@@ -1884,7 +1884,7 @@
   (text "XSMT defaults LOW via 100k pulldown. Firmware starts stable BCLK/LRCK/DATA, waits, then drives DAC_XSMT HIGH." (exclude_from_sim no) (at 35 135 0) (effects (font (size 1.27 1.27))) (uuid "090000b4-9000-4900-8900-0000000000b5"))
   (text "Single 3V3_AUDIO supply for CPVDD/DVDD/AVDD. LDOO is an internal ~1.8V output and is decoupled only." (exclude_from_sim no) (at 35 140 0) (effects (font (size 1.27 1.27))) (uuid "090000b5-9000-4900-8900-0000000000b6"))
   (text "MAIN_L/R are ground-centered DirectPath line outputs: 470R + 2.2nF, no series DC-block capacitors." (exclude_from_sim no) (at 35 145 0) (effects (font (size 1.27 1.27))) (uuid "090000b6-9000-4900-8900-0000000000b7"))
-  (text "RCA and optional 3.5mm mechanical footprints remain TBD-MECH. J6 is DNP and is LINE OUT only, not headphone drive." (exclude_from_sim no) (at 35 150 0) (effects (font (size 1.27 1.27))) (uuid "090000b7-9000-4900-8900-0000000000b8"))
+  (text "RCA and optional 3.5mm mechanical footprints remain TBD-MECH. J_LINE_35 is DNP and is LINE OUT only, not headphone drive." (exclude_from_sim no) (at 35 150 0) (effects (font (size 1.27 1.27))) (uuid "090000b7-9000-4900-8900-0000000000b8"))
   (symbol
     (lib_id "power:PWR_FLAG")
     (at 55.245 40.005 0)

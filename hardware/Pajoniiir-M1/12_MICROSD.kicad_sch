@@ -1265,7 +1265,7 @@
   (text "TPS22918: SD rail defaults OFF. CT=470pF initial; QOD=100R initial; 3V3_SD must fully discharge for true card reset." (exclude_from_sim no) (at 35 120 0) (effects (font (size 1.27 1.27))) (uuid "0c0000a2-c000-4c00-8c00-0000000000a3"))
   (text "CMD/D0..D3 pull-ups are 10k to switched 3V3_SD. CLK has no pull-up; CLK series=22R and a DNP shunt-C tuning footprint." (exclude_from_sim no) (at 35 125 0) (effects (font (size 1.27 1.27))) (uuid "0c0000a3-c000-4c00-8c00-0000000000a4"))
   (text "Before SD power-off firmware must stop SDMMC and make GPIO39-44 high-Z to prevent back-power through card I/O protection." (exclude_from_sim no) (at 35 130 0) (effects (font (size 1.27 1.27))) (uuid "0c0000a4-c000-4c00-8c00-0000000000a5"))
-  (text "J7 footprint and low-cap multi-line ESD array remain TBD. Socket shield is direct GND; card-detect is active-low when supported." (exclude_from_sim no) (at 35 135 0) (effects (font (size 1.27 1.27))) (uuid "0c0000a5-c000-4c00-8c00-0000000000a6"))
+  (text "J_SD footprint and low-cap multi-line ESD array remain TBD. Socket shield is direct GND; card-detect is active-low when supported." (exclude_from_sim no) (at 35 135 0) (effects (font (size 1.27 1.27))) (uuid "0c0000a5-c000-4c00-8c00-0000000000a6"))
   (sheet_instances (path "/" (page "13")))
   (embedded_fonts no)
 )

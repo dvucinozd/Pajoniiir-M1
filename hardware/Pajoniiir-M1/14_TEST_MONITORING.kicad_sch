@@ -1025,10 +1025,10 @@
   )
   (label "SYS_POWER_ALERT_N" (at 130.175 104.775 0) (effects (font (size 1.27 1.27))) (uuid "0e000053-e000-4e00-8e00-000000000054"))
 
-  (text "R120 = WSK25125L000FEA, 5mR 1% 1W, 4-terminal/Kelvin. At 4.5A: 22.5mV, ~101mW." (exclude_from_sim no) (at 35 125 0) (effects (font (size 1.27 1.27))) (uuid "0e000054-e000-4e00-8e00-000000000055"))
+  (text "R_SYS_SHUNT = WSK25125L000FEA, 5mR 1% 1W, 4-terminal/Kelvin. At 4.5A: 22.5mV, ~101mW." (exclude_from_sim no) (at 35 125 0) (effects (font (size 1.27 1.27))) (uuid "0e000054-e000-4e00-8e00-000000000055"))
   (text "INA238 address 0x40: A0=A1=GND. VBUS senses load-side 5V_SYS; IN+ = supply-side Kelvin, IN- = load-side Kelvin." (exclude_from_sim no) (at 35 130 0) (effects (font (size 1.27 1.27))) (uuid "0e000055-e000-4e00-8e00-000000000056"))
   (text "Input filter: 10R + 10R and 100nF differential. Do not route sense traces on shared high-current copper; take Kelvin taps at shunt pads." (exclude_from_sim no) (at 35 135 0) (effects (font (size 1.27 1.27))) (uuid "0e000056-e000-4e00-8e00-000000000057"))
-  (text "Cost-down: U14/filter/ALERT may be DNP, but R120 must remain or be replaced by footprint-compatible 0R high-current jumper." (exclude_from_sim no) (at 35 140 0) (effects (font (size 1.27 1.27))) (uuid "0e000057-e000-4e00-8e00-000000000058"))
+  (text "Cost-down: U_MON/filter/ALERT may be DNP, but R_SYS_SHUNT must remain or be replaced by footprint-compatible 0R high-current jumper." (exclude_from_sim no) (at 35 140 0) (effects (font (size 1.27 1.27))) (uuid "0e000057-e000-4e00-8e00-000000000058"))
   (text "Shared I2C uses existing bus pull-ups; do not add another strong pull-up pair on this sheet." (exclude_from_sim no) (at 35 145 0) (effects (font (size 1.27 1.27))) (uuid "0e000058-e000-4e00-8e00-000000000059"))
   (sheet_instances (path "/" (page "15")))
   (embedded_fonts no)
