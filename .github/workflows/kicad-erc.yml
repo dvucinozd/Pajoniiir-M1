@@ -38,50 +38,6 @@ jobs:
           sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints
           kicad-cli version
 
-      - name: Dump installed symbol definitions
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          def sexpr_at(src, start):
-              depth = 0
-              in_string = False
-              escaped = False
-              for i in range(start, len(src)):
-                  ch = src[i]
-                  if in_string:
-                      if escaped:
-                          escaped = False
-                      elif ch == "\\":
-                          escaped = True
-                      elif ch == '"':
-                          in_string = False
-                      continue
-                  if ch == '"':
-                      in_string = True
-                  elif ch == "(":
-                      depth += 1
-                  elif ch == ")":
-                      depth -= 1
-                      if depth == 0:
-                          return src[start:i+1]
-              raise RuntimeError("unterminated s-expression")
-
-          wanted = [
-              (Path("/usr/share/kicad/symbols/Connector.kicad_sym"), "Conn_Coaxial"),
-              (Path("/usr/share/kicad/symbols/Regulator_Switching.kicad_sym"), "TPS62132"),
-              (Path("/usr/share/kicad/symbols/Device.kicad_sym"), "Crystal_GND24"),
-          ]
-          for path, name in wanted:
-              src = path.read_text(encoding="utf-8")
-              start = src.index(f'(symbol "{name}"')
-              block = sexpr_at(src, start)
-              print(f"BEGIN_KICAD_SYMBOL {name}")
-              print(block)
-              print(f"END_KICAD_SYMBOL {name}")
-          PY
-
       - name: Structural schematic contracts
         run: python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 

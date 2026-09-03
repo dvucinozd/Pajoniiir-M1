@@ -10,7 +10,7 @@
     (rev "A / M1-SCH-A")
     (company "Pajoniiir")
     (comment 1 "TPS259474ARPWR input protection and 5V_PROTECTED generation")
-    (comment 2 "PGTH intentionally TBD-VALIDATE")
+    (comment 2 "PGTH locked at ~4.49 V rising threshold")
   )
   (lib_symbols
 (symbol "power:PWR_FLAG"
@@ -2142,16 +2142,13 @@
     (effects (font (size 1.27 1.27)))
     (uuid "a1000062-1111-4111-8111-000000000063")
   )
-  (wire (pts (xy 158.115 50.165) (xy 194.945 50.165))
+  (wire (pts (xy 158.115 50.165) (xy 165.735 50.165))
     (stroke (width 0) (type default))
     (uuid "a1000063-1111-4111-8111-000000000064")
   )
-  (junction (at 165.735 50.165) (diameter 0) (color 0 0 0 0)
-    (uuid "a1010012-1111-4111-8111-000000000012")
-  )
   (hierarchical_label "5V_PROTECTED"
     (shape output)
-    (at 194.945 50.165 0)
+    (at 158.115 50.165 0)
     (effects (font (size 1.27 1.27)))
     (uuid "a1000064-1111-4111-8111-000000000065")
   )
