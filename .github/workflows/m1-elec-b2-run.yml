@@ -60,3 +60,5 @@ jobs:
           git diff --cached --check
           git commit -m "display: migrate schematic to final DSI506 module"
           git push origin HEAD:main
+
+# retry: validator newline escape fixed
