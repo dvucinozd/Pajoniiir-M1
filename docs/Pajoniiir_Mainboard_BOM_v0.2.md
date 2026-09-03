@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Repo:** `dvucinozd/Pajoniiir-M1`  
 **Datum:** 2026-09-02  
-**Status:** Engineering BOM v0.2 — konsolidirani Rev A baseline prije KiCad capturea
+**Status:** Engineering-intent BOM v0.2 — subsystem/value baseline; nije 1:1 manufacturing BOM. Za stvarni assembly output koristiti KiCad-generated BOM i `Pajoniiir_Manufacturing_Output_Contract_v0.1.md`.
 
 > Ovaj BOM je namjerno konzervativan. Dijelovi koji ovise o konačnom LCD panelu, FPC rasporedu, kućištu ili mjerenju stvarne potrošnje označeni su kao `TBD`, `TBD-MECH` ili `TBD-VALIDATE`. Takve stavke se ne smiju tretirati kao proizvodno zaključane prije schematic/EVT reviewa.
 

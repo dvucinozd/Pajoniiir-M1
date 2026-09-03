@@ -248,6 +248,12 @@ Provjerava S-expression balance, hierarchy name/shape sync, duplicate RefDes, ro
 
 Ne radi native ERC, footprint pin-to-pad validation, PCB DRC, impedance verification ni field-solver analizu.
 
+### Manufacturing-output CI
+
+Dodani su native KiCad exporti i source-parity provjera. CI sada generira manufacturing BOM CSV, hierarchy netlist, kompletni schematic PDF i Markdown BOM-audit. `validate_manufacturing_outputs.py` zahtijeva da KiCad BOM sadrži točno isti `in_bom=yes` RefDes skup kao 15 leaf sheetova te iste Value/Footprint podatke. Trenutni source baseline ima 270 `in_bom=yes` RefDes-a, 17 DNP stavki i 12 dopuštenih blank-footprint manufacturing gateova.
+
+Detalji: `Pajoniiir_Manufacturing_Output_Contract_v0.1.md`.
+
 ---
 
 ## 14. M1-SCH-A exit gates remaining
@@ -269,8 +275,10 @@ Ne radi native ERC, footprint pin-to-pad validation, PCB DRC, impedance verifica
 - [ ] RCA exact MPNs
 - [ ] 5V input exact MPN
 - [ ] RESET/BOOT exact switch MPNs
+- [x] schematic PDF generation in CI
 - [ ] schematic PDF human review
-- [ ] final manufacturing BOM extraction / comparison
+- [x] manufacturing BOM/netlist extraction + schematic-source parity check in CI
+- [ ] engineering/manual review of generated manufacturing BOM
 
 ---
 
@@ -294,7 +302,7 @@ Final layout čeka authoritative display/FPC mechanics, exact connector footprin
 2. Select exact USB-A, RCA, microSD, 5V input and RESET/BOOT/service-switch MPNs from the final enclosure/mechanical constraints.
 3. Open project in native KiCad and perform GUI open/save + Sync Sheet Pins confirmation.
 4. Generate schematic PDF and conduct human cross-sheet review.
-5. Extract manufacturing BOM/netlist and compare to the engineering BOM.
+5. Review the CI-generated manufacturing BOM against engineering intent and resolve every deliberate naming/MPN/TBD difference.
 6. Lock PCB outline / connector datums / display FPC location.
 7. Obtain PCB fab stackup and derive controlled-impedance geometries.
 8. Begin final placement/routing only after those physical gates close.

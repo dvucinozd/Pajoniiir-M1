@@ -30,7 +30,7 @@ The electrical architecture is defined for:
 - P4/C6 recovery and factory programming
 - optional system power telemetry
 
-The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: the Guition source identifies **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch**, but contact-side/mating geometry, Altium symbol entries 31/32, pins 15/16/18/19, and the relationship between the original common ESP_3V3 pins 4/21/29 and M1's separately filtered 3V3_LCD / 3V3_TOUCH rails remain unresolved. Native GUI Sync Sheet Pins, exact connector/mechanical sourcing gates, schematic PDF review and manufacturing BOM comparison still remain before final M1-SCH-A sign-off.
+The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: the Guition source identifies **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch**, but contact-side/mating geometry, Altium symbol entries 31/32, pins 15/16/18/19, and the relationship between the original common ESP_3V3 pins 4/21/29 and M1's separately filtered 3V3_LCD / 3V3_TOUCH rails remain unresolved. CI now also exports and source-validates the manufacturing BOM, hierarchy netlist and complete schematic PDF. Native GUI Sync Sheet Pins, human PDF/BOM review and exact connector/mechanical sourcing gates still remain before final M1-SCH-A sign-off.
 
 ---
 
@@ -99,6 +99,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [Schematic plan v0.1](docs/Pajoniiir_Mainboard_Schematic_Plan_v0.1.md)
 - [Schematic readiness review v0.1](docs/Pajoniiir_RevA_Schematic_Readiness_Review_v0.1.md)
 - [M1-SCH-A schematic audit v0.1](docs/Pajoniiir_M1_Schematic_Audit_v0.1.md)
+- [Manufacturing output contract v0.1](docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
 ## 01 — Input power
@@ -438,14 +439,17 @@ Current sign-off gates:
 - [x] DNP/DNL policy captured
 - [x] local structural validator committed
 - [ ] native KiCad Sync Sheet Pins
-- [ ] native KiCad ERC with zero unexplained errors
+- [x] native KiCad 9.0.9 ERC — 0 unexplained errors, 6 approved J_LCD exclusions, 0 warnings
+- [x] CI manufacturing BOM/netlist/PDF export + source-parity validation
 - [ ] final LCD/FPC physical definition
 - [ ] exact external connector MPNs / footprints
 - [x] U7 HotRod RPW land pattern freeze — `Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm`
 - [x] L_BL exact sourcing/footprint — XGL4030-103MEC / `Inductor_SMD:L_Coilcraft_XxL4030`
 - [x] Kelvin shunt sourcing/footprint — WSK25125L000FEA / `Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm`
+- [x] schematic PDF generation in CI
 - [ ] schematic PDF human review
-- [ ] manufacturing BOM/netlist cross-check
+- [x] manufacturing BOM/netlist extraction + source-parity cross-check
+- [ ] engineering/manual review of generated manufacturing BOM
 
 Use:
 

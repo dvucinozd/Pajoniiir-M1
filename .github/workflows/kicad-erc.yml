@@ -12,7 +12,7 @@ on:
       - "hardware/Pajoniiir-M1/*.kicad_pro"
       - "hardware/Pajoniiir-M1/sym-lib-table"
       - "hardware/Pajoniiir-M1/fp-lib-table"
-      - "hardware/Pajoniiir-M1/tools/validate_schematic_structure.py"
+      - "hardware/Pajoniiir-M1/tools/*.py"
       - ".github/workflows/kicad-erc.yml"
 
 concurrency:
@@ -318,6 +318,35 @@ jobs:
           done < <(find hardware/Pajoniiir-M1 -maxdepth 1 -name '*.kicad_sch' -print | sort)
           exit "$failed"
 
+      - name: Export and validate manufacturing outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          kicad-cli sch export bom \
+            --output artifacts/Pajoniiir-M1-manufacturing-bom.csv \
+            --fields 'Reference,Value,Footprint,${QUANTITY},${DNP}' \
+            --labels 'Refs,Value,Footprint,Qty,DNP' \
+            --group-by 'Reference' \
+            --sort-field 'Reference' \
+            --sort-asc \
+            --string-delimiter '"' \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+
+          python3 hardware/Pajoniiir-M1/tools/validate_manufacturing_outputs.py \
+            artifacts/Pajoniiir-M1-manufacturing-bom.csv \
+            artifacts/Pajoniiir-M1-manufacturing-bom-audit.md
+
+          kicad-cli sch export netlist \
+            --format kicadxml \
+            --output artifacts/Pajoniiir-M1.net.xml \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+
+          kicad-cli sch export pdf \
+            --black-and-white \
+            --output artifacts/Pajoniiir-M1-schematic.pdf \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+
       - name: Native KiCad ERC
         id: erc
         shell: bash
@@ -338,13 +367,14 @@ jobs:
             exit "$rc"
           fi
 
-      - name: Upload ERC report
+      - name: Upload M1-SCH-A review bundle
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Pajoniiir-M1-KiCad9-ERC
-          path: artifacts/Pajoniiir-M1-erc.json
+          name: Pajoniiir-M1-M1-SCH-A
+          path: artifacts/
           if-no-files-found: warn
+          retention-days: 30
 
       - name: Enforce ERC cleanliness
         if: always()
