@@ -270,6 +270,30 @@ def main() -> int:
                 f"{MECH_A.name}: M1-MECH-A0 PCB envelope drift: "
                 f"{observed_pcb_candidate} != {expected_pcb_candidate}"
             )
+        connector_baseline = mech_a.get("connector_cluster_baseline", {})
+        surfaces = connector_baseline.get("panel_surfaces", {})
+        if surfaces.get("FRONT_Z0", {}).get("usable_for_user_io") is not False:
+            errors.append(
+                f"{MECH_A.name}: FRONT_Z0 must remain reserved for display/touch"
+            )
+        expected_cluster_refs = {
+            "AUDIO_OUT": {"J4", "J5", "J6"},
+            "USB_HOST_PAIR": {"J2", "J3"},
+            "POWER_IN": {"J1"},
+            "REMOVABLE_STORAGE": {"J7"},
+            "RECOVERY_BUTTONS": {"SW1", "SW2"},
+            "FACTORY_SERVICE": {"J9"},
+        }
+        observed_cluster_refs = {
+            cluster.get("id"): set(cluster.get("refs", []))
+            for cluster in connector_baseline.get("clusters", [])
+            if isinstance(cluster, dict) and isinstance(cluster.get("id"), str)
+        }
+        if observed_cluster_refs != expected_cluster_refs:
+            errors.append(
+                f"{MECH_A.name}: connector cluster membership drift: "
+                f"{observed_cluster_refs} != {expected_cluster_refs}"
+            )
         observed_display = {
             "bare_x": bare.get("x"),
             "bare_y": bare.get("y"),

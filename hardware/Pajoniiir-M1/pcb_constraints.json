@@ -294,5 +294,18 @@
     },
     "status": "placement feasibility only",
     "edge_cuts_allowed": false
+  },
+  "connector_cluster_rules": {
+    "source": "mech_a.json",
+    "front_face_reserved": true,
+    "rule": "perimeter connector placement must preserve cluster grouping and remain provisional until absolute wall/cutout datums close",
+    "clusters": [
+      "AUDIO_OUT",
+      "USB_HOST_PAIR",
+      "POWER_IN",
+      "REMOVABLE_STORAGE",
+      "RECOVERY_BUTTONS",
+      "FACTORY_SERVICE"
+    ]
   }
 }

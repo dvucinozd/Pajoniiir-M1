@@ -244,7 +244,43 @@ This candidate exists only in mech_a.json / documentation. CI rejects real Edge.
 
 ---
 
-## 10. What M1-MECH-A has closed
+## 10. Connector cluster baseline
+
+Front Z=0 is now explicitly reserved for display/touch. User-facing connectors must use a side or rear surface unless the enclosure is redesigned.
+
+### AUDIO_OUT — J4/J5/J6
+
+- legacy RCA hole diameter: 11.88 mm
+- RCA center spacing: 19.20 mm
+- minimum two-RCA aperture span from outer hole edge to outer hole edge: 31.08 mm
+- legacy 3.5 mm aperture: 6.97 mm
+- absolute centers remain open
+
+### USB_HOST_PAIR — J2/J3
+
+The old enclosure work carried a 34.0 mm center-spacing reference for the two USB openings. Because M1 changes the connector type to USB-A, this is preserved only as a spacing reference and is not a production cutout.
+
+### POWER_IN — J1
+
+Wall and center remain open. Prefer a wall/region that keeps the high-current path to U7/R120 short and does not interfere with USB cable insertion.
+
+### REMOVABLE_STORAGE — J7
+
+Wall and center remain open. Card insertion and extraction must be straight and externally accessible.
+
+### RECOVERY_BUTTONS — SW1/SW2
+
+Wall and centers remain open. Baseline intent is recessed/tool-accessible service controls, not prominent front-panel UI.
+
+### FACTORY_SERVICE — J9
+
+Rear/internal fixture access only; no normal-user aperture requirement.
+
+No cluster receives an absolute wall assignment in this commit. The remaining datum must come from the legacy Blender geometry or an explicit M1 enclosure wall decision.
+
+---
+
+## 11. What M1-MECH-A has closed
 
 - display/front-envelope family identified
 - bare front envelope quantified
@@ -259,7 +295,7 @@ This candidate exists only in mech_a.json / documentation. CI rejects real Edge.
 
 ---
 
-## 11. What remains open
+## 12. What remains open
 
 ### PCB
 
@@ -288,7 +324,7 @@ This candidate exists only in mech_a.json / documentation. CI rejects real Edge.
 
 ---
 
-## 12. Immediate next M1-MECH-A action
+## 13. Immediate next M1-MECH-A action
 
 Use the 121.008 × 73.408 × 30 mm enclosure candidate and M1-MECH-A0 108 × 65.06 mm PCB envelope candidate to build the first connector-placement envelope and verify that connector bodies/bosses do not invalidate the candidate outline.
 

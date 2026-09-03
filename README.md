@@ -13,7 +13,7 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **Manufacturing output review:** PASS — 270/270 BOM parity, 17 DNP, 12 intentional blank-footprint gates  
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
-**M1-MECH-A:** IN PROGRESS — display datum locked; validated 121.008 × 73.408 × 30 mm legacy enclosure candidate; PCB outline still open  
+**M1-MECH-A:** IN PROGRESS — display datum/Z-stack/M1-MECH-A0 PCB envelope and connector cluster baseline defined; absolute wall/cutout datums still open  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:

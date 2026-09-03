@@ -301,11 +301,189 @@
     }
   },
   "next_closure_inputs": [
+    "recover or provide the legacy flx4_0407.blend model to extract absolute cutout centers, or explicitly assign M1 connector clusters to enclosure walls",
     "confirm M1 reuses the validated legacy enclosure external envelope or define a replacement envelope",
     "validate/revise the M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
     "lock M1 mounting-hole coordinates and screw/standoff system",
     "define user-facing panel assignment for J1/J2/J3/J4/J5/J6/J7/SW1/SW2",
     "resolve J_LCD FPC mating/contact/pin-domain gate",
     "choose fabrication stackup after board outline/connector datums are frozen"
-  ]
+  ],
+  "connector_cluster_baseline": {
+    "status": "relative topology defined__absolute wall datums open",
+    "panel_surfaces": {
+      "FRONT_Z0": {
+        "usable_for_user_io": false,
+        "role": "display/touch only",
+        "reason": "centered bare display leaves only 3.304 mm nominal perimeter in the validated enclosure candidate"
+      },
+      "REAR_Z30": {
+        "usable_for_user_io": true,
+        "wall_size": {
+          "x": 121.008,
+          "y": 73.408
+        },
+        "insertion_axis": "approximately Z",
+        "note": "usable only if cable/card access from the device rear is acceptable"
+      },
+      "X_NEG": {
+        "usable_for_user_io": true,
+        "wall_length": 73.408,
+        "wall_depth": 30,
+        "insertion_axis": "approximately X"
+      },
+      "X_POS": {
+        "usable_for_user_io": true,
+        "wall_length": 73.408,
+        "wall_depth": 30,
+        "insertion_axis": "approximately X"
+      },
+      "Y_NEG": {
+        "usable_for_user_io": true,
+        "wall_length": 121.008,
+        "wall_depth": 30,
+        "insertion_axis": "approximately Y"
+      },
+      "Y_POS": {
+        "usable_for_user_io": true,
+        "wall_length": 121.008,
+        "wall_depth": 30,
+        "insertion_axis": "approximately Y"
+      }
+    },
+    "clusters": [
+      {
+        "id": "AUDIO_OUT",
+        "refs": [
+          "J4",
+          "J5",
+          "J6"
+        ],
+        "wall_assignment": "TBD",
+        "front_forbidden": true,
+        "allowed_surfaces": [
+          "REAR_Z30",
+          "X_NEG",
+          "X_POS",
+          "Y_NEG",
+          "Y_POS"
+        ],
+        "legacy_evidence": {
+          "rca_hole_diameter": 11.88,
+          "rca_center_spacing": 19.2,
+          "rca_pair_min_aperture_span": 31.08,
+          "line_35_hole_diameter": 6.97,
+          "absolute_centers": "not recovered in current session"
+        },
+        "rules": [
+          "keep J4/J5 as one RCA pair cluster",
+          "J6 remains optional and must either receive a real MPN/cutout datum or be removed",
+          "keep audio cluster away from the high-current/power connector cluster where enclosure routing permits"
+        ]
+      },
+      {
+        "id": "USB_HOST_PAIR",
+        "refs": [
+          "J2",
+          "J3"
+        ],
+        "wall_assignment": "TBD",
+        "front_forbidden": true,
+        "allowed_surfaces": [
+          "REAR_Z30",
+          "X_NEG",
+          "X_POS",
+          "Y_NEG",
+          "Y_POS"
+        ],
+        "legacy_evidence": {
+          "prior_dual_usb_c_center_spacing": 34,
+          "status": "legacy spacing reference only; M1 changes connector type to USB-A"
+        },
+        "rules": [
+          "keep both host ports on a common service/user wall unless cable-clearance study proves otherwise",
+          "do not freeze center spacing until exact USB-A MPN shell/cutout dimensions are selected"
+        ]
+      },
+      {
+        "id": "POWER_IN",
+        "refs": [
+          "J1"
+        ],
+        "wall_assignment": "TBD",
+        "front_forbidden": true,
+        "allowed_surfaces": [
+          "REAR_Z30",
+          "X_NEG",
+          "X_POS",
+          "Y_NEG",
+          "Y_POS"
+        ],
+        "rules": [
+          "prefer shortest practical connection to the J1-U7-R120 high-current spine",
+          "do not place where the power plug blocks USB or microSD access"
+        ]
+      },
+      {
+        "id": "REMOVABLE_STORAGE",
+        "refs": [
+          "J7"
+        ],
+        "wall_assignment": "TBD",
+        "front_forbidden": true,
+        "allowed_surfaces": [
+          "REAR_Z30",
+          "X_NEG",
+          "X_POS",
+          "Y_NEG",
+          "Y_POS"
+        ],
+        "rules": [
+          "card insertion axis must be straight and unobstructed",
+          "reserve finger/card extraction clearance outside the enclosure"
+        ]
+      },
+      {
+        "id": "RECOVERY_BUTTONS",
+        "refs": [
+          "SW1",
+          "SW2"
+        ],
+        "wall_assignment": "TBD",
+        "front_forbidden": true,
+        "allowed_surfaces": [
+          "REAR_Z30",
+          "X_NEG",
+          "X_POS",
+          "Y_NEG",
+          "Y_POS"
+        ],
+        "rules": [
+          "RESET/BOOT should be recessed or tool-accessible rather than exposed as primary UI controls",
+          "actuation direction must match final switch MPN"
+        ]
+      },
+      {
+        "id": "FACTORY_SERVICE",
+        "refs": [
+          "J9"
+        ],
+        "wall_assignment": "internal_or_rear_fixture_TBD",
+        "front_forbidden": true,
+        "allowed_surfaces": [
+          "REAR_Z30"
+        ],
+        "rules": [
+          "DNL fixture access only",
+          "no requirement for normal user access"
+        ]
+      }
+    ],
+    "next_required_absolute_data": [
+      "which physical wall each cluster uses",
+      "connector/cutout center coordinates in M1_FRONT_CENTER",
+      "connector insertion axis and board-edge projection",
+      "exact MPN body/courtyard/mating-clearance envelope"
+    ]
+  }
 }

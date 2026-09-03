@@ -70,7 +70,9 @@
         "connector height/depth envelope"
       ],
       "closure": "Lock exact 5 V locking connector MPN and courtyard from enclosure geometry.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "POWER_IN",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "SW1_RESET",
@@ -88,7 +90,9 @@
         "keepout/courtyard"
       ],
       "closure": "Lock exact RESET momentary-NO switch MPN.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "RECOVERY_BUTTONS",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "SW2_BOOT",
@@ -106,7 +110,9 @@
         "keepout/courtyard"
       ],
       "closure": "Lock exact BOOT momentary-NO switch MPN.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "RECOVERY_BUTTONS",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "J2_USB0",
@@ -124,7 +130,9 @@
         "enclosure cutout and insertion clearance"
       ],
       "closure": "Lock exact USB-A receptacle MPN for storage port.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "USB_HOST_PAIR",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "J3_USB1",
@@ -142,7 +150,9 @@
         "enclosure cutout and insertion clearance"
       ],
       "closure": "Lock exact USB-A receptacle MPN for FLX4 port.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "USB_HOST_PAIR",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "J4_RCA_L",
@@ -160,7 +170,9 @@
         "plug spacing and shell isolation requirement"
       ],
       "closure": "Lock exact RCA LEFT connector MPN.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "AUDIO_OUT",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "J5_RCA_R",
@@ -178,7 +190,9 @@
         "plug spacing and shell isolation requirement"
       ],
       "closure": "Lock exact RCA RIGHT connector MPN.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "AUDIO_OUT",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "J6_LINE35",
@@ -195,7 +209,9 @@
         "jack center height and orientation"
       ],
       "closure": "Either lock exact 3.5 mm line-out jack footprint or remove the option before layout freeze.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "AUDIO_OUT",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "J_LCD_DISPLAY_FPC",
@@ -245,7 +261,9 @@
         "socket height and keepout"
       ],
       "closure": "Lock exact microSD socket MPN.",
-      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
+      "connector_cluster": "REMOVABLE_STORAGE",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "J9_USB_SERVICE_POGO",
@@ -261,7 +279,9 @@
         "pin-1 datum",
         "fixture keepout"
       ],
-      "closure": "Lock the PCB-only USB Serial/JTAG pogo footprint."
+      "closure": "Lock the PCB-only USB Serial/JTAG pogo footprint.",
+      "connector_cluster": "FACTORY_SERVICE",
+      "absolute_cutout_datum_status": "open"
     },
     {
       "id": "PCB_OUTLINE",
