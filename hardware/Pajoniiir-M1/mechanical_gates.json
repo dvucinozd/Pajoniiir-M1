@@ -201,7 +201,10 @@
         "SOFNG 0.5TBQP-30P-1",
         "JLCPCB C3975120",
         "30 contacts",
-        "0.5 mm pitch"
+        "0.5 mm pitch",
+        "bare display/front envelope 114.40 x 66.80 mm",
+        "active display area 93.60 x 56.16 mm",
+        "original shell mounting reference 4xD2 on 102.6 x 60.0 mm centers"
       ],
       "source": "https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120",
       "required_evidence": [
@@ -212,7 +215,8 @@
         "resolve pins 15/16/18/19",
         "confirm original common 3V3 pins 4/21/29 before mapping separate 3V3_LCD/3V3_TOUCH"
       ],
-      "closure": "Instantiate physical LCD connector only after pin-domain and mating geometry are authoritative."
+      "closure": "Instantiate physical LCD connector only after pin-domain and mating geometry are authoritative.",
+      "evidence_file": "mech_a.json"
     },
     {
       "id": "J7_MICROSD",
@@ -258,12 +262,20 @@
       "bom_scope": false,
       "blocks_layout_freeze": true,
       "required_evidence": [
-        "final PCB X/Y dimensions",
-        "mounting-hole coordinates",
+        "explicit freeze/reject decision for validated legacy enclosure candidate",
+        "final PCB X/Y dimensions within chosen enclosure",
+        "final M1 mounting-hole coordinates / standoff hardware",
         "edge clearances",
         "connector/display/enclosure datums"
       ],
-      "closure": "Commit authoritative Edge.Cuts and mounting datums."
+      "closure": "Commit authoritative Edge.Cuts and mounting datums.",
+      "known_evidence": [
+        "validated legacy enclosure candidate 121.008 x 73.408 x 30.000 mm",
+        "2.0 mm legacy wall thickness",
+        "conservative M1 board-bay candidate <=108 x 60 mm",
+        "original GUITION shell mounting reference 102.6 x 60.0 mm, 4xD2"
+      ],
+      "evidence_file": "mech_a.json"
     },
     {
       "id": "FAB_STACKUP",
@@ -283,5 +295,7 @@
       ],
       "closure": "Lock stackup and derive 90 ohm USB / 100 ohm MIPI geometry."
     }
-  ]
+  ],
+  "milestone": "M1-MECH-A",
+  "mechanical_authority": "mech_a.json"
 }

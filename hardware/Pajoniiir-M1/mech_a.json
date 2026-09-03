@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "milestone": "M1-MECH-A",
+  "updated": "2026-09-03",
+  "status": "display_datum_locked__enclosure_candidate_validated__pcb_outline_open",
+  "final_board_outline_locked": false,
+  "coordinate_system": {
+    "name": "M1_FRONT_CENTER",
+    "units": "mm",
+    "origin": "center of the nominal bare display front envelope on the front glass plane",
+    "axes": {
+      "x": "+right when viewing the final device in landscape orientation",
+      "y": "+down when viewing the final device in landscape orientation",
+      "z": "+rear/inward from the front glass plane"
+    },
+    "handedness": "right-handed"
+  },
+  "authoritative_display_reference": {
+    "family": "GUITION JC4880P443C_I_W / JC4880P443C_I_W_Y",
+    "orientation_for_M1": "landscape",
+    "source": {
+      "type": "manufacturer_specification",
+      "title": "JC4880P443C_I_W Specifications-EN-V1.0",
+      "url": "https://www.guition.com/icms/upload/fb081940d6fc11f09850077a33e1404f/FTPData/UEditor/file/2026121/1768961095795/JC4880P443C_I_W%20Specifications-EN-V1.0.pdf",
+      "pages": [
+        6,
+        7
+      ]
+    },
+    "bare_display_front_envelope": {
+      "x": 114.4,
+      "y": 66.8,
+      "status": "locked_reference"
+    },
+    "active_display_area": {
+      "x": 93.6,
+      "y": 56.16,
+      "status": "locked_reference"
+    },
+    "module_shell_reference": {
+      "x": 117.01,
+      "y": 69.41,
+      "z_total": 13.8,
+      "status": "legacy_module_reference_only"
+    },
+    "rear_shell_reference": {
+      "x": 108,
+      "y": 65.06,
+      "status": "legacy_module_reference_only"
+    },
+    "legacy_mounting_pattern": {
+      "hole_count": 4,
+      "hole_diameter": 2,
+      "center_spacing_x": 102.6,
+      "center_spacing_y": 60,
+      "centers_relative_to_origin": [
+        [
+          -51.3,
+          -30
+        ],
+        [
+          51.3,
+          -30
+        ],
+        [
+          -51.3,
+          30
+        ],
+        [
+          51.3,
+          30
+        ]
+      ],
+      "status": "authoritative_for_original_GUITION_shell__candidate_for_M1_reuse"
+    },
+    "unresolved": [
+      "numerical active-area offset relative to bare glass origin is not dimensioned in the public drawing",
+      "bare panel/FPC tail mechanical drawing",
+      "J_LCD contact-side orientation and mating height",
+      "panel-side pin-domain questions tracked in mechanical_gates.json"
+    ]
+  },
+  "legacy_blender_evidence": {
+    "source_file": "D:\\AI\\BLENDER\\flx4_0407.blend",
+    "relevant_objects": [
+      "FINAL_PRINT_EXPORT_ONLY_ESP32_PCM_CASE_MODIFIED",
+      "middle_obj_FIT_TEST_ASSEMBLED",
+      "middle_obj_REFERENCE_LOCKED"
+    ],
+    "module_fit_reference": {
+      "x": 117.008,
+      "y": 69.408,
+      "z": 13.9,
+      "comparison_to_manufacturer_mm": {
+        "dx": -0.002,
+        "dy": -0.002,
+        "dz": 0.1
+      },
+      "conclusion": "strong geometric match to the GUITION module/shell reference"
+    },
+    "enclosure_candidate": {
+      "x": 121.008,
+      "y": 73.408,
+      "z": 30,
+      "wall_thickness": 2,
+      "status": "validated_legacy_candidate__not_final_M1_authority"
+    },
+    "connector_cutout_evidence": {
+      "rca_hole_diameter": 11.88,
+      "rca_center_spacing": 19.2,
+      "line_35_hole_diameter": 6.97,
+      "status": "legacy_cutout_sizes_only__absolute M1 centers not yet authoritative"
+    },
+    "standoff_evidence": {
+      "main_standoff_height": 6,
+      "status": "final legacy decision__M1 mounting coordinates not yet authoritative"
+    },
+    "notes": [
+      "Legacy Blender envelope matches manufacturer shell geometry closely enough to reuse as M1-MECH-A evidence.",
+      "Legacy board/standoff coordinates are not promoted to M1 PCB mounting authority because the M1 mainboard is a new custom board.",
+      "RCA/3.5 mm cutout diameters remain useful enclosure evidence, but exact M1 connector MPN and panel centers remain open."
+    ]
+  },
+  "m1_enclosure_baseline": {
+    "external_envelope_candidate": {
+      "x": 121.008,
+      "y": 73.408,
+      "z": 30,
+      "status": "candidate"
+    },
+    "display_front_reference": {
+      "x": 114.4,
+      "y": 66.8,
+      "status": "locked"
+    },
+    "board_bay_candidate": {
+      "x_max": 108,
+      "y_max": 60,
+      "rationale": "conservative rear-shell/mounting reference from the original GUITION geometry; not yet Edge.Cuts authority",
+      "status": "candidate"
+    },
+    "mounting_pattern_candidate": {
+      "center_spacing_x": 102.6,
+      "center_spacing_y": 60,
+      "hole_diameter": 2,
+      "status": "candidate_pending explicit M1 enclosure reuse decision"
+    }
+  },
+  "next_closure_inputs": [
+    "confirm M1 reuses the validated legacy enclosure external envelope or define a replacement envelope",
+    "lock final M1 PCB X/Y inside the enclosure candidate",
+    "lock M1 mounting-hole coordinates and screw/standoff system",
+    "define user-facing panel assignment for J1/J2/J3/J4/J5/J6/J7/SW1/SW2",
+    "resolve J_LCD FPC mating/contact/pin-domain gate",
+    "choose fabrication stackup after board outline/connector datums are frozen"
+  ]
+}

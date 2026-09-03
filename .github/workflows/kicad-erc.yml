@@ -14,6 +14,7 @@ on:
       - "hardware/Pajoniiir-M1/fp-lib-table"
       - "hardware/Pajoniiir-M1/tools/*.py"
       - "hardware/Pajoniiir-M1/mechanical_gates.json"
+      - "hardware/Pajoniiir-M1/mech_a.json"
       - "hardware/Pajoniiir-M1/pcb_constraints.json"
       - "hardware/Pajoniiir-M1/*.kicad_pcb"
       - ".github/workflows/kicad-erc.yml"

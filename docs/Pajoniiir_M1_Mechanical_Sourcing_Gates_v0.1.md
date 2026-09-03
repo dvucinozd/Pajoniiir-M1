@@ -6,6 +6,12 @@
 
 ---
 
+## M1-MECH-A baseline evidence
+
+Manufacturer and legacy Blender geometry are now correlated in `hardware/Pajoniiir-M1/mech_a.json` and `Pajoniiir_M1_MECH_A_Baseline_v0.1.md`. The validated legacy enclosure candidate is 121.008 × 73.408 × 30.000 mm with 2.0 mm walls; the bare display/front reference is 114.40 × 66.80 mm. These values narrow the mechanical search space but do not yet authorize final Edge.Cuts.
+
+---
+
 ## Current conclusion
 
 Electrical capture, hierarchy synchronization, native KiCad ERC, manufacturing BOM review and schematic PDF review are complete.

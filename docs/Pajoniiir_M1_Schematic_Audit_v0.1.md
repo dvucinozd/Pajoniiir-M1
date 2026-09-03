@@ -292,6 +292,12 @@ Open physical gates are now machine-readable in `hardware/Pajoniiir-M1/mechanica
 
 ---
 
+### M1-MECH-A progress
+
+Display/front geometry and the legacy enclosure candidate are now quantified in `mech_a.json`. The old Blender fit-test envelope (117.008 × 69.408 × 13.900 mm) matches GUITION's 117.01 × 69.41 × 13.8 mm module reference closely, so the 121.008 × 73.408 × 30 mm / 2 mm-wall enclosure is retained as a validated M1 candidate rather than discarded. Final PCB outline and connector datums remain open.
+
+---
+
 ## 15. PCB-layout status
 
 **GO for exploratory functional placement:** YES, uz placeholder mechanics i obavezni `pcb_constraints.json` / `Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md` constraint set.

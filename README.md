@@ -13,6 +13,7 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **Manufacturing output review:** PASS — 270/270 BOM parity, 17 DNP, 12 intentional blank-footprint gates  
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
+**M1-MECH-A:** IN PROGRESS — display datum locked; validated 121.008 × 73.408 × 30 mm legacy enclosure candidate; PCB outline still open  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -104,6 +105,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [Manufacturing output contract v0.1](docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md)
 - [RefDes annotation map v0.1](docs/Pajoniiir_RefDes_Annotation_Map_v0.1.md)
 - [Mechanical & sourcing gate closure v0.1](docs/Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md)
+- [M1-MECH-A Mechanical Baseline v0.1](docs/Pajoniiir_M1_MECH_A_Baseline_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 

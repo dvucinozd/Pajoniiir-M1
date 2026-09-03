@@ -38,6 +38,7 @@ CHILDREN = [
 MECHANICAL_GATES = BASE / "mechanical_gates.json"
 PCB_CONSTRAINTS = BASE / "pcb_constraints.json"
 PCB = BASE / "Pajoniiir-M1.kicad_pcb"
+MECH_A = BASE / "mech_a.json"
 
 BANNED_LEGACY_VALUE_PATTERNS = (
     "ESP32-S3",
@@ -188,6 +189,46 @@ def main() -> int:
         if open_blockers:
             notes.append(
                 f"layout freeze remains blocked by {len(open_blockers)} mechanical/sourcing gates"
+            )
+
+    if not MECH_A.exists():
+        errors.append(f"missing M1-MECH-A authority {MECH_A.name}")
+    else:
+        try:
+            mech_a = json.loads(MECH_A.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            errors.append(f"{MECH_A.name}: invalid JSON: {exc}")
+            mech_a = {}
+        if mech_a.get("milestone") != "M1-MECH-A":
+            errors.append(f"{MECH_A.name}: milestone must remain M1-MECH-A")
+        if mech_a.get("final_board_outline_locked") and any(
+            isinstance(gate, dict)
+            and gate.get("id") == "PCB_OUTLINE"
+            and gate.get("status") != "closed"
+            for gate in gates
+        ):
+            errors.append(
+                f"{MECH_A.name}: final_board_outline_locked=true while PCB_OUTLINE gate is open"
+            )
+        display = mech_a.get("authoritative_display_reference", {})
+        bare = display.get("bare_display_front_envelope", {})
+        active = display.get("active_display_area", {})
+        expected_display = {
+            "bare_x": 114.40,
+            "bare_y": 66.80,
+            "active_x": 93.60,
+            "active_y": 56.16,
+        }
+        observed_display = {
+            "bare_x": bare.get("x"),
+            "bare_y": bare.get("y"),
+            "active_x": active.get("x"),
+            "active_y": active.get("y"),
+        }
+        if observed_display != expected_display:
+            errors.append(
+                f"{MECH_A.name}: manufacturer display geometry drift: "
+                f"{observed_display} != {expected_display}"
             )
 
     if not PCB_CONSTRAINTS.exists():
