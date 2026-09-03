@@ -18,7 +18,7 @@ if "active_body = \"\".join(body)" not in text:
     for required in ['''
     text, count = re.subn(
         r'    for forbidden in \[\n.*?    for required in \[',
-        replacement,
+        lambda _match: replacement,
         text,
         count=1,
         flags=re.S,
@@ -38,7 +38,7 @@ if 'active_p10 = "\\n".join(instantiated_symbol_blocks(p10))' not in text:
     if any(True for _ in instantiated_symbol_blocks'''
     text, count = re.subn(
         r'    for legacy in \(\n.*?    if any\(True for _ in instantiated_symbol_blocks',
-        replacement,
+        lambda _match: replacement,
         text,
         count=1,
         flags=re.S,
