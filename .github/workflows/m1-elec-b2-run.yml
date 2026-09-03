@@ -20,12 +20,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run migration
+      - name: Run migration and finalizer
         shell: bash
         run: |
           set -euo pipefail
           python3 hardware/Pajoniiir-M1/tools/fix_migrate_display_dsi506_b2_guards.py
           python3 hardware/Pajoniiir-M1/tools/migrate_display_dsi506_b2.py
+          python3 hardware/Pajoniiir-M1/tools/finalize_display_dsi506_b2_outputs.py
           python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 
       - name: Install KiCad 9
@@ -46,7 +47,7 @@ jobs:
           kicad-cli sch export netlist -o /tmp/m1-b2/root.net hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
           test -s /tmp/m1-b2/root.pdf
           test -s /tmp/m1-b2/root.net
-          grep -q J8 /tmp/m1-b2/root.net
+          grep -q J10 /tmp/m1-b2/root.net
           grep -q SFW15R-2STE1LF /tmp/m1-b2/root.net
 
       - name: Commit validated migration
@@ -61,4 +62,4 @@ jobs:
           git commit -m "display: migrate schematic to final DSI506 module"
           git push origin HEAD:main
 
-# retry: two-level validator escape fixed
+# retry: structural audit findings finalized
