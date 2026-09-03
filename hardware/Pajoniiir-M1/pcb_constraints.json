@@ -130,14 +130,16 @@
         "L1",
         "Y1"
       ],
-      "priority": "central compute island; shortest flash/crystal/core-power loops"
+      "priority": "central compute island; shortest flash/crystal/core-power loops",
+      "z_note": "prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"
     },
     {
       "id": "C6_RF",
       "members": [
         "U4"
       ],
-      "priority": "board edge with antenna keepout"
+      "priority": "board edge with antenna keepout",
+      "z_note": "prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"
     },
     {
       "id": "USB_POWER",
@@ -153,7 +155,8 @@
         "D2",
         "J2"
       ],
-      "priority": "J2 at final enclosure edge; D2 immediately behind connector"
+      "priority": "J2 at final enclosure edge; D2 immediately behind connector",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
     },
     {
       "id": "USB1_EDGE",
@@ -161,7 +164,8 @@
         "D3",
         "J3"
       ],
-      "priority": "J3 at final enclosure edge; D3 immediately behind connector"
+      "priority": "J3 at final enclosure edge; D3 immediately behind connector",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
     },
     {
       "id": "AUDIO",
@@ -171,7 +175,8 @@
         "J5",
         "J6"
       ],
-      "priority": "quiet edge zone separated from switchers"
+      "priority": "quiet edge zone separated from switchers",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
     },
     {
       "id": "DISPLAY",
@@ -180,7 +185,8 @@
         "L3",
         "D4"
       ],
-      "priority": "backlight power cluster separated from DSI corridor"
+      "priority": "backlight power cluster separated from DSI corridor",
+      "z_note": "prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"
     },
     {
       "id": "MICROSD",
@@ -188,7 +194,8 @@
         "U13",
         "J7"
       ],
-      "priority": "card-access edge zone"
+      "priority": "card-access edge zone",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
     },
     {
       "id": "POWER_ENTRY",
@@ -199,7 +206,8 @@
         "U8",
         "L2"
       ],
-      "priority": "short high-current spine with Kelvin monitor geometry"
+      "priority": "short high-current spine with Kelvin monitor geometry",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
     },
     {
       "id": "FACTORY",
@@ -244,5 +252,29 @@
       ]
     ],
     "note": "candidate only; Edge.Cuts remain forbidden until PCB_OUTLINE gate closes"
+  },
+  "component_height_zones": {
+    "source": "mech_a.json",
+    "under_display_front_side": {
+      "gross_clearance_mm": 6.5,
+      "production_limit_locked": false,
+      "rules": [
+        "use only low-profile components until mechanical safety margin is validated",
+        "do not place unselected C3/C8 bulk packages here unless their final height is proven",
+        "avoid tall connector bodies under the display/module footprint"
+      ]
+    },
+    "pcb_back_side": {
+      "gross_clearance_mm": 6,
+      "production_limit_locked": false,
+      "rules": [
+        "prefer no backside parts in mounting/standoff zones",
+        "fixture/test pads are preferred over tall backside components",
+        "account for screw heads, bosses and rear-wall ribs before any backside population"
+      ]
+    },
+    "perimeter_connector_zone": {
+      "rule": "USB-A/RCA/microSD/power connector bodies may exceed the central under-display height only where side/rear enclosure cutouts and local keepouts explicitly permit it"
+    }
   }
 }

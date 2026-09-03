@@ -125,7 +125,26 @@ U13 and J7 form a user-accessible edge domain after card insertion mechanics are
 
 ---
 
-## 5. Mechanical dependency
+## 5. Component-height zoning
+
+Current M1-MECH-A candidate Z-stack gives:
+
+~~~text
+6.5 mm gross front-side clearance under the legacy display/module footprint
+6.0 mm gross backside clearance from PCB rear face to enclosure inner rear wall
+~~~
+
+These are not production height limits. Until safety margin and local enclosure ribs/bosses are measured:
+
+- keep central compute/RF/display-power parts low-profile
+- keep unselected C3/C8 bulk parts out of the under-display zone
+- keep tall connector bodies at the perimeter
+- avoid backside population around candidate mounting/standoff locations
+- treat user-facing connector height as part of each connector mechanical gate
+
+---
+
+## 6. Mechanical dependency
 
 No user-facing connector may be assigned a final production location or footprint until the corresponding gate in `mechanical_gates.json` is closed. M1-MECH-A currently provides a candidate rear working envelope of 108.00 × 65.06 mm and candidate mounting centers at X=±51.3 mm, Y=±30.0 mm in `M1_FRONT_CENTER`; those coordinates are not yet Edge.Cuts.
 
@@ -133,7 +152,7 @@ This specifically prevents provisional J1/J2/J3/J4/J5/J6/J7/SW1/SW2 choices from
 
 ---
 
-## 6. PCB freeze gate
+## 7. PCB freeze gate
 
 Final layout freeze requires all of the following:
 

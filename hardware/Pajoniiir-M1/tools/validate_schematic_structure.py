@@ -240,6 +240,20 @@ def main() -> int:
                 f"{MECH_A.name}: rear-shell/mount geometry drift: "
                 f"{observed_rear_mount} != {expected_rear_mount}"
             )
+        z_stack = mech_a.get("m1_enclosure_baseline", {}).get("z_stack_candidate", {})
+        expected_z = {
+            "rear_inner_surface_z": 28.0,
+            "pcb_rear_face_z": 22.0,
+            "pcb_front_face_z": 20.4,
+            "gross_front_component_clearance_under_module": 6.5,
+            "gross_back_component_clearance_to_rear_inner": 6.0,
+        }
+        observed_z = {key: z_stack.get(key) for key in expected_z}
+        if observed_z != expected_z:
+            errors.append(
+                f"{MECH_A.name}: candidate Z-stack drift: "
+                f"{observed_z} != {expected_z}"
+            )
         observed_display = {
             "bare_x": bare.get("x"),
             "bare_y": bare.get("y"),

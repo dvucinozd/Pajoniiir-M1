@@ -206,6 +206,44 @@
         "y_max": 32.53
       },
       "status": "candidate maximum rear working envelope; not Edge.Cuts authority"
+    },
+    "front_bezel_nominal_if_centered": {
+      "case_to_bare_display_margin_each_side_x": 3.304,
+      "case_to_bare_display_margin_each_side_y": 3.304,
+      "module_shell_to_bare_display_margin_each_side_x": 1.304,
+      "module_shell_to_bare_display_margin_each_side_y": 1.304,
+      "conclusion": "front face is effectively display-only in the baseline; user I/O belongs on side/rear surfaces unless enclosure is redesigned"
+    },
+    "xy_fit_warning": {
+      "modeled_inner_x": 117.008,
+      "modeled_inner_y": 69.408,
+      "legacy_module_x": 117.008,
+      "legacy_module_y": 69.408,
+      "modeled_nominal_clearance_x": 0,
+      "modeled_nominal_clearance_y": 0,
+      "status": "fit-reference only; real enclosure manufacture requires validated positive clearance/tolerance"
+    },
+    "z_stack_candidate": {
+      "enclosure_front_plane_z": 0,
+      "enclosure_rear_outer_z": 30,
+      "rear_wall_thickness": 2,
+      "rear_inner_surface_z": 28,
+      "legacy_module_back_z": 13.9,
+      "gross_cavity_module_to_rear_inner": 14.1,
+      "legacy_main_standoff_height": 6,
+      "pcb_rear_face_z": 22,
+      "pcb_thickness": 1.6,
+      "pcb_front_face_z": 20.4,
+      "gross_front_component_clearance_under_module": 6.5,
+      "gross_back_component_clearance_to_rear_inner": 6,
+      "safety_clearance": "TBD-MECH; gross values are not production component-height limits",
+      "orientation": "PCB component side assumed facing the display/front for this candidate stack",
+      "status": "candidate_pending physical enclosure/PCB fit validation"
+    },
+    "front_face_policy": {
+      "status": "baseline_constraint",
+      "rule": "reserve front face for display/touch; place user-facing connectors and service apertures on side/rear walls unless enclosure geometry is explicitly redesigned",
+      "rationale": "only 3.304 mm nominal case margin remains around the centered bare display envelope"
     }
   },
   "next_closure_inputs": [

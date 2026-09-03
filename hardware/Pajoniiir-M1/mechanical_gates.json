@@ -18,7 +18,8 @@
         "ESR/ripple-current target",
         "available board height/diameter or SMD envelope"
       ],
-      "closure": "Select exact capacitor MPN and footprint after EVT/mechanical envelope is known."
+      "closure": "Select exact capacitor MPN and footprint after EVT/mechanical envelope is known.",
+      "known_mechanical_constraint": "central under-display gross front-side clearance candidate = 6.5 mm; perimeter placement may allow more only with explicit enclosure keepout"
     },
     {
       "id": "D1_INPUT_TVS",
@@ -50,7 +51,8 @@
         "ESR/ripple-current target",
         "available board height/diameter or SMD envelope"
       ],
-      "closure": "Select exact capacitor MPN and footprint after EVT/mechanical envelope is known."
+      "closure": "Select exact capacitor MPN and footprint after EVT/mechanical envelope is known.",
+      "known_mechanical_constraint": "central under-display gross front-side clearance candidate = 6.5 mm; perimeter placement may allow more only with explicit enclosure keepout"
     },
     {
       "id": "J1_POWER_INPUT",
@@ -67,7 +69,8 @@
         "board-edge orientation",
         "connector height/depth envelope"
       ],
-      "closure": "Lock exact 5 V locking connector MPN and courtyard from enclosure geometry."
+      "closure": "Lock exact 5 V locking connector MPN and courtyard from enclosure geometry.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "SW1_RESET",
@@ -84,7 +87,8 @@
         "actuator height",
         "keepout/courtyard"
       ],
-      "closure": "Lock exact RESET momentary-NO switch MPN."
+      "closure": "Lock exact RESET momentary-NO switch MPN.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "SW2_BOOT",
@@ -101,7 +105,8 @@
         "actuator height",
         "keepout/courtyard"
       ],
-      "closure": "Lock exact BOOT momentary-NO switch MPN."
+      "closure": "Lock exact BOOT momentary-NO switch MPN.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "J2_USB0",
@@ -118,7 +123,8 @@
         "shell retention style",
         "enclosure cutout and insertion clearance"
       ],
-      "closure": "Lock exact USB-A receptacle MPN for storage port."
+      "closure": "Lock exact USB-A receptacle MPN for storage port.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "J3_USB1",
@@ -135,7 +141,8 @@
         "shell retention style",
         "enclosure cutout and insertion clearance"
       ],
-      "closure": "Lock exact USB-A receptacle MPN for FLX4 port."
+      "closure": "Lock exact USB-A receptacle MPN for FLX4 port.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "J4_RCA_L",
@@ -152,7 +159,8 @@
         "jack center height",
         "plug spacing and shell isolation requirement"
       ],
-      "closure": "Lock exact RCA LEFT connector MPN."
+      "closure": "Lock exact RCA LEFT connector MPN.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "J5_RCA_R",
@@ -169,7 +177,8 @@
         "jack center height",
         "plug spacing and shell isolation requirement"
       ],
-      "closure": "Lock exact RCA RIGHT connector MPN."
+      "closure": "Lock exact RCA RIGHT connector MPN.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "J6_LINE35",
@@ -185,7 +194,8 @@
         "panel datum if retained",
         "jack center height and orientation"
       ],
-      "closure": "Either lock exact 3.5 mm line-out jack footprint or remove the option before layout freeze."
+      "closure": "Either lock exact 3.5 mm line-out jack footprint or remove the option before layout freeze.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "J_LCD_DISPLAY_FPC",
@@ -234,7 +244,8 @@
         "card-detect switch requirement",
         "socket height and keepout"
       ],
-      "closure": "Lock exact microSD socket MPN."
+      "closure": "Lock exact microSD socket MPN.",
+      "panel_policy": "side/rear wall baseline; front face reserved for display/touch"
     },
     {
       "id": "J9_USB_SERVICE_POGO",

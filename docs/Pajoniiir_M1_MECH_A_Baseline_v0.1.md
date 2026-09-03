@@ -187,7 +187,37 @@ This gives us a real datum tree for later connector coordinates without pretendi
 
 ---
 
-## 8. What M1-MECH-A has closed
+## 8. Candidate Z-stack
+
+Using the validated 30 mm legacy enclosure depth, 2 mm rear wall, final legacy 6 mm standoff decision and 1.6 mm PCB thickness:
+
+~~~text
+front/display plane                         Z =  0.0
+legacy module back                         Z = 13.9
+
+PCB front/component-side surface            Z = 20.4
+PCB rear surface                            Z = 22.0
+
+rear inner wall                             Z = 28.0
+rear outer wall                             Z = 30.0
+~~~
+
+Therefore:
+
+~~~text
+gross front-side clearance under module = 20.4 - 13.9 = 6.5 mm
+gross PCB-back to rear-inner clearance   = 28.0 - 22.0 = 6.0 mm
+~~~
+
+These are **gross geometric clearances**, not final allowed component heights. Screw heads, bosses, print tolerance, flex motion, adhesive and assembly clearance still need explicit margin.
+
+A second important consequence is the front bezel: if the bare 114.40 × 66.80 mm display is centered in the 121.008 × 73.408 mm enclosure candidate, only **3.304 mm** nominal perimeter remains on each side. M1-MECH-A therefore treats the front face as display/touch-only; connectors belong on side/rear walls unless the enclosure is intentionally redesigned.
+
+The legacy Blender fit also modeled exactly 117.008 × 69.408 mm of inner XY space around a 117.008 × 69.408 mm module reference — effectively zero nominal manufacturing clearance. That confirms the geometry but **does not** establish a printable/production fit tolerance.
+
+---
+
+## 9. What M1-MECH-A has closed
 
 - display/front-envelope family identified
 - bare front envelope quantified
@@ -202,7 +232,7 @@ This gives us a real datum tree for later connector coordinates without pretendi
 
 ---
 
-## 9. What remains open
+## 10. What remains open
 
 ### PCB
 
@@ -231,7 +261,7 @@ This gives us a real datum tree for later connector coordinates without pretendi
 
 ---
 
-## 10. Immediate next M1-MECH-A action
+## 11. Immediate next M1-MECH-A action
 
 Use the 121.008 × 73.408 × 30 mm enclosure candidate and 108 × 65.06 mm rear mechanical working-envelope candidate to build the first connector-placement envelope.
 
