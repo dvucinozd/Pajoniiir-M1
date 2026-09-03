@@ -76,7 +76,22 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "POWER_IN",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "screened_candidates": [
+        {
+          "manufacturer": "Molex",
+          "mpn": "43650-0200",
+          "status": "screened_not_locked",
+          "evidence": [
+            "8.5 A max/contact",
+            "right-angle THT",
+            "recommended 1.60 mm PCB",
+            "6.98 mm mated-height screening basis"
+          ],
+          "screen_result": "electrical pass; current conservative central Z margin fail; exact panel/body/mating envelope open",
+          "source": "https://www.molex.com/en-us/products/part-detail/436500200"
+        }
+      ]
     },
     {
       "id": "SW1_RESET",
@@ -97,7 +112,21 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "RECOVERY_BUTTONS",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "screened_candidates": [
+        {
+          "manufacturer": "Omron",
+          "mpn_family": "B3U-3000P / B3U-3000PM",
+          "status": "family_screened_exact_mpn_open",
+          "evidence": [
+            "side-actuated SMT family",
+            "in-production family listing",
+            "compact service-button geometry"
+          ],
+          "screen_result": "mechanically promising for recessed/tool-access use; exact suffix and wall/actuator datum required",
+          "source": "https://components.omron.com/eu-en/products/switches/B3U"
+        }
+      ]
     },
     {
       "id": "SW2_BOOT",
@@ -118,7 +147,21 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "RECOVERY_BUTTONS",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "screened_candidates": [
+        {
+          "manufacturer": "Omron",
+          "mpn_family": "B3U-3000P / B3U-3000PM",
+          "status": "family_screened_exact_mpn_open",
+          "evidence": [
+            "side-actuated SMT family",
+            "in-production family listing",
+            "compact service-button geometry"
+          ],
+          "screen_result": "mechanically promising for recessed/tool-access use; exact suffix and wall/actuator datum required",
+          "source": "https://components.omron.com/eu-en/products/switches/B3U"
+        }
+      ]
     },
     {
       "id": "J2_USB0",
@@ -139,7 +182,24 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "USB_HOST_PAIR",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "screened_candidates": [
+        {
+          "manufacturer": "GCT",
+          "mpn": "USB1125-GF-B",
+          "status": "screened_not_locked",
+          "evidence": [
+            "USB 2.0 Type-A",
+            "right-angle THT",
+            "3 A",
+            "6.48 mm profile",
+            "10.00 mm body",
+            "1.6 mm PCB distributor metadata"
+          ],
+          "screen_result": "electrical pass; only 0.02 mm gross margin against current 6.5 mm conservative central clearance, therefore no production margin",
+          "source": "https://gct.co/usb-connector/usb-a-type"
+        }
+      ]
     },
     {
       "id": "J3_USB1",
@@ -160,7 +220,24 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "USB_HOST_PAIR",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "screened_candidates": [
+        {
+          "manufacturer": "GCT",
+          "mpn": "USB1125-GF-B",
+          "status": "screened_not_locked",
+          "evidence": [
+            "USB 2.0 Type-A",
+            "right-angle THT",
+            "3 A",
+            "6.48 mm profile",
+            "10.00 mm body",
+            "1.6 mm PCB distributor metadata"
+          ],
+          "screen_result": "electrical pass; only 0.02 mm gross margin against current 6.5 mm conservative central clearance, therefore no production margin",
+          "source": "https://gct.co/usb-connector/usb-a-type"
+        }
+      ]
     },
     {
       "id": "J4_RCA_L",
@@ -181,7 +258,22 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "screened_candidates": [
+        {
+          "manufacturer": "Kycon",
+          "mpn": "KLPX-0848A-2-W-G",
+          "status": "screened_not_locked",
+          "evidence": [
+            "right-angle THT RCA",
+            "8.3 mm barrel",
+            "~10 mm body profile",
+            "legacy aperture 11.88 mm"
+          ],
+          "screen_result": "legacy aperture diameter compatible on first screen; global Z screen fails; local edge relief/alternate strategy required",
+          "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+        }
+      ]
     },
     {
       "id": "J5_RCA_R",
@@ -202,7 +294,22 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "screened_candidates": [
+        {
+          "manufacturer": "Kycon",
+          "mpn": "KLPX-0848A-2-R-G",
+          "status": "screened_not_locked",
+          "evidence": [
+            "right-angle THT RCA",
+            "8.3 mm barrel",
+            "~10 mm body profile",
+            "legacy aperture 11.88 mm"
+          ],
+          "screen_result": "legacy aperture diameter compatible on first screen; global Z screen fails; local edge relief/alternate strategy required",
+          "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+        }
+      ]
     },
     {
       "id": "J6_LINE35",
@@ -276,7 +383,24 @@
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "REMOVABLE_STORAGE",
       "absolute_cutout_datum_status": "open",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent"
+      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
+      "screened_candidates": [
+        {
+          "manufacturer": "Molex",
+          "mpn": "503398-1892",
+          "status": "screened_not_locked",
+          "evidence": [
+            "normal-mount SMT",
+            "push-push",
+            "card detect",
+            "1.28 mm height",
+            "front entry",
+            "10,000 mating cycles"
+          ],
+          "screen_result": "height pass; card slot, insertion, extraction and exact panel datum remain open",
+          "source": "https://www.molex.com/en-us/products/part-detail/5033981892"
+        }
+      ]
     },
     {
       "id": "J9_USB_SERVICE_POGO",
@@ -310,7 +434,8 @@
         "final PCB X/Y dimensions within chosen enclosure",
         "final M1 mounting-hole coordinates / standoff hardware",
         "edge clearances",
-        "connector/display/enclosure datums"
+        "connector/display/enclosure datums",
+        "connector-driven PCB Z/standoff rebalance or proven local perimeter relief for tall edge connectors"
       ],
       "closure": "Validate connector/boss/edge clearances, then commit authoritative Edge.Cuts and final mounting datums; M1-MECH-A0 is not final.",
       "known_evidence": [
@@ -320,7 +445,8 @@
         "original GUITION shell mounting reference 102.6 x 60.0 mm, 4xD2",
         "M1-MECH-A0 placement-feasibility PCB envelope 108.00 x 65.06 mm",
         "candidate outline cavity clearance 4.504 mm/side X and 2.174 mm/side Y",
-        "candidate mounting centers X=+/-51.3 mm, Y=+/-30.0 mm"
+        "candidate mounting centers X=+/-51.3 mm, Y=+/-30.0 mm",
+        "M1-MECH-A1 connector envelope screen: USB-A is margin-limited, Micro-Fit power is marginal under conservative central Z screen, and ~10 mm right-angle RCA is the dominant Z-stack driver"
       ],
       "evidence_file": "mech_a.json"
     },

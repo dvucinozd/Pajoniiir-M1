@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-A",
   "updated": "2026-09-03",
-  "status": "display_datum_locked__z_stack_candidate_defined__pcb_envelope_candidate_defined__critical_height_screen_pass__absolute_connector_datums_open",
+  "status": "display_datum_locked__z_stack_candidate_defined__pcb_envelope_candidate_defined__critical_height_screen_pass__connector_envelope_screened__z_stack_rebalance_required__absolute_connector_datums_open",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -252,7 +252,65 @@
       "gross_back_component_clearance_to_rear_inner": 6,
       "safety_clearance": "TBD-MECH; gross values are not production component-height limits",
       "orientation": "PCB component side assumed facing the display/front for this candidate stack",
-      "status": "candidate_pending physical enclosure/PCB fit validation"
+      "status": "candidate_pending physical enclosure/PCB fit validation",
+      "connector_driven_rebalance_required": true,
+      "screening_safety_gap_mm": 0.5,
+      "screening_safety_gap_status": "engineering screening value only; not a production clearance freeze",
+      "front_connector_margin_status": "current 6.5 mm gross central clearance has no production margin for screened USB-A and is insufficient for screened Micro-Fit/RCA heights",
+      "connector_screening_cases": [
+        {
+          "refdes": [
+            "J2",
+            "J3"
+          ],
+          "candidate": "GCT USB1125-GF-B",
+          "screened_height_or_profile_mm": 6.48,
+          "basis": "manufacturer USB1125 series profile",
+          "required_front_clearance_with_screening_gap_mm": 6.98,
+          "implied_pcb_front_z_mm": 20.88,
+          "implied_pcb_rear_z_mm": 22.48,
+          "implied_rear_clearance_mm": 5.52,
+          "result": "FAIL_CURRENT_MARGIN__RECOVERABLE_BY_SMALL_Z_SHIFT_OR_LOCAL_EDGE_RELIEF"
+        },
+        {
+          "refdes": [
+            "J1"
+          ],
+          "candidate": "Molex 43650-0200",
+          "screened_height_or_profile_mm": 6.98,
+          "basis": "manufacturer mated-height value used conservatively for envelope screening; exact housing-above-board profile still requires drawing review",
+          "required_front_clearance_with_screening_gap_mm": 7.48,
+          "implied_pcb_front_z_mm": 21.38,
+          "implied_pcb_rear_z_mm": 22.98,
+          "implied_rear_clearance_mm": 5.02,
+          "result": "FAIL_CURRENT_MARGIN__LIKELY_RECOVERABLE_BY_Z_SHIFT_OR_LOCAL_EDGE_RELIEF"
+        },
+        {
+          "refdes": [
+            "J4",
+            "J5"
+          ],
+          "candidate": "Kycon KLPX-0848A-2-x-G",
+          "screened_height_or_profile_mm": 10,
+          "basis": "manufacturer right-angle RCA body drawing",
+          "required_front_clearance_with_screening_gap_mm": 10.5,
+          "implied_pcb_front_z_mm": 24.4,
+          "implied_pcb_rear_z_mm": 26,
+          "implied_rear_clearance_mm": 2,
+          "result": "FAIL_GLOBAL_Z_SCREEN__DOMINANT_HEIGHT_DRIVER__LOCAL_EDGE_RELIEF_OR_ALTERNATE_RCA_STRATEGY_REQUIRED"
+        },
+        {
+          "refdes": [
+            "J7"
+          ],
+          "candidate": "Molex 503398-1892",
+          "screened_height_or_profile_mm": 1.28,
+          "basis": "manufacturer sales drawing / push-push socket height",
+          "required_front_clearance_with_screening_gap_mm": 1.78,
+          "result": "PASS_GLOBAL_HEIGHT_SCREEN__CARD_ACCESS_DATUM_STILL_OPEN"
+        }
+      ],
+      "screening_note": "These calculations apply the central module-back plane globally as a conservative screen. Edge-mounted connectors may gain local Z space if the real display/module rear geometry is relieved near the perimeter; that must be demonstrated from CAD or physical measurement before promotion."
     },
     "front_face_policy": {
       "status": "baseline_constraint",
@@ -315,17 +373,19 @@
     }
   },
   "next_closure_inputs": [
-    "execute M1-MECH-A-D1 datum extraction when flx4_0407.blend or a dimensioned export becomes available",
-    "recover or provide the legacy flx4_0407.blend model to extract absolute cutout centers, or explicitly assign M1 connector clusters to enclosure walls",
-    "confirm M1 reuses the validated legacy enclosure external envelope or define a replacement envelope",
-    "validate/revise the M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
-    "lock M1 mounting-hole coordinates and screw/standoff system",
-    "define user-facing panel assignment for J1/J2/J3/J4/J5/J6/J7/SW1/SW2",
+    "recover flx4_0407.blend, a dimensioned export, or direct physical measurements and execute M1-MECH-A-D1",
+    "decide RCA strategy first: prove local perimeter/module relief for board-mounted right-angle RCA, select a lower-profile alternative, use panel/harness RCA, or revise enclosure/Z-stack",
+    "rebalance PCB Z position / standoff height from connector envelopes; do not freeze the legacy 6.0 mm standoff",
+    "assign POWER_IN / USB_HOST_PAIR / AUDIO_OUT / REMOVABLE_STORAGE / RECOVERY_BUTTONS to physical walls and record cutout centers/insertion axes",
+    "promote screened candidates to exact production MPNs only after wall, body, mating and tolerance envelopes pass",
+    "resolve J6 POP-vs-DNP/removal decision",
     "resolve J_LCD FPC mating/contact/pin-domain gate",
+    "validate/revise M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
+    "lock M1 mounting-hole coordinates and screw/standoff system",
     "choose fabrication stackup after board outline/connector datums are frozen"
   ],
   "connector_cluster_baseline": {
-    "status": "relative topology defined__absolute wall datums open",
+    "status": "relative_topology_defined__candidate_mpn_envelopes_screened__absolute_wall_datums_open__z_stack_rebalance_required",
     "panel_surfaces": {
       "FRONT_Z0": {
         "usable_for_user_io": false,
@@ -394,6 +454,10 @@
           "keep J4/J5 as one RCA pair cluster",
           "J6 remains optional and must either receive a real MPN/cutout datum or be removed",
           "keep audio cluster away from the high-current/power connector cluster where enclosure routing permits"
+        ],
+        "screened_candidates": [
+          "Kycon KLPX-0848A-2-W-G",
+          "Kycon KLPX-0848A-2-R-G"
         ]
       },
       {
@@ -418,7 +482,8 @@
         "rules": [
           "keep both host ports on a common service/user wall unless cable-clearance study proves otherwise",
           "do not freeze center spacing until exact USB-A MPN shell/cutout dimensions are selected"
-        ]
+        ],
+        "screened_candidate": "GCT USB1125-GF-B"
       },
       {
         "id": "POWER_IN",
@@ -437,7 +502,8 @@
         "rules": [
           "prefer shortest practical connection to the J1-U7-R120 high-current spine",
           "do not place where the power plug blocks USB or microSD access"
-        ]
+        ],
+        "screened_candidate": "Molex 43650-0200"
       },
       {
         "id": "REMOVABLE_STORAGE",
@@ -456,7 +522,8 @@
         "rules": [
           "card insertion axis must be straight and unobstructed",
           "reserve finger/card extraction clearance outside the enclosure"
-        ]
+        ],
+        "screened_candidate": "Molex 503398-1892"
       },
       {
         "id": "RECOVERY_BUTTONS",
@@ -476,7 +543,8 @@
         "rules": [
           "RESET/BOOT should be recessed or tool-accessible rather than exposed as primary UI controls",
           "actuation direction must match final switch MPN"
-        ]
+        ],
+        "screened_candidate_family": "Omron B3U-3000P / B3U-3000PM"
       },
       {
         "id": "FACTORY_SERVICE",
@@ -503,7 +571,7 @@
   },
   "mechanical_height_audit": {
     "revision": "M1-MECH-A-H1",
-    "status": "critical_fixed_central_parts_screened__production_height_limit_open",
+    "status": "critical_fixed_central_parts_screened__external_connector_envelope_requires_z_rebalance__production_height_limit_open",
     "gross_under_display_clearance_mm": 6.5,
     "production_allowable_component_height_mm": null,
     "rule": "PASS below is a geometry screen only; it does not include assembly tolerance, solder stand-off, flex motion, adhesive, enclosure ribs/bosses, or required safety clearance.",
@@ -599,7 +667,7 @@
         "action": "resolve before final display/PCB Z-stack sign-off"
       }
     ],
-    "conclusion": "Known tallest fixed central parts are <=3.25 mm, leaving >=3.25 mm gross headroom inside the 6.5 mm candidate cavity. Height is not currently a blocker for the fixed compute/power/RF core; remaining height blockers are the already-open bulk/connector/FPC gates."
+    "conclusion": "Known fixed central compute/power/RF parts remain <=3.25 mm and pass the 6.5 mm gross cavity screen. External connector screening changes the mechanical verdict: USB-A has effectively zero gross tolerance margin, the screened Micro-Fit power header needs more than 6.5 mm under the conservative screen, and the screened right-angle RCA family is the dominant ~10 mm Z driver. The 6 mm legacy standoff/Z-stack therefore remains candidate-only until local perimeter relief or an alternate connector strategy is proven."
   },
   "datum_extraction_plan": {
     "revision": "M1-MECH-A-D1",
@@ -633,5 +701,98 @@
       "acceptance": "transformed module envelope must reproduce the locked M1-MECH-A display/module reference within 0.1 mm before any connector datum is promoted"
     },
     "promotion_rule": "A recovered legacy cutout datum remains evidence until the chosen M1 connector MPN fits the cutout/body/mating envelope; only then can the corresponding mechanical gate close."
+  },
+  "connector_candidate_screen": {
+    "revision": "M1-MECH-A1",
+    "status": "screened_candidates_only__no_mechanical_gate_closed",
+    "purpose": "Reduce sourcing uncertainty and expose connector-driven envelope conflicts before final PCB outline/footprint freeze.",
+    "candidates": [
+      {
+        "refs": [
+          "J1"
+        ],
+        "function": "5V locking input",
+        "manufacturer": "Molex",
+        "mpn": "43650-0200",
+        "interface": "Micro-Fit 3.0, 2-circuit, right-angle through-hole header",
+        "electrical_screen": "8.5 A max/contact comfortably exceeds the present ~4.45 A eFuse ILIM baseline",
+        "mechanical_screen": "9.65 mm length, 6.98 mm mated height, recommended 1.60 mm PCB; current 6.5 mm central front clearance has no fit margin",
+        "result": "SCREENED_NOT_LOCKED",
+        "source": "https://www.molex.com/en-us/products/part-detail/436500200"
+      },
+      {
+        "refs": [
+          "J2",
+          "J3"
+        ],
+        "function": "USB-A host pair",
+        "manufacturer": "GCT",
+        "mpn": "USB1125-GF-B",
+        "interface": "USB 2.0 Type-A receptacle, right-angle through-hole, 1.6 mm PCB",
+        "electrical_screen": "3 A current rating exceeds USB0 ~1.0 A and USB1 ~1.6 A initial VBUS limits",
+        "mechanical_screen": "6.48 mm profile, 10.00 mm body length; only 0.02 mm gross margin exists against the current 6.5 mm central clearance before any tolerance/safety allowance",
+        "result": "SCREENED_NOT_LOCKED__Z_MARGIN_FAIL",
+        "source": "https://gct.co/usb-connector/usb-a-type"
+      },
+      {
+        "refs": [
+          "J4"
+        ],
+        "function": "RCA left/white",
+        "manufacturer": "Kycon",
+        "mpn": "KLPX-0848A-2-W-G",
+        "interface": "right-angle through-hole RCA jack",
+        "electrical_screen": "audio-compatible candidate; exact grounding/isolation policy still belongs to layout review",
+        "mechanical_screen": "8.3 mm barrel vs legacy 11.88 mm aperture gives 1.79 mm nominal radial aperture clearance if concentric; ~10 mm body profile fails the global 6.5 mm central Z screen",
+        "result": "SCREENED_NOT_LOCKED__DOMINANT_Z_CONFLICT",
+        "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+      },
+      {
+        "refs": [
+          "J5"
+        ],
+        "function": "RCA right/red",
+        "manufacturer": "Kycon",
+        "mpn": "KLPX-0848A-2-R-G",
+        "interface": "right-angle through-hole RCA jack",
+        "electrical_screen": "audio-compatible candidate; exact grounding/isolation policy still belongs to layout review",
+        "mechanical_screen": "8.3 mm barrel vs legacy 11.88 mm aperture gives 1.79 mm nominal radial aperture clearance if concentric; ~10 mm body profile fails the global 6.5 mm central Z screen",
+        "result": "SCREENED_NOT_LOCKED__DOMINANT_Z_CONFLICT",
+        "source": "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+      },
+      {
+        "refs": [
+          "J7"
+        ],
+        "function": "microSD",
+        "manufacturer": "Molex",
+        "mpn": "503398-1892",
+        "interface": "normal-mount SMT microSD, push-push, card detect",
+        "electrical_screen": "compatible with low-voltage microSD signaling; final ESD/footprint review remains separate",
+        "mechanical_screen": "1.28 mm socket height, front entry, 10k-cycle manufacturer rating; height passes easily, but wall slot/finger/card extraction datum remains open",
+        "result": "SCREENED_NOT_LOCKED__HEIGHT_PASS",
+        "source": "https://www.molex.com/en-us/products/part-detail/5033981892"
+      },
+      {
+        "refs": [
+          "SW1",
+          "SW2"
+        ],
+        "function": "RESET / BOOT recessed service controls",
+        "manufacturer": "Omron",
+        "mpn_family": "B3U-3000P / B3U-3000PM",
+        "interface": "side-actuated ultra-small SMT tactile switch",
+        "mechanical_screen": "family provides side actuation and compact geometry suitable for recessed tool access; exact suffix, boss/ground option and actuator-to-wall datum remain open",
+        "result": "FAMILY_SCREENED__EXACT_MPN_NOT_LOCKED",
+        "source": "https://components.omron.com/eu-en/products/switches/B3U"
+      }
+    ],
+    "unresolved": [
+      "No candidate closes a gate without an absolute wall/cutout datum and verified mating keepout.",
+      "J6 remains an explicit POP-vs-DNP/removal decision before layout freeze.",
+      "J_LCD remains the highest-priority display/FPC hard gate.",
+      "RCA implementation strategy is now the dominant connector-driven Z-stack decision: prove local edge relief, choose a lower-profile board connector, use panel/harness RCA, or revise enclosure/Z-stack.",
+      "The legacy 6.0 mm standoff height is evidence only and must not be promoted to final M1 authority until connector-driven Z-stack is closed."
+    ]
   }
 }

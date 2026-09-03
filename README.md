@@ -13,7 +13,7 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **Manufacturing output review:** PASS — 270/270 BOM parity, 17 DNP, 12 intentional blank-footprint gates  
 **Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
-**M1-MECH-A:** IN PROGRESS — display datum/Z-stack/M1-MECH-A0 PCB envelope, connector clusters and critical fixed-part height screen defined; absolute wall/cutout datums still open  
+**M1-MECH-A:** IN PROGRESS — display datum/M1-MECH-A0 PCB envelope locked as working baselines; connector MPN/envelope screen completed; current legacy 6 mm standoff/Z-stack is not frozen because USB-A is margin-limited and right-angle RCA is the dominant height driver; absolute wall/cutout datums still open  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -109,6 +109,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [M1-MECH-A Height Audit v0.1](docs/Pajoniiir_M1_MECH_A_Height_Audit_v0.1.md)
 - [M1-MECH-A Connector Clusters v0.1](docs/Pajoniiir_M1_MECH_A_Connector_Clusters_v0.1.md)
 - [M1-MECH-A Datum Extraction v0.1](docs/Pajoniiir_M1_MECH_A_Datum_Extraction_v0.1.md)
+- [M1-MECH-A Connector Envelope Screen v0.1](docs/Pajoniiir_M1_MECH_A_Connector_Envelope_Screen_v0.1.md)
 - [PCB placement & routing constraints v0.1](docs/Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
