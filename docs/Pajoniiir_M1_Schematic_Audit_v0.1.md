@@ -2,7 +2,8 @@
 
 **Projekt:** Pajoniiir-M1 Rev A  
 **Datum:** 2026-09-02  
-**Status:** Component-level schematic capture substantially complete; native KiCad ERC and mechanical/footprint gates remain before sign-off.
+**Ažurirano:** 2026-09-03  
+**Status:** Electrical capture and KiCad 9.0.9 ERC clean; documented mechanical/sourcing/display hard gates remain before final manufacturing sign-off.
 
 ---
 
@@ -42,15 +43,25 @@ Root je `Pajoniiir-M1.kicad_sch`.
 
 ### Component-level capture
 
-**PASS / substantially complete**
+**PASS / electrically complete with documented hard gates**
 
 Električki su captured: 5 V input protection/eFuse, 5V_PROTECTED → system shunt → 5V_SYS, 3V3_SYS, ESP32-P4 v3.x core, QSPI flash/40 MHz/boot/reset, ESP32-C6-WROOM-1 + 4-bit SDIO, USB0/USB1 independent VBUS switching, oba USB data patha, PCM5102A MAIN audio, MIPI DSI logical signal path, MP3202 backlight, GT911 panel interface, controlled-power microSD, P4/C6 factory recovery, INA238 monitoring i DNP/DNL assembly policy.
 
 ### Native KiCad ERC
 
-**NOT YET SIGNED OFF**
+**PASS in CI — KiCad 9.0.9**
 
-Structural validator nije zamjena za Eeschema ERC. Prije M1-SCH-A sign-offa još trebaju native KiCad open/save, Sync Sheet Pins, ERC, review svih preostalih TBD footprintova, schematic PDF review i BOM/netlist cross-check.
+Latest locked baseline:
+
+```text
+unexplained_errors = 0
+excluded_errors    = 6
+warnings           = 0
+```
+
+Šest excluded errora nisu generički suppressioni: to su isključivo UUID-scoped `PANEL_DSI_*` dangling-label hard gateovi koji postoje zato što fizički `J_LCD` namjerno nije instanciran. Structural validator provjerava točan set tih šest UUID-a i faila na svakom dodatnom ERC exclusionu ili globalnom severity downgradeu.
+
+Native GUI open/save + Sync Sheet Pins i dalje ostaje zaseban human/tooling sign-off korak; CI ERC ne zamjenjuje fizičku/mehaničku i manufacturing provjeru.
 
 ---
 
@@ -111,7 +122,9 @@ Display elektrika je captured, ali **J_LCD namjerno nije instanciran**.
 
 Already captured: 2-lane MIPI DSI, D0/D1/CLK P/N, šest inline 0R tuning footprintova, 3V3_LCD filtering, LCD reset, optional TE, MP3202 backlight, 10uH, SS14, 3.9R || 2.2R LED sense i LEDA/LEDK logical panel-side nets.
 
-Prije J_LCD instanciranja treba zatvoriti: finalni panel MPN, FPC connector MPN, 30-vs-32 discrepancy, pins 15/16/18/19, contact-side orientation, pitch, mating height i authoritative mechanical drawing.
+Tvornički trag sada identificira FPC1 kao **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120**, nominalno **30 kontakata, 0.5 mm pitch**. DSI parovi, LEDA/LEDK, TE, LCD reset i touch signali su rekonstruirani iz originalne Guition connectivity ekstrakcije.
+
+Prije J_LCD instanciranja još treba zatvoriti: finalni panel MPN/varijantu, contact-side i mating/mechanical drawing, ulogu Altium symbol referenci 31/32, pinove 15/16/18/19 te potvrdu jesu li originalni FPC 3V3 pinovi 4/21/29 interno zajednički. Ta zadnja stavka je važna jer M1 koristi odvojene filtrirane `3V3_LCD` i `3V3_TOUCH` domene.
 
 Validator namjerno faila ako se `J_LCD` pojavi prije promjene ovog gatea.
 
@@ -246,7 +259,7 @@ Ne radi native ERC, footprint pin-to-pad validation, PCB DRC, impedance verifica
 - [x] DNP/DNL policy captured
 - [x] local structural validator committed
 - [ ] native KiCad Sync Sheet Pins
-- [ ] native KiCad ERC with zero unexplained errors
+- [x] native KiCad 9.0.9 ERC — 0 unexplained errors, 6 approved J_LCD exclusions, 0 warnings
 - [x] final U7 RPW0010A land pattern freeze — `Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm`
 - [x] final L_BL part / footprint — XGL4030-103MEC / L_Coilcraft_XxL4030
 - [x] final system shunt part / footprint — WSK25125L000FEA / WSK2512 T1.19mm
@@ -271,21 +284,20 @@ Ne radi native ERC, footprint pin-to-pad validation, PCB DRC, impedance verifica
 
 **GO for Gerbers / EVT order:** NO.
 
-Final layout čeka authoritative display/FPC mechanics, exact connector footprints, final PCB outline, fab stackup, 90R USB geometry, 100R MIPI geometry, high-current footprints i native ERC.
+Final layout čeka authoritative display/FPC mechanics, exact connector footprints, final PCB outline, fab stackup, 90R USB geometry, 100R MIPI geometry i preostale manufacturing/sourcing odluke. Native ERC više nije blocker.
 
 ---
 
 ## 16. Recommended next sequence
 
-1. Resolve LCD/panel/FPC physical identity.
-2. Select exact USB-A, RCA, microSD, 5V input i service-switch MPNs.
-3. Open project in native KiCad and run Sync Sheet Pins + ERC.
-4. Fix only real ERC findings and document intentional exceptions.
-5. Generate schematic PDF and conduct human cross-sheet review.
-6. Extract BOM and compare to engineering BOM.
-7. Lock PCB outline / connector datums / display FPC location.
-8. Obtain PCB fab stackup.
-9. Begin controlled-impedance placement/routing.
+1. Resolve remaining LCD/panel/FPC mating geometry, pins 15/16/18/19 and 3V3-domain commonality.
+2. Select exact USB-A, RCA, microSD, 5V input and RESET/BOOT/service-switch MPNs from the final enclosure/mechanical constraints.
+3. Open project in native KiCad and perform GUI open/save + Sync Sheet Pins confirmation.
+4. Generate schematic PDF and conduct human cross-sheet review.
+5. Extract manufacturing BOM/netlist and compare to the engineering BOM.
+6. Lock PCB outline / connector datums / display FPC location.
+7. Obtain PCB fab stackup and derive controlled-impedance geometries.
+8. Begin final placement/routing only after those physical gates close.
 
 ---
 
@@ -293,4 +305,4 @@ Final layout čeka authoritative display/FPC mechanics, exact connector footprin
 
 Pajoniiir-M1 više nije u architecture-only fazi. Projekt sada ima stvarni hijerarhijski component-level Rev A schematic capture sa strukturno čistim inter-sheet contractom.
 
-Preostali rad prije PCB layouta koncentriran je na native KiCad ERC/final schematic sign-off te mehaničko i exact-footprint zatvaranje. Najveći pojedinačni blocker ostaje fizička LCD/touch panel i FPC definicija.
+Native KiCad ERC više nije blocker. Preostali rad prije finalnog PCB layouta koncentriran je na GUI Sync Sheet Pins/human review, manufacturing BOM cross-check te mehaničko i exact-footprint zatvaranje. Najveći pojedinačni blocker ostaje fizička LCD/touch panel/FPC definicija, sada sužena na jasno identificirane mating/pin/3V3-domain nepoznanice.

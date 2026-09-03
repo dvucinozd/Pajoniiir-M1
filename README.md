@@ -8,9 +8,9 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 
 ## Current status
 
-**M1-SCH-A component capture:** SUBSTANTIALLY COMPLETE  
+**M1-SCH-A electrical capture:** PASS / COMPLETE WITH DOCUMENTED HARD GATES  
 **Structural schematic audit:** PASS  
-**Native KiCad ERC:** PENDING  
+**Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -30,7 +30,7 @@ The electrical architecture is defined for:
 - P4/C6 recovery and factory programming
 - optional system power telemetry
 
-The largest remaining layout gate is the exact physical LCD/touch FPC/panel assembly. Native KiCad Sync Sheet Pins + ERC and final exact-footprint/mechanical closure are still required before M1-SCH-A sign-off.
+The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: the Guition source identifies **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch**, but contact-side/mating geometry, Altium symbol entries 31/32, pins 15/16/18/19, and the relationship between the original common ESP_3V3 pins 4/21/29 and M1's separately filtered 3V3_LCD / 3V3_TOUCH rails remain unresolved. Native GUI Sync Sheet Pins, exact connector/mechanical sourcing gates, schematic PDF review and manufacturing BOM comparison still remain before final M1-SCH-A sign-off.
 
 ---
 

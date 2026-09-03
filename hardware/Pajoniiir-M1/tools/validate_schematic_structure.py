@@ -549,6 +549,10 @@ def main() -> int:
         errors.append("J_LCD must remain uninstantiated until authoritative FPC gate closes")
     if "PHYSICAL J_LCD IS INTENTIONALLY NOT INSTANTIATED" not in p10:
         errors.append("display FPC hard-gate annotation missing")
+    if "SOFNG 0.5TBQP-30P-1 / C3975120, 30 contacts, 0.5mm pitch" not in p10:
+        errors.append("display FPC confirmed connector identity/pitch annotation missing")
+    if "Original FPC pins 4/21/29 share ESP_3V3" not in p10:
+        errors.append("display FPC 3V3-domain hard-gate annotation missing")
 
 
     # 7. ESP32-P4 multi-unit GPIO connectivity contract.
@@ -837,7 +841,7 @@ def main() -> int:
         return 1
 
     print("\nPASS: structural contracts are clean.")
-    print("Native KiCad ERC is still required separately before M1-SCH-A is fully signed off.")
+    print("Native KiCad ERC is enforced separately by the KiCad 9 CI workflow.")
     return 0
 
 if __name__ == "__main__":

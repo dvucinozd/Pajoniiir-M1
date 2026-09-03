@@ -2,7 +2,8 @@
 
 **Projekt:** Pajoniiir-M1 Rev A  
 **Datum:** 2026-09-02  
-**Status:** Forensic reconstruction from public mirror of original Guition JC4880P443 V1.0 schematic
+**Ažurirano:** 2026-09-03  
+**Status:** Electrical FPC mapping substantially reconstructed; exact physical mating/orientation and four ambiguous pins remain hard gates
 
 ---
 
@@ -41,13 +42,16 @@ FPC1
 0.5TBQP-30P-1
 ```
 
-JLCPCB za taj MPN navodi:
+JLCPCB catalog za taj MPN potvrđuje:
 
-- manufacturer: SOFNG
-- MPN: 0.5TBQP-30P-1
-- JLCPCB: C3975120
-- 0.5 mm pitch
-- 30-pin FPC connector
+- manufacturer: **SOFNG**
+- MPN: **0.5TBQP-30P-1**
+- JLCPCB: **C3975120**
+- package: **FPC0.5mm-30pin**
+- pitch: **0.5 mm**
+- nominal electrical contact count: **30**
+
+Dakle **MPN, nominalni broj kontakata i pitch više nisu nepoznati**. Ono što još nije zaključano jest stvarna mating/contact-side geometrija i interpretacija dodatnih Altium symbol referenci 31/32.
 
 ## Critical discrepancy
 
@@ -59,25 +63,14 @@ PIFPC101 ... PIFPC1032
 
 dakle 32 numerirana symbol pina.
 
-To je konflikt:
+To više nije konflikt oko nominalnog konektora — SOFNG dio je 30-contact / 0.5 mm — nego konflikt između **30 električnih kontakata** i **32 Altium symbol referencea**:
 
 ```text
-part label = 30-pin
-symbol extraction = 32 pins
+physical/electrical connector identity = 30 contacts, 0.5 mm
+Altium extracted symbol references      = 1 ... 32
 ```
 
-Zato:
-
-**NE zaključavati finalni J_LCD footprint samo na temelju naziva 0.5TBQP-30P-1.**
-
-Moguća objašnjenja:
-
-1. schematic symbol ima 30 electrical + 2 mechanical/shield pina
-2. library symbol je pogrešno numeriran
-3. MPN label je naslijeđen/pogrešan
-4. connector ima dodatne mounting/shield contacts evidentirane kao pins 31/32
-
-To se mora riješiti usporedbom s originalnim schematic PDF imageom i physical connectorom/panel FPC-om prije layout freezea.
+Najvjerojatnije objašnjenje je 30 električnih kontakata + 2 mounting/shield referencea, ali to još nije dovoljno autoritativno dokazano za finalni footprint. Zato se **J_LCD footprint ne zaključava** dok se ne potvrde contact-side, mating height/mechanical drawing i uloga 31/32.
 
 ---
 
@@ -130,6 +123,21 @@ Pins:
 nisu dovoljno sigurno mapirani iz text extraction ordering alone.
 
 Ne smiju se pogađati.
+
+## 3.1. 3V3 supply-domain hard gate
+
+Originalna Guition shema vodi FPC1 pinove **4, 21 i 29** na isti net `ESP_3V3`.
+
+Pajoniiir-M1 namjerno ima dvije filtrirane domene:
+
+```text
+3V3_LCD
+3V3_TOUCH
+```
+
+Dok se ne potvrdi jesu li panel/FPC 3V3 pinovi 4/21/29 interno međusobno spojeni, **ne smijemo ih proizvoljno raspodijeliti između 3V3_LCD i 3V3_TOUCH**. U suprotnom bi sam panel mogao premostiti dva filtera i poništiti namjernu rail separaciju.
+
+To je stvarni električni hard-gate za instanciranje J_LCD, odvojen od čiste mehaničke nepoznanice footprinta.
 
 ---
 
@@ -399,13 +407,15 @@ The backlight electrical blocker is now substantially resolved.
 
 Still unresolved before final J_LCD footprint lock:
 
-1. exact physical panel MPN
-2. exact FPC contact count
-3. 30-pin MPN vs 32-symbol discrepancy
-4. contact-side orientation
-5. physical mating height/mechanics
-6. pins 15/16/18/19
+1. exact physical panel MPN / purchased panel variant
+2. contact-side orientation
+3. physical mating height and authoritative mechanical drawing
+4. interpretation of Altium symbol references 31/32
+5. pins 15/16/18/19
+6. whether FPC 3V3 pins 4/21/29 are internally common, and therefore how they may safely map to M1 3V3_LCD / 3V3_TOUCH
 7. confirmation that the final purchased panel assembly is the same electrical variant as JC4880
+
+Already resolved: **SOFNG 0.5TBQP-30P-1, C3975120, 30 contacts, 0.5 mm pitch**.
 
 ---
 
@@ -427,14 +437,16 @@ Still unresolved before final J_LCD footprint lock:
 
 ## MEDIUM confidence
 
-- exact connector MPN itself as production choice
+- SOFNG 0.5TBQP-30P-1 as the exact production connector variant until contact-side/mating geometry is checked against the physical panel
 - pin31/32 being mechanical/shield vs electrical GND contacts
 
 ## NOT YET LOCKED
 
 - FPC pins 15/16/18/19
+- FPC 3V3 pins 4/21/29 internal-common status / safe M1 rail mapping
 - exact final panel supplier MPN
-- connector orientation/height
+- connector contact-side/orientation/mating height
+- physical interpretation of symbol references 31/32
 
 ---
 
@@ -448,4 +460,4 @@ using the original JC4880 values above.
 
 **FPC FOOTPRINT = STILL BLOCKED**
 
-until the 30-vs-32 discrepancy and exact physical panel assembly are resolved.
+Nominal connector identity, 30-contact count and 0.5 mm pitch are now known. Final footprint lock still waits for mating/contact-side mechanics, 31/32 interpretation, pins 15/16/18/19, and safe 3V3 domain mapping for the actual purchased panel assembly.
