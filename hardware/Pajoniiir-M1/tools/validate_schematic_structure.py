@@ -36,6 +36,8 @@ CHILDREN = [
 ]
 
 MECHANICAL_GATES = BASE / "mechanical_gates.json"
+PCB_CONSTRAINTS = BASE / "pcb_constraints.json"
+PCB = BASE / "Pajoniiir-M1.kicad_pcb"
 
 BANNED_LEGACY_VALUE_PATTERNS = (
     "ESP32-S3",
@@ -186,6 +188,55 @@ def main() -> int:
         if open_blockers:
             notes.append(
                 f"layout freeze remains blocked by {len(open_blockers)} mechanical/sourcing gates"
+            )
+
+    if not PCB_CONSTRAINTS.exists():
+        errors.append(f"missing PCB constraint authority {PCB_CONSTRAINTS.name}")
+    else:
+        try:
+            pcb_constraints = json.loads(PCB_CONSTRAINTS.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            errors.append(f"{PCB_CONSTRAINTS.name}: invalid JSON: {exc}")
+            pcb_constraints = {}
+        if pcb_constraints.get("board_outline_locked") and any(
+            isinstance(gate, dict)
+            and gate.get("id") == "PCB_OUTLINE"
+            and gate.get("status") != "closed"
+            for gate in gates
+        ):
+            errors.append(
+                f"{PCB_CONSTRAINTS.name}: board_outline_locked=true while PCB_OUTLINE gate is open"
+            )
+        if pcb_constraints.get("stackup_locked") and any(
+            isinstance(gate, dict)
+            and gate.get("id") == "FAB_STACKUP"
+            and gate.get("status") != "closed"
+            for gate in gates
+        ):
+            errors.append(
+                f"{PCB_CONSTRAINTS.name}: stackup_locked=true while FAB_STACKUP gate is open"
+            )
+        if pcb_constraints.get("controlled_impedance_locked") and not pcb_constraints.get(
+            "stackup_locked"
+        ):
+            errors.append(
+                f"{PCB_CONSTRAINTS.name}: controlled_impedance_locked requires stackup_locked"
+            )
+
+    if not PCB.exists():
+        errors.append(f"missing PCB shell {PCB.name}")
+    else:
+        pcb_text = PCB.read_text(encoding="utf-8")
+        copper_layers = re.findall(r'\(\d+ "[^"]+\.Cu" (?:signal|power|mixed|jumper)', pcb_text)
+        expected_layers = (
+            pcb_constraints.get("logical_copper_layers")
+            if isinstance(pcb_constraints, dict)
+            else None
+        )
+        if isinstance(expected_layers, int) and len(copper_layers) != expected_layers:
+            errors.append(
+                f"{PCB.name}: copper layer count={len(copper_layers)}; "
+                f"pcb_constraints expects {expected_layers}"
             )
 
     # ERC exclusions are allowed only for explicitly documented hard gates.

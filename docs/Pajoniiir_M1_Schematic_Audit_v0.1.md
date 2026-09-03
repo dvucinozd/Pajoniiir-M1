@@ -294,7 +294,7 @@ Open physical gates are now machine-readable in `hardware/Pajoniiir-M1/mechanica
 
 ## 15. PCB-layout status
 
-**GO for exploratory functional placement:** YES, uz placeholder mechanics.
+**GO for exploratory functional placement:** YES, uz placeholder mechanics i obavezni `pcb_constraints.json` / `Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md` constraint set.
 
 **GO for final placement freeze:** NO.
 

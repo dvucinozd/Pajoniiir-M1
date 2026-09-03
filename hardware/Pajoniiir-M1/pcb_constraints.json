@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "updated": "2026-09-03",
+  "layout_state": "pre_mechanical_layout",
+  "logical_copper_layers": 4,
+  "board_outline_locked": false,
+  "stackup_locked": false,
+  "controlled_impedance_locked": false,
+  "layer_intent": [
+    {
+      "layer": "F.Cu",
+      "role": "components + critical signals; preferred USB/MIPI routing layer"
+    },
+    {
+      "layer": "In1.Cu",
+      "role": "continuous GND reference plane; do not split under USB/MIPI/clock/RF return paths"
+    },
+    {
+      "layer": "In2.Cu",
+      "role": "power distribution + low-speed routing as stackup permits; preserve return-path continuity"
+    },
+    {
+      "layer": "B.Cu",
+      "role": "secondary signals/components; GND fill where compatible with antenna/connector keepouts"
+    }
+  ],
+  "routing_targets": {
+    "USB0_HS": {
+      "target_diff_ohms": 90,
+      "tolerance_percent": 10,
+      "source_series": "R80/R81",
+      "connector_esd": "D2",
+      "rules": [
+        "continuous adjacent GND reference",
+        "minimal vias",
+        "no stubs",
+        "ESD physically adjacent to J2",
+        "series elements near ESP32-P4",
+        "do not cross switching-node voids"
+      ]
+    },
+    "USB1_FS": {
+      "target_diff_ohms": 90,
+      "tolerance_percent": 10,
+      "source_series": "R82/R83",
+      "connector_esd": "D3",
+      "rules": [
+        "preserve pair geometry",
+        "ESD physically adjacent to J3",
+        "DNP shunt capacitors symmetric if ever populated",
+        "keep away from switch nodes"
+      ]
+    },
+    "MIPI_DSI": {
+      "target_diff_ohms": 100,
+      "tolerance_percent": 10,
+      "intra_pair_skew_mil_max": 10,
+      "pair_to_pair_target_mil_max": 30,
+      "rules": [
+        "continuous adjacent GND reference",
+        "six inline 0R tuning footprints stay in-line with no stubs",
+        "minimize layer changes",
+        "keep away from backlight SW node and inductors",
+        "connector geometry not final until J_LCD gate closes"
+      ]
+    },
+    "P4_QSPI": {
+      "rules": [
+        "U2 close to U1",
+        "series tuning resistors near source",
+        "short matched data/clock topology",
+        "continuous GND reference"
+      ]
+    },
+    "C6_SDIO": {
+      "rules": [
+        "U4 close enough for compact SDIO escape",
+        "preserve antenna edge keepout",
+        "CLK series element near source",
+        "CMD/DAT pull-ups in quiet 3V3_C6 area"
+      ]
+    },
+    "MICROSD_SDMMC": {
+      "rules": [
+        "U13/J7 power-switch loop compact",
+        "series elements placed to control source edge",
+        "user-accessible socket ESD decision at final connector",
+        "no switch-node routing under bus"
+      ]
+    },
+    "AUDIO": {
+      "rules": [
+        "U5 and output RC network in quiet analog zone",
+        "J4/J5 at enclosure edge after mechanics close",
+        "keep MAIN_L/R away from buck/backlight switch nodes",
+        "preserve clean GND return to DAC/output connectors"
+      ]
+    },
+    "HIGH_CURRENT_5V": {
+      "rules": [
+        "J1->U7->R120->5V_SYS is the primary current spine",
+        "Kelvin sense taps only at R120 terminals",
+        "USB0/USB1 VBUS branches from U6/U12 remain short and wide",
+        "avoid routing sensitive signals through high-current return bottlenecks"
+      ]
+    },
+    "BACKLIGHT": {
+      "rules": [
+        "U9/L3/D4/input-output capacitors form a compact switch loop",
+        "keep SW node copper minimal",
+        "separate from MIPI, audio and RF zones",
+        "LEDA route sized for LED current and isolated from DSI pairs"
+      ]
+    },
+    "RF": {
+      "rules": [
+        "U4 antenna at board edge",
+        "official antenna keepout on every copper layer",
+        "no connector metal/cable/enclosure intrusion into antenna clearance without revalidation"
+      ]
+    }
+  },
+  "placement_domains": [
+    {
+      "id": "P4_CORE",
+      "members": [
+        "U1",
+        "U2",
+        "U3",
+        "L1",
+        "Y1"
+      ],
+      "priority": "central compute island; shortest flash/crystal/core-power loops"
+    },
+    {
+      "id": "C6_RF",
+      "members": [
+        "U4"
+      ],
+      "priority": "board edge with antenna keepout"
+    },
+    {
+      "id": "USB_POWER",
+      "members": [
+        "U6",
+        "U12"
+      ],
+      "priority": "between 5V_SYS spine and respective USB connectors"
+    },
+    {
+      "id": "USB0_EDGE",
+      "members": [
+        "D2",
+        "J2"
+      ],
+      "priority": "J2 at final enclosure edge; D2 immediately behind connector"
+    },
+    {
+      "id": "USB1_EDGE",
+      "members": [
+        "D3",
+        "J3"
+      ],
+      "priority": "J3 at final enclosure edge; D3 immediately behind connector"
+    },
+    {
+      "id": "AUDIO",
+      "members": [
+        "U5",
+        "J4",
+        "J5",
+        "J6"
+      ],
+      "priority": "quiet edge zone separated from switchers"
+    },
+    {
+      "id": "DISPLAY",
+      "members": [
+        "U9",
+        "L3",
+        "D4"
+      ],
+      "priority": "backlight power cluster separated from DSI corridor"
+    },
+    {
+      "id": "MICROSD",
+      "members": [
+        "U13",
+        "J7"
+      ],
+      "priority": "card-access edge zone"
+    },
+    {
+      "id": "POWER_ENTRY",
+      "members": [
+        "J1",
+        "U7",
+        "R120",
+        "U8",
+        "L2"
+      ],
+      "priority": "short high-current spine with Kelvin monitor geometry"
+    },
+    {
+      "id": "FACTORY",
+      "members": [
+        "J8",
+        "J9",
+        "J10"
+      ],
+      "priority": "fixture-accessible area that does not consume user-facing panel space"
+    }
+  ],
+  "freeze_requirements": [
+    "mechanical_gates.json: all blocks_layout_freeze gates closed",
+    "authoritative Edge.Cuts and mounting datums committed",
+    "chosen fabricator stackup committed",
+    "90 ohm USB and 100 ohm MIPI geometries calculated from actual stackup",
+    "final connector courtyards and enclosure clearance reviewed"
+  ]
+}
