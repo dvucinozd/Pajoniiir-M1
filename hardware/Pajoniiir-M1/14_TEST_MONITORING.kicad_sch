@@ -804,13 +804,13 @@
   (symbol
     (lib_id "Device:R_US") (at 85.09 45.085 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000002-e000-4e00-8e00-000000000003")
-    (property "Reference" "R_SYS_SHUNT" (at 88.09 43.085 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R120" (at 88.09 43.085 0) (effects (font (size 1.27 1.27))))
     (property "Value" "WSK25125L000FEA / 5mR 1% 1W" (at 88.09 47.085 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm" (at 85.09 45.085 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "https://www.vishay.com/docs/30108/wsk2512.pdf" (at 85.09 45.085 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e000003-e000-4e00-8e00-000000000004")) (pin "2" (uuid "0e000004-e000-4e00-8e00-000000000005"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_SYS_SHUNT") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R120") (unit 1))))
   )
   (wire (pts (xy 34.925 45.085) (xy 81.28 45.085)) (stroke (width 0) (type default)) (uuid "0e000005-e000-4e00-8e00-000000000006"))
   
@@ -820,25 +820,25 @@
   (symbol
     (lib_id "Pajoniiir-M1:INA238") (at 165.1 74.93 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00000a-e000-4e00-8e00-00000000000b")
-    (property "Reference" "U_MON" (at 154.1 55.93 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "U14" (at 154.1 55.93 0) (effects (font (size 1.27 1.27))))
     (property "Value" "INA238AIDGSR" (at 154.1 58.93 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Package_SO:VSSOP-10_3x3mm_P0.5mm" (at 165.1 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina238.pdf" (at 165.1 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e00000b-e000-4e00-8e00-00000000000c")) (pin "2" (uuid "0e00000c-e000-4e00-8e00-00000000000d")) (pin "3" (uuid "0e00000d-e000-4e00-8e00-00000000000e")) (pin "4" (uuid "0e00000e-e000-4e00-8e00-00000000000f")) (pin "5" (uuid "0e00000f-e000-4e00-8e00-000000000010"))
     (pin "6" (uuid "0e000010-e000-4e00-8e00-000000000011")) (pin "7" (uuid "0e000011-e000-4e00-8e00-000000000012")) (pin "8" (uuid "0e000012-e000-4e00-8e00-000000000013")) (pin "9" (uuid "0e000013-e000-4e00-8e00-000000000014")) (pin "10" (uuid "0e000014-e000-4e00-8e00-000000000015"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "U_MON") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "U14") (unit 1))))
   )
   (symbol
     (lib_id "Device:R_US") (at 125.095 72.39 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000015-e000-4e00-8e00-000000000016")
-    (property "Reference" "R_INA_P" (at 128.095 70.39 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R121" (at 128.095 70.39 0) (effects (font (size 1.27 1.27))))
     (property "Value" "10R" (at 128.095 74.39 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 125.095 72.39 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 125.095 72.39 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e000016-e000-4e00-8e00-000000000017")) (pin "2" (uuid "0e000017-e000-4e00-8e00-000000000018"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_INA_P") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R121") (unit 1))))
   )
   (label "5V_PROTECTED" (at 121.285 72.39 0) (effects (font (size 1.27 1.27))) (uuid "0e000018-e000-4e00-8e00-000000000019"))
   
@@ -846,13 +846,13 @@
   (symbol
     (lib_id "Device:R_US") (at 125.095 62.23 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00001b-e000-4e00-8e00-00000000001c")
-    (property "Reference" "R_INA_N" (at 128.095 60.23 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R122" (at 128.095 60.23 0) (effects (font (size 1.27 1.27))))
     (property "Value" "10R" (at 128.095 64.23 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 125.095 62.23 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 125.095 62.23 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e00001c-e000-4e00-8e00-00000000001d")) (pin "2" (uuid "0e00001d-e000-4e00-8e00-00000000001e"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_INA_N") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R122") (unit 1))))
   )
   (label "5V_SYS" (at 121.285 62.23 0) (effects (font (size 1.27 1.27))) (uuid "0e00001e-e000-4e00-8e00-00000000001f"))
   (wire (pts (xy 128.905 62.23) (xy 144.78 62.23)) (stroke (width 0) (type default)) (uuid "0e00001f-e000-4e00-8e00-000000000020"))
@@ -862,13 +862,13 @@
   (symbol
     (lib_id "Device:C") (at 109.855 74.93 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000023-e000-4e00-8e00-000000000024")
-    (property "Reference" "C_INA_DIFF" (at 112.855 72.93 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C110" (at 112.855 72.93 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100nF" (at 112.855 76.93 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 109.855 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 109.855 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e000024-e000-4e00-8e00-000000000025")) (pin "2" (uuid "0e000025-e000-4e00-8e00-000000000026"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "C_INA_DIFF") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "C110") (unit 1))))
   )
   (label "INA_INP_FILT" (at 109.855 71.12 0) (effects (font (size 1.27 1.27))) (uuid "0e000026-e000-4e00-8e00-000000000027"))
   (label "INA_INN_FILT" (at 109.855 78.74 0) (effects (font (size 1.27 1.27))) (uuid "0e000027-e000-4e00-8e00-000000000028"))
@@ -878,13 +878,13 @@
   (symbol
     (lib_id "Device:C") (at 189.865 93.98 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00002b-e000-4e00-8e00-00000000002c")
-    (property "Reference" "C_INA_HF" (at 192.865 91.98 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C111" (at 192.865 91.98 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100nF" (at 192.865 95.98 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 189.865 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 189.865 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e00002c-e000-4e00-8e00-00000000002d")) (pin "2" (uuid "0e00002d-e000-4e00-8e00-00000000002e"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "C_INA_HF") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "C111") (unit 1))))
   )
   (label "3V3_SYS" (at 189.865 90.17 0) (effects (font (size 1.27 1.27))) (uuid "0e00002e-e000-4e00-8e00-00000000002f"))
   (symbol
@@ -901,13 +901,13 @@
   (symbol
     (lib_id "Device:C") (at 201.93 93.98 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000031-e000-4e00-8e00-000000000032")
-    (property "Reference" "C_INA_LOCAL" (at 204.93 91.98 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C112" (at 204.93 91.98 0) (effects (font (size 1.27 1.27))))
     (property "Value" "1uF" (at 204.93 95.98 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 201.93 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 201.93 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e000032-e000-4e00-8e00-000000000033")) (pin "2" (uuid "0e000033-e000-4e00-8e00-000000000034"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "C_INA_LOCAL") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "C112") (unit 1))))
   )
   (label "3V3_SYS" (at 201.93 90.17 0) (effects (font (size 1.27 1.27))) (uuid "0e000034-e000-4e00-8e00-000000000035"))
   (symbol
@@ -963,72 +963,72 @@
   (symbol
     (lib_id "Device:R_US") (at 194.945 63.5 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000043-e000-4e00-8e00-000000000044")
-    (property "Reference" "R_INA_ALERT_PU" (at 197.945 61.5 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R123" (at 197.945 61.5 0) (effects (font (size 1.27 1.27))))
     (property "Value" "10k" (at 197.945 65.5 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 194.945 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 194.945 63.5 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e000044-e000-4e00-8e00-000000000045")) (pin "2" (uuid "0e000045-e000-4e00-8e00-000000000046"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R_INA_ALERT_PU") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "R123") (unit 1))))
   )
   (label "3V3_SYS" (at 194.945 59.69 0) (effects (font (size 1.27 1.27))) (uuid "0e000046-e000-4e00-8e00-000000000047"))
   
   (symbol
     (lib_id "Connector:TestPoint") (at 55.245 104.775 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000048-e000-4e00-8e00-000000000049")
-    (property "Reference" "TP_5V_PROTECTED" (at 55.245 97.775 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "TP21" (at 55.245 97.775 0) (effects (font (size 1.27 1.27))))
     (property "Value" "5V_PROTECTED" (at 55.245 99.775 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 55.245 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 55.245 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e000049-e000-4e00-8e00-00000000004a"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "TP_5V_PROTECTED") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "TP21") (unit 1))))
   )
   (label "5V_PROTECTED" (at 55.245 104.775 0) (effects (font (size 1.27 1.27))) (uuid "0e00004a-e000-4e00-8e00-00000000004b"))
 
   (symbol
     (lib_id "Connector:TestPoint") (at 80.01 104.775 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00004b-e000-4e00-8e00-00000000004c")
-    (property "Reference" "TP_5V_SYS" (at 80.01 97.775 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "TP22" (at 80.01 97.775 0) (effects (font (size 1.27 1.27))))
     (property "Value" "5V_SYS" (at 80.01 99.775 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 80.01 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 80.01 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e00004c-e000-4e00-8e00-00000000004d"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "TP_5V_SYS") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "TP22") (unit 1))))
   )
   (label "5V_SYS" (at 80.01 104.775 0) (effects (font (size 1.27 1.27))) (uuid "0e00004d-e000-4e00-8e00-00000000004e"))
 
   (symbol
     (lib_id "Connector:TestPoint") (at 104.775 104.775 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00004e-e000-4e00-8e00-00000000004f")
-    (property "Reference" "TP_3V3_SYS" (at 104.775 97.775 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "TP23" (at 104.775 97.775 0) (effects (font (size 1.27 1.27))))
     (property "Value" "3V3_SYS" (at 104.775 99.775 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 104.775 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 104.775 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e00004f-e000-4e00-8e00-000000000050"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "TP_3V3_SYS") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "TP23") (unit 1))))
   )
   (label "3V3_SYS" (at 104.775 104.775 0) (effects (font (size 1.27 1.27))) (uuid "0e000050-e000-4e00-8e00-000000000051"))
 
   (symbol
     (lib_id "Connector:TestPoint") (at 130.175 104.775 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e000051-e000-4e00-8e00-000000000052")
-    (property "Reference" "TP_SYS_ALERT" (at 130.175 97.775 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "TP24" (at 130.175 97.775 0) (effects (font (size 1.27 1.27))))
     (property "Value" "SYS_POWER_ALERT_N" (at 130.175 99.775 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 130.175 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 130.175 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e000052-e000-4e00-8e00-000000000053"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "TP_SYS_ALERT") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/3100000e-6b2a-4a3a-8c91-00000000000e" (reference "TP24") (unit 1))))
   )
   (label "SYS_POWER_ALERT_N" (at 130.175 104.775 0) (effects (font (size 1.27 1.27))) (uuid "0e000053-e000-4e00-8e00-000000000054"))
 
-  (text "R_SYS_SHUNT = WSK25125L000FEA, 5mR 1% 1W, 4-terminal/Kelvin. At 4.5A: 22.5mV, ~101mW." (exclude_from_sim no) (at 35 125 0) (effects (font (size 1.27 1.27))) (uuid "0e000054-e000-4e00-8e00-000000000055"))
+  (text "R120 = WSK25125L000FEA, 5mR 1% 1W, 4-terminal/Kelvin. At 4.5A: 22.5mV, ~101mW." (exclude_from_sim no) (at 35 125 0) (effects (font (size 1.27 1.27))) (uuid "0e000054-e000-4e00-8e00-000000000055"))
   (text "INA238 address 0x40: A0=A1=GND. VBUS senses load-side 5V_SYS; IN+ = supply-side Kelvin, IN- = load-side Kelvin." (exclude_from_sim no) (at 35 130 0) (effects (font (size 1.27 1.27))) (uuid "0e000055-e000-4e00-8e00-000000000056"))
   (text "Input filter: 10R + 10R and 100nF differential. Do not route sense traces on shared high-current copper; take Kelvin taps at shunt pads." (exclude_from_sim no) (at 35 135 0) (effects (font (size 1.27 1.27))) (uuid "0e000056-e000-4e00-8e00-000000000057"))
-  (text "Cost-down: U_MON/filter/ALERT may be DNP, but R_SYS_SHUNT must remain or be replaced by footprint-compatible 0R high-current jumper." (exclude_from_sim no) (at 35 140 0) (effects (font (size 1.27 1.27))) (uuid "0e000057-e000-4e00-8e00-000000000058"))
+  (text "Cost-down: U14/filter/ALERT may be DNP, but R120 must remain or be replaced by footprint-compatible 0R high-current jumper." (exclude_from_sim no) (at 35 140 0) (effects (font (size 1.27 1.27))) (uuid "0e000057-e000-4e00-8e00-000000000058"))
   (text "Shared I2C uses existing bus pull-ups; do not add another strong pull-up pair on this sheet." (exclude_from_sim no) (at 35 145 0) (effects (font (size 1.27 1.27))) (uuid "0e000058-e000-4e00-8e00-000000000059"))
   (sheet_instances (path "/" (page "15")))
   (embedded_fonts no)

@@ -1316,8 +1316,8 @@
   (label "DAC_DATA_DAC" (at 85.725 72.39 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000001"))
   (label "DAC_DATA_DAC" (at 112.395 72.39 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000002"))
   (label "MAIN_L" (at 219.71 90.17 0) (effects (font (size 1.27 1.27))) (uuid "af090000-0000-4000-8000-000000000003"))
-  (label "DAC_VNEG" (at 137.795 92.71 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000001"))
-  (label "DAC_LDOO_1V8" (at 137.795 90.17 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000002"))
+  (label "DAC89" (at 137.795 92.71 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000001"))
+  (label "DAC90_1V8" (at 137.795 90.17 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000002"))
   (label "MAIN_L" (at 163.83 69.85 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000003"))
   (label "MAIN_R" (at 163.83 72.39 0) (effects (font (size 1.27 1.27))) (uuid "aa090000-0000-4000-8000-000000000004"))
   (junction (at 99.695 72.39) (diameter 0) (color 0 0 0 0) (uuid "6a2c0000-0000-4000-8000-000000000009"))
@@ -1355,13 +1355,13 @@
   (symbol
     (lib_id "Device:R_US") (at 81.915 69.85 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000017-9000-4900-8900-000000000018")
-    (property "Reference" "R_I2S_LRCK" (at 84.915 67.85 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R75" (at 84.915 67.85 0) (effects (font (size 1.27 1.27))))
     (property "Value" "22R" (at 84.915 71.85 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 81.915 69.85 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 81.915 69.85 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000018-9000-4900-8900-000000000019")) (pin "2" (uuid "09000019-9000-4900-8900-00000000001a"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R_I2S_LRCK") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R75") (unit 1))))
   )
   (wire (pts (xy 55.245 69.85) (xy 78.105 69.85)) (stroke (width 0) (type default)) (uuid "0900001a-9000-4900-8900-00000000001b"))
   (wire (pts (xy 85.725 69.85) (xy 112.395 69.85)) (stroke (width 0) (type default)) (uuid "0900001b-9000-4900-8900-00000000001c"))
@@ -1369,13 +1369,13 @@
   (symbol
     (lib_id "Device:R_US") (at 81.915 72.39 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900001d-9000-4900-8900-00000000001e")
-    (property "Reference" "R_I2S_DATA" (at 84.915 70.39 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R76" (at 84.915 70.39 0) (effects (font (size 1.27 1.27))))
     (property "Value" "22R" (at 84.915 74.39 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 81.915 72.39 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 81.915 72.39 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0900001e-9000-4900-8900-00000000001f")) (pin "2" (uuid "0900001f-9000-4900-8900-000000000020"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R_I2S_DATA") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R76") (unit 1))))
   )
   (wire (pts (xy 55.245 72.39) (xy 78.105 72.39)) (stroke (width 0) (type default)) (uuid "09000020-9000-4900-8900-000000000021"))
   
@@ -1383,13 +1383,13 @@
   (symbol
     (lib_id "Device:R_US") (at 81.915 74.93 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000023-9000-4900-8900-000000000024")
-    (property "Reference" "R_I2S_BCLK" (at 84.915 72.93 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R77" (at 84.915 72.93 0) (effects (font (size 1.27 1.27))))
     (property "Value" "22R" (at 84.915 76.93 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 81.915 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 81.915 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000024-9000-4900-8900-000000000025")) (pin "2" (uuid "09000025-9000-4900-8900-000000000026"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R_I2S_BCLK") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R77") (unit 1))))
   )
   (wire (pts (xy 55.245 74.93) (xy 78.105 74.93)) (stroke (width 0) (type default)) (uuid "09000026-9000-4900-8900-000000000027"))
   (wire (pts (xy 85.725 74.93) (xy 112.395 74.93)) (stroke (width 0) (type default)) (uuid "09000027-9000-4900-8900-000000000028"))
@@ -1441,26 +1441,26 @@
   (symbol
     (lib_id "Device:R_US") (at 81.915 87.63 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000031-9000-4900-8900-000000000032")
-    (property "Reference" "R_XSMT_SER" (at 84.915 85.63 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R78" (at 84.915 85.63 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100R" (at 84.915 89.63 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 81.915 87.63 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 81.915 87.63 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000032-9000-4900-8900-000000000033")) (pin "2" (uuid "09000033-9000-4900-8900-000000000034"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R_XSMT_SER") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R78") (unit 1))))
   )
   (wire (pts (xy 55.245 87.63) (xy 78.105 87.63)) (stroke (width 0) (type default)) (uuid "09000034-9000-4900-8900-000000000035"))
   (wire (pts (xy 85.725 87.63) (xy 112.395 87.63)) (stroke (width 0) (type default)) (uuid "09000035-9000-4900-8900-000000000036"))
   (symbol
     (lib_id "Device:R_US") (at 99.695 91.44 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000036-9000-4900-8900-000000000037")
-    (property "Reference" "R_XSMT_PD" (at 102.695 89.44 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R79" (at 102.695 89.44 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100k" (at 102.695 93.44 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 99.695 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 99.695 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000037-9000-4900-8900-000000000038")) (pin "2" (uuid "09000038-9000-4900-8900-000000000039"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R_XSMT_PD") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R79") (unit 1))))
   )
   (wire (pts (xy 99.695 87.63) (xy 112.395 87.63)) (stroke (width 0) (type default)) (uuid "09000039-9000-4900-8900-00000000003a"))
   (symbol
@@ -1478,13 +1478,13 @@
   (symbol
     (lib_id "Device:C") (at 55.245 43.815 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900003d-9000-4900-8900-00000000003e")
-    (property "Reference" "C_AUDIO_BRANCH" (at 58.245 41.815 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C81" (at 58.245 41.815 0) (effects (font (size 1.27 1.27))))
     (property "Value" "10uF" (at 58.245 45.815 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 55.245 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 55.245 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0900003e-9000-4900-8900-00000000003f")) (pin "2" (uuid "0900003f-9000-4900-8900-000000000040"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_AUDIO_BRANCH") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C81") (unit 1))))
   )
   
   (symbol
@@ -1504,13 +1504,13 @@
   (symbol
     (lib_id "Device:C") (at 160.02 43.815 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000046-9000-4900-8900-000000000047")
-    (property "Reference" "C_CPVDD_HF" (at 163.02 41.815 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C82" (at 163.02 41.815 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100nF" (at 163.02 45.815 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 160.02 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 160.02 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000047-9000-4900-8900-000000000048")) (pin "2" (uuid "09000048-9000-4900-8900-000000000049"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_CPVDD_HF") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C82") (unit 1))))
   )
   (label "3V3_AUDIO" (at 160.02 40.005 0) (effects (font (size 1.27 1.27))) (uuid "09000049-9000-4900-8900-00000000004a"))
   (symbol
@@ -1527,13 +1527,13 @@
   (symbol
     (lib_id "Device:C") (at 170.18 43.815 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900004c-9000-4900-8900-00000000004d")
-    (property "Reference" "C_CPVDD_BULK" (at 173.18 41.815 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C83" (at 173.18 41.815 0) (effects (font (size 1.27 1.27))))
     (property "Value" "10uF" (at 173.18 45.815 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 170.18 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 170.18 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0900004d-9000-4900-8900-00000000004e")) (pin "2" (uuid "0900004e-9000-4900-8900-00000000004f"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_CPVDD_BULK") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C83") (unit 1))))
   )
   (label "3V3_AUDIO" (at 170.18 40.005 0) (effects (font (size 1.27 1.27))) (uuid "0900004f-9000-4900-8900-000000000050"))
   (symbol
@@ -1550,13 +1550,13 @@
   (symbol
     (lib_id "Device:C") (at 184.785 43.815 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000052-9000-4900-8900-000000000053")
-    (property "Reference" "C_DVDD_HF" (at 187.785 41.815 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C84" (at 187.785 41.815 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100nF" (at 187.785 45.815 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 184.785 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 184.785 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000053-9000-4900-8900-000000000054")) (pin "2" (uuid "09000054-9000-4900-8900-000000000055"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_DVDD_HF") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C84") (unit 1))))
   )
   (label "3V3_AUDIO" (at 184.785 40.005 0) (effects (font (size 1.27 1.27))) (uuid "09000055-9000-4900-8900-000000000056"))
   (symbol
@@ -1573,13 +1573,13 @@
   (symbol
     (lib_id "Device:C") (at 194.945 43.815 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000058-9000-4900-8900-000000000059")
-    (property "Reference" "C_DVDD_BULK" (at 197.945 41.815 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C85" (at 197.945 41.815 0) (effects (font (size 1.27 1.27))))
     (property "Value" "10uF" (at 197.945 45.815 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 194.945 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 194.945 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000059-9000-4900-8900-00000000005a")) (pin "2" (uuid "0900005a-9000-4900-8900-00000000005b"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_DVDD_BULK") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C85") (unit 1))))
   )
   (label "3V3_AUDIO" (at 194.945 40.005 0) (effects (font (size 1.27 1.27))) (uuid "0900005b-9000-4900-8900-00000000005c"))
   (symbol
@@ -1596,13 +1596,13 @@
   (symbol
     (lib_id "Device:C") (at 210.185 43.815 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900005e-9000-4900-8900-00000000005f")
-    (property "Reference" "C_AVDD_HF" (at 213.185 41.815 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C86" (at 213.185 41.815 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100nF" (at 213.185 45.815 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 210.185 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 210.185 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0900005f-9000-4900-8900-000000000060")) (pin "2" (uuid "09000060-9000-4900-8900-000000000061"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_AVDD_HF") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C86") (unit 1))))
   )
   (label "3V3_AUDIO" (at 210.185 40.005 0) (effects (font (size 1.27 1.27))) (uuid "09000061-9000-4900-8900-000000000062"))
   (symbol
@@ -1619,13 +1619,13 @@
   (symbol
     (lib_id "Device:C") (at 219.71 43.815 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000064-9000-4900-8900-000000000065")
-    (property "Reference" "C_AVDD_BULK" (at 222.71 41.815 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C87" (at 222.71 41.815 0) (effects (font (size 1.27 1.27))))
     (property "Value" "10uF" (at 222.71 45.815 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 219.71 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 219.71 43.815 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000065-9000-4900-8900-000000000066")) (pin "2" (uuid "09000066-9000-4900-8900-000000000067"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_AVDD_BULK") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C87") (unit 1))))
   )
   (label "3V3_AUDIO" (at 219.71 40.005 0) (effects (font (size 1.27 1.27))) (uuid "09000067-9000-4900-8900-000000000068"))
   (symbol
@@ -1675,13 +1675,13 @@
   (symbol
     (lib_id "Device:C") (at 154.94 78.74 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000070-9000-4900-8900-000000000071")
-    (property "Reference" "C_CP_FLY" (at 157.94 76.74 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C88" (at 157.94 76.74 0) (effects (font (size 1.27 1.27))))
     (property "Value" "2.2uF" (at 157.94 80.74 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 154.94 78.74 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 154.94 78.74 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000071-9000-4900-8900-000000000072")) (pin "2" (uuid "09000072-9000-4900-8900-000000000073"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_CP_FLY") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C88") (unit 1))))
   )
   (label "DAC_CAPP" (at 154.94 74.93 0) (effects (font (size 1.27 1.27))) (uuid "09000073-9000-4900-8900-000000000074"))
   (label "DAC_CAPM" (at 154.94 82.55 0) (effects (font (size 1.27 1.27))) (uuid "09000074-9000-4900-8900-000000000075"))
@@ -1692,16 +1692,16 @@
   (symbol
     (lib_id "Device:C") (at 146.05 71.12 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000079-9000-4900-8900-00000000007a")
-    (property "Reference" "C_VNEG" (at 157.94 69.12 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C89" (at 157.94 69.12 0) (effects (font (size 1.27 1.27))))
     (property "Value" "2.2uF" (at 157.94 73.12 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 154.94 71.12 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 154.94 71.12 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0900007a-9000-4900-8900-00000000007b")) (pin "2" (uuid "0900007b-9000-4900-8900-00000000007c"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_VNEG") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C89") (unit 1))))
   )
   
-  (label "DAC_VNEG" (at 146.05 67.31 0) (effects (font (size 1.27 1.27))) (uuid "0900007d-9000-4900-8900-00000000007e"))
+  (label "DAC89" (at 146.05 67.31 0) (effects (font (size 1.27 1.27))) (uuid "0900007d-9000-4900-8900-00000000007e"))
   (symbol
     (lib_id "power:GND") (at 146.05 74.93 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900007e-9000-4900-8900-00000000007f")
@@ -1716,16 +1716,16 @@
   (symbol
     (lib_id "Device:C") (at 170.18 73.66 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000080-9000-4900-8900-000000000081")
-    (property "Reference" "C_LDOO" (at 173.18 71.66 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C90" (at 173.18 71.66 0) (effects (font (size 1.27 1.27))))
     (property "Value" "100nF" (at 173.18 75.66 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 170.18 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 170.18 73.66 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000081-9000-4900-8900-000000000082")) (pin "2" (uuid "09000082-9000-4900-8900-000000000083"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_LDOO") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C90") (unit 1))))
   )
   
-  (label "DAC_LDOO_1V8" (at 170.18 69.85 0) (effects (font (size 1.27 1.27))) (uuid "09000084-9000-4900-8900-000000000085"))
+  (label "DAC90_1V8" (at 170.18 69.85 0) (effects (font (size 1.27 1.27))) (uuid "09000084-9000-4900-8900-000000000085"))
   (symbol
     (lib_id "power:GND") (at 170.18 77.47 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000085-9000-4900-8900-000000000086")
@@ -1740,13 +1740,13 @@
   (symbol
     (lib_id "Device:R_US") (at 160.02 69.85 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000087-9000-4900-8900-000000000088")
-    (property "Reference" "R_OUT_L" (at 163.02 67.85 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R80" (at 163.02 67.85 0) (effects (font (size 1.27 1.27))))
     (property "Value" "470R" (at 163.02 71.85 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 160.02 69.85 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 160.02 69.85 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000088-9000-4900-8900-000000000089")) (pin "2" (uuid "09000089-9000-4900-8900-00000000008a"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R_OUT_L") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R80") (unit 1))))
   )
   (wire (pts (xy 137.795 69.85) (xy 156.21 69.85)) (stroke (width 0) (type default)) (uuid "0900008a-9000-4900-8900-00000000008b"))
   
@@ -1754,13 +1754,13 @@
   (symbol
     (lib_id "Device:C") (at 179.705 93.98 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900008d-9000-4900-8900-00000000008e")
-    (property "Reference" "C_OUT_L" (at 182.705 91.98 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C91" (at 182.705 91.98 0) (effects (font (size 1.27 1.27))))
     (property "Value" "2.2nF C0G" (at 182.705 95.98 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 179.705 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 179.705 93.98 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0900008e-9000-4900-8900-00000000008f")) (pin "2" (uuid "0900008f-9000-4900-8900-000000000090"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_OUT_L") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C91") (unit 1))))
   )
   
   (symbol
@@ -1777,26 +1777,26 @@
   (symbol
     (lib_id "Device:R_US") (at 160.02 72.39 90) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000093-9000-4900-8900-000000000094")
-    (property "Reference" "R_OUT_R" (at 163.02 70.39 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "R81" (at 163.02 70.39 0) (effects (font (size 1.27 1.27))))
     (property "Value" "470R" (at 163.02 74.39 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 160.02 72.39 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 160.02 72.39 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "09000094-9000-4900-8900-000000000095")) (pin "2" (uuid "09000095-9000-4900-8900-000000000096"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R_OUT_R") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "R81") (unit 1))))
   )
   (wire (pts (xy 137.795 72.39) (xy 156.21 72.39)) (stroke (width 0) (type default)) (uuid "09000096-9000-4900-8900-000000000097"))
   
   (symbol
     (lib_id "Device:C") (at 189.865 91.44 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "09000099-9000-4900-8900-00000000009a")
-    (property "Reference" "C_OUT_R" (at 192.865 89.44 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "C92" (at 192.865 89.44 0) (effects (font (size 1.27 1.27))))
     (property "Value" "2.2nF C0G" (at 192.865 93.44 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 189.865 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 189.865 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0900009a-9000-4900-8900-00000000009b")) (pin "2" (uuid "0900009b-9000-4900-8900-00000000009c"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C_OUT_R") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "C92") (unit 1))))
   )
   (label "MAIN_R" (at 189.865 87.63 0) (effects (font (size 1.27 1.27))) (uuid "0900009c-9000-4900-8900-00000000009d"))
   (symbol
@@ -1813,13 +1813,13 @@
   (symbol
     (lib_id "Connector:Conn_Coaxial") (at 224.79 90.17 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0900009f-9000-4900-8900-0000000000a0")
-    (property "Reference" "J_RCA_L" (at 224.79 84.01 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "J4" (at 224.79 84.01 0) (effects (font (size 1.27 1.27))))
     (property "Value" "RCA LEFT TBD-MECH" (at 224.79 86.51 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 224.79 90.17 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 224.79 90.17 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "090000a0-9000-4900-8900-0000000000a1")) (pin "2" (uuid "090000a1-9000-4900-8900-0000000000a2"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "J_RCA_L") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "J4") (unit 1))))
   )
   
   (symbol
@@ -1836,13 +1836,13 @@
   (symbol
     (lib_id "Connector:Conn_Coaxial") (at 224.79 104.775 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "090000a5-9000-4900-8900-0000000000a6")
-    (property "Reference" "J_RCA_R" (at 224.79 98.775 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "J5" (at 224.79 98.775 0) (effects (font (size 1.27 1.27))))
     (property "Value" "RCA RIGHT TBD-MECH" (at 224.79 101.275 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 224.79 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 224.79 104.775 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "090000a6-9000-4900-8900-0000000000a7")) (pin "2" (uuid "090000a7-9000-4900-8900-0000000000a8"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "J_RCA_R") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "J5") (unit 1))))
   )
   (label "MAIN_R" (at 219.71 104.775 0) (effects (font (size 1.27 1.27))) (uuid "090000a8-9000-4900-8900-0000000000a9"))
   (symbol
@@ -1859,13 +1859,13 @@
   (symbol
     (lib_id "Connector_Generic:Conn_01x03") (at 224.79 121.92 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp yes) (uuid "090000ab-9000-4900-8900-0000000000ac")
-    (property "Reference" "J_LINE_35" (at 224.79 114.92 0) (effects (font (size 1.27 1.27))))
+    (property "Reference" "J6" (at 224.79 114.92 0) (effects (font (size 1.27 1.27))))
     (property "Value" "3.5MM LINE OUT DNP" (at 224.79 117.42 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "" (at 224.79 121.92 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "~" (at 224.79 121.92 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "090000ac-9000-4900-8900-0000000000ad")) (pin "2" (uuid "090000ad-9000-4900-8900-0000000000ae")) (pin "3" (uuid "090000ae-9000-4900-8900-0000000000af"))
-    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "J_LINE_35") (unit 1))))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000009-6b2a-4a3a-8c91-000000000009" (reference "J6") (unit 1))))
   )
   (label "MAIN_L" (at 219.71 124.46 0) (effects (font (size 1.27 1.27))) (uuid "090000af-9000-4900-8900-0000000000b0"))
   (label "MAIN_R" (at 219.71 121.92 0) (effects (font (size 1.27 1.27))) (uuid "090000b0-9000-4900-8900-0000000000b1"))
@@ -1884,7 +1884,7 @@
   (text "XSMT defaults LOW via 100k pulldown. Firmware starts stable BCLK/LRCK/DATA, waits, then drives DAC_XSMT HIGH." (exclude_from_sim no) (at 35 135 0) (effects (font (size 1.27 1.27))) (uuid "090000b4-9000-4900-8900-0000000000b5"))
   (text "Single 3V3_AUDIO supply for CPVDD/DVDD/AVDD. LDOO is an internal ~1.8V output and is decoupled only." (exclude_from_sim no) (at 35 140 0) (effects (font (size 1.27 1.27))) (uuid "090000b5-9000-4900-8900-0000000000b6"))
   (text "MAIN_L/R are ground-centered DirectPath line outputs: 470R + 2.2nF, no series DC-block capacitors." (exclude_from_sim no) (at 35 145 0) (effects (font (size 1.27 1.27))) (uuid "090000b6-9000-4900-8900-0000000000b7"))
-  (text "RCA and optional 3.5mm mechanical footprints remain TBD-MECH. J_LINE_35 is DNP and is LINE OUT only, not headphone drive." (exclude_from_sim no) (at 35 150 0) (effects (font (size 1.27 1.27))) (uuid "090000b7-9000-4900-8900-0000000000b8"))
+  (text "RCA and optional 3.5mm mechanical footprints remain TBD-MECH. J6 is DNP and is LINE OUT only, not headphone drive." (exclude_from_sim no) (at 35 150 0) (effects (font (size 1.27 1.27))) (uuid "090000b7-9000-4900-8900-0000000000b8"))
   (symbol
     (lib_id "power:PWR_FLAG")
     (at 55.245 40.005 0)
