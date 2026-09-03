@@ -809,8 +809,17 @@ def main() -> int:
         errors.append("J_LCD must remain uninstantiated until authoritative FPC gate closes")
     if "PHYSICAL J_LCD IS INTENTIONALLY NOT INSTANTIATED" not in p10:
         errors.append("display FPC hard-gate annotation missing")
-    if "SOFNG 0.5TBQP-30P-1 / C3975120, 30 contacts, 0.5mm pitch" not in p10:
-        errors.append("display FPC confirmed connector identity/pitch annotation missing")
+    display_identity_tokens = (
+        "SOFNG 0.5TBQP-30P-1 / C3975120",
+        "30 contacts",
+        "0.5mm",
+    )
+    if not all(token in p10 for token in display_identity_tokens):
+        errors.append("display FPC confirmed connector identity/count/pitch annotation missing")
+    if "31/32 are GND shell/mount refs" not in p10:
+        errors.append("display FPC A9 shell/mount resolution annotation missing")
+    if "15/16/18/19 are NC" not in p10:
+        errors.append("display FPC A9 NC-pin resolution annotation missing")
     if "Original FPC pins 4/21/29 share ESP_3V3" not in p10:
         errors.append("display FPC 3V3-domain hard-gate annotation missing")
 
