@@ -470,8 +470,7 @@ Wait for:
 
 1. resolve final LCD/touch panel variant, contact-side/mating mechanics, 31/32 interpretation, pins 15/16/18/19 and 3V3 rail commonality
 2. final USB-A/RCA/microSD/5V-input/reset-boot connector mechanics
-3. native GUI Sync Sheet Pins/open-save confirmation
-4. final board outline and PCB-fabricator stackup
+3. final board outline and PCB-fabricator stackup
 
 
 ---
@@ -487,10 +486,10 @@ Completed:
 - KiCad 9.0.9 native ERC clean baseline
 - generated manufacturing BOM/netlist parity review complete (270/270)
 - 16-page schematic PDF human review complete
+- hierarchy pin-sync equivalence complete: bidirectional root/child name+shape validation plus native KiCad root load/export
 
 Remaining before final manufacturing sign-off:
 
-- GUI Sync Sheet Pins/open-save confirmation
 - display and connector mechanical closure
 
 

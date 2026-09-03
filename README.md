@@ -32,7 +32,7 @@ The electrical architecture is defined for:
 - P4/C6 recovery and factory programming
 - optional system power telemetry
 
-The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: the Guition source identifies **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch**, but contact-side/mating geometry, Altium symbol entries 31/32, pins 15/16/18/19, and the relationship between the original common ESP_3V3 pins 4/21/29 and M1's separately filtered 3V3_LCD / 3V3_TOUCH rails remain unresolved. CI exports and source-validates the manufacturing BOM, hierarchy netlist and complete schematic PDF. Human PDF/BOM review is complete; native GUI Sync Sheet Pins and exact connector/mechanical sourcing gates still remain before final M1-SCH-A sign-off.
+The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: the Guition source identifies **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch**, but contact-side/mating geometry, Altium symbol entries 31/32, pins 15/16/18/19, and the relationship between the original common ESP_3V3 pins 4/21/29 and M1's separately filtered 3V3_LCD / 3V3_TOUCH rails remain unresolved. CI exports and source-validates the manufacturing BOM, hierarchy netlist and complete schematic PDF. Human PDF/BOM review and hierarchy pin-sync equivalence are complete. Only exact connector/display mechanics, board outline/datums and fab stackup remain before final M1-SCH-A manufacturing sign-off.
 
 ---
 

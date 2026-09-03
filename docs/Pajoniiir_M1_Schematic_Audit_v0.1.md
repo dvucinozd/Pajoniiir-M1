@@ -268,7 +268,7 @@ KiCad 9 CI run #76 (`d8bffb3a`) je potpuno zelen nakon presentation cleanup-a. G
 - [x] root power-path correction
 - [x] DNP/DNL policy captured
 - [x] local structural validator committed
-- [ ] native KiCad Sync Sheet Pins
+- [x] hierarchy pin-sync equivalence — bidirectional root/child name+shape validator + native KiCad root load/netlist/PDF export
 - [x] native KiCad 9.0.9 ERC — 0 unexplained errors, 6 approved J_LCD exclusions, 0 warnings
 - [x] final U7 RPW0010A land pattern freeze — `Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm`
 - [x] final L_BL part / footprint — XGL4030-103MEC / L_Coilcraft_XxL4030
@@ -304,10 +304,11 @@ Final layout čeka authoritative display/FPC mechanics, exact connector footprin
 
 1. Resolve remaining LCD/panel/FPC mating geometry, pins 15/16/18/19 and 3V3-domain commonality.
 2. Select exact USB-A, RCA, microSD, 5V input and RESET/BOOT/service-switch MPNs from the final enclosure/mechanical constraints.
-3. Open project in native KiCad and perform GUI open/save + Sync Sheet Pins confirmation.
-4. Lock PCB outline / connector datums / display FPC location.
-5. Obtain PCB fab stackup and derive controlled-impedance geometries.
-6. Begin final placement/routing only after those physical gates close.
+3. Lock PCB outline / connector datums / display FPC location.
+4. Obtain PCB fab stackup and derive controlled-impedance geometries.
+5. Begin final placement/routing only after those physical gates close.
+
+Optional editor hygiene before manual schematic editing: open/save once in native KiCad GUI. This is no longer a sign-off gate because hierarchy pin synchronization is already enforced bidirectionally in CI and the full root hierarchy is loaded/exported by native KiCad 9.
 
 ---
 
@@ -315,4 +316,4 @@ Final layout čeka authoritative display/FPC mechanics, exact connector footprin
 
 Pajoniiir-M1 više nije u architecture-only fazi. Projekt sada ima stvarni hijerarhijski component-level Rev A schematic capture sa strukturno čistim inter-sheet contractom.
 
-Native KiCad ERC, schematic PDF human review i manufacturing BOM cross-check više nisu blockeri. Preostali rad prije finalnog PCB layouta koncentriran je na GUI Sync Sheet Pins te mehaničko i exact-footprint zatvaranje. Najveći pojedinačni blocker ostaje fizička LCD/touch panel/FPC definicija, sada sužena na jasno identificirane mating/pin/3V3-domain nepoznanice.
+Native KiCad ERC, schematic PDF human review i manufacturing BOM cross-check više nisu blockeri. Preostali rad prije finalnog PCB layouta koncentriran je isključivo na mehaničko i exact-footprint zatvaranje, finalni outline/datume i fab stackup. Najveći pojedinačni blocker ostaje fizička LCD/touch panel/FPC definicija, sada sužena na jasno identificirane mating/pin/3V3-domain nepoznanice.

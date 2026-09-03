@@ -101,7 +101,8 @@ Run #76 additionally completed the review-layer checks: 16/16 schematic PDF page
 
 Still manual/physical:
 
-- native GUI open/save + Sync Sheet Pins confirmation
+Hierarchy pin synchronization is no longer a manual gate: CI compares every child hierarchical label with the corresponding root sheet pin in both directions by name and electrical shape, then native KiCad 9 loads and exports the full root hierarchy. A GUI open/save remains optional editor hygiene only.
+
 - exact LCD/FPC mechanical closure
 - exact external connector MPN/footprints
 - final board outline and enclosure datums
