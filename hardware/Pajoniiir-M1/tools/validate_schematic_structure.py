@@ -41,15 +41,15 @@ ALLOWED_BLANK_FOOTPRINTS = {
     ("01_POWER_INPUT", "C3"),
     ("01_POWER_INPUT", "D1"),
     ("01_POWER_INPUT", "C8"),
-    ("04_P4_FLASH_CLOCK_RESET", "SW_RESET"),
-    ("04_P4_FLASH_CLOCK_RESET", "SW_BOOT"),
-    ("07_USB0_STORAGE", "J_USB0"),
-    ("08_USB1_FLX4", "J_USB1"),
-    ("09_AUDIO_PCM5102A", "J_RCA_L"),
-    ("09_AUDIO_PCM5102A", "J_RCA_R"),
-    ("09_AUDIO_PCM5102A", "J_LINE_35"),
-    ("12_MICROSD", "J_SD"),
-    ("13_DEBUG_SERVICE", "JDBG_USB"),
+    ("04_P4_FLASH_CLOCK_RESET", "SW1"),
+    ("04_P4_FLASH_CLOCK_RESET", "SW2"),
+    ("07_USB0_STORAGE", "J2"),
+    ("08_USB1_FLX4", "J3"),
+    ("09_AUDIO_PCM5102A", "J4"),
+    ("09_AUDIO_PCM5102A", "J5"),
+    ("09_AUDIO_PCM5102A", "J6"),
+    ("12_MICROSD", "J7"),
+    ("13_DEBUG_SERVICE", "J9"),
 }
 
 BANNED_LEGACY_VALUE_PATTERNS = (
@@ -500,7 +500,7 @@ def main() -> int:
         errors.append("14_TEST_MONITORING must generate 5V_SYS after system shunt")
     if re.search(r'\(label "5V_SYS" \(at 65 25 0\)', root_text):
         errors.append("stale pre-shunt 5V_SYS root label detected at 65,25")
-    if "R_SYS_SHUNT" not in p14 or "5mR" not in p14:
+    if "R120" not in p14 or "5mR" not in p14:
         errors.append("system 5mR shunt invariant missing")
     if "INA238AIDGSR" not in p14:
         errors.append("INA238 monitoring candidate missing")
@@ -782,7 +782,7 @@ def main() -> int:
                         errors.append(
                             "03_P4_CORE: DSI_REXT physical pin is not wired"
                         )
-                if "R_DSI_REXT" not in p03 or "4.02k 1%" not in p03:
+                if "R24" not in p03 or "4.02k 1%" not in p03:
                     errors.append(
                         "03_P4_CORE: DSI_REXT 4.02k 1% pull-down invariant missing"
                     )

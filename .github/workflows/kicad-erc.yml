@@ -327,7 +327,7 @@ jobs:
             --output artifacts/Pajoniiir-M1-manufacturing-bom.csv \
             --fields 'Reference,Value,Footprint,${QUANTITY},${DNP}' \
             --labels 'Refs,Value,Footprint,Qty,DNP' \
-            --group-by 'Reference' \
+
             --sort-field 'Reference' \
             --sort-asc \
             --string-delimiter '"' \

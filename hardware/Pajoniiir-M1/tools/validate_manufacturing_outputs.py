@@ -34,20 +34,20 @@ CHILDREN = [
 ]
 
 # Blank footprints that are intentionally still present in the manufacturing BOM.
-# JDBG_USB is excluded because that pogo/service connector is in_bom=no.
+# J9 is excluded because that pogo/service connector is in_bom=no.
 ALLOWED_BOM_BLANK_FOOTPRINTS = {
     "J1",
     "C3",
     "D1",
     "C8",
-    "SW_RESET",
-    "SW_BOOT",
-    "J_USB0",
-    "J_USB1",
-    "J_RCA_L",
-    "J_RCA_R",
-    "J_LINE_35",
-    "J_SD",
+    "SW1",
+    "SW2",
+    "J2",
+    "J3",
+    "J4",
+    "J5",
+    "J6",
+    "J7",
 }
 
 
@@ -116,6 +116,11 @@ def source_components() -> dict[str, Component]:
             reference = prop(block, "Reference")
             if not reference or reference.startswith(("#PWR", "#FLG")):
                 continue
+            if not re.fullmatch(r"[A-Za-z]+[0-9]+", reference):
+                raise SystemExit(
+                    f"invalid manufacturing RefDes {reference!r} in {sheet}; "
+                    "reference must end in a numeric suffix"
+                )
             in_bom = re.search(r'\(in_bom (yes|no)\)', block)
             if not in_bom or in_bom.group(1) != "yes":
                 continue
