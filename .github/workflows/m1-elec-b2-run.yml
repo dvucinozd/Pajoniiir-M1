@@ -61,4 +61,4 @@ jobs:
           git commit -m "display: migrate schematic to final DSI506 module"
           git push origin HEAD:main
 
-# retry: validator newline escape fixed
+# retry: two-level validator escape fixed
