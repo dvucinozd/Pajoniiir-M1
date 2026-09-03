@@ -11,6 +11,8 @@ This repository contains the hardware architecture, engineering BOM, subsystem e
 **M1-SCH-A electrical capture:** PASS / COMPLETE WITH DOCUMENTED HARD GATES  
 **Structural schematic audit:** PASS  
 **Native KiCad 9.0.9 ERC:** PASS — 0 unexplained errors, 6 UUID-scoped J_LCD hard-gate exclusions, 0 warnings  
+**Manufacturing output review:** PASS — 270/270 BOM parity, 17 DNP, 12 intentional blank-footprint gates  
+**Schematic PDF review:** PASS — 16/16 pages reviewed after layout cleanup  
 **GO for final PCB layout:** NOT YET
 
 The electrical architecture is defined for:
@@ -30,7 +32,7 @@ The electrical architecture is defined for:
 - P4/C6 recovery and factory programming
 - optional system power telemetry
 
-The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: the Guition source identifies **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch**, but contact-side/mating geometry, Altium symbol entries 31/32, pins 15/16/18/19, and the relationship between the original common ESP_3V3 pins 4/21/29 and M1's separately filtered 3V3_LCD / 3V3_TOUCH rails remain unresolved. CI now also exports and source-validates the manufacturing BOM, hierarchy netlist and complete schematic PDF. Native GUI Sync Sheet Pins, human PDF/BOM review and exact connector/mechanical sourcing gates still remain before final M1-SCH-A sign-off.
+The electrical/ERC cleanup is complete. The largest remaining layout gate is physical LCD/touch FPC closure: the Guition source identifies **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120, 30 contacts, 0.5 mm pitch**, but contact-side/mating geometry, Altium symbol entries 31/32, pins 15/16/18/19, and the relationship between the original common ESP_3V3 pins 4/21/29 and M1's separately filtered 3V3_LCD / 3V3_TOUCH rails remain unresolved. CI exports and source-validates the manufacturing BOM, hierarchy netlist and complete schematic PDF. Human PDF/BOM review is complete; native GUI Sync Sheet Pins and exact connector/mechanical sourcing gates still remain before final M1-SCH-A sign-off.
 
 ---
 
@@ -100,6 +102,7 @@ Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.1.md is superseded by v0.2.
 - [Schematic readiness review v0.1](docs/Pajoniiir_RevA_Schematic_Readiness_Review_v0.1.md)
 - [M1-SCH-A schematic audit v0.1](docs/Pajoniiir_M1_Schematic_Audit_v0.1.md)
 - [Manufacturing output contract v0.1](docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md)
+- [RefDes annotation map v0.1](docs/Pajoniiir_RefDes_Annotation_Map_v0.1.md)
 - [DNP / option matrix v0.1](docs/Pajoniiir_DNP_Option_Matrix_v0.1.md)
 
 ## 01 — Input power

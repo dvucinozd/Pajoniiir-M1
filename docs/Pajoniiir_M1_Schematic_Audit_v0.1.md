@@ -181,15 +181,15 @@ Mechanical / enclosure dependent:
 
 ~~~text
 01_POWER_INPUT:J1
-04_P4_FLASH_CLOCK_RESET:SW_RESET
-04_P4_FLASH_CLOCK_RESET:SW_BOOT
-07_USB0_STORAGE:J_USB0
-08_USB1_FLX4:J_USB1
-09_AUDIO_PCM5102A:J_RCA_L
-09_AUDIO_PCM5102A:J_RCA_R
-09_AUDIO_PCM5102A:J_LINE_35
-12_MICROSD:J_SD
-13_DEBUG_SERVICE:JDBG_USB
+04_P4_FLASH_CLOCK_RESET:SW1 (RESET)
+04_P4_FLASH_CLOCK_RESET:SW2 (BOOT)
+07_USB0_STORAGE:J2 (USB0)
+08_USB1_FLX4:J3 (USB1)
+09_AUDIO_PCM5102A:J4 (RCA L)
+09_AUDIO_PCM5102A:J5 (RCA R)
+09_AUDIO_PCM5102A:J6 (optional 3.5 mm)
+12_MICROSD:J7 (microSD)
+13_DEBUG_SERVICE:J9 (USB pogo/service)
 ~~~
 
 Sourcing / exact land-pattern dependent:
@@ -254,6 +254,10 @@ Dodani su native KiCad exporti i source-parity provjera. CI sada generira manufa
 
 Detalji: `Pajoniiir_Manufacturing_Output_Contract_v0.1.md`.
 
+### Run #76 review evidence
+
+KiCad 9 CI run #76 (`d8bffb3a`) je potpuno zelen nakon presentation cleanup-a. Generated manufacturing BOM ima **270/270 RefDes parity PASS**, **17 DNP** i točno **12 intentional blank-footprint gateova**. Schematic PDF ima 16 stranica; render-first human review potvrđuje da nema rezanih engineering-note blokova niti title-block preklapanja. `03_P4_CORE` je namjerno A2 kako U1B ostaje unutar review framea. Manual BOM review nije pronašao dodatne skrivene TBD/blank-footprint stavke izvan odobrenog gate skupa.
+
 ---
 
 ## 14. M1-SCH-A exit gates remaining
@@ -276,9 +280,9 @@ Detalji: `Pajoniiir_Manufacturing_Output_Contract_v0.1.md`.
 - [ ] 5V input exact MPN
 - [ ] RESET/BOOT exact switch MPNs
 - [x] schematic PDF generation in CI
-- [ ] schematic PDF human review
+- [x] schematic PDF human review — run #76, 16/16 pages reviewed
 - [x] manufacturing BOM/netlist extraction + schematic-source parity check in CI
-- [ ] engineering/manual review of generated manufacturing BOM
+- [x] engineering/manual review of generated manufacturing BOM — 270/270, 17 DNP, 12 intentional blank gates
 
 ---
 
@@ -301,11 +305,9 @@ Final layout čeka authoritative display/FPC mechanics, exact connector footprin
 1. Resolve remaining LCD/panel/FPC mating geometry, pins 15/16/18/19 and 3V3-domain commonality.
 2. Select exact USB-A, RCA, microSD, 5V input and RESET/BOOT/service-switch MPNs from the final enclosure/mechanical constraints.
 3. Open project in native KiCad and perform GUI open/save + Sync Sheet Pins confirmation.
-4. Generate schematic PDF and conduct human cross-sheet review.
-5. Review the CI-generated manufacturing BOM against engineering intent and resolve every deliberate naming/MPN/TBD difference.
-6. Lock PCB outline / connector datums / display FPC location.
-7. Obtain PCB fab stackup and derive controlled-impedance geometries.
-8. Begin final placement/routing only after those physical gates close.
+4. Lock PCB outline / connector datums / display FPC location.
+5. Obtain PCB fab stackup and derive controlled-impedance geometries.
+6. Begin final placement/routing only after those physical gates close.
 
 ---
 
@@ -313,4 +315,4 @@ Final layout čeka authoritative display/FPC mechanics, exact connector footprin
 
 Pajoniiir-M1 više nije u architecture-only fazi. Projekt sada ima stvarni hijerarhijski component-level Rev A schematic capture sa strukturno čistim inter-sheet contractom.
 
-Native KiCad ERC više nije blocker. Preostali rad prije finalnog PCB layouta koncentriran je na GUI Sync Sheet Pins/human review, manufacturing BOM cross-check te mehaničko i exact-footprint zatvaranje. Najveći pojedinačni blocker ostaje fizička LCD/touch panel/FPC definicija, sada sužena na jasno identificirane mating/pin/3V3-domain nepoznanice.
+Native KiCad ERC, schematic PDF human review i manufacturing BOM cross-check više nisu blockeri. Preostali rad prije finalnog PCB layouta koncentriran je na GUI Sync Sheet Pins te mehaničko i exact-footprint zatvaranje. Najveći pojedinačni blocker ostaje fizička LCD/touch panel/FPC definicija, sada sužena na jasno identificirane mating/pin/3V3-domain nepoznanice.

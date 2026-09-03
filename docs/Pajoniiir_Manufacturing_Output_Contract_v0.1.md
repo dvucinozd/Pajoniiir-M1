@@ -69,17 +69,17 @@ J1
 C3
 D1
 C8
-SW_RESET
-SW_BOOT
-J_USB0
-J_USB1
-J_RCA_L
-J_RCA_R
-J_LINE_35
-J_SD
+SW1
+SW2
+J2
+J3
+J4
+J5
+J6
+J7
 ~~~
 
-`J_LCD` is not in this list because the physical display connector is intentionally not instantiated until its mating geometry and remaining pin-domain questions are closed.
+`J_LCD` is a documentation alias, not an instantiated RefDes. It is not in this list because the physical display connector remains intentionally uninstantiated until its mating geometry and remaining pin-domain questions are closed.
 
 ---
 
@@ -97,11 +97,11 @@ Passing CI now means:
 
 It does **not** mean final production sign-off.
 
+Run #76 additionally completed the review-layer checks: 16/16 schematic PDF pages were rendered and visually reviewed, and the generated manufacturing BOM was reviewed against engineering intent with 270/270 parity, 17 DNP entries and exactly 12 intentional blank-footprint gates.
+
 Still manual/physical:
 
 - native GUI open/save + Sync Sheet Pins confirmation
-- human review of generated schematic PDF
-- engineering review of generated manufacturing BOM
 - exact LCD/FPC mechanical closure
 - exact external connector MPN/footprints
 - final board outline and enclosure datums

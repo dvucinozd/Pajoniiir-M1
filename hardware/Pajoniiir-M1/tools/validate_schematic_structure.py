@@ -127,6 +127,19 @@ def sheet_blocks(root_text: str) -> dict[str, str]:
         pos = end
     return out
 
+def top_level_blocks(text: str, token: str):
+    """Yield top-level schematic S-expressions with the requested token."""
+    needle = f"\n  ({token}"
+    pos = 0
+    while True:
+        found = text.find(needle, pos)
+        if found < 0:
+            return
+        start = found + 1
+        block, end = sexpr_at(text, start)
+        yield block
+        pos = end
+
 def instantiated_symbol_blocks(text: str):
     pos = 0
     while True:
@@ -237,6 +250,19 @@ def main() -> int:
         depth, minimum = balanced_sexpr(text)
         if depth != 0 or minimum < 0:
             errors.append(f"{label}: unbalanced S-expression depth={depth}, min={minimum}")
+
+    # 1b. Review-layout invariants. These do not change connectivity, but keep
+    # CI-generated schematic PDFs legible enough for human sign-off.
+    for name, text in child_text.items():
+        for index, block in enumerate(top_level_blocks(text, "text"), start=1):
+            if "(justify left)" not in block:
+                errors.append(
+                    f"{name}: top-level engineering note {index} must be left-justified"
+                )
+        if name == "03_P4_CORE" and '(paper "A2")' not in text:
+            errors.append(
+                "03_P4_CORE: paper must remain A2 so U1B clears the title block"
+            )
 
     # 2. Child hierarchical labels must match root sheet pins by name AND shape.
     blocks = sheet_blocks(root_text)
