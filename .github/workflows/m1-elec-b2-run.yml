@@ -47,7 +47,7 @@ jobs:
           kicad-cli sch export netlist -o /tmp/m1-b2/root.net hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
           test -s /tmp/m1-b2/root.pdf
           test -s /tmp/m1-b2/root.net
-          grep -q J10 /tmp/m1-b2/root.net
+          grep -q DSI506 /tmp/m1-b2/root.net
           grep -q SFW15R-2STE1LF /tmp/m1-b2/root.net
 
       - name: Commit validated migration
@@ -62,4 +62,4 @@ jobs:
           git commit -m "display: migrate schematic to final DSI506 module"
           git push origin HEAD:main
 
-# retry: structural audit findings finalized
+# retry: dynamic connector RefDes allocator and GPIO23 NC contract
