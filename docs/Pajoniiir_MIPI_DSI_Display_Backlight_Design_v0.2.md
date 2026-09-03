@@ -632,7 +632,7 @@ Ako je potreban signal-integrity probing:
 
 | RefDes | Qty | Value / part | Status |
 |---|---:|---|---|
-| J_LCD | 1 | FPC connector | TBD-PANEL / TBD-MECH |
+| J_LCD | 1 | SOFNG 0.5TBQP-30P-1 / C3975120, 30 contacts, 0.5 mm pitch | ID/pitch confirmed; footprint still TBD-MECH pending contact-side/mating geometry, 31/32, pins 15/16/18/19 and 3V3-domain mapping |
 | R_DSI_REXT | 1 | 4.02 kΩ 1% | LOCKED |
 | R_DSI_CLK_P | 1 | 0 Ω | tuning |
 | R_DSI_CLK_N | 1 | 0 Ω | tuning |

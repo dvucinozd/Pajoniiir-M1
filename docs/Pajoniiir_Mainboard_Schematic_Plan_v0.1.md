@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Repo:** `dvucinozd/Pajoniiir-M1`  
 **Datum:** 2026-09-02  
-**Status:** Schematic architecture plan — detailed leaf designs completed; use BOM v0.2 and Global GPIO Allocation v0.1 as current authority
+**Status:** Historical schematic architecture/capture plan. Implementation status is superseded by `Pajoniiir_M1_Schematic_Audit_v0.1.md` and the live KiCad project; pre-capture checkboxes below are not current milestone status.
 
 ---
 

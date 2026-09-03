@@ -1,15 +1,16 @@
 # Pajoniiir-M1 Rev A — Schematic Readiness Review v0.1
 
 **Datum:** 2026-09-02  
+**Ažurirano:** 2026-09-03  
 **Repo:** dvucinozd/Pajoniiir-M1  
 **Branch:** main  
-**Status:** Pre-KiCad schematic readiness gate
+**Status:** Post-capture readiness snapshot — KiCad 9.0.9 ERC PASS; mechanical/sourcing gates remain
 
 ---
 
 # 1. Executive summary
 
-Rev A electrical architecture is now sufficiently specified to begin schematic capture.
+Rev A electrical architecture has been captured in the real hierarchical KiCad project and the native KiCad 9.0.9 CI ERC baseline is clean: 0 unexplained errors, 6 approved J_LCD hard-gate exclusions and 0 warnings.
 
 The design is no longer a copy of the JC4880 development board. It is a purpose-built Pajoniiir mainboard centered on:
 
@@ -235,15 +236,17 @@ Recovered with high confidence:
 - touch SDA/SCL/RST/INT
 - 3.3 V/GND group
 - LEDA/LEDK
-- original connector label `0.5TBQP-30P-1`
+- connector identity **SOFNG 0.5TBQP-30P-1 / C3975120**
+- nominal connector geometry **30 contacts / 0.5 mm pitch**
 
 Still required:
 
-- exact final panel manufacturer MPN
-- resolve **30-pin connector MPN vs 32-pin schematic-symbol reference discrepancy**
+- exact final panel manufacturer MPN / purchased variant
+- interpret Altium symbol references 31/32 relative to the 30-contact physical connector
 - pins 15/16/18/19
-- contact orientation
-- panel mechanical drawing / FPC geometry
+- contact-side orientation and mating height
+- authoritative panel/connector mechanical drawing
+- confirm whether original FPC 3V3 pins 4/21/29 are internally common before mapping M1's separate 3V3_LCD and 3V3_TOUCH rails
 - confirm purchased assembly is electrically the same JC4880 variant
 
 Until then J_LCD footprint remains unfrozen.
@@ -351,9 +354,9 @@ Display/touch are drawn late because their final connector pin numbering depends
 
 ---
 
-# 10. KiCad library tasks
+# 10. KiCad library / manufacturing tasks
 
-Before ERC sign-off:
+Native ERC sign-off is complete. Remaining library work is tied to exact mechanical/manufacturing choices:
 
 ## Custom symbols to verify/create
 
@@ -383,15 +386,15 @@ Before ERC sign-off:
 
 # 11. ERC policy
 
-Schematic cannot advance to PCB until:
+Current KiCad 9.0.9 CI baseline satisfies:
 
-- zero unexplained ERC errors
-- every NC explicit
-- no floating EN/reset/strap pins
-- all power outputs/inputs typed correctly
-- all DNP elements marked
-- no legacy JC4880 nets remain accidentally connected
-- GPIO map matches Pajoniiir_Global_GPIO_Allocation_v0.1.md
+- **0 unexplained ERC errors**
+- **0 warnings**
+- exactly **6 UUID-scoped J_LCD hard-gate exclusions**
+- every additional exclusion or global severity downgrade is rejected by the structural validator
+- CI now fails on any future non-excluded ERC warning
+
+PCB may still not enter final layout freeze until the physical/mechanical gates below are closed.
 
 ---
 
@@ -455,9 +458,9 @@ Rev A intentionally has more test points and tuning footprints than later produc
 
 ## GO for schematic capture
 
-**YES**
+**COMPLETED / PASS**
 
-Power, compute, USB, audio, Wi-Fi, touch logic, microSD, debug and monitoring are sufficiently specified.
+Power, compute, USB, audio, Wi-Fi, touch logic, microSD, debug and monitoring are captured and native ERC-clean subject only to the documented J_LCD hard gate.
 
 ## GO for final PCB layout
 
@@ -465,22 +468,29 @@ Power, compute, USB, audio, Wi-Fi, touch logic, microSD, debug and monitoring ar
 
 Wait for:
 
-1. resolve exact LCD/touch physical FPC/panel MPN and 30-vs-32 discrepancy
-2. final connector mechanics
+1. resolve final LCD/touch panel variant, contact-side/mating mechanics, 31/32 interpretation, pins 15/16/18/19 and 3V3 rail commonality
+2. final USB-A/RCA/microSD/5V-input/reset-boot connector mechanics
+3. native GUI Sync Sheet Pins/open-save confirmation, schematic PDF human review and manufacturing BOM cross-check
+4. final board outline and PCB-fabricator stackup
 
 
 ---
 
 # 16. Next engineering milestone
 
-**Milestone M1-SCH-A**
+**Milestone M1-SCH-A — electrical/CI portion complete**
 
-Create the real KiCad Rev A schematic and pass:
+Completed:
 
-- symbol review
-- power review
-- GPIO review
-- ERC
-- schematic design review
+- real hierarchical KiCad Rev A capture
+- symbol/power/GPIO structural review
+- KiCad 9.0.9 native ERC clean baseline
 
-Only after M1-SCH-A passes should the project enter PCB placement/routing.
+Remaining before final manufacturing sign-off:
+
+- GUI Sync Sheet Pins/open-save confirmation
+- display and connector mechanical closure
+- schematic PDF human review
+- manufacturing BOM/netlist comparison
+
+Only after those physical/review gates close should the project enter final PCB placement/routing.

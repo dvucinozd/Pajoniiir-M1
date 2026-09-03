@@ -370,7 +370,7 @@ Baseline:
 
 | RefDes | Qty | Vrijednost / funkcija |
 |---|---:|---|
-| J_LCD | 1 | FPC connector — **TBD-MECH; original label 0.5TBQP-30P-1 but 30-vs-32 schematic discrepancy unresolved** |
+| J_LCD | 1 | **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120 — 30 contacts, 0.5 mm pitch; footprint still TBD-MECH pending contact-side/mating geometry, Altium 31/32 interpretation, pins 15/16/18/19 and panel 3V3 commonality** |
 | R_DSI_REXT | 1 | **4.02 kΩ 1%** |
 | R_DSI_CLK_P/N | 2 | 0 Ω tuning |
 | R_DSI_D0_P/N | 2 | 0 Ω tuning |
@@ -411,7 +411,7 @@ I_LED @104mV typ ≈ 73.9 mA
 
 M1 baseline uses **direct EN PWM at 1 kHz**. The current JC4880 firmware's 5 kHz value should not be copied into the new M1 BSP without using the alternate filtered-FB topology.
 
-Backlight electrical values are now lock-candidates if the final panel is the same electrical JC4880 assembly family. Exact connector footprint/panel MPN remains the hard mechanical gate.
+Backlight electrical values are now lock-candidates if the final panel is the same electrical JC4880 assembly family. Connector identity/contact count/pitch are known; exact mating footprint, final panel MPN, pins 15/16/18/19 and safe mapping of original common FPC 3V3 pins 4/21/29 remain the hard display gate.
 
 # 13. Touch / GT911
 
