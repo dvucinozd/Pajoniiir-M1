@@ -1,9 +1,9 @@
 {
-  "schema_version": 6,
-  "milestone": "M1-MECH-B1",
+  "schema_version": 7,
+  "milestone": "M1-MECH-B1/B2",
   "updated": "2026-09-04",
-  "source_class": "user-provided rear dimensioned image, physical Z measurements, reconciled front-glass/visible-window measurements, orientation-controlled full-cable FFC photograph, and physical DSI receptacle center measurements for the final DSI506/DYL0023 display module",
-  "authority_level": "nominal_rear_XY_image_plus_physical_Z_front_visible_window_FFC_type_and_receptacle_XY_evidence__rear_XY_caliper_or_official_CAD_confirmation_required_for_production_release",
+  "source_class": "user-provided rear dimensioned image, physical Z/front/FFC/receptacle measurements, and physical inner-post measurements for the final DSI506/DYL0023 display module",
+  "authority_level": "nominal_rear_XY_image_plus_physical_Z_front_visible_window_FFC_receptacle_and_inner-post evidence__rear_XY caliper or official CAD confirmation required for production release",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "coordinate_system": {
     "xy_origin": "rear PCB top-left corner",
@@ -13,10 +13,7 @@
     "z_positive": "rear/inward",
     "units": "mm"
   },
-  "rear_pcb": {
-    "width_mm": 121.109,
-    "height_mm": 77.193
-  },
+  "rear_pcb": {"width_mm": 121.109, "height_mm": 77.193},
   "mounting_holes": {
     "count": 8,
     "radius_mm": 1.25,
@@ -33,13 +30,7 @@
     ],
     "derived_patterns": {
       "outer_pattern_center_spacing_mm": [111.109, 67.930],
-      "inner_pattern_center_spacing_mm": [58.000, 49.000],
-      "outer_top_edge_offset_mm": 5.000,
-      "inner_top_edge_offset_mm": 7.430,
-      "inner_left_x_mm": 43.109,
-      "inner_right_x_mm": 101.109,
-      "inner_lower_y_mm": 56.430,
-      "outer_lower_y_mm": 72.930
+      "inner_pattern_center_spacing_mm": [58.000, 49.000]
     }
   },
   "physical_z_measurements": {
@@ -50,45 +41,35 @@
     "derived": {
       "rear_controller_pcb_plane_z_mm": 5.0,
       "nominal_display_body_rear_envelope_z_mm": 7.0,
-      "maximum_rear_protrusion_z_mm": 10.0,
-      "maximum_protrusion_beyond_rear_controller_pcb_plane_mm": 5.0
-    },
-    "status": "physical scalar Z envelope measured; local XY obstruction map and FFC bend envelope remain open"
+      "maximum_rear_protrusion_z_mm": 10.0
+    }
+  },
+  "inner_mainboard_posts": {
+    "evidence_file": "dsi506_inner_posts_evidence_b2.json",
+    "count": 4,
+    "pattern_mm": {"x": 58.0, "y": 49.0},
+    "measured_outer_diameter_mm": 5.0,
+    "measured_height_above_display_rear_pcb_mm": 5.0,
+    "post_top_seating_plane_z_mm": 10.0,
+    "candidate_mainboard_display_facing_surface_z_mm": 10.0,
+    "candidate_mainboard_rear_surface_z_mm_for_1p6mm_pcb": 11.6,
+    "interboard_plane_gap_mm": 5.0,
+    "thread": {"candidate": "M2.5", "status": "LIKELY_USER_ESTIMATE_NOT_PRODUCTION_LOCKED"},
+    "direct_mainboard_mount_architecture": "PREFERRED_M1-MECH-B2"
   },
   "front_glass_and_visible_area": {
-    "evidence_files": [
-      "dsi506_front_glass_evidence_b1.json",
-      "dsi506_bezel_offsets_evidence_b1.json"
-    ],
     "front_glass_width_mm": 120.0,
     "front_glass_height_mm": 75.0,
     "visible_lcd_width_mm": 110.0,
     "visible_lcd_height_mm": 67.0,
-    "visible_window_from_front_glass_top_left_mm": {
-      "x": 5.0,
-      "y": 2.0,
-      "width": 110.0,
-      "height": 67.0
-    },
-    "edge_offsets_mm": {
-      "left": 5.0,
-      "right": 5.0,
-      "top": 2.0,
-      "bottom": 6.0
-    },
-    "common_reference_measurement_mm": {
-      "Y1_visible_top_from_glass_top": 2.0,
-      "Y2_visible_bottom_from_glass_top": 69.0,
-      "check": "69 - 2 = 67; 2 + 67 + 6 = 75"
-    },
-    "horizontal_status": "LOCKED",
-    "vertical_status": "LOCKED_FROM_COMMON_REFERENCE_Y1_Y2_MEASUREMENT",
+    "visible_window_from_front_glass_top_left_mm": {"x": 5.0, "y": 2.0, "width": 110.0, "height": 67.0},
+    "edge_offsets_mm": {"left": 5.0, "right": 5.0, "top": 2.0, "bottom": 6.0},
     "production_visible_window_datum_locked": true
   },
   "dsi_ffc": {
-    "evidence_file": "dsi506_ffc_photo_evidence_b1.json",
     "contact_count": 15,
     "pitch_mm": 1.0,
+    "physical_size_mm": {"length": 60.0, "width": 15.0},
     "cable_type": "Type-B / reverse-contact / opposite-side exposed conductors",
     "same_side_vs_opposite_side_status": "LOCKED_FROM_ORIENTATION_CONTROLLED_PHOTO",
     "host_to_module_pin1_mapping_status": "OPEN",
@@ -96,12 +77,7 @@
   },
   "dsi_module_receptacle": {
     "evidence_file": "dsi506_receptacle_position_evidence_b1.json",
-    "center_from_right_edge_mm": 11.0,
-    "center_from_top_edge_mm": 33.0,
-    "absolute_center_from_rear_pcb_top_left_mm": {
-      "x": 110.109,
-      "y": 33.0
-    },
+    "absolute_center_from_rear_pcb_top_left_mm": {"x": 110.109, "y": 33.0},
     "entry_face": "+X / right PCB edge",
     "cable_approach_direction": "+X toward receptacle",
     "insertion_vector": "-X",
@@ -109,40 +85,35 @@
     "insertion_direction_status": "LOCKED_FROM_PHOTO_AND_BOARD_ORIENTATION",
     "pin1_contact_side_status": "OPEN"
   },
-  "source_dimension_notes": [
-    "Rear PCB and eight-hole nominal XY raster come from the user-provided dimensioned rear image; the 0.001 mm edge-label discrepancy is treated as image rounding and nominalized to 5.000 mm where explicitly dimensioned.",
-    "Z evidence is physical user measurement: A=7.00 mm, B=5.00 mm, C=10.00 mm.",
-    "Front glass is physically measured at 120.00 x 75.00 mm and visible width at 110.00 mm; L=5.00 mm and R=5.00 mm reconcile exactly.",
-    "Final vertical datum is resolved from one common top-glass reference: Y1=2.00 mm to visible top and Y2=69.00 mm to visible bottom, giving visible height 67.00 mm and bottom offset 6.00 mm. This supersedes the earlier inconsistent T=3/B=7 readings.",
-    "The full DSI FFC photographed flat and untwisted proves opposite-side exposed contacts: Type-B/reverse-contact cable.",
-    "DSI module receptacle center is physically measured 11.00 mm from the right PCB edge and 33.00 mm from the top edge, giving absolute center X=110.109 mm, Y=33.000 mm from rear PCB top-left.",
-    "The close-up shows the receptacle entry face toward the right PCB edge; cable approaches from +X and inserts toward -X.",
-    "No production pin-1 assignment, FFC bend radius, module receptacle Z height or local XY position of the 10 mm maximum rear protrusion is inferred."
-  ],
   "closed_by_this_evidence": [
     "nominal rear PCB width and height",
-    "nominal mounting-hole count",
-    "nominal mounting-hole diameter",
     "nominal XY coordinates for all eight mounting holes",
-    "scalar front-to-rear controller PCB Z datum",
-    "scalar nominal display assembly thickness excluding DSI cable",
-    "scalar maximum rear protrusion envelope",
-    "front glass nominal width and height",
-    "visible LCD width and height",
-    "visible-window datum from glass top-left: x=5 mm, y=2 mm, width=110 mm, height=67 mm",
-    "front visible-area edge offsets L=5 mm, R=5 mm, T=2 mm, B=6 mm",
-    "DSI FFC same-side versus opposite-side cable type: Type-B/reverse-contact",
-    "DSI506 module receptacle absolute XY center: x=110.109 mm, y=33.000 mm from rear PCB top-left",
-    "DSI506 module receptacle cable approach from +X/right edge and insertion toward -X"
+    "scalar display Z envelope: rear PCB Z=5 mm, nominal body Z=7 mm, max rear feature Z=10 mm",
+    "front glass 120 x 75 mm and visible window 110 x 67 mm at x=5, y=2 mm",
+    "DSI FFC Type-B, 60 x 15 mm",
+    "DSI receptacle absolute center x=110.109 mm, y=33.000 mm and insertion toward -X",
+    "inner four-post pattern 58 x 49 mm",
+    "inner-post outer diameter 5 mm",
+    "inner-post height 5 mm above rear display PCB",
+    "inner-post/mainboard seating plane Z=10 mm",
+    "direct-behind-display mainboard architecture selected as preferred candidate"
   ],
   "still_required": [
     "physical caliper or official CAD confirmation of nominal rear PCB XY dimensions before production release",
-    "local XY obstruction map for rear protrusions",
-    "DSI506 module receptacle pin-1/contact-side identification and host-to-module pin-1 continuity/orientation verification",
-    "DSI506 module receptacle Z height / cable neutral-plane datum if required for final bend modelling",
+    "confirm inner-post thread; M2.5 remains likely but unproven",
+    "measure usable thread depth and verify four-post coplanarity",
+    "local XY obstruction map for display-side components within the 5 mm plane gap",
+    "DSI506 module receptacle pin-1/contact-side identification and host-to-module pin-1 continuity verification",
     "FFC minimum bend radius and mating/removal keepout",
     "front glass corner/radius/chamfer details if relevant to enclosure retention",
     "final bezel overlap/cosmetic reveal decision",
-    "new enclosure depth and M1 mainboard Z/standoff selection"
+    "new enclosure walls/depth and user-I/O connector datums",
+    "final custom-mainboard outline"
+  ],
+  "safety_policy": [
+    "M2.5 is not production-locked from visual judgment alone.",
+    "The 5 mm inter-board plane gap is not universal component-height clearance; local display components reduce it.",
+    "Prefer primary M1 components on the rear/outward side of the mainboard.",
+    "Do not freeze Edge.Cuts until user-I/O connector walls and local obstruction/bend checks are complete."
   ]
 }
