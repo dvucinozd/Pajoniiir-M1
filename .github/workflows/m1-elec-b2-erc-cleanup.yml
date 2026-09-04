@@ -37,6 +37,14 @@ jobs:
           sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints >/dev/null
           kicad-cli version
 
+      - name: Synchronize cached library symbols
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 hardware/Pajoniiir-M1/tools/sync_display_b2_symbol_cache.py
+          python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
+          git diff --check
+
       - name: Load every schematic
         shell: bash
         run: |
