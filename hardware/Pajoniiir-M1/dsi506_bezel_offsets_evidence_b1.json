@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "milestone": "M1-MECH-B1",
+  "updated": "2026-09-04",
+  "source_class": "user physical measurements of visible-LCD offsets from front-glass edges",
+  "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
+  "front_glass_mm": {
+    "width": 120.0,
+    "height": 75.0
+  },
+  "previous_visible_area_measurement_mm": {
+    "width": 110.0,
+    "height": 66.0
+  },
+  "measured_edge_offsets_mm": {
+    "left": 5.0,
+    "right": 5.0,
+    "top": 3.0,
+    "bottom": 7.0
+  },
+  "consistency_checks": {
+    "horizontal": {
+      "glass_minus_visible_mm": 10.0,
+      "left_plus_right_mm": 10.0,
+      "result": "PASS"
+    },
+    "vertical": {
+      "glass_minus_visible_mm_using_previous_66mm_visible_height": 9.0,
+      "top_plus_bottom_mm": 10.0,
+      "difference_mm": 1.0,
+      "result": "OPEN_REMEASUREMENT_REQUIRED"
+    }
+  },
+  "authority": {
+    "horizontal_offsets": "LOCKED_AS_PHYSICAL_MEASUREMENT__L5_R5",
+    "vertical_offsets": "MEASURED_T3_B7_BUT_NOT_YET_RECONCILED_WITH_PRIOR_66MM_VISIBLE_HEIGHT",
+    "production_bezel_vertical_datum_locked": false
+  },
+  "required_recheck": [
+    "Re-measure visible LCD height directly, preferably with caliper jaws on the visible active window.",
+    "Alternatively re-measure T and B from the same glass reference edges used for the 75.00 mm total height.",
+    "Vertical production datum closes when T + visible_height + B equals 75.00 mm within measurement tolerance."
+  ],
+  "do_not_infer": [
+    "Do not average T/B or silently force centered margins.",
+    "Do not change the measured 3 mm / 7 mm values merely to match the prior 66 mm visible-height reading."
+  ]
+}
