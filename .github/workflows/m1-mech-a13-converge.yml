@@ -27,7 +27,11 @@ jobs:
           git diff -- . ':(exclude).github/workflows/m1-mech-a13-converge.yml' > /tmp/a13-first.diff
           python3 hardware/Pajoniiir-M1/tools/converge_mech_a_dsi506_b2.py
           git diff -- . ':(exclude).github/workflows/m1-mech-a13-converge.yml' > /tmp/a13-second.diff
-          cmp /tmp/a13-first.diff /tmp/a13-second.diff
+          if ! cmp -s /tmp/a13-first.diff /tmp/a13-second.diff; then
+            echo '::error::A13 migration is not idempotent; second-pass delta follows'
+            diff -u /tmp/a13-first.diff /tmp/a13-second.diff | head -n 240 || true
+            exit 1
+          fi
           git diff --check
 
       - name: Mechanical authority gate
