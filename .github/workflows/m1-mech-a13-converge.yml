@@ -19,6 +19,23 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fix A13 migration idempotence guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('hardware/Pajoniiir-M1/tools/converge_mech_a_dsi506_b2.py')
+          text=p.read_text(encoding='utf-8')
+          old='''def patch_structural_validator() -> None:\n    text = STRUCTURAL.read_text(encoding="utf-8")\n    start_marker = '        display = mech_a.get("authoritative_display_reference", {})\\n'\n'''
+          new='''def patch_structural_validator() -> None:\n    text = STRUCTURAL.read_text(encoding="utf-8")\n    if "M1-MECH-A13 final DSI506 mechanical authority" in text:\n        return\n    start_marker = '        display = mech_a.get("authoritative_display_reference", {})\\n'\n'''
+          if old in text:
+              text=text.replace(old,new,1)
+          elif new not in text:
+              raise SystemExit('idempotence guard patch marker not found')
+          p.write_text(text,encoding='utf-8')
+          PY
+
       - name: Apply A13 convergence and prove idempotence
         shell: bash
         run: |
