@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Physical Evidence Boundary v0.2
 
+> **A13 BOUNDARY RECORD.** B3/B4/B5 later added display mounting, connector selection and placement/routing screening. The current open evidence gates are summarized in `Pajoniiir_M1_Current_Design_Status_B5.md`.
+
 **Date:** 2026-09-04
 **Revision:** M1-MECH-A13 / post M1-ELEC-B2 convergence
 **Status:** Repository-only mechanical convergence complete; layout freeze intentionally blocked by physical/EVT/new-enclosure evidence

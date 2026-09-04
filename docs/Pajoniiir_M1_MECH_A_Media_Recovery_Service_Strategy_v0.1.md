@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Media & Recovery Service Strategy v0.1
 
+> **HISTORICAL SELECTION RECORD.** B4 subsequently locked and instantiated the production candidates for J7, SW1 and SW2; panel datums and access remain open. See `Pajoniiir_M1_Current_Design_Status_B5.md`.
+
 **Datum:** 2026-09-03  
 **Revision:** M1-MECH-A6  
 **Status:** Preferred J7/SW1/SW2 candidates and opposite-wall relationship selected; absolute datums remain open  

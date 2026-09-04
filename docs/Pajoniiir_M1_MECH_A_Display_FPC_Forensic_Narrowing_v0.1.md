@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Display FPC Forensic Narrowing v0.1
 
+> **SUPERSEDED DISPLAY FORENSICS.** This document concerns the retired 30-pin JC4880 path. The active Rev A display is the 15-pin DSI506/DYL0023 implementation recorded in `Pajoniiir_M1_Current_Design_Status_B5.md`.
+
 **Datum:** 2026-09-03  
 **Revision:** M1-MECH-A9  
 **Status:** Two J_LCD sub-gates CLOSED; physical mating and 3V3-domain gate remain open

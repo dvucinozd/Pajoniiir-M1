@@ -1,146 +1,129 @@
-# Pajoniiir-M1 — Mechanical & Sourcing Gate Closure v0.1
+# Pajoniiir-M1 — Mechanical and Sourcing Gates v0.2
 
-**Datum:** 2026-09-03  
-**Status:** Physical gates formalized; final layout freeze remains blocked  
-**Machine-readable authority:** `hardware/Pajoniiir-M1/mechanical_gates.json`
+**Updated:** 2026-09-04
 
----
+**Mechanical milestone:** M1-MECH-B5
 
-## M1-MECH-A baseline evidence
+**Status:** source and screening decisions advanced; final layout freeze blocked
 
-Manufacturer and legacy Blender geometry are now correlated in `hardware/Pajoniiir-M1/mech_a.json` and `Pajoniiir_M1_MECH_A_Baseline_v0.1.md`. The validated legacy enclosure candidate is 121.008 × 73.408 × 30.000 mm with 2.0 mm walls; the bare display/front reference is 114.40 × 66.80 mm. These values narrow the mechanical search space but do not yet authorize final Edge.Cuts.
-
----
+**Machine authority:** `hardware/Pajoniiir-M1/mechanical_gates.json`
 
 ## Current conclusion
 
-Electrical capture, hierarchy synchronization, native KiCad ERC, manufacturing BOM review and schematic PDF review are complete.
+The final DSI506 display, direct four-post mainboard mount, B3 board/enclosure screens, three-wall I/O assignment, most external connector MPNs/footprints and the B5 top-wall placement skeleton are defined.
 
-The repository currently contains **no authoritative PCB outline, enclosure CAD, board-edge connector datums or mounting-hole coordinate set**. Therefore exact user-facing connector MPNs cannot be responsibly frozen from the electrical schematic alone.
+This does not close the corresponding connector gates. Absolute panel datums, cutouts, mated cable envelopes, local clearances and final `Edge.Cuts` still require physical/CAD evidence.
 
-The policy is deliberate: no arbitrary footprint is allowed to turn a mechanical unknown into a false green check.
-
----
-
-## Open physical gates
-
-The machine-readable manifest records every open gate, its current RefDes, required evidence and closure condition. It is now the source of truth for both structural and manufacturing blank-footprint validation.
-
-Key classes:
-
-- input bulk EVT tuning still open: `C3`, `C8`
-- input TVS `D1` **CLOSED in M1-MECH-A12** — ST SMBJ6.0CA-TR / `Diode_SMD:D_SMB`
-- user-facing mechanics still open: `J1`, `J2`, `J3`, `J4`, `J5`, `J7`, `SW1`, `SW2`
-- `J6` **CLOSED in M1-MECH-A8 by removal from Rev A**
-- factory fixture: `J9` **CLOSED in M1-MECH-A7** — project-local PCB-only 5-pad pogo footprint with asymmetric tooling holes
-- display/FPC: documentation alias `J_LCD`, intentionally not instantiated
-- global mechanics: PCB outline / mounting datums
-- fabrication stackup **CLOSED in M1-MECH-A11** — JLCPCB `JLC04161H-7628`; exact routed impedance width/spacing remains a layout-stage calculation
-
----
-
-## Display/FPC evidence already locked
-
-Public JLCPCB data identifies:
-
-~~~text
-Manufacturer: SOFNG
-MPN: 0.5TBQP-30P-1
-JLCPCB: C3975120
-Package: FPC0.5mm-30pin
-Description: FPC-30P-0.5mm
-~~~
-
-JLCPCB also exposes an EasyEDA symbol/footprint entry for the part. This is enough to confirm identity/contact count/pitch, but **not** enough to override the unresolved panel-side mating/contact orientation and pin-domain questions.
-
-Source:
-
-~~~text
-https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120
-~~~
-
-Remaining J_LCD evidence required before instantiation:
-
-1. authoritative purchased panel/assembly MPN
-2. top-vs-bottom electrical contact-side orientation
-3. exact connector housing / mated FPC Z height and final panel-tail geometry
-4. confirmation that original FPC 3V3 pins 4/21/29 are internally common before mapping M1's separately filtered LCD/touch rails
-
-Already resolved by M1-MECH-A9/A10: physical sequence is 30 electrical contacts, 31/32 are GND shell/mount references, pins 15/16/18/19 are NC, and the original assembly uses component-side right-angle/side-entry insertion.
-
----
-
-## Connector closure inputs
-
-### USB-A J2/J3
-
-Need final board-edge X/Y datum, insertion direction, vertical/right-angle decision, enclosure cutout and shell-retention/keepout envelope.
-
-### RCA J4/J5
-
-Need panel datum, center height, horizontal spacing, connector orientation and whether isolated shell mechanics are required. J6 is no longer part of the Rev A PCB: M1-MECH-A8 closes it by removal.
-
-### microSD J7
-
-Need card insertion direction, enclosure access geometry, push-push vs push-pull choice, socket height and final card-detect switch requirement.
-
-### 5 V input J1
-
-Need enclosure cutout, board-edge orientation, locking/mating cable requirement and connector Z/depth envelope.
-
-### RESET/BOOT SW1/SW2
-
-Need top/side actuation decision, access method and actuator height relative to enclosure.
-
-### Factory USB pogo J9 — CLOSED
-
-Locked in M1-MECH-A7:
-
-~~~text
-Footprint: Pajoniiir-M1:Factory_Pogo_USBJTAG_1x05_P1.27_2Tooling
-5 pads @ 1.27 mm
-pad diameter: 1.0 mm
-pin 1: rectangular + silkscreen marker
-tooling: 2 × Ø1.2 mm NPTH, asymmetric coordinates
-assembly: DNL / PCB-only
-~~~
-
-Pin map:
-
-~~~text
-1  3V3_SYS VREF sense-only
-2  GND
-3  USBJTAG_DM_SERVICE
-4  USBJTAG_DP_SERVICE
-5  CHIP_PU
-~~~
-
-The fixture must power the board through the normal qualified 5 V path and must never source pin 1. No user-facing enclosure aperture is required.
-
----
-
-## Board/fabrication closure inputs
-
-Fabrication stackup is already locked by M1-MECH-A11:
+Current state:
 
 ```text
-JLCPCB JLC04161H-7628
-4 layers / 1.6 mm
-1 oz outer / 0.5 oz inner
-L1 high-speed -> solid L2 GND reference
+layout_freeze_allowed  false
+open blockers          12
+closed gates           4
+blank BOM gates        3
 ```
 
-Before controlled-impedance routing/final layout freeze:
+## Mechanical baseline
 
-- lock board X/Y and mounting holes
-- lock connector/display edge datums
-- calculate and record exact width/spacing from the current JLCPCB impedance calculator for USB 90 ohm differential and MIPI DSI 100 ohm differential
-- size/review power/high-current copper from 5V input through eFuse/shunt/USB branches
+Active display and mount:
 
----
+```text
+Display                 EYOYO DSI506 / DYL0023, 5-inch 800 x 480
+Rear PCB                 121.109 x 77.193 mm nominal evidence
+Front glass              120 x 75 mm
+Visible window           110 x 67 mm at x=5, y=2 mm
+Direct mount             four M2.5 posts, 58 x 49 mm
+Usable thread depth      3.0 mm
+Mainboard seating plane  Z=10.0 mm
+Mainboard rear surface   Z=11.6 mm for 1.6 mm PCB
+```
+
+The B3 core board screen is 104 x 62 mm. The compact enclosure screen is 128 x 84 x 30 mm with 2 mm walls. Both remain non-production candidates.
+
+The former 121.008 x 73.408 mm JC4880 enclosure is a hard fail for the DSI506 and must not be used for current board geometry.
+
+## Closed gates
+
+| Gate | Closure |
+|---|---|
+| `D1_INPUT_TVS` | SMBJ6.0CA-TR / `Diode_SMD:D_SMB` |
+| `J6_LINE35` | optional 3.5 mm line output removed from Rev A |
+| `J9_USB_SERVICE_POGO` | project-local 1x05 factory pogo footprint, DNL |
+| `FAB_STACKUP` | JLCPCB JLC04161H-7628, four layers, 1.6 mm |
+
+## Open gates
+
+### C3 and C8 bulk capacitors
+
+Current schematic value is a 330 uF tuning baseline. Closure requires startup/inrush and worst-case transient results, ESR/ripple-current targets and an available mechanical envelope before exact MPN/footprint selection.
+
+### J1 power input
+
+Production intent is Switchcraft 722RAHLP with S760KHZ mating plug. The MPN is locked. The footprint remains blank because the released drawing has not yet yielded an unambiguous three-terminal center-coordinate interpretation without inference.
+
+Closure also requires the left-wall cutout, nut/washer/bushing engagement, reinforcement, plug/cable strain envelope and polarity marking.
+
+### J2/J3 USB host
+
+Both ports use Amphenol 87520-1010ALF with a manufacturer-checked project footprint. Remaining work is final top-wall center spacing, cutouts, insertion clearance, screw-head clearance and full USB plug/cable envelopes.
+
+### J4/J5 RCA
+
+J4 uses Kycon KLPX-0848A-2-W-G and J5 uses KLPX-0848A-2-R-G with the locked project footprint. Closure needs final panel centers/cutouts, shell isolation decision and mated RCA plug/cable envelopes.
+
+### J6 display FFC
+
+The active display connector is Amphenol SFW15R-2STE1LF, 15 contacts, 1.0 mm, top-contact, right-angle SMT ZIF. Its footprint is locked and instantiated.
+
+Remaining evidence:
+
+1. actual host-to-module pin-1 continuity/orientation
+2. physical 60 x 15 mm FFC U-bend, insertion and removal keepout
+3. absolute J6 XY/Z placement relative to the display and custom mainboard
+
+The former SOFNG 30-pin JC4880 connector is historical evidence only.
+
+### J7 microSD
+
+J7 uses Molex 503398-1892 with a drawing-checked project footprint. Closure requires the right-wall slot center/opening, card insertion/ejection and finger access, lower-right mounting-screw clearance, and physical coexistence with the guarded FFC corridor.
+
+### SW1/SW2 recovery switches
+
+Both use B3U-3000P-B and the exact standard KiCad footprint. Closure requires two separate recessed tool-hole centers, actuator-to-wall/tool geometry, spacing that prevents simultaneous actuation, and clearance to J7, FFC and mounting hardware.
+
+### PCB outline
+
+The 104 x 62 mm core rectangle is a B3/B5 screening envelope only. Closure requires:
+
+- final enclosure walls, bosses, ribs and rear cover
+- final board side wings/notches and dimensions
+- final mounting-hole diameter and screw head/washer geometry
+- display rear-obstruction map
+- all connector cutouts and mated cable envelopes
+- DSI FFC approach/bend envelope
+- final PCB Z and rear-cover clearance
+
+## B5 placement-screen result
+
+The top-wall J2/J3/J4/J5 anchor set passes courtyard and provisional screw-center screens. J7/SW1/SW2 and J1 intentionally remain unanchored until their side-wing/panel evidence exists.
+
+This proves the three-wall architecture is viable enough to continue CAD screening. It does not create production connector centers or `Edge.Cuts`.
+
+## Fabrication and routing boundary
+
+The fabrication stackup gate is closed. Controlled impedance remains open:
+
+- USB0/USB1: 90 ohm differential
+- MIPI DSI: 100 ohm differential
+- current values in the B5 routing contract are screening geometry only
+
+Exact JLCPCB calculator output, soldermask/model settings and corresponding KiCad rules are required before routing freeze.
 
 ## Freeze rule
 
-Final placement/routing freeze is allowed only when `layout_freeze_allowed` can truthfully become `true` in the gate manifest with every `blocks_layout_freeze` gate closed.
+Final placement/routing freeze is allowed only when every open `blocks_layout_freeze` gate is closed and the production impedance geometry is committed. Until then:
 
-Exploratory electrical clustering remains allowed; production footprints, Edge.Cuts, connector datums and controlled-impedance routing must not be represented as final while this manifest remains open.
+- B5 anchors remain screening locations
+- the 104 x 62 mm core remains a screening envelope
+- no final `Edge.Cuts` may be added
+- no Gerber or EVT PCB order may be described as release-ready

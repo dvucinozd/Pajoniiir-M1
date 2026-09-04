@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — RefDes Annotation Map v0.1
 
+> **HISTORICAL M1-SCH-A NORMALIZATION MAP.** Rows for the old `10_DISPLAY_MIPI` and `11_TOUCH_GT911` contents describe the pre-DSI506 source and are no longer instantiated. Current RefDes, values and footprints come from the live KiCad sheets. The active display connector is J6; R95..R100 and TP9/TP10 now belong to the DSI506 display sheet. Do not use this table as a current component inventory.
+
 **Datum:** 2026-09-03  
 **Milestone:** M1-SCH-A manufacturing normalization  
 **Source electrical baseline:** `276e803ec72994dd6d69dfb1c1e0ad5fbb26a8ef`  
@@ -15,9 +17,7 @@ The manufacturing normalization changes **Reference fields only**. The safe rewr
 
 Do not recover semantic meaning by renaming RefDes values again. Use this map, Value/Description fields, net names and subsystem documentation.
 
-Existing valid numeric references were preserved. Planned main-device numbering remains aligned with Engineering BOM v0.2, including `U6` USB0 power switch, `U9` backlight boost, `U12` USB1 power switch, `U13` microSD load switch and `U14` INA238 monitor.
-
-The physical LCD connector remains the unresolved documentation alias **`J_LCD`** because it is not yet instantiated in the schematic. It will receive a real numeric RefDes only when its mechanical/pin-domain gate is closed.
+Existing valid numeric references were preserved at the time of the original normalization. Later M1-ELEC-B2 migration removed U9 and the old touch/backlight components, then instantiated the final DSI506 connector as J6. Current component intent is documented in Engineering BOM v0.3.
 
 ---
 

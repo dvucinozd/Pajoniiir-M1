@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-04  
 **Revision:** M1-ELEC-B1  
-**Status:** production connector MPN/contact side locked; land pattern and physical cable placement remain gated
+**Status:** connector MPN, contact side and drawing-derived project footprint locked; physical cable integration remains gated
 
 ## Decision
 
@@ -48,18 +48,21 @@ This map comes from the same DSI506/DYL0023 interface already accepted on real h
 
 `TOP contact` describes the receptacle. It does not prove the exposed-conductor orientation of the particular supplied FFC at both ends. Before production placement, verify actual cable pin 1 and conductor side so host pin 1 reaches module pin 1.
 
-## Footprint rule
+## Footprint closure
 
-The production footprint is not hand-drawn from screenshots. It must be imported/reconstructed from the released Amphenol recommended PCB layout and checked against drawing `10172241` before the connector mechanical gate can close.
+M1-ELEC-B2 imported/reconstructed the project footprint from the released Amphenol recommended PCB layout and checked it against drawing `10172241`. The locked footprint is:
+
+`hardware/Pajoniiir-M1/libraries/footprints.pretty/Amphenol_SFW15R-2STE1LF.kicad_mod`
+
+It is instantiated on J6 in `10_DISPLAY_MIPI.kicad_sch`. Future footprint changes require a fresh drawing comparison and mechanical review.
 
 ## Remaining connector gate
 
 Only these connector-specific items remain:
 
-1. verified land pattern committed to the project footprint library;
-2. physical cable inversion / pin-1 check;
-3. FFC bend and insertion keepout;
-4. final connector XY/Z placement relative to the display and custom mainboard.
+1. physical cable inversion / pin-1 continuity check;
+2. FFC bend, insertion and removal keepout;
+3. final connector XY/Z placement relative to the display and custom mainboard.
 
 ## Sources
 

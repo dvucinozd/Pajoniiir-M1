@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 13_DEBUG_SERVICE  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — service interfaces locked as architecture
+**Status:** Captured in KiCad; service architecture and J9 factory-pogo footprint locked
 
 ---
 

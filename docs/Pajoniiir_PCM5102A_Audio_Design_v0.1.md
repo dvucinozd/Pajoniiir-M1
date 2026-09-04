@@ -4,7 +4,9 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 09_AUDIO_PCM5102A  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — temeljen na postojećem bench-proven I²S mappingu i TI PCM5102A reference applicationu
+**Status:** Captured in KiCad; RCA MPNs/footprint locked, panel and audio EVT gates open
+
+> **Post-capture update (2026-09-04):** J4/J5 are locked to Kycon KLPX-0848A-2-W-G / KLPX-0848A-2-R-G with project footprint `Pajoniiir-M1:Kycon_KLPX-0848A-2-x-G`. The optional 3.5 mm output was removed from Rev A. Final RCA panel and mated-plug geometry remain open.
 
 ---
 

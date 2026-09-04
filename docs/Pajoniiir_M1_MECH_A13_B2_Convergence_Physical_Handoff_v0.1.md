@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A13 B2 Convergence & Physical Handoff v0.1
 
+> **MILESTONE RECORD.** This handoff remains valid as A13/B2 evidence; B3/B4/B5 later advanced the active mechanical and routing contracts. Use `Pajoniiir_M1_Current_Design_Status_B5.md` for current status.
+
 **Date:** 2026-09-04
 **Milestone:** M1-MECH-A13
 **Result:** REPO/SOFTWARE CLOSURE PASS — production layout freeze remains intentionally blocked

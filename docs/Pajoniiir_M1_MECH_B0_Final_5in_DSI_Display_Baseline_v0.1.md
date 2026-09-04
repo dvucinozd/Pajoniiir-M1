@@ -70,7 +70,7 @@ The M3 BSP explicitly records the J2 15-pin map:
 | 14 | 3V3 | `3V3_DISPLAY_MODULE` |
 | 15 | 3V3 | `3V3_DISPLAY_MODULE` |
 
-This signal map is now locked for M1. The remaining connector gate is **mechanical**: exact receptacle MPN, contact side, cable inversion and mating keepout.
+This signal map is now locked for M1. M1-ELEC-B1/B2 subsequently locked and instantiated Amphenol `SFW15R-2STE1LF`, including its top-contact orientation and drawing-derived project footprint. The remaining connector gate is physical integration: actual FFC pin-1 continuity, cable inversion, bend/insertion/removal keepout and absolute J6 XY/Z placement.
 
 ---
 

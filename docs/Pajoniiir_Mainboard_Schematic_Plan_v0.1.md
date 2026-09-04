@@ -10,7 +10,7 @@
 
 # 1. Svrha dokumenta
 
-Ovaj dokument pretvara hardversku arhitekturu i Engineering BOM v0.2 u konkretan plan za crtanje sheme.
+Ovaj dokument bilježi kako su tadašnja hardverska arhitektura i Engineering BOM v0.2 prevedeni u plan za crtanje sheme. Aktivni projekt i Engineering BOM v0.3 sada su mjerodavni za stvarno stanje.
 
 Cilj je da KiCad projekt od početka bude:
 

@@ -1,5 +1,7 @@
 # Pajoniiir Mainboard — MIPI DSI Display & Backlight Design v0.2
 
+> **SUPERSEDED FOR THE ACTIVE REV A DISPLAY.** This document records the retired JC4880/ST7701S/MP3202 design. M1-ELEC-B2 uses the EYOYO DSI506/DYL0023 module, Amphenol SFW15R-2STE1LF, module-integrated touch/backlight and no external GPIO23 PWM. Current authority: `Pajoniiir_M1_Current_Design_Status_B5.md`, `Pajoniiir_M1_Hardware_Firmware_Contract_v0.1.md` and the live `10_DISPLAY_MIPI.kicad_sch`.
+
 **Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1  
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 10_DISPLAY_MIPI  

@@ -4,7 +4,9 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 01_POWER_INPUT  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — prije KiCad capturea i EVT mjerenja
+**Status:** Captured in KiCad; J1 land pattern and C3/C8 EVT selections remain open
+
+> **Post-capture update (2026-09-04):** U7 and D1 are captured with locked footprints. J1 is selected as Switchcraft 722RAHLP with S760KHZ mating plug, but its land pattern remains intentionally blank pending unambiguous terminal-center evidence. C3/C8 remain EVT-selected production packages.
 
 ---
 

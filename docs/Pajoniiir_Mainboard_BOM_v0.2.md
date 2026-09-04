@@ -1,5 +1,8 @@
 # Pajoniiir Mainboard — Engineering BOM v0.2
 
+> **SUPERSEDED BY `Pajoniiir_Mainboard_BOM_v0.3.md` (2026-09-04).**
+> This file preserves the pre-DSI506 engineering baseline. Its ST7701S/GT911/MP3202 display path, connector TBD states and source counts are historical and must not be used for the active Rev A BOM.
+
 **Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1  
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Repo:** `dvucinozd/Pajoniiir-M1`  

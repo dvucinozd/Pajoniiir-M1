@@ -1,5 +1,7 @@
 # Pajoniiir Mainboard — USB1 Full-Speed DDJ-FLX4 Design v0.1
 
+> **Post-capture update (2026-09-04):** J3 is locked to Amphenol 87520-1010ALF with the same project footprint as J2. The remaining gate is final top-wall cutout, insertion and mated-cable geometry.
+
 **Projekt:** Pajoniiir-M1 Rev A  
 **Blok:** 08_USB1_FLX4  
 **Namjena:** DDJ-FLX4 MIDI + USB Audio Class host  

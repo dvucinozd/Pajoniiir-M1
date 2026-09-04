@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 06_USB_POWER  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — revidirano nakon TPS2561 arhitekturnog audita
+**Status:** Captured in KiCad; current-limit, inrush and fault-recovery values remain EVT targets
 
 ---
 

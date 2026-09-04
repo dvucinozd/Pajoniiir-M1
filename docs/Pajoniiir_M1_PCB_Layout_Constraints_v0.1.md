@@ -1,176 +1,164 @@
-# Pajoniiir-M1 — PCB Placement & Routing Constraints v0.1
+# Pajoniiir-M1 — PCB Placement and Routing Constraints v0.2
 
-**Datum:** 2026-09-03  
-**State:** Pre-mechanical layout / electrical constraints locked  
-**Machine-readable authority:** `hardware/Pajoniiir-M1/pcb_constraints.json`
+**Updated:** 2026-09-04
 
----
+**Milestone:** M1-PRELAYOUT-B5
 
-## 1. What is locked now
+**Status:** placement skeleton and routing topology validated; final placement/routing freeze blocked
 
-The existing `Pajoniiir-M1.kicad_pcb` is intentionally only a KiCad 9 four-copper-layer shell. It is not a routed board and its 1.6 mm thickness is not an impedance authority.
+**Machine authorities:** `pcb_constraints.json`, `m1_mech_b5_placement_skeleton.json`, `m1_prelayout_b5_routing_contract.json`
 
-What is locked before mechanics:
+## Current PCB state
 
-- functional placement domains
-- high-current power-spine order
-- RF keepout intent
-- connector-side ESD placement order
-- source-series placement intent
-- USB and MIPI differential-impedance targets
-- sensitive/switching-domain separation rules
-- Kelvin shunt measurement topology
+`Pajoniiir-M1.kicad_pcb` is intentionally an empty KiCad 9 four-copper-layer shell. It has no footprints, routes, zones or `Edge.Cuts`.
 
-A placement-feasibility envelope **M1-MECH-A0 = 108.00 × 65.06 mm** is defined in `mech_a.json`; it is not Edge.Cuts.
+Current screening geometry:
 
-What is **not** locked:
+| Item | Value | State |
+|---|---:|---|
+| Core mainboard | 104 x 62 mm | B3/B5 placement screen |
+| Direct mount pattern | 58 x 49 mm | locked |
+| Mainboard seating plane | Z = 10.0 mm | locked |
+| Mainboard rear surface | Z = 11.6 mm | locked for 1.6 mm PCB |
+| Enclosure candidate | 128 x 84 x 30 mm | screening only |
+| Wall thickness | 2.0 mm | screening only |
 
-- Edge.Cuts
-- board X/Y
-- mounting holes
-- connector X/Y/Z
-- layer dielectric thicknesses
-- trace width/gap values
-- final via geometry
-- copper weights
-- finished PCB thickness
+The legacy 108 x 65.06 mm board rectangle and 121.008 x 73.408 mm enclosure belong to the rejected JC4880 geometry and have no current `Edge.Cuts` authority.
 
----
+## Layer and stackup contract
 
-## 2. Logical four-layer intent
+Selected fabrication stackup:
 
-Preferred role assignment:
+```text
+Fabricator         JLCPCB
+Stackup            JLC04161H-7628
+Finished thickness 1.6 mm
+Outer copper       1 oz
+Inner copper       0.5 oz
+F.Cu to In1.Cu     0.2104 mm
+Prepreg            7628, Er 4.4 screening value
+Core Er            4.6 screening value
+```
 
-~~~text
-L1 / F.Cu   components + critical signals
-L2 / In1.Cu continuous GND reference
-L3 / In2.Cu power distribution + low-speed signals
-L4 / B.Cu   secondary signals/components + compatible GND fill
-~~~
+Layer roles:
 
-The layer **roles** are electrical intent. Actual dielectric spacing must come from the chosen fabricator before any controlled-impedance width/gap is frozen.
+```text
+F.Cu   primary components + USB/MIPI/QSPI/SDIO critical routing
+In1.Cu continuous solid GND reference; no split beneath critical routes
+In2.Cu power distribution + compatible low-speed routing
+B.Cu   secondary components and low-speed routing
+```
 
----
+Primary USB/MIPI routing belongs on F.Cu referenced to In1.Cu. Any required layer transition needs adjacent GND return vias and a recalculated geometry.
 
-## 3. Critical routing targets
+## Mechanical placement domains
+
+Wall assignment is fixed for screening:
+
+- top `Y_NEG`: J2 USB0, J3 USB1, J4 MAIN L RCA, J5 MAIN R RCA
+- left `X_NEG`: J1 power input
+- right `X_POS`: J7 microSD, SW1 RESET, SW2 BOOT and the guarded display FFC corridor
+- bottom `Y_POS`: clear
+
+The display-facing mainboard side is substantially component-free. J6 is the only planned exception and requires local FFC/collision validation. The rear/outward face is the primary component side.
+
+## B5 top-wall screening anchors
+
+These anchors prove feasibility only; they are not production XY:
+
+| RefDes | Anchor X/Y mm | Rotation | Checked result |
+|---|---:|---:|---|
+| J2 | 19.51 / 3.90 | 180 deg | Amphenol courtyard fits USB window |
+| J3 | 51.21 / 3.90 | 180 deg | 16.10 mm courtyard gap to J2 |
+| J4 | 70.31 / 1.75 | 90 deg | Kycon courtyard fits RCA window |
+| J5 | 82.51 / 1.75 | 90 deg | 1.00 mm courtyard gap to J4 |
+
+Final screw-head/washer and panel-cutout checks remain required.
+
+Right-side placement remains deliberately unanchored:
+
+```text
+SW1/SW2 recovery zone   Y 7.5 .. 21.0 mm
+guarded FFC corridor    Y 22.07 .. 42.07 mm
+J7 microSD zone         Y 43.0 .. 61.0 mm
+```
+
+J7, SW1 and SW2 must be solved together with the right-side wing, card insertion/ejection, lower-right mounting screw and 60 x 15 mm FFC U-bend.
+
+J1 remains unanchored until the Switchcraft 722RAHLP terminal-center geometry, left-side wing and panel/cable envelope are authoritative.
+
+## Critical routing targets
 
 ### USB0 High-Speed
 
-- 90 ohm differential, ±10%
-- series elements near ESP32-P4
-- D2 TPD2EUSB30A immediately adjacent to J2
-- minimal vias
-- no stubs
-- continuous adjacent GND reference
-- do not cross backlight/buck switching-node return discontinuities
+- 90 ohm differential
+- J2 -> D2 ESD -> series tuning -> U1, no stubs
+- D2 immediately behind J2
+- avoid layer changes and In1 plane voids
+- keep away from switch nodes and high-current return bottlenecks
 
 ### USB1 Full-Speed
 
 - preserve 90 ohm differential geometry
-- source series near P4
-- D3 at J3
-- optional shunt capacitors remain DNP unless EMI validation requires them
-- any populated shunt pair must be symmetric
+- J3 -> D3 ESD -> optional tuning -> U1
+- 22 ohm source series remains populated
+- DNP shunt capacitors must be symmetric if enabled
+- avoid switch nodes
 
 ### MIPI DSI
 
-- 100 ohm differential, ±10%
-- intra-pair skew target <10 mil
-- pair-to-pair target <30 mil
-- six 0R tuning positions remain strictly inline
-- minimal layer changes
-- continuous GND reference
-- keep DSI corridor away from U9/L3/D4 switching zone
+- 100 ohm differential
+- U1 -> six strictly inline 0 ohm positions -> J6
+- intra-pair skew maximum 0.254 mm
+- pair-to-pair target maximum 0.762 mm
+- avoid layer changes and all tee stubs
+- preserve a continuous In1 GND reference
 
-Exact width/gap is **TBD-STACKUP**, not a schematic constant.
+### Other critical domains
 
----
+- Keep U2/QSPI tuning elements in a compact U1-local island.
+- Keep U4 close enough for compact SDIO escape while preserving the official all-layer RF keepout.
+- Keep J7/U13 in the lower-right media domain and do not route through the FFC corridor.
+- Keep U5 and the output RC/RCA network away from switching nodes and USB VBUS return bottlenecks.
+- Preserve Kelvin sense routing around R120 independently of generic high-current copper.
 
-## 4. Placement topology
+## Impedance gate
 
-### Compute island
+Current screening values:
 
-U1 ESP32-P4 central. U2 flash, U3 core buck/L1 and Y1 remain close to U1 according to their critical loops.
+| Class | Target | Width | Edge gap | Other-copper clearance |
+|---|---:|---:|---:|---:|
+| USB0/USB1 | 90 ohm diff | 0.2332 mm | 0.15 mm | 0.30 mm |
+| MIPI DSI | 100 ohm diff | 0.1722 mm | 0.15 mm | 0.30 mm |
 
-### RF island
+These values are suitable for placement/channel budgeting only. Before routing freeze:
 
-U4 ESP32-C6-WROOM antenna must sit at a board edge with official copper keepout on every layer. No connector shell, cable or enclosure metal may intrude without RF revalidation.
+1. record a current JLCPCB calculator result for JLC04161H-7628
+2. record selected width/gap for 90 ohm and 100 ohm classes
+3. record the soldermask/model option used for fabrication
+4. apply exact values to KiCad net classes/custom rules
+5. run PCB DRC and preserve the stackup in fabrication notes
 
-### 5 V spine
+## Power routing
 
-~~~text
+```text
 J1 -> U7 eFuse -> R120 Kelvin shunt -> 5V_SYS
-                                      |
-                    +-----------------+------------------+
-                    |                 |                  |
-                   U8                U6/U12             U9
-                  3V3               USB VBUS         backlight
-~~~
+                                      +-> U8 3V3
+                                      +-> U6/U12 USB VBUS
+```
 
-R120 Kelvin sense taps must not share generic high-current branch copper.
+J1 routing cannot freeze before its footprint. C3/C8 routing cannot freeze before EVT selects exact production packages. USB VBUS branches require a final copper-width/current-density and thermal review.
 
-### USB edge zones
+## Freeze rule
 
-J2/J3 are mechanical-edge anchors once their MPNs are known. D2/D3 live directly behind the connector shell; power switches U6/U12 remain on the high-current side of those ports.
+Final placement/routing requires:
 
-### Audio zone
+1. all 12 `blocks_layout_freeze` gates closed
+2. final enclosure, side wings/notches, mounting hardware and `Edge.Cuts`
+3. absolute connector centers, cutouts and mated plug/cable envelopes
+4. DSI FFC pin-1 and bend/removal proof plus absolute J6 placement
+5. C3/C8 production selection from EVT evidence
+6. exact production impedance rules
+7. completed placement review, PCB DRC and power-copper review
 
-U5 plus output RC network and J4/J5 form a quiet edge domain. Keep it away from U8/U9 switch nodes and from USB VBUS high-current bottlenecks.
-
-### Display zone
-
-DSI is a quiet high-speed corridor. Backlight U9/L3/D4 is a separate noisy power island even though both serve the display assembly.
-
-### microSD
-
-U13 and J7 form a user-accessible edge domain after card insertion mechanics are known.
-
----
-
-## 5. Component-height zoning
-
-Current M1-MECH-A candidate Z-stack gives:
-
-~~~text
-6.5 mm gross front-side clearance under the legacy display/module footprint
-6.0 mm gross backside clearance from PCB rear face to enclosure inner rear wall
-~~~
-
-These are not production height limits. Until safety margin and local enclosure ribs/bosses are measured:
-
-- keep central compute/RF/display-power parts low-profile
-- keep unselected C3/C8 bulk parts out of the under-display zone
-- keep tall connector bodies at the perimeter
-- avoid backside population around candidate mounting/standoff locations
-- treat user-facing connector height as part of each connector mechanical gate
-
----
-
-## 6. Mechanical dependency
-
-No user-facing connector may be assigned a final production location or footprint until the corresponding gate in `mechanical_gates.json` is closed. M1-MECH-A currently provides a candidate rear working envelope of 108.00 × 65.06 mm and candidate mounting centers at X=±51.3 mm, Y=±30.0 mm in `M1_FRONT_CENTER`; those coordinates are not yet Edge.Cuts.
-
-This specifically prevents provisional J1/J2/J3/J4/J5/J7/SW1/SW2 choices from silently becoming manufacturing defaults.
-
----
-
-## 7. PCB freeze gate
-
-Final layout freeze requires all of the following:
-
-1. every `blocks_layout_freeze` mechanical gate closed
-2. authoritative Edge.Cuts/mounting datums
-3. connector and display Z/X/Y clearance review
-4. chosen fabricator stackup
-5. calculated 90 ohm USB / 100 ohm MIPI width-gap geometry
-6. final power-copper/current-density review
-7. KiCad PCB DRC and manufacturing output review
-
-Until then, exploratory electrical clustering is allowed, but Gerbers/EVT ordering is not.
-
-
----
-
-## M1-MECH-A8 audio-option update
-
-J6 was removed from the Rev A PCB baseline in M1-MECH-A8. Do not reserve a J6 footprint, panel aperture or courtyard. The recorded legacy Ø6.97 mm opening remains enclosure-history evidence only.
+`edge_cuts_allowed`, `routing_freeze_allowed` and `fabrication_release_allowed` remain false.

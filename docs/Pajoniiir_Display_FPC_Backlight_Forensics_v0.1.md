@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — JC4880 Display FPC & Backlight Forensics v0.1
 
+> **HISTORICAL FORENSIC EVIDENCE ONLY.** The active Rev A design uses the 15-pin EYOYO DSI506/DYL0023 module and does not use this 30-pin JC4880 connector or discrete MP3202 backlight path. Do not apply the pin map, 3V3-domain questions or backlight values below to the active board.
+
 **Projekt:** Pajoniiir-M1 Rev A  
 **Datum:** 2026-09-02  
 **Ažurirano:** 2026-09-03  

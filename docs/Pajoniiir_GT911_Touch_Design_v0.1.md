@@ -1,5 +1,7 @@
 # Pajoniiir Mainboard — GT911 Touch Design v0.1
 
+> **SUPERSEDED FOR THE ACTIVE REV A DISPLAY.** The DSI506 module uses an FT5426/FT5x06-compatible touch device at `0x38` on `DISPLAY_I2C_SDA/SCL`, with no dedicated reset or interrupt wires. `11_TOUCH_GT911.kicad_sch` is intentionally retired and empty.
+
 **Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1  
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 11_TOUCH_GT911  

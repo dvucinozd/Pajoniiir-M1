@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Connector Clusters v0.1
 
+> **HISTORICAL SCREENING RECORD.** B3/B4/B5 now define the active wall mapping, exact locked connector footprints and routing skeleton. Use `Pajoniiir_M1_Current_Design_Status_B5.md` for current status.
+
 **Datum:** 2026-09-03  
 **Status:** Relative connector topology defined; absolute cutout datums open  
 **Authority:** `hardware/Pajoniiir-M1/mech_a.json`

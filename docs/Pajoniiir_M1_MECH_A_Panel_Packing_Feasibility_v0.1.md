@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Panel Packing Feasibility v0.1
 
+> **HISTORICAL SCREENING RECORD.** The active wall mapping and placement skeleton are now defined by B3/B4/B5. This document remains evidence for the earlier packing decisions.
+
 **Datum:** 2026-09-03  
 **Revision:** M1-MECH-A4  
 **Status:** Wall-class topology screened; absolute wall signs and centers remain open  

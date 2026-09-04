@@ -1,9 +1,12 @@
 # Pajoniiir Mainboard — DNP / Option Matrix v0.1
 
-**Projekt:** Pajoniiir-M1 Rev A  
-**Blok:** 15_DNP_OPTIONS  
-**Datum:** 2026-09-02  
-**Status:** Engineering option policy
+**Projekt:** Pajoniiir-M1 Rev A
+
+**Blok:** 15_DNP_OPTIONS
+
+**Datum:** 2026-09-04
+
+**Status:** Engineering option policy after M1-ELEC-B2 display migration
 
 ---
 
@@ -48,8 +51,7 @@ Ako se neka od tih funkcija vrati, to je nova board revision, ne DNP populate va
 | 3V3 second 22 µF | DNP | load transient tuning |
 | FB_C6 ferrite | 0 Ω default | EMI tuning |
 | FB_AUDIO ferrite | 0 Ω default | audio noise tuning |
-| FB_LCD ferrite | 0 Ω default | display noise tuning |
-| FB_TOUCH ferrite | 0 Ω default | touch noise tuning |
+| FB3 display-module ferrite | 0 Ω default | `3V3_DISPLAY_MODULE` noise tuning |
 | INA238 monitor | populate EVT, optional DNP later | power telemetry |
 
 ---
@@ -98,19 +100,19 @@ No speaker path DNP.
 
 # 7. Display DNP
 
-- LCD_TE 0 Ω link, DNP default
-- DSI six 0 Ω tuning elements populated by default
-- optional backlight control straps depending final MP3202 network
-- no extra MIPI ESD by default
+- six inline DSI 0 Ω tuning elements are populated by default
+- R99/R100 provide optional parallel 4.7 kΩ pull-ups on the shared display I2C bus
+- FB3 is a 0 Ω default / ferrite tuning option for `3V3_DISPLAY_MODULE`
+- no external MP3202/backlight-control straps, LCD_TE or GPIO23 PWM footprint exists in the active design
+- no extra MIPI ESD is populated by default
 
 ---
 
 # 8. Touch DNP
 
-- parallel second 4.7 kΩ SDA pull-up
-- parallel second 4.7 kΩ SCL pull-up
-- optional low-C touch ESD array
-- polling firmware remains software fallback, not a hardware DNP option
+Touch is module-integrated and shares the display connector/I2C bus. There is no GT911 reset/interrupt or separate touch-power DNP network in Rev A.
+
+The only touch-related assembly options are the shared display-I2C parallel pull-ups R99/R100. Polling versus interrupt behavior is a firmware decision; the 15-pin module interface exposes no dedicated touch interrupt.
 
 ---
 
@@ -178,9 +180,9 @@ i biti pravilno excluded/flagged u manufacturing BOM-u.
 | INA238 | POP | POP | TBD after DVT |
 | extra USB VBUS C | test variants | selected | selected |
 | SD CLK C | tune | selected/DNP | selected/DNP |
-| touch extra pullups | tune | selected/DNP | selected/DNP |
+| display-I2C extra pullups R99/R100 | DNP/tune | selected/DNP | selected/DNP |
 | analog ESD | evaluate | compliance dependent | compliance dependent |
-| LCD TE link | DNP/experiment | TBD | DNP unless used |
+| legacy LCD TE / external PWM | absent | absent | absent from active Rev A |
 | 3.5 mm line out | removed | removed | removed from Rev A (M1-MECH-A8) |
 | ferrites | 0 Ω first | tune | selected |
 | debug footprints | DNL pads | DNL pads | DNL pads |

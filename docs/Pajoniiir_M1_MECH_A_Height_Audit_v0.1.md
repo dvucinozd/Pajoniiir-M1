@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Height Audit v0.1
 
+> **HISTORICAL SCREENING RECORD.** B3/B4/B5 and the current mechanical authority supersede this early candidate-height snapshot.
+
 **Datum:** 2026-09-03  
 **Status:** Critical fixed central parts PASS geometry screen; production height limit not locked  
 **Authority:** `hardware/Pajoniiir-M1/mech_a.json`

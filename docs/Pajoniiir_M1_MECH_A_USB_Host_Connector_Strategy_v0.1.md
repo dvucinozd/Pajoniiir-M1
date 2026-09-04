@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A USB Host Connector Strategy v0.1
 
+> **HISTORICAL SELECTION RECORD.** B4 subsequently locked and instantiated Amphenol 87520-1010ALF for J2/J3; final panel datums and mated-cable geometry remain open. See `Pajoniiir_M1_Current_Design_Status_B5.md`.
+
 **Datum:** 2026-09-03  
 **Revision:** M1-MECH-A3  
 **Status:** Active preferred candidate selected; J2/J3 remain open hard gates  

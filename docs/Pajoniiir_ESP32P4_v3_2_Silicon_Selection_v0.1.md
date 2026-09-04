@@ -2,7 +2,7 @@
 
 **Projekt:** Pajoniiir-M1 Rev A  
 **Datum:** 2026-09-02  
-**Status:** Production silicon selection candidate
+**Status:** Production silicon target selected and captured; procurement lot marking and EVT remain release checks
 
 ---
 

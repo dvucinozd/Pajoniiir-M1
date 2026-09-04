@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 05_C6_WIFI  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — spreman za KiCad capture nakon RF/mehaničkog placement reviewa
+**Status:** Captured in KiCad; RF placement and enclosure validation remain open
 
 ---
 

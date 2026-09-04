@@ -4,7 +4,9 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 02_POWER_3V3  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — prije KiCad capturea i EVT mjerenja
+**Status:** Captured in KiCad; production validation remains EVT work
+
+> **Post-capture update (2026-09-04):** The TPS62132 design is captured. The active display load is the DSI506 module on `3V3_DISPLAY_MODULE` (up to 340 mA documented), and the former separate GT911/MP3202 display path is retired. Final all-on rail and display-transient margin remain EVT work.
 
 ---
 

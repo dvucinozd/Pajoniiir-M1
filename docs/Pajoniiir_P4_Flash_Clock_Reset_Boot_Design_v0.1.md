@@ -4,7 +4,9 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 04_P4_FLASH_CLOCK_RESET  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — spreman za KiCad capture nakon finalnog symbol/footprint reviewa
+**Status:** Captured in KiCad; crystal/flash/strap EVT and switch panel placement remain
+
+> **Post-capture update (2026-09-04):** This block is captured. SW1/SW2 are locked to B3U-3000P-B and its exact standard KiCad footprint; only recessed enclosure tool-hole placement remains open.
 
 ---
 

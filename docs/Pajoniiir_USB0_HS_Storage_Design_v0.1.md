@@ -1,5 +1,7 @@
 # Pajoniiir Mainboard — USB0 High-Speed Storage Design v0.1
 
+> **Post-capture update (2026-09-04):** J2 is locked to Amphenol 87520-1010ALF with project footprint `Pajoniiir-M1:Amphenol_87520-1010ALF`. The remaining gate is final top-wall cutout, insertion and mated-cable geometry.
+
 **Projekt:** Pajoniiir-M1 Rev A  
 **Blok:** 07_USB0_STORAGE  
 **Namjena:** Rekordbox USB mass-storage host  

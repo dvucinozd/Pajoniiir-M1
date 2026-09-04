@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Power Input Connector Strategy v0.1
 
+> **HISTORICAL SELECTION RECORD.** J1 is now locked to Switchcraft 722RAHLP, while its PCB land pattern remains open pending terminal-center evidence. See `Pajoniiir_M1_Current_Design_Status_B5.md`.
+
 **Datum:** 2026-09-03  
 **Revision:** M1-MECH-A5  
 **Status:** Preferred conditional J1 connector architecture selected; J1 gate remains open  

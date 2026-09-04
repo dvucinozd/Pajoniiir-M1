@@ -4,7 +4,9 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 14_TEST_MONITORING  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — telemetry optional/DNP for Rev A
+**Status:** Captured in KiCad; telemetry is present for EVT/DVT validation
+
+> **Post-capture update (2026-09-04):** INA238 is captured on the shared `DISPLAY_I2C_SDA/SCL` bus with the DSI506 module devices at `0x38` and `0x45`. References below to GT911 coexistence should be read as shared-bus coexistence with the active display module.
 
 ---
 

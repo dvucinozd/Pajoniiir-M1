@@ -1,111 +1,101 @@
-# Pajoniiir-M1 — Manufacturing Output Contract v0.1
+# Pajoniiir-M1 — Manufacturing Output Contract v0.2
 
-**Datum:** 2026-09-03  
-**Milestone:** M1-SCH-A  
+**Milestone:** M1-ELEC-B2 / M1-MECH-B5
+
+**Updated:** 2026-09-04
+
 **Status:** CI-enforced manufacturing-output baseline
 
----
+## Authority
 
-## Purpose
+Engineering BOM documents describe intent. The manufacturing candidate is exported directly from the root KiCad hierarchy:
 
-`docs/Pajoniiir_Mainboard_BOM_v0.2.md` is an engineering-intent BOM. It was assembled before and during schematic capture and intentionally uses subsystem-oriented names, grouped quantities and TBD gates. It is not a manufacturing netlist and must not be used as a 1:1 substitute for the KiCad design database.
+```text
+hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+```
 
-The authoritative manufacturing candidate is exported directly from the root hierarchical schematic with KiCad 9.
+The current source-derived baseline is:
 
-Current source baseline contains:
+| Metric | Current value |
+|---|---:|
+| Unique `in_bom=yes` RefDes | 242 |
+| DNP RefDes | 15 |
+| Intentional blank-footprint gates | 3 |
+| Blank-footprint RefDes | `C3`, `C8`, `J1` |
 
-- **269** unique RefDes with `in_bom=yes`
-- **16** DNP RefDes included for assembly-option visibility
-- **10** intentional `in_bom=yes` blank-footprint gates
-- additional DNL/service elements such as `JDBG_USB` may remain `in_bom=no`
-
-These counts are a snapshot, not a hard-coded invariant. CI derives the current expected set from the 15 leaf schematics and compares it against the KiCad-generated BOM.
-
-### M1-MECH-A8 source-baseline update
-
-J6 / optional 3.5 mm line-out was removed from the Rev A schematic rather than carried as a permanent DNP mechanical gate. After M1-MECH-A12 locks D1, the current source snapshot is **269 in-BOM / 16 DNP / 10 intentional blank-footprint gates**. Older run #76 figures later in this document remain historical evidence for the pre-A8 source state.
-
----
+These counts are snapshots. CI derives the expected set from the 15 leaf schematics and compares it with the KiCad-generated BOM.
 
 ## CI outputs
 
-Every relevant schematic/library/tool change now produces the M1-SCH-A review bundle:
+Relevant schematic/library/tool changes produce:
 
-~~~text
+```text
 Pajoniiir-M1-manufacturing-bom.csv
 Pajoniiir-M1-manufacturing-bom-audit.md
 Pajoniiir-M1.net.xml
 Pajoniiir-M1-schematic.pdf
 Pajoniiir-M1-erc.json
-~~~
+```
 
-The bundle is uploaded as the GitHub Actions artifact:
+The bundle is uploaded as the GitHub Actions artifact `Pajoniiir-M1-M1-SCH-A`.
 
-~~~text
-Pajoniiir-M1-M1-SCH-A
-~~~
+## Enforced checks
 
-The generated BOM is exported with one row per RefDes and includes Reference, Value, Footprint, Quantity and DNP state.
+`validate_manufacturing_outputs.py` fails when:
 
----
+- a source `in_bom=yes` RefDes is missing from the exported BOM
+- KiCad exports an unexpected RefDes
+- Value or Footprint differs between source and export
+- a new blank footprint appears outside the gate allowlist
+- an allowlisted blank footprint becomes populated without removing the stale allowlist entry
+- a manufacturing RefDes does not end with a numeric suffix
 
-## Machine checks
+This is separate from ERC. ERC checks electrical consistency; BOM parity checks hierarchy loading and assembly database integrity.
 
-`validate_manufacturing_outputs.py` compares the KiCad BOM with the source hierarchy and fails CI when:
+## Current blank-footprint gates
 
-- a source `in_bom=yes` RefDes is missing from the KiCad BOM
-- KiCad emits an unexpected RefDes
-- Value differs between source and generated BOM
-- Footprint differs between source and generated BOM
-- a new blank footprint appears outside the approved manufacturing gate set
-- an approved blank-footprint gate becomes populated without removing the stale allowlist entry
+```text
+C3  input bulk capacitor; exact MPN/package waits for startup/inrush/transient EVT
+C8  protected-rail bulk capacitor; exact MPN/package waits for transient EVT
+J1  Switchcraft 722RAHLP; land pattern waits for unambiguous terminal-center evidence
+```
 
-This is deliberately separate from ERC. ERC proves electrical-rule consistency; manufacturing-output parity proves that hierarchy loading and BOM extraction preserve the assembly database.
+J2/J3, J4/J5, J6, J7 and SW1/SW2 now have exact footprints. Their mechanical gates remain open for panel datums, cutouts, mating envelopes or local clearance, but they are no longer blank-footprint manufacturing gates.
 
----
+J8/J9/J10 service interfaces are DNL/`in_bom=no` and do not appear in the manufacturing BOM.
 
-## Intentional blank-footprint manufacturing gates
+## Current DNP set
 
-Current `in_bom=yes` gates:
+The current 15 DNP RefDes are:
 
-~~~text
-J1
-C3
-C8
-SW1
-SW2
-J2
-J3
-J4
-J5
-J7
-~~~
+```text
+C24 C72 C76 C77 C78 C79 C80 C106 C107 C108 C109 R70 R74 R99 R100
+```
 
-`J_LCD` is a documentation alias, not an instantiated RefDes. It is not in this list because the physical display connector remains intentionally uninstantiated until its mating geometry and remaining pin-domain questions are closed.
+DNP entries remain visible in the exported assembly data so EVT tuning choices are explicit.
 
----
+## Latest verified result
+
+The latest KiCad 9 CI run covering the B5 schematic state reported:
+
+```text
+all 16 schematic files load: PASS
+manufacturing BOM parity: source=242 bom=242 dnp=15 blank_gates=3 PASS
+native ERC: unexplained_errors=0 excluded_errors=0 warnings=0
+```
+
+Historical run #76 reported 270/270, 17 DNP and 12 blank gates before the J6 audio removal, D1 lock, DSI506 migration and B4 footprint locks. Those numbers are retained only as historical evidence and are not the current baseline.
 
 ## Sign-off interpretation
 
-Passing CI now means:
+Passing the workflow proves:
 
 1. structural schematic contracts pass
-2. all schematics load under native KiCad 9
+2. every schematic loads under native KiCad 9
 3. native ERC has no unexplained errors or warnings
-4. KiCad can export the full manufacturing BOM
-5. KiCad BOM RefDes/Value/Footprint data match the source hierarchy
-6. KiCad can export a hierarchy netlist
-7. KiCad can generate the complete multi-page schematic PDF
+4. KiCad exports the manufacturing BOM
+5. exported RefDes/Value/Footprint data match the source hierarchy
+6. KiCad exports the hierarchy netlist
+7. KiCad generates the complete schematic PDF
 
-It does **not** mean final production sign-off.
-
-Run #76 additionally completed the review-layer checks: 16/16 schematic PDF pages were rendered and visually reviewed, and the generated manufacturing BOM was reviewed against engineering intent with 270/270 parity, 17 DNP entries and exactly 12 intentional blank-footprint gates.
-
-Still manual/physical:
-
-Hierarchy pin synchronization is no longer a manual gate: CI compares every child hierarchical label with the corresponding root sheet pin in both directions by name and electrical shape, then native KiCad 9 loads and exports the full root hierarchy. A GUI open/save remains optional editor hygiene only.
-
-- exact LCD/FPC mechanical closure
-- exact external connector MPN/footprints
-- final board outline and enclosure datums
-- PCB-fabricator stackup and controlled-impedance rules
+It does not authorize PCB fabrication. Final manufacturing sign-off still requires closure of all layout-blocking mechanical/EVT gates, final `Edge.Cuts`, production impedance rules, PCB DRC and fabrication-output review.

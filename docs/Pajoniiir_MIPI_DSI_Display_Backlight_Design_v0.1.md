@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 10_DISPLAY_MIPI  
 **Datum:** 2026-09-02  
-**Status:** **SUPERSEDED** — use `Pajoniiir_MIPI_DSI_Display_Backlight_Design_v0.2.md`
+**Status:** **SUPERSEDED** — v0.2 is also historical; use the DSI506 B5 status/contract and live `10_DISPLAY_MIPI.kicad_sch`
 
 ---
 

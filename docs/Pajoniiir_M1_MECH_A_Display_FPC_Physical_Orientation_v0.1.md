@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Display FPC Physical Orientation v0.1
 
+> **SUPERSEDED DISPLAY FORENSICS.** This orientation result belongs to the retired 30-pin display path and must not be applied to active J6. Use the B5 status and DSI15 connector-lock documents.
+
 **Datum:** 2026-09-03  
 **Revision:** M1-MECH-A10  
 **Status:** Original insertion architecture confirmed; contact-side and exact height remain open

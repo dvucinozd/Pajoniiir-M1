@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Connector Envelope Screen v0.1
 
+> **HISTORICAL SCREENING RECORD.** Later B4 work locked the active J2/J3/J4/J5/J7/SW1/SW2 footprints. Use `Pajoniiir_M1_Current_Design_Status_B5.md` for current gate status.
+
 **Datum:** 2026-09-03  
 **Revision:** M1-MECH-A1  
 **Status:** Candidate connector envelopes screened; no mechanical gate closed  

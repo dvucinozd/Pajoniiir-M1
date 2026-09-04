@@ -4,7 +4,9 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 12_MICROSD  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — spreman za KiCad capture uz finalni socket MPN
+**Status:** Captured in KiCad; Molex 503398-1892 MPN/footprint locked, panel/access gate open
+
+> **Post-capture update (2026-09-04):** J7 is locked to Molex 503398-1892 with project footprint `Pajoniiir-M1:Molex_503398-1892`. The remaining gate is the right-wall slot, card/finger access and clearance to the FFC corridor and lower-right mounting screw.
 
 ---
 

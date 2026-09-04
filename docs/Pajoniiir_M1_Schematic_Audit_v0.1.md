@@ -1,23 +1,18 @@
-# Pajoniiir-M1 — M1-SCH-A Schematic Audit v0.1
+# Pajoniiir-M1 — Schematic Audit v0.2
 
-**Projekt:** Pajoniiir-M1 Rev A  
-**Datum:** 2026-09-02  
-**Ažurirano:** 2026-09-03  
-**Status:** Electrical capture and KiCad 9.0.9 ERC clean; documented mechanical/sourcing/display hard gates remain before final manufacturing sign-off.
+**Updated:** 2026-09-04
 
----
+**Electrical milestone:** M1-ELEC-B2
 
-## 1. Audit scope
+**Mechanical context:** M1-MECH-B5
 
-Ovaj audit pokriva stvarni KiCad projekt pod:
+**Status:** electrical capture and KiCad 9 validation pass; final PCB placement/routing remains blocked
 
-~~~text
-hardware/Pajoniiir-M1/
-~~~
+## Scope
 
-i svih 15 hijerarhijskih leaf sheetova:
+This audit covers the root KiCad schematic and all 15 leaf sheets under `hardware/Pajoniiir-M1/`.
 
-~~~text
+```text
 01_POWER_INPUT
 02_POWER_3V3
 03_P4_CORE
@@ -33,306 +28,142 @@ i svih 15 hijerarhijskih leaf sheetova:
 13_DEBUG_SERVICE
 14_TEST_MONITORING
 15_DNP_OPTIONS
-~~~
-
-Root je `Pajoniiir-M1.kicad_sch`.
-
----
-
-## 2. Current milestone verdict
-
-### Component-level capture
-
-**PASS / electrically complete with documented hard gates**
-
-Električki su captured: 5 V input protection/eFuse, 5V_PROTECTED → system shunt → 5V_SYS, 3V3_SYS, ESP32-P4 v3.x core, QSPI flash/40 MHz/boot/reset, ESP32-C6-WROOM-1 + 4-bit SDIO, USB0/USB1 independent VBUS switching, oba USB data patha, PCM5102A MAIN audio, MIPI DSI logical signal path, MP3202 backlight, GT911 panel interface, controlled-power microSD, P4/C6 factory recovery, INA238 monitoring i DNP/DNL assembly policy.
-
-### Native KiCad ERC
-
-**PASS in CI — KiCad 9.0.9**
-
-Latest locked baseline:
-
-```text
-unexplained_errors = 0
-excluded_errors    = 6
-warnings           = 0
 ```
 
-Šest excluded errora nisu generički suppressioni: to su isključivo UUID-scoped `PANEL_DSI_*` dangling-label hard gateovi koji postoje zato što fizički `J_LCD` namjerno nije instanciran. Structural validator provjerava točan set tih šest UUID-a i faila na svakom dodatnom ERC exclusionu ili globalnom severity downgradeu.
+`11_TOUCH_GT911` and `15_DNP_OPTIONS` intentionally contain no instantiated symbols after the DSI506 migration. Their presence preserves the hierarchy and historical sheet roles.
 
-Native GUI open/save + Sync Sheet Pins i dalje ostaje zaseban human/tooling sign-off korak; CI ERC ne zamjenjuje fizičku/mehaničku i manufacturing provjeru.
+## Current verdict
 
----
+| Check | Result |
+|---|---|
+| 15-sheet structural contract | PASS |
+| Unique RefDes/unit contract | PASS |
+| Root/child hierarchical pin name and shape equivalence | PASS |
+| Critical 5 V/shunt topology | PASS |
+| Final DSI506 connector contract | PASS |
+| KiCad 9 load of root and 15 leaves | PASS |
+| Native KiCad 9 ERC | 0 unexplained errors, 0 excluded errors, 0 warnings |
+| Manufacturing BOM parity | 242 source / 242 export, 15 DNP, 3 blank gates, PASS |
+| Final PCB placement/routing freeze | BLOCKED |
 
-## 3. Structural audit results
+The `.kicad_pro` file still contains six UUID-scoped exclusion records from the retired JC4880 connector gate. Current KiCad 9 ERC reports zero excluded errors, so those records are inactive configuration history rather than current violations.
 
-PASS:
+## Captured electrical architecture
 
-- svi root/child `.kicad_sch` S-expressioni su balansirani
-- svaki child hierarchical label ima matching root sheet pin
-- svaki matching label/pin ima isti KiCad shape
-- nema root sheet pina bez child hierarchical labela
-- nema duplih RefDes oznaka
-- nema konfliktnih root local labela na istoj koordinati
-- nema preklapanja hierarchical sheet blokova
-- uklonjen je stari pre-shunt `5V_SYS` label
-- `5V_PROTECTED` je jedini label na eFuse output čvoru
-- legacy ESP32-S3 / ES8311 / MAX485 / NS4150 blokovi nisu instancirani kao Rev A funkcionalni sklopovi
+### Power
 
-Tijekom cleanupa sinkronizirano je 76 sheet-pin shapeova. KiCad Sync Sheet Pins zahtijeva da sheet pin i odgovarajući hierarchical label imaju isti shape.
+```text
+J1 -> D1 -> U7 TPS259474A -> 5V_PROTECTED
+   -> R120 5 mOhm Kelvin shunt -> 5V_SYS
+```
 
----
+`5V_SYS` supplies the TPS62132 3.3 V system regulator and independent TPS25221 USB VBUS paths. INA238 measures across the system shunt. J1, C3 and C8 remain intentional blank-footprint production gates.
 
-## 4. Critical power-path invariant
+### ESP32-P4
 
-~~~text
-5V INPUT
-   |
-U7 TPS259474ARPWR
-   |
-5V_PROTECTED
-   |
-R_SYS_SHUNT 5mR
-   |
-5V_SYS
-   |
-   +-- 3V3 system buck
-   +-- USB0 VBUS switch
-   +-- USB1 VBUS switch
-   +-- LCD backlight
-   +-- remaining 5V loads
-~~~
+U1 is ESP32-P4NRW32X with a project-local KiCad 9 symbol/footprint derived from current Espressif data. Both symbol units are instantiated. The P4 v3.x power model, physical pin 54 `VDD_HP_1`, TLV62569 core regulator, 499 k/499 k/22 pF feedback network, DSI_REXT, MIPI LDO and USB PHY supplies are captured.
 
-Time INA238 mjeri stvarni ukupni downstream current.
+### Flash, clock and recovery
 
----
+W25Q128JVPIQ external flash, 40 MHz ECS crystal, boot/reset straps, P4 UART0, P4 USB Serial/JTAG pogo and C6 recovery paths are captured. SW1/SW2 use B3U-3000P-B footprints but remain open for enclosure tool-hole placement.
 
-## 5. RefDes cleanup
+### ESP32-C6
 
-`U1 = ESP32-P4NRW32X` ostaje main MCU. Input eFuse je sada `U7 = TPS259474ARPWR`. Nema duplih RefDes oznaka u trenutnoj hijerarhiji.
+ESP32-C6-WROOM-1-N4 is connected over four-bit SDIO with external pull-ups and series tuning. GPIO54 controls C6 reset/EN. RF antenna placement and final enclosure performance remain PCB/EVT work.
 
-Deskriptivni engineering RefDes kao `U_USB0`, `U_USB1`, `U_BL`, `U_MON` i `U_SD_PWR` namjerno ostaju radi preglednosti subsystem reviewa. Manufacturing annotation ih kasnije može normalizirati ako ERP/BOM flow to zahtijeva.
+### USB
 
----
+USB0 uses the dedicated P4 High-Speed PHY, TPD2EUSB30A and Amphenol 87520-1010ALF. USB1 uses GPIO26/27 Full-Speed, 22 ohm source series, TPD2EUSB30A and the same connector. Each port has an independent TPS25221 VBUS switch and EN/FAULT path.
 
-## 6. Display / FPC hard gate
+J2/J3 MPNs and footprints are locked. Their gates remain open only for final panel/cutout/mated-cable geometry.
 
-Display elektrika je captured, ali **J_LCD namjerno nije instanciran**.
+### MAIN audio
 
-Already captured: 2-lane MIPI DSI, D0/D1/CLK P/N, šest inline 0R tuning footprintova, 3V3_LCD filtering, LCD reset, optional TE, MP3202 backlight, 10uH, SS14, 3.9R || 2.2R LED sense i LEDA/LEDK logical panel-side nets.
+PCM5102APWR uses GPIO50 BCLK, GPIO51 DATA, GPIO52 LRCK and GPIO49 XSMT. The outputs use 470 ohm plus 2.2 nF filters into Kycon white/red RCA connectors. The former 3.5 mm line output was removed from Rev A.
 
-Tvornički trag sada identificira FPC1 kao **SOFNG 0.5TBQP-30P-1 / JLCPCB C3975120**, nominalno **30 kontakata, 0.5 mm pitch**. DSI parovi, LEDA/LEDK, TE, LCD reset i touch signali su rekonstruirani iz originalne Guition connectivity ekstrakcije.
+### Final display
 
-Prije J_LCD instanciranja još treba zatvoriti: finalni panel MPN/varijantu, contact-side i mating/mechanical drawing/insertion geometry te potvrdu jesu li originalni FPC 3V3 pinovi 4/21/29 interno zajednički. M1-MECH-A9 je zatvorio 30-vs-32 dilemu (31/32 su GND shell/mount reference) i pinove 15/16/18/19 (NC). Ta zadnja stavka je važna jer M1 koristi odvojene filtrirane `3V3_LCD` i `3V3_TOUCH` domene.
+The active design is EYOYO DSI506 / DYL0023, 5-inch, 800 x 480. J6 is Amphenol SFW15R-2STE1LF with a locked project footprint.
 
-Validator namjerno faila ako se `J_LCD` pojavi prije promjene ovog gatea.
+Captured interface:
 
----
+```text
+clock + DSI lane0 + DSI lane1
+GPIO7 DISPLAY_I2C_SDA
+GPIO8 DISPLAY_I2C_SCL
+3V3_DISPLAY_MODULE on pins 14/15
+```
 
-## 7. Touch status
+The initial accepted firmware profile uses one lane at 800 Mbps, RGB888 and 27.777 MHz DPI. Touch is FT5426/FT5x06-compatible at 0x38 and panel power/backlight is controlled by the module device at 0x45.
 
-GT911 se tretira kao panel-integrated. Captured mapping:
+There is no active MP3202 backlight boost, GT911 reset/interrupt network, LCD reset/TE or GPIO23 external PWM path. GPIO3/4/5/6/23 are released and unassigned.
 
-~~~text
-GPIO3 -> TOUCH_RST
-GPIO4 <-> TOUCH_INT
-GPIO7 <-> I2C SDA
-GPIO8 <-> I2C SCL
-~~~
+The remaining J6 gate is physical: FFC pin-1 continuity, U-bend/insertion/removal keepout and absolute placement.
 
-Panel-side: 3V3_LCD → FB_TOUCH → 3V3_TOUCH, 100nF + 4.7uF, 22R SDA/SCL, 4.7k pull-upovi + DNP paralelne opcije, 100R reset/INT i deterministic 0x5D reset sequence.
+### microSD
 
----
+The four-bit SDMMC bus, GPIO45-controlled TPS22918 supply and optional GPIO46 card detect are captured. J7 is Molex 503398-1892 with a locked footprint. Panel slot/access and local FFC/screw clearance remain open.
 
-## 8. Backlight status
+## Source and manufacturing inventory
 
-`U_BL = MP3202DJ-LF-Z`, TSOT23-6.
+Current source-derived counts:
 
-Local symbol pin model:
+```text
+in_bom=yes      242
+DNP              15
+blank footprints  3: C3, C8, J1
+DNL service       J8, J9, J10
+```
 
-~~~text
-1 SW
-2 GND
-3 FB
-4 EN
-5 OV
-6 IN
-~~~
+Exact B4 footprints are present for J2/J3 USB, J4/J5 RCA, J7 microSD and SW1/SW2. J6 uses the B2 display connector footprint.
 
-JC4880-derived electrical baseline:
+Historical 269/16/10 and run #76 270/17/12 figures predate the final display migration and B4 footprint locks. They are not current acceptance numbers.
 
-~~~text
-L_BL = 10uH
-D_BL = SS14
-C_IN = 10uF + 100nF
-C_OUT = 4.7uF + 100nF
-R_SENSE = 3.9R || 2.2R
-I_LED nominal ~74mA
-~~~
+## Structural validator coverage
 
-Locked sourcing candidate: **L_BL = Coilcraft XGL4030-103MEC**, 10 µH ±20%, 63 mΩ typ DCR, 3.1 A Isat, 3.9 A Irms (40 °C rise), footprint `Inductor_SMD:L_Coilcraft_XxL4030`. EVT još mora potvrditi thermal margin i finalni panel LED string.
+`validate_schematic_structure.py` checks:
 
----
-
-## 9. Intentional blank-footprint gates
-
-Mechanical / enclosure dependent:
-
-~~~text
-01_POWER_INPUT:J1
-04_P4_FLASH_CLOCK_RESET:SW1 (RESET)
-04_P4_FLASH_CLOCK_RESET:SW2 (BOOT)
-07_USB0_STORAGE:J2 (USB0)
-08_USB1_FLX4:J3 (USB1)
-09_AUDIO_PCM5102A:J4 (RCA L)
-09_AUDIO_PCM5102A:J5 (RCA R)
-12_MICROSD:J7 (microSD)
-~~~
-
-Sourcing / exact land-pattern dependent:
-
-~~~text
-01_POWER_INPUT:C3
-01_POWER_INPUT:D1
-01_POWER_INPUT:C8
-~~~
-
-U7 je sada zaključan kao **TPS259474ARPWR** s project-local footprintom `Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm`, izvedenim iz TI RPW0010A / VQFN-HR-10 2x2 mm drawinga `4225183/A`. Footprint zadržava HotRod L-shaped corner copper, duge IN/OUT landove, 14 copper pad primitiva, 16 stencil paste primitiva, +0.05 mm NSMD mask expansion te 0.100 mm-stencil redukcije približno 93% za corner landove i 82% za IN/OUT. Generički simetrični QFN land pattern nije dopušten.
-
-`R_SYS_SHUNT` je zaključan kao **Vishay WSK25125L000FEA**, 5 mΩ, 1%, 1 W, 4-terminal, s footprintom `Resistor_SMD:R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm`.
-
-Svaki novi blank footprint izvan ovog allowlista validator tretira kao error.
-
-
-### J6 Rev A removal closure
-
-M1-MECH-A8 removes optional J6 3.5 mm line-out from the Rev A schematic/PCB baseline. MAIN remains RCA J4/J5 and CUE/headphones remain via DDJ-FLX4 USB Audio. J6 was already production-default DNP and not a headphone output; M1-MECH-A4 additionally showed only 0.525 mm to the candidate mounting-hole edge in the same primary I/O row before boss/courtyard allowance.
-
-### J9 factory pogo closure
-
-M1-MECH-A7 closes the former blank-footprint J9 gate with project-local footprint `Pajoniiir-M1:Factory_Pogo_USBJTAG_1x05_P1.27_2Tooling`. J9 remains DNL / `in_bom=no`, so manufacturing BOM parity/counts are unchanged. The footprint is a 5-pad 1.27 mm production pogo row with two asymmetric Ø1.2 mm tooling holes and explicit pin-1 datum. Existing signal mapping is preserved: 3V3_SYS VREF sense-only, GND, USBJTAG D-/D+, CHIP_PU. Fixture power injection through VREF is forbidden.
-
----
-
-## 10. USB status
-
-USB0: dedicated P4 HS, 0R data tuning, TPD2EUSB30A, independent VBUS, shield tuning i 90R diff target. Hard gate je exact USB-A MPN/footprint.
-
-USB1: P4 FS GPIO26/27, 22R/22R, DNP data caps, TPD2EUSB30A, independent VBUS, shield tuning i očuvani GPIO24/25 USB Serial/JTAG. Hard gate je exact USB-A MPN/footprint.
-
----
-
-## 11. microSD status
-
-Captured: native 4-bit SDMMC0, GPIO39-44, GPIO45 controlled power, GPIO46 card detect, TPS22918, CT/QOD, pull-upovi na switched 3V3_SD, series tuning i DNP CLK capacitor.
-
-Hard gate: exact microSD socket MPN/footprint i final low-C ESD odluka.
-
----
-
-## 12. Debug / recovery status
-
-Captured independent paths: P4 UART0, P4 USB Serial/JTAG i C6 UART/boot/EN. P4 i C6 recovery su zasebni. Tag-Connect footprintovi su DNL/no-parts, a VREF je sense-only.
-
----
-
-## 13. Structural validator
-
-Added:
-
-~~~text
-hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
-~~~
-
-Run from repo root:
-
-~~~bash
-python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
-~~~
-
-Provjerava S-expression balance, hierarchy name/shape sync, duplicate RefDes, root label collisions, sheet overlap, blank-footprint allowlist, banned legacy blocks, 5V_PROTECTED→shunt→5V_SYS invariants, INA238/MP3202 presence i J_LCD hard gate.
-
-Ne radi native ERC, footprint pin-to-pad validation, PCB DRC, impedance verification ni field-solver analizu.
-
-### Manufacturing-output CI
-
-Dodani su native KiCad exporti i source-parity provjera. CI sada generira manufacturing BOM CSV, hierarchy netlist, kompletni schematic PDF i Markdown BOM-audit. `validate_manufacturing_outputs.py` zahtijeva da KiCad BOM sadrži točno isti `in_bom=yes` RefDes skup kao 15 leaf sheetova te iste Value/Footprint podatke. Trenutni M1-MECH-A12 source baseline ima 269 `in_bom=yes` RefDes-a, 16 DNP stavki i 10 dopuštenih blank-footprint manufacturing gateova; D1 je sada stvarno footprint-lockan kao ST SMBJ6.0CA-TR / `Diode_SMD:D_SMB`.
-
-Detalji: `Pajoniiir_Manufacturing_Output_Contract_v0.1.md`.
-
-### Run #76 review evidence
-
-KiCad 9 CI run #76 (`d8bffb3a`) je potpuno zelen nakon presentation cleanup-a. Generated manufacturing BOM ima **270/270 RefDes parity PASS**, **17 DNP** i točno **12 intentional blank-footprint gateova**. Schematic PDF ima 16 stranica; render-first human review potvrđuje da nema rezanih engineering-note blokova niti title-block preklapanja. `03_P4_CORE` je namjerno A2 kako U1B ostaje unutar review framea. Manual BOM review nije pronašao dodatne skrivene TBD/blank-footprint stavke izvan odobrenog gate skupa.
-
----
-
-## 14. M1-SCH-A exit gates remaining
-
-- [x] 15-sheet component-level capture
-- [x] structural hierarchy audit
-- [x] unique RefDes audit
-- [x] root power-path correction
-- [x] DNP/DNL policy captured
-- [x] local structural validator committed
-- [x] hierarchy pin-sync equivalence — bidirectional root/child name+shape validator + native KiCad root load/netlist/PDF export
-- [x] native KiCad 9.0.9 ERC — 0 unexplained errors, 6 approved J_LCD exclusions, 0 warnings
-- [x] final U7 RPW0010A land pattern freeze — `Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm`
-- [x] final L_BL part / footprint — XGL4030-103MEC / L_Coilcraft_XxL4030
-- [x] final system shunt part / footprint — WSK25125L000FEA / WSK2512 T1.19mm
-- [ ] J_LCD physical gate closed
-- [ ] USB-A exact MPNs
-- [ ] microSD exact MPN
-- [ ] RCA exact MPNs
-- [ ] 5V input exact MPN
-- [ ] RESET/BOOT exact switch MPNs
-- [x] schematic PDF generation in CI
-- [x] schematic PDF human review — run #76, 16/16 pages reviewed
-- [x] manufacturing BOM/netlist extraction + schematic-source parity check in CI
-- [x] historical run #76 engineering/manual BOM review — 270/270, 17 DNP, 12 intentional blank gates; current M1-MECH-A12 source baseline is 269/16/10 after J6 removal and D1 footprint lock
-
----
-
-### Mechanical gate authority
-
-Open physical gates are now machine-readable in `hardware/Pajoniiir-M1/mechanical_gates.json` and described in `Pajoniiir_M1_Mechanical_Sourcing_Gates_v0.1.md`. Both structural and manufacturing validators derive blank-footprint policy from that manifest.
-
----
-
-### M1-MECH-A progress
-
-Display/front geometry and the legacy enclosure candidate are now quantified in `mech_a.json`. The old Blender fit-test envelope (117.008 × 69.408 × 13.900 mm) matches GUITION's 117.01 × 69.41 × 13.8 mm module reference closely, so the 121.008 × 73.408 × 30 mm / 2 mm-wall enclosure is retained as a validated M1 candidate rather than discarded. Final PCB outline and connector datums remain open.
-
----
-
-## 15. PCB-layout status
-
-**GO for exploratory functional placement:** YES, uz placeholder mechanics i obavezni `pcb_constraints.json` / `Pajoniiir_M1_PCB_Layout_Constraints_v0.1.md` constraint set.
-
-**GO for final placement freeze:** NO.
-
-**GO for final USB/MIPI routing:** NO.
-
-**GO for Gerbers / EVT order:** NO.
-
-Final layout čeka authoritative display/FPC mechanics, exact connector footprints, final PCB outline, fab stackup, 90R USB geometry, 100R MIPI geometry i preostale manufacturing/sourcing odluke. Native ERC više nije blocker.
-
----
-
-## 16. Recommended next sequence
-
-1. Resolve remaining LCD/panel/FPC mating geometry, pins 15/16/18/19 and 3V3-domain commonality.
-2. Select exact USB-A, RCA, microSD, 5V input and RESET/BOOT/service-switch MPNs from the final enclosure/mechanical constraints.
-3. Lock PCB outline / connector datums / display FPC location.
-4. Obtain PCB fab stackup and derive controlled-impedance geometries.
-5. Begin final placement/routing only after those physical gates close.
-
-Optional editor hygiene before manual schematic editing: open/save once in native KiCad GUI. This is no longer a sign-off gate because hierarchy pin synchronization is already enforced bidirectionally in CI and the full root hierarchy is loaded/exported by native KiCad 9.
-
----
-
-## 17. Conclusion
-
-Pajoniiir-M1 više nije u architecture-only fazi. Projekt sada ima stvarni hijerarhijski component-level Rev A schematic capture sa strukturno čistim inter-sheet contractom.
-
-Native KiCad ERC, schematic PDF human review i manufacturing BOM cross-check više nisu blockeri. Preostali rad prije finalnog PCB layouta koncentriran je isključivo na mehaničko i exact-footprint zatvaranje, finalni outline/datume i fab stackup. Najveći pojedinačni blocker ostaje fizička LCD/touch panel/FPC definicija, sada sužena na jasno identificirane mating/pin/3V3-domain nepoznanice.
+- balanced KiCad S-expressions and expected hierarchy
+- bidirectional child-label/root-pin name and shape equivalence
+- duplicate RefDes and duplicate RefDes/unit instances
+- U1 two-unit geometry and pin partitioning
+- prohibited ESP32-S3/ES8311/MAX485/NS4150 legacy blocks
+- exact project eFuse and DSI506 connector contracts
+- `5V_PROTECTED -> R120 -> 5V_SYS` topology
+- blank-footprint allowlist derived from `mechanical_gates.json`
+- B2 display authority and fail-closed mechanical/PCB state
+- PCB copper-layer count and absence of `Edge.Cuts` while the outline gate is open
+
+Native KiCad ERC and downstream manufacturing export remain separate CI checks.
+
+## Remaining release boundary
+
+Electrical capture is complete. The 12 remaining blockers are physical/EVT/layout gates:
+
+```text
+C3_INPUT_BULK
+C8_PROTECTED_BULK
+J1_POWER_INPUT
+SW1_RESET
+SW2_BOOT
+J2_USB0
+J3_USB1
+J4_RCA_L
+J5_RCA_R
+J_LCD_DISPLAY_FPC
+J7_MICROSD
+PCB_OUTLINE
+```
+
+Production placement/routing additionally requires exact 90 ohm USB and 100 ohm MIPI width/gap values for JLCPCB JLC04161H-7628.
+
+## Go / no-go
+
+- Schematic capture: **PASS / complete**
+- Structural and manufacturing-source validation: **PASS**
+- Exploratory placement using B5 screening anchors: **allowed**
+- Final component placement: **blocked**
+- Final USB/MIPI routing: **blocked**
+- Gerbers and EVT PCB order: **blocked**
+
+The next work should close J1 geometry, DSI FFC continuity/bend, display obstruction mapping, final enclosure/panel datums, mounting hardware, `Edge.Cuts`, C3/C8 EVT selection and production impedance rules.

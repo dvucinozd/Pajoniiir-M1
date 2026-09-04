@@ -2,7 +2,7 @@
 
 **Projekt:** Pajoniiir-M1 Rev A  
 **Datum:** 2026-09-04  
-**Status:** Pre-bring-up custom-PCB contract after M1-ELEC-B0 display migration
+**Status:** Current pre-bring-up custom-PCB contract after M1-ELEC-B2 implementation
 
 ---
 

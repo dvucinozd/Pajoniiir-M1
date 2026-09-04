@@ -4,7 +4,7 @@
 **Ploča:** Pajoniiir Mainboard Rev A  
 **Blok:** 03_P4_CORE  
 **Datum:** 2026-09-02  
-**Status:** Engineering design candidate — temeljen na aktualnim Espressif v3.x smjernicama
+**Status:** Captured in KiCad and structurally validated; silicon-lot and EVT checks remain
 
 ---
 

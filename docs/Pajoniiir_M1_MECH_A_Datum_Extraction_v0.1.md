@@ -1,5 +1,7 @@
 # Pajoniiir-M1 — M1-MECH-A Datum Extraction v0.1
 
+> **HISTORICAL PROCEDURE.** The active mechanical authority is now the B3/B4/B5 machine-readable contract set summarized in `Pajoniiir_M1_Current_Design_Status_B5.md`.
+
 **Procedure ID:** M1-MECH-A-D1  
 **Status:** Ready; source CAD currently unavailable in this session  
 **Primary source:** `D:\AI\BLENDER\flx4_0407.blend`

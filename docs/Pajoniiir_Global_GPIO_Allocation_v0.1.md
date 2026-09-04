@@ -1,9 +1,12 @@
 # Pajoniiir Mainboard — Global GPIO Allocation v0.2
 
-**Projekt:** Pajoniiir-M1 Rev A  
-**MCU:** ESP32-P4 v3.x / ESP32-P4NRW32X candidate  
-**Datum:** 2026-09-04  
-**Status:** Central GPIO authority after M1-ELEC-B0 display migration
+**Projekt:** Pajoniiir-M1 Rev A
+
+**MCU:** ESP32-P4 v3.2+ / ESP32-P4NRW32X production target
+
+**Datum:** 2026-09-04
+
+**Status:** Current central GPIO authority after M1-ELEC-B2 implementation
 
 ---
 
