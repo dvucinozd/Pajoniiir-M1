@@ -1,0 +1,47 @@
+name: M1 MECH B4 microSD footprint probe
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/m1-mech-b4-microsd-footprint-probe.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install converter and import C428492
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user easyeda2kicad >/dev/null
+          rm -rf /tmp/microsd
+          mkdir -p /tmp/microsd
+          "$HOME/.local/bin/easyeda2kicad" --footprint --lcsc_id=C428492 --output /tmp/microsd/molex
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          files=list(Path('/tmp/microsd').glob('molex.pretty/*.kicad_mod'))
+          if len(files)!=1:
+              raise SystemExit(f'expected one footprint, got {files}')
+          p=files[0]
+          t=p.read_text()
+          print('FOOTPRINT_FILE',p)
+          print('--- PADS ---')
+          pads=[]
+          for m in re.finditer(r'\(pad\s+"?([^"\s)]+)"?\s+([^\s)]+).*?\(at\s+([-+0-9.]+)\s+([-+0-9.]+)(?:\s+[-+0-9.]+)?\).*?\(size\s+([-+0-9.]+)\s+([-+0-9.]+)\)',t,re.S):
+              pad=(m.group(1),m.group(2),float(m.group(3)),float(m.group(4)),float(m.group(5)),float(m.group(6)))
+              pads.append(pad)
+              print(pad)
+          print('PAD_COUNT',len(pads))
+          print('PAD_NAMES',sorted({x[0] for x in pads}))
+          print('--- FOOTPRINT RAW ---')
+          print(t)
+          PY
