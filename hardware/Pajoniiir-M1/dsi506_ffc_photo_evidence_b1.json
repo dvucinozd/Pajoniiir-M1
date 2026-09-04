@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "milestone": "M1-MECH-B1",
+  "updated": "2026-09-04",
+  "source_class": "user close-up photograph of both exposed contact ends of the DSI flat-flex cable",
+  "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
+  "observations": [
+    "Both photographed cable ends show exposed contact fingers facing the camera in the close-up.",
+    "The visible contact count is consistent with the 15-way DSI cable used by the module.",
+    "One photographed end shows the printed AWM side while the other end presentation does not provide a full-length untwisted orientation reference."
+  ],
+  "conclusion": {
+    "electrical_contact_presence": "CONFIRMED",
+    "same_side_vs_opposite_side_cable_type": "NOT_YET_PROVEN",
+    "host_to_module_pin1_orientation": "NOT_YET_PROVEN"
+  },
+  "reason_orientation_remains_open": "The photograph shows the two ends close together, but not the complete cable laid flat and untwisted. One end can be flipped relative to the other while still presenting both contact rows to the camera, so Type-A versus Type-B cannot be established without one more orientation-controlled view or continuity measurement.",
+  "required_closure_evidence": [
+    "Lay the complete FFC flat on a table without twisting it and photograph the whole cable from one side so both ends are visible simultaneously.",
+    "Or perform continuity from pin 1 at one end to the corresponding physical edge contact at the other end and document the result."
+  ]
+}
