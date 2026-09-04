@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "milestone": "M1-MECH-B2",
+  "updated": "2026-09-04",
+  "source_class": "user annotated rear photograph plus previously captured DSI506 dimensions and FFC measurements",
+  "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
+  "proposal_status": "PREFERRED_MECHANICAL_ARCHITECTURE_CANDIDATE__NOT_YET_PRODUCTION_LOCKED",
+  "proposal": "Mount the Pajoniiir-M1 custom mainboard directly to the four inner rear threaded-post locations on the display module, keeping the mainboard parallel to the display rear PCB.",
+  "mount_pattern": {
+    "source": "inner four DSI506 mounting locations identified in the dimensioned rear drawing and user annotated photograph",
+    "centers_from_display_rear_pcb_top_left_mm": [
+      {"name":"UL_inner","x":43.109,"y":7.430},
+      {"name":"UR_inner","x":101.109,"y":7.430},
+      {"name":"LL_inner","x":43.109,"y":56.430},
+      {"name":"LR_inner","x":101.109,"y":56.430}
+    ],
+    "center_spacing_mm": {"x":58.000,"y":49.000},
+    "board_hole_pattern_policy": "If the post thread and seating surfaces are verified suitable, the M1 mainboard shall use this exact 58 x 49 mm four-hole datum as its primary display-relative mounting pattern."
+  },
+  "ffc": {
+    "physical_size_mm": {"length":60.0,"width":15.0},
+    "type":"Type-B / reverse-contact / opposite-side exposed conductors",
+    "display_receptacle_center_from_display_rear_pcb_top_left_mm":{"x":110.109,"y":33.000},
+    "display_receptacle_cable_approach":"+X from the right edge",
+    "display_receptacle_insertion_direction":"-X",
+    "routing_concept":"Use a controlled U-bend near the display right edge and place the M1 host DSI receptacle in the corresponding right-side region. Exact host connector XY/Z remains open until the post seating plane and FFC bend envelope are measured.",
+    "length_screen":"60 mm is favorable for a direct-behind-display mainboard concept, but no production bend radius or slack claim is made until physical mock-up / bend-envelope measurement."
+  },
+  "mainboard_orientation_candidate": {
+    "plane":"parallel to DSI506 rear PCB",
+    "preferred_component_side":"rear/outward, away from display",
+    "display_facing_side_policy":"Keep substantially component-free to minimize collision risk; the host DSI receptacle may be an intentional exception if the measured inter-board gap and assembly sequence pass.",
+    "assembly_sequence_candidate":[
+      "pre-insert FFC into the display-side host receptacle if access requires it",
+      "seat mainboard on the four verified posts",
+      "secure with verified screw size/length",
+      "route FFC through the approved U-bend without twist or over-folding"
+    ]
+  },
+  "why_preferred": [
+    "Uses existing display-relative mechanical datums instead of introducing independent enclosure standoffs.",
+    "Keeps display-to-mainboard alignment deterministic and repeatable.",
+    "Can reduce enclosure complexity and tolerance stack-up.",
+    "The 58 x 49 mm pattern is central enough to support a mainboard larger than the pattern while still allowing connector overhang toward enclosure walls.",
+    "The display DSI receptacle is close to the right edge, which is favorable for a short controlled FFC return path to a mainboard mounted directly behind the module."
+  ],
+  "hard_gates_before_lock": [
+    "verify all four marked posts are actually available threaded mounting points and are coplanar",
+    "measure thread type / screw major diameter",
+    "measure usable thread depth or safe screw engagement",
+    "measure post seating-plane Z above the display rear PCB",
+    "confirm whether the previously measured 10.0 mm maximum rear protrusion is the top of these four posts",
+    "measure post outside diameter / washer-bearing surface",
+    "confirm the display assembly tolerates the added mainboard mass and screw preload without stressing the LCD stack",
+    "create a local XY obstruction map for display-side components under the candidate mainboard",
+    "validate the 60 mm FFC bend path and mating keepout with the selected mainboard Z plane",
+    "identify display receptacle pin 1 and prove host pin 1 to module pin 1 mapping"
+  ],
+  "do_not_infer": [
+    "Do not assume M2, M2.5 or any other screw thread from the photograph.",
+    "Do not assume the 10 mm Z measurement is the post top until the user confirms what feature was measured.",
+    "Do not freeze the mainboard outline from the 58 x 49 mm hole pattern alone.",
+    "Do not place tall components on the display-facing side before the obstruction map is established."
+  ]
+}
