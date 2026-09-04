@@ -1,14 +1,16 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
-  "source_class": "user-provided dimensioned rear-side image of the final DSI506/DYL0023 display module",
-  "authority_level": "nominal_XY_dimensioned_image_evidence__physical_or_official_CAD_confirmation_required_for_production_release",
+  "source_class": "user-provided dimensioned rear-side image plus user physical caliper Z measurements on the final DSI506/DYL0023 display module",
+  "authority_level": "nominal_XY_dimensioned_image_plus_physical_Z_evidence__XY_caliper_or_official_CAD_confirmation_required_for_production_release",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "coordinate_system": {
-    "origin": "rear PCB top-left corner",
+    "xy_origin": "rear PCB top-left corner",
     "x_positive": "right",
     "y_positive": "down",
+    "z_origin": "front-most display/glass plane",
+    "z_positive": "rear/inward",
     "units": "mm"
   },
   "rear_pcb": {
@@ -40,24 +42,42 @@
       "outer_lower_y_mm": 72.930
     }
   },
+  "physical_z_measurements": {
+    "evidence_file": "dsi506_z_stack_evidence_b1.json",
+    "A_total_display_assembly_thickness_excluding_dsi_cable_mm": 7.0,
+    "B_front_to_rear_controller_pcb_plane_mm": 5.0,
+    "C_front_to_maximum_rear_protrusion_mm": 10.0,
+    "derived": {
+      "rear_controller_pcb_plane_z_mm": 5.0,
+      "nominal_display_body_rear_envelope_z_mm": 7.0,
+      "maximum_rear_protrusion_z_mm": 10.0,
+      "maximum_protrusion_beyond_rear_controller_pcb_plane_mm": 5.0
+    },
+    "status": "physical scalar Z envelope measured; local XY obstruction map and FFC bend envelope remain open"
+  },
   "source_dimension_notes": [
     "The image prints 116.110 mm from the upper-left outer-hole center to the right PCB edge while the overall PCB width is 121.109 mm; subtraction gives 4.999 mm. The raster is normalized to the separately indicated nominal 5.000 mm edge offset, a 0.001 mm image-label rounding discrepancy.",
     "The 78.000 mm and 20.000 mm right-edge dimensions yield inner-hole X coordinates 43.109 mm and 101.109 mm respectively.",
     "The 7.430 mm, 56.430 mm and 72.930 mm vertical dimensions are taken directly from the dimensioned image.",
-    "No Z-height, FFC bend radius, connector-center XY, component maximum height or glass/front-stack dimension is inferred from this rear image."
+    "Z evidence is physical user measurement: A=7.00 mm, B=5.00 mm, C=10.00 mm using the definitions captured in dsi506_z_stack_evidence_b1.json.",
+    "No FFC bend radius, connector-center XY or local XY position of the 10 mm maximum rear protrusion is inferred from the scalar Z measurements."
   ],
   "closed_by_this_evidence": [
     "nominal rear PCB width and height",
     "nominal mounting-hole count",
     "nominal mounting-hole diameter",
-    "nominal XY coordinates for all eight mounting holes"
+    "nominal XY coordinates for all eight mounting holes",
+    "scalar front-to-rear controller PCB Z datum",
+    "scalar nominal display assembly thickness excluding DSI cable",
+    "scalar maximum rear protrusion envelope"
   ],
   "still_required": [
     "physical caliper or official CAD confirmation of nominal XY dimensions before production release",
-    "complete display-module Z envelope",
+    "local XY obstruction map for rear protrusions",
     "DSI FFC connector absolute XY/Z datum and insertion direction",
     "actual FFC conductor-side / host-to-module pin-1 continuity check",
-    "FFC approach, bend and mating keepout",
-    "front glass / active-area / bezel stack needed for enclosure design"
+    "FFC approach, bend radius and mating keepout",
+    "front glass / active-area / bezel stack needed for enclosure design",
+    "new enclosure depth and M1 mainboard Z/standoff selection"
   ]
 }
