@@ -1,61 +1,65 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
-  "source_class": "user physical measurements of visible-LCD offsets from front-glass edges plus direct visible-height remeasurement",
+  "source_class": "user physical measurements of front-glass/visible-area geometry, resolved by absolute Y1/Y2 measurements from one common top-glass reference edge",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "front_glass_mm": {
     "width": 120.0,
     "height": 75.0
   },
-  "visible_area_measurements_mm": {
+  "visible_area_mm": {
     "width": 110.0,
-    "first_height_reading": 66.0,
-    "latest_height_recheck": 67.0
+    "height": 67.0
   },
-  "measured_edge_offsets_mm": {
+  "authoritative_common_reference_measurement_mm": {
+    "reference": "top edge of front glass",
+    "Y1_visible_window_top": 2.0,
+    "Y2_visible_window_bottom": 69.0,
+    "derived_visible_height": 67.0,
+    "derived_top_offset": 2.0,
+    "derived_bottom_offset": 6.0
+  },
+  "horizontal_offsets_mm": {
     "left": 5.0,
-    "right": 5.0,
-    "top": 3.0,
-    "bottom": 7.0
+    "right": 5.0
   },
   "consistency_checks": {
     "horizontal": {
-      "glass_minus_visible_mm": 10.0,
-      "left_plus_right_mm": 10.0,
+      "equation": "5 + 110 + 5 = 120",
       "result": "PASS"
     },
-    "vertical_using_first_66mm_reading": {
-      "top_plus_visible_plus_bottom_mm": 76.0,
-      "glass_height_mm": 75.0,
-      "difference_mm": 1.0,
-      "result": "FAIL_RECONCILIATION_REQUIRED"
+    "vertical": {
+      "equation": "2 + 67 + 6 = 75",
+      "result": "PASS"
     },
-    "vertical_using_latest_67mm_reading": {
-      "top_plus_visible_plus_bottom_mm": 77.0,
-      "glass_height_mm": 75.0,
-      "difference_mm": 2.0,
-      "result": "FAIL_RECONCILIATION_REQUIRED"
-    },
-    "visible_height_implied_if_T3_B7_are_exact_mm": 65.0,
-    "bottom_offset_implied_if_T3_and_visible67_are_exact_mm": 5.0,
-    "top_offset_implied_if_visible67_and_B7_are_exact_mm": 1.0
+    "direct_Y_check": {
+      "equation": "69 - 2 = 67",
+      "result": "PASS"
+    }
   },
   "authority": {
-    "horizontal_offsets": "LOCKED_AS_PHYSICAL_MEASUREMENT__L5_R5",
-    "latest_direct_visible_height_reading_mm": 67.0,
-    "vertical_offsets": "MEASURED_T3_B7_BUT_INCONSISTENT_WITH_BOTH_66MM_AND_67MM_VISIBLE_HEIGHT_READINGS",
-    "production_bezel_vertical_datum_locked": false
+    "horizontal_offsets_locked": true,
+    "vertical_offsets_locked": true,
+    "production_visible_window_datum_locked": true,
+    "final_visible_window_from_front_glass_top_left_mm": {
+      "x": 5.0,
+      "y": 2.0,
+      "width": 110.0,
+      "height": 67.0
+    },
+    "final_edge_offsets_mm": {
+      "left": 5.0,
+      "right": 5.0,
+      "top": 2.0,
+      "bottom": 6.0
+    }
   },
-  "interpretation": "At least one of T, B or the direct visible-height readings was taken to a different visual boundary or with insufficient precision. No averaging, centering or forced correction is allowed.",
-  "required_recheck": [
-    "Re-measure T and B with the same exact visible-pixel/window boundary used for the visible-height measurement, preferably with calipers.",
-    "Alternatively measure the absolute Y coordinate of the visible-window top edge and bottom edge from the same top glass edge; their difference directly gives visible height and avoids adding three separate measurements.",
-    "Vertical production datum closes only when T + visible_height + B equals 75.00 mm within the selected measurement tolerance."
+  "superseded_measurements": [
+    {
+      "values": "T=3 mm, B=7 mm, visible height 66/67 mm",
+      "reason": "Separate measurements used ambiguous/different visual boundaries and did not arithmetically close against the 75 mm glass height. They are retained only as historical evidence and are superseded by the common-reference Y1/Y2 measurement."
+    }
   ],
-  "do_not_infer": [
-    "Do not average the 66 mm and 67 mm visible-height readings.",
-    "Do not change T=3 mm or B=7 mm merely to force arithmetic closure.",
-    "Do not use a production bezel opening that could crop the active image until the vertical datum is reconciled."
-  ]
+  "bezel_design_note": "The visible-window datum is now physically reconciled. Final cosmetic bezel overlap/reveal may intentionally cover some inactive border, but must not crop the 110 x 67 mm locked visible window unless a later deliberate industrial-design decision says otherwise."
 }
