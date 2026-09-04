@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "milestone": "M1-MECH-B1",
+  "updated": "2026-09-04",
+  "source_class": "user-provided dimensioned rear-side image of the final DSI506/DYL0023 display module",
+  "authority_level": "nominal_XY_dimensioned_image_evidence__physical_or_official_CAD_confirmation_required_for_production_release",
+  "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
+  "coordinate_system": {
+    "origin": "rear PCB top-left corner",
+    "x_positive": "right",
+    "y_positive": "down",
+    "units": "mm"
+  },
+  "rear_pcb": {
+    "width_mm": 121.109,
+    "height_mm": 77.193
+  },
+  "mounting_holes": {
+    "count": 8,
+    "radius_mm": 1.25,
+    "diameter_mm": 2.5,
+    "nominal_centers_from_top_left_mm": [
+      {"name": "UL_outer", "x": 5.000, "y": 5.000},
+      {"name": "UL_inner", "x": 43.109, "y": 7.430},
+      {"name": "UR_inner", "x": 101.109, "y": 7.430},
+      {"name": "UR_outer", "x": 116.109, "y": 5.000},
+      {"name": "LL_inner", "x": 43.109, "y": 56.430},
+      {"name": "LR_inner", "x": 101.109, "y": 56.430},
+      {"name": "LL_outer", "x": 5.000, "y": 72.930},
+      {"name": "LR_outer", "x": 116.109, "y": 72.930}
+    ],
+    "derived_patterns": {
+      "outer_pattern_center_spacing_mm": [111.109, 67.930],
+      "inner_pattern_center_spacing_mm": [58.000, 49.000],
+      "outer_top_edge_offset_mm": 5.000,
+      "inner_top_edge_offset_mm": 7.430,
+      "inner_left_x_mm": 43.109,
+      "inner_right_x_mm": 101.109,
+      "inner_lower_y_mm": 56.430,
+      "outer_lower_y_mm": 72.930
+    }
+  },
+  "source_dimension_notes": [
+    "The image prints 116.110 mm from the upper-left outer-hole center to the right PCB edge while the overall PCB width is 121.109 mm; subtraction gives 4.999 mm. The raster is normalized to the separately indicated nominal 5.000 mm edge offset, a 0.001 mm image-label rounding discrepancy.",
+    "The 78.000 mm and 20.000 mm right-edge dimensions yield inner-hole X coordinates 43.109 mm and 101.109 mm respectively.",
+    "The 7.430 mm, 56.430 mm and 72.930 mm vertical dimensions are taken directly from the dimensioned image.",
+    "No Z-height, FFC bend radius, connector-center XY, component maximum height or glass/front-stack dimension is inferred from this rear image."
+  ],
+  "closed_by_this_evidence": [
+    "nominal rear PCB width and height",
+    "nominal mounting-hole count",
+    "nominal mounting-hole diameter",
+    "nominal XY coordinates for all eight mounting holes"
+  ],
+  "still_required": [
+    "physical caliper or official CAD confirmation of nominal XY dimensions before production release",
+    "complete display-module Z envelope",
+    "DSI FFC connector absolute XY/Z datum and insertion direction",
+    "actual FFC conductor-side / host-to-module pin-1 continuity check",
+    "FFC approach, bend and mating keepout",
+    "front glass / active-area / bezel stack needed for enclosure design"
+  ]
+}
