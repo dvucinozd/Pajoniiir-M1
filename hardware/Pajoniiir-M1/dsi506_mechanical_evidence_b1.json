@@ -1,9 +1,9 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
-  "source_class": "user-provided dimensioned rear-side image, physical Z measurements, and front-side photograph with physical front-glass/visible-area measurements for the final DSI506/DYL0023 display module",
-  "authority_level": "nominal_XY_dimensioned_image_plus_physical_Z_and_front_envelope_evidence__XY_caliper_or_official_CAD_confirmation_required_for_production_release",
+  "source_class": "user-provided rear dimensioned image, physical Z measurements, front-glass/visible-area measurements, bezel-offset measurements, and orientation-controlled full-cable FFC photograph for the final DSI506/DYL0023 display module",
+  "authority_level": "nominal_XY_dimensioned_image_plus_physical_Z_front_and_FFC_type_evidence__rear_XY_caliper_or_official_CAD_confirmation_required_for_production_release",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "coordinate_system": {
     "xy_origin": "rear PCB top-left corner",
@@ -56,26 +56,40 @@
     "status": "physical scalar Z envelope measured; local XY obstruction map and FFC bend envelope remain open"
   },
   "front_glass_and_visible_area": {
-    "evidence_file": "dsi506_front_glass_evidence_b1.json",
     "front_glass_width_mm": 120.0,
     "front_glass_height_mm": 75.0,
     "visible_lcd_width_mm": 110.0,
-    "visible_lcd_height_mm": 66.0,
-    "derived_if_centered_only": {
-      "left_mm": 5.0,
-      "right_mm": 5.0,
-      "top_mm": 4.5,
-      "bottom_mm": 4.5
+    "visible_lcd_height_measurements_mm": [66.0, 67.0],
+    "measured_offsets_mm": {
+      "left": 5.0,
+      "right": 5.0,
+      "top": 3.0,
+      "bottom": 7.0
     },
-    "status": "physical envelope and visible-area size measured; individual four-edge offsets not yet measured, so centered margins are not a production bezel datum"
+    "horizontal_status": "LOCKED__5_PLUS_110_PLUS_5_EQUALS_120",
+    "vertical_status": "OPEN__T3_PLUS_B7_IMPLIES_65MM_VISIBLE_HEIGHT_BUT_DIRECT_READINGS_ARE_66_AND_67MM",
+    "production_vertical_bezel_datum_locked": false,
+    "evidence_files": [
+      "dsi506_front_glass_evidence_b1.json",
+      "dsi506_bezel_offsets_evidence_b1.json"
+    ]
+  },
+  "dsi_ffc": {
+    "evidence_file": "dsi506_ffc_photo_evidence_b1.json",
+    "contact_count": 15,
+    "pitch_mm": 1.0,
+    "cable_type": "Type-B / reverse-contact / opposite-side exposed conductors",
+    "same_side_vs_opposite_side_status": "LOCKED_FROM_ORIENTATION_CONTROLLED_PHOTO",
+    "host_to_module_pin1_mapping_status": "OPEN",
+    "cable_twist_required_for_normal_mating": false
   },
   "source_dimension_notes": [
-    "The image prints 116.110 mm from the upper-left outer-hole center to the right PCB edge while the overall PCB width is 121.109 mm; subtraction gives 4.999 mm. The raster is normalized to the separately indicated nominal 5.000 mm edge offset, a 0.001 mm image-label rounding discrepancy.",
-    "The 78.000 mm and 20.000 mm right-edge dimensions yield inner-hole X coordinates 43.109 mm and 101.109 mm respectively.",
-    "The 7.430 mm, 56.430 mm and 72.930 mm vertical dimensions are taken directly from the dimensioned image.",
-    "Z evidence is physical user measurement: A=7.00 mm, B=5.00 mm, C=10.00 mm using the definitions captured in dsi506_z_stack_evidence_b1.json.",
-    "Front evidence is physical user measurement: glass 120.00 x 75.00 mm and visible LCD 110 x 66 mm.",
-    "No FFC bend radius, connector-center XY, local XY position of the 10 mm maximum rear protrusion, or asymmetric visible-area edge offsets are inferred."
+    "Rear PCB and eight-hole nominal XY raster come from the user-provided dimensioned rear image; the 0.001 mm edge-label discrepancy is treated as image rounding and nominalized to 5.000 mm where explicitly dimensioned.",
+    "Z evidence is physical user measurement: A=7.00 mm, B=5.00 mm, C=10.00 mm.",
+    "Front glass is physically measured at 120.00 x 75.00 mm and visible width at 110.00 mm; L=5.00 mm and R=5.00 mm reconcile exactly.",
+    "Vertical measurements do not reconcile: T=3.00 mm and B=7.00 mm imply a 65.00 mm visible height, while direct visible-height readings were 66.00 mm and then 67.00 mm. No forced correction is allowed.",
+    "The full DSI FFC photographed flat and untwisted proves opposite-side exposed contacts: Type-B/reverse-contact cable.",
+    "No FFC bend radius, module receptacle pin-1 orientation, connector-center XY, or local XY position of the 10 mm maximum rear protrusion is inferred."
   ],
   "closed_by_this_evidence": [
     "nominal rear PCB width and height",
@@ -86,14 +100,16 @@
     "scalar nominal display assembly thickness excluding DSI cable",
     "scalar maximum rear protrusion envelope",
     "front glass nominal width and height",
-    "visible LCD nominal width and height"
+    "visible LCD nominal width",
+    "horizontal visible-area offsets L=5 mm and R=5 mm",
+    "DSI FFC same-side versus opposite-side cable type: Type-B/reverse-contact"
   ],
   "still_required": [
     "physical caliper or official CAD confirmation of nominal rear PCB XY dimensions before production release",
-    "individual visible-area offsets from left, right, top and bottom glass edges",
+    "reconciled vertical front-glass/visible-area datum using one consistent visible boundary",
     "local XY obstruction map for rear protrusions",
-    "DSI FFC connector absolute XY/Z datum and insertion direction",
-    "actual FFC conductor-side / host-to-module pin-1 continuity check",
+    "DSI506 module receptacle absolute XY/Z datum and insertion direction",
+    "DSI506 module receptacle pin-1/contact-side identification and host-to-module pin-1 continuity/orientation verification",
     "FFC approach, bend radius and mating keepout",
     "front glass corner/radius/chamfer details if relevant to enclosure retention",
     "final bezel overlap/cosmetic reveal decision",
