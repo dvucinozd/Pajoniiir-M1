@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report the current M1-MECH-A gate snapshot from mechanical_gates.json.
+"""Report the current M1-MECH-A13 gate snapshot from mechanical_gates.json.
 
 This is intentionally read-only. It is useful before/after physical-CAD or EVT
 closure work and gives a deterministic count of layout blockers and BOM blank
@@ -71,7 +71,7 @@ def main() -> int:
         print(json.dumps(snapshot, indent=2))
         return 0
 
-    print("M1-MECH-A gate snapshot")
+    print("M1-MECH-A13 gate snapshot")
     print(f"  layout freeze allowed: {snapshot['layout_freeze_allowed']}")
     print(f"  open layout blockers: {len(open_blockers)}")
     print(f"  closed gates: {len(closed)}")
