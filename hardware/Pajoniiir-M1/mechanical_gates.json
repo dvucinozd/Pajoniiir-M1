@@ -166,17 +166,16 @@
       "refdes": "SW1",
       "category": "switch_mechanical",
       "status": "open",
-      "allow_blank_footprint": true,
+      "allow_blank_footprint": false,
       "bom_scope": true,
       "blocks_layout_freeze": true,
       "required_evidence": [
-        "actuation direction",
-        "enclosure access method",
-        "actuator height",
-        "keepout/courtyard",
-        "separate recessed tool-hole geometry preventing accidental actuation"
+        "separate recessed tool-hole center on the final X_POS media/service wall",
+        "actuator-to-wall gap and tool diameter",
+        "local courtyard/keepout versus J7, FFC corridor and mounting screw",
+        "spacing preventing accidental simultaneous RESET/BOOT actuation"
       ],
-      "closure": "Lock exact RESET momentary-NO switch MPN.",
+      "closure": "B3U-3000P-B and Button_Switch_SMD:SW_SPST_B3U-3000P-B are locked/instantiated. Gate remains open only for recessed panel tool-hole center, actuator-to-wall gap, service access and final XY placement.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "RECOVERY_BUTTONS",
       "absolute_cutout_datum_status": "open",
@@ -206,7 +205,12 @@
       ],
       "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
       "closure_path": "Prefer B3U-3000P-B recessed/tool-access configuration; close only after exact actuator-to-wall/tool-hole/spacing and boss footprint geometry pass.",
-      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY"
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
+      "exact_mpn": "B3U-3000P-B",
+      "exact_footprint": "Button_Switch_SMD:SW_SPST_B3U-3000P-B",
+      "datasheet": "https://components.omron.com/us-en/system/files/2023-01/datasheet_pdf/A162-E1.pdf",
+      "source_status": "MPN_AND_FOOTPRINT_LOCKED_M1-MECH-B4-SW",
+      "footprint_status": "CLOSED__STANDARD_KICAD_EXACT_PART_FOOTPRINT"
     },
     {
       "id": "SW2_BOOT",
@@ -214,17 +218,16 @@
       "refdes": "SW2",
       "category": "switch_mechanical",
       "status": "open",
-      "allow_blank_footprint": true,
+      "allow_blank_footprint": false,
       "bom_scope": true,
       "blocks_layout_freeze": true,
       "required_evidence": [
-        "actuation direction",
-        "enclosure access method",
-        "actuator height",
-        "keepout/courtyard",
-        "separate recessed tool-hole geometry preventing accidental actuation"
+        "separate recessed tool-hole center on the final X_POS media/service wall",
+        "actuator-to-wall gap and tool diameter",
+        "local courtyard/keepout versus J7, FFC corridor and mounting screw",
+        "spacing preventing accidental simultaneous RESET/BOOT actuation"
       ],
-      "closure": "Lock exact BOOT momentary-NO switch MPN.",
+      "closure": "B3U-3000P-B and Button_Switch_SMD:SW_SPST_B3U-3000P-B are locked/instantiated. Gate remains open only for recessed panel tool-hole center, actuator-to-wall gap, service access and final XY placement.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "RECOVERY_BUTTONS",
       "absolute_cutout_datum_status": "open",
@@ -254,7 +257,12 @@
       ],
       "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
       "closure_path": "Prefer B3U-3000P-B recessed/tool-access configuration; close only after exact actuator-to-wall/tool-hole/spacing and boss footprint geometry pass.",
-      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY"
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
+      "exact_mpn": "B3U-3000P-B",
+      "exact_footprint": "Button_Switch_SMD:SW_SPST_B3U-3000P-B",
+      "datasheet": "https://components.omron.com/us-en/system/files/2023-01/datasheet_pdf/A162-E1.pdf",
+      "source_status": "MPN_AND_FOOTPRINT_LOCKED_M1-MECH-B4-SW",
+      "footprint_status": "CLOSED__STANDARD_KICAD_EXACT_PART_FOOTPRINT"
     },
     {
       "id": "J2_USB0",
@@ -300,7 +308,7 @@
           ]
         },
         {
-          "manufacturer": "Würth Elektronik",
+          "manufacturer": "W\u00fcrth Elektronik",
           "mpn": "614004190021",
           "role": "active_lifecycle_stable_alternate",
           "status": "screened_not_locked",
@@ -334,7 +342,7 @@
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
       ],
-      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; W\u00fcrth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
       "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
       "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
@@ -384,7 +392,7 @@
           ]
         },
         {
-          "manufacturer": "Würth Elektronik",
+          "manufacturer": "W\u00fcrth Elektronik",
           "mpn": "614004190021",
           "role": "active_lifecycle_stable_alternate",
           "status": "screened_not_locked",
@@ -418,7 +426,7 @@
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
       ],
-      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; W\u00fcrth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
       "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
       "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
@@ -456,7 +464,7 @@
             "right-angle THT",
             "board lock",
             "active distributor listing",
-            "Ø8.3 mm actual barrel",
+            "\u00d88.3 mm actual barrel",
             "white"
           ],
           "screen_result": "aperture first-order pass; local Z/body/plug clearance must be proven",
@@ -523,7 +531,7 @@
             "right-angle THT",
             "board lock",
             "active distributor listing",
-            "Ø8.3 mm actual barrel",
+            "\u00d88.3 mm actual barrel",
             "red"
           ],
           "screen_result": "aperture first-order pass; local Z/body/plug clearance must be proven",
@@ -580,7 +588,7 @@
       "wall_class_preference": "NOT_PRIMARY_LONG_WALL_SAME_PCB_EDGE_ROW",
       "panel_packing_screen": {
         "result": "fail_same_edge_row",
-        "reason": "USB pair + RCA pair + 5 mm reserve + legacy Ø6.97 J6 aperture yields 99.55 mm occupied span; centered on 108 mm candidate PCB edge leaves only 0.525 mm from packed envelope to candidate D2 mounting-hole edge before any boss/courtyard allowance",
+        "reason": "USB pair + RCA pair + 5 mm reserve + legacy \u00d86.97 J6 aperture yields 99.55 mm occupied span; centered on 108 mm candidate PCB edge leaves only 0.525 mm from packed envelope to candidate D2 mounting-hole edge before any boss/courtyard allowance",
         "closure_paths": [
           "different wall",
           "different Z row / panel-mounted or harness",

@@ -7,7 +7,9 @@
   "wall_assignment_authority": "m1_mech_b3_mainboard_io_envelope.json",
   "selections": [
     {
-      "refdes": ["J1"],
+      "refdes": [
+        "J1"
+      ],
       "function": "5 V regulated locking power inlet",
       "wall": "X_NEG_LEFT / POWER_WALL",
       "manufacturer": "Switchcraft",
@@ -24,7 +26,10 @@
         "bushing_length_mm": 5.5,
         "locking": "threaded",
         "termination": "right-angle PC mount / through-hole",
-        "jack_temperature_c": [-40, 105]
+        "jack_temperature_c": [
+          -40,
+          105
+        ]
       },
       "why_locked": "Meets current margin, durability and locking requirements and remains an active/current Switchcraft product family. The short-bushing low-profile version is appropriate for the 2 mm wall candidate.",
       "still_open": [
@@ -40,7 +45,10 @@
       ]
     },
     {
-      "refdes": ["J2", "J3"],
+      "refdes": [
+        "J2",
+        "J3"
+      ],
       "function": "dual USB 2.0 Type-A host receptacles",
       "wall": "Y_NEG_TOP / PRIMARY_LONG_IO_WALL",
       "manufacturer": "Amphenol Communications Solutions / FCI",
@@ -68,7 +76,9 @@
       ]
     },
     {
-      "refdes": ["J4"],
+      "refdes": [
+        "J4"
+      ],
       "function": "MAIN L RCA output",
       "wall": "Y_NEG_TOP / PRIMARY_LONG_IO_WALL",
       "manufacturer": "Kycon",
@@ -87,10 +97,14 @@
         "top-wall RCA center/cutout",
         "mated RCA plug body/cable clearance"
       ],
-      "sources": ["https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"]
+      "sources": [
+        "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+      ]
     },
     {
-      "refdes": ["J5"],
+      "refdes": [
+        "J5"
+      ],
       "function": "MAIN R RCA output",
       "wall": "Y_NEG_TOP / PRIMARY_LONG_IO_WALL",
       "manufacturer": "Kycon",
@@ -109,10 +123,14 @@
         "top-wall RCA center/cutout",
         "mated RCA plug body/cable clearance"
       ],
-      "sources": ["https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"]
+      "sources": [
+        "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
+      ]
     },
     {
-      "refdes": ["J7"],
+      "refdes": [
+        "J7"
+      ],
       "function": "microSD removable media",
       "wall": "X_POS_RIGHT / MEDIA_SERVICE_WALL",
       "manufacturer": "Molex",
@@ -140,34 +158,42 @@
       ]
     },
     {
-      "refdes": ["SW1", "SW2"],
+      "refdes": [
+        "SW1",
+        "SW2"
+      ],
       "function": "recessed RESET / BOOT recovery switches",
       "wall": "X_POS_RIGHT / MEDIA_SERVICE_WALL",
       "manufacturer": "Aratas (formerly Omron Components)",
       "mpn": "B3U-3000P-B",
-      "selection_status": "COMMON_PART_MPN_LOCKED_FOR_BOTH_SWITCHES",
+      "selection_status": "MPN_AND_FOOTPRINT_LOCKED",
       "electrical_mechanical_evidence": {
         "circuit": "SPST-NO",
         "actuation": "side-actuated / right-angle SMT",
         "locating_boss": true,
-        "outline_mm": [4.0, 2.5],
+        "outline_mm": [
+          4.0,
+          2.5
+        ],
         "operating_force_n": 1.59,
-        "travel_mm": 0.20,
+        "travel_mm": 0.2,
         "mechanical_cycles": 100000,
         "dust_proof": true,
         "product_status": "In production / Active"
       },
       "still_open": [
-        "manufacturer land pattern / exact footprint committed and checked",
         "two separate recessed right-wall tool-hole centers",
         "actuator-to-wall gap and tool diameter",
+        "local courtyard/keepout versus J7, FFC corridor and mounting screw",
         "spacing preventing accidental simultaneous actuation"
       ],
       "sources": [
         "https://components.omron.com/us-en/products/switches/B3U",
         "https://components.omron.com/us-en/system/files/2023-01/datasheet_pdf/A162-E1.pdf",
         "https://www.digikey.com/en/products/detail/omron-electronics-inc-emc-div/B3U-3000P-B/2748498"
-      ]
+      ],
+      "exact_footprint": "Button_Switch_SMD:SW_SPST_B3U-3000P-B",
+      "footprint_basis": "Official KiCad Button_Switch_SMD library contains exact SW_SPST_B3U-3000P-B footprint; manufacturer B3U datasheet provides the boss/pad pattern for B3U-3000P-B."
     }
   ],
   "common_part_policy": {
