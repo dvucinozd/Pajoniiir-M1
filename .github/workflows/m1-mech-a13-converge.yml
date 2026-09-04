@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fix A13 migration idempotence guard
+      - name: Normalize A13 migration source
         shell: bash
         run: |
           set -euo pipefail
@@ -33,6 +33,8 @@ jobs:
               text=text.replace(old,new,1)
           elif new not in text:
               raise SystemExit('idempotence guard patch marker not found')
+          # Repository policy rejects trailing whitespace; do not generate Markdown hard-break spaces.
+          text=text.replace('  \\n', '\\n')
           p.write_text(text,encoding='utf-8')
           PY
 
