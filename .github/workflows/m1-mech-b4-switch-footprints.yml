@@ -1,0 +1,121 @@
+name: M1 MECH B4 switch footprint closure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/m1-mech-b4-switch-footprints.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply audited switch migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 hardware/Pajoniiir-M1/tools/migrate_b4_switch_footprints.py
+          python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
+          python3 hardware/Pajoniiir-M1/tools/validate_mechanical_authority.py
+          python3 hardware/Pajoniiir-M1/tools/validate_b4_panel_windows.py
+
+      - name: Install KiCad 9
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases >/dev/null
+          sudo apt-get update -qq
+          sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints >/dev/null
+          kicad-cli version
+          test -f /usr/share/kicad/footprints/Button_Switch_SMD.pretty/SW_SPST_B3U-3000P-B.kicad_mod
+
+      - name: KiCad preflight and manufacturing parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/m1-b4 artifacts
+          failed=0
+          while IFS= read -r schematic; do
+            name="$(basename "$schematic" .kicad_sch)"
+            set +e
+            kicad-cli sch erc --severity-error --output "/tmp/m1-b4/${name}.rpt" "$schematic" >/tmp/m1-b4/stdout 2>/tmp/m1-b4/stderr
+            rc=$?
+            set -e
+            if [[ "$rc" -ne 0 ]]; then
+              echo "LOAD/ERROR ERC FAIL: $schematic rc=$rc"
+              cat /tmp/m1-b4/stderr || true
+              failed=1
+            fi
+          done < <(find hardware/Pajoniiir-M1 -maxdepth 1 -name '*.kicad_sch' -print | sort)
+          test "$failed" -eq 0
+
+          kicad-cli sch export bom \
+            --output artifacts/Pajoniiir-M1-manufacturing-bom.csv \
+            --fields 'Reference,Value,Footprint,${QUANTITY},${DNP}' \
+            --labels 'Refs,Value,Footprint,Qty,DNP' \
+            --sort-field 'Reference' --sort-asc --string-delimiter '"' \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          python3 hardware/Pajoniiir-M1/tools/validate_manufacturing_outputs.py \
+            artifacts/Pajoniiir-M1-manufacturing-bom.csv \
+            artifacts/Pajoniiir-M1-manufacturing-bom-audit.md
+
+          kicad-cli sch export netlist --format kicadxml \
+            --output /tmp/m1-b4/Pajoniiir-M1.net.xml \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          kicad-cli sch export pdf --black-and-white \
+            --output /tmp/m1-b4/Pajoniiir-M1.pdf \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+
+          set +e
+          kicad-cli sch erc --format json --severity-all --exit-code-violations \
+            --output /tmp/m1-b4/Pajoniiir-M1-erc.json \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          erc_rc=$?
+          set -e
+          if [[ "$erc_rc" -ne 0 && "$erc_rc" -ne 5 ]]; then exit "$erc_rc"; fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('/tmp/m1-b4/Pajoniiir-M1-erc.json').read_text())
+          bad=[]
+          for sheet in data.get('sheets',[]):
+              for v in sheet.get('violations',[]):
+                  if v.get('excluded'): continue
+                  if v.get('severity') in {'error','warning'}:
+                      bad.append((sheet.get('path'),v.get('severity'),v.get('type'),v.get('description')))
+          if bad:
+              for item in bad: print('ERC BAD:',item)
+              raise SystemExit(f'unexcluded ERC error/warning count={len(bad)}')
+          print('PASS: native ERC has zero unexcluded errors/warnings')
+          PY
+
+          grep -q 'SW1' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q 'SW2' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q 'B3U-3000P-B' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q 'Button_Switch_SMD:SW_SPST_B3U-3000P-B' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+
+      - name: Commit validated closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/m1-mech-b4-switch-footprints.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            hardware/Pajoniiir-M1/04_P4_FLASH_CLOCK_RESET.kicad_sch \
+            hardware/Pajoniiir-M1/mechanical_gates.json \
+            hardware/Pajoniiir-M1/m1_mech_b4_connector_source_lock.json \
+            .github/workflows/m1-mech-b4-switch-footprints.yml
+          git diff --cached --check
+          git commit -m "mechanical: lock RESET BOOT switch footprints"
+          git push origin HEAD:main
