@@ -1,13 +1,12 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "milestone": "M1-MECH-B2",
   "updated": "2026-09-04",
-  "source_class": "user annotated rear photograph plus physical inner-post dimensions, prior DSI506 geometry, and FFC measurements",
+  "source_class": "user annotated rear photograph plus physical post dimensions, M2.5 screw-fit confirmation, thread-depth measurement, flat-plate coplanarity check, prior DSI506 geometry and FFC measurements",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
-  "proposal_status": "PREFERRED_MECHANICAL_ARCHITECTURE__DIRECT_MOUNT_GEOMETRY_PARTIALLY_LOCKED__THREAD_AND_LOCAL_CLEARANCE_OPEN",
-  "proposal": "Mount the Pajoniiir-M1 custom mainboard directly to the four inner rear threaded-post locations on the display module, keeping the mainboard parallel to the display rear PCB.",
+  "proposal_status": "DIRECT_MAINBOARD_MOUNT_ARCHITECTURE_LOCKED__PCB_OUTLINE_AND_LOCAL_CLEARANCE_OPEN",
+  "proposal": "Mount the Pajoniiir-M1 custom mainboard directly to the four inner rear threaded posts on the display module, parallel to the display rear PCB.",
   "mount_pattern": {
-    "source": "inner four DSI506 mounting locations identified in the dimensioned rear drawing and user annotated photograph",
     "centers_from_display_rear_pcb_top_left_mm": [
       {"name": "UL_inner", "x": 43.109, "y": 7.430},
       {"name": "UR_inner", "x": 101.109, "y": 7.430},
@@ -17,10 +16,14 @@
     "center_spacing_mm": {"x": 58.000, "y": 49.000},
     "measured_post_outer_diameter_mm": 5.0,
     "measured_post_height_above_display_rear_pcb_mm": 5.0,
-    "thread_candidate": "M2.5 likely; unconfirmed",
-    "board_hole_pattern_policy": "Use this exact 58 x 49 mm four-hole datum as the preferred display-relative mainboard mounting pattern once thread, screw engagement and coplanarity are confirmed."
+    "thread": "M2.5",
+    "thread_status": "PHYSICALLY_CONFIRMED",
+    "usable_thread_depth_mm": 3.0,
+    "coplanarity_status": "PHYSICALLY_CONFIRMED",
+    "flat_plate_collision_check": "PASS__all_four_post_tops contact and no display component touches the seating plane",
+    "board_hole_pattern_policy": "Use the exact 58 x 49 mm four-hole datum as the primary display-relative M1 mainboard mount frame."
   },
-  "z_stack_candidate": {
+  "z_stack": {
     "front_glass_z_mm": 0.0,
     "display_rear_controller_pcb_z_mm": 5.0,
     "post_top_seating_plane_z_mm": 10.0,
@@ -28,8 +31,20 @@
     "mainboard_thickness_mm": 1.6,
     "mainboard_rear_surface_z_mm": 11.6,
     "plane_to_plane_gap_display_pcb_to_mainboard_mm": 5.0,
-    "status": "GEOMETRICALLY_LOCKED_FROM_PHYSICAL_H5_AND_PRIOR_Z5_DATUM; local component clearance still requires XY obstruction map",
-    "cross_check": "rear PCB Z=5 mm + measured post H=5 mm = post top Z=10 mm, consistent with prior C=10 mm front-glass-to-maximum-rear-feature measurement"
+    "status": "LOCKED_FROM_PHYSICAL_MEASUREMENTS_AND_COPLANARITY_TEST"
+  },
+  "screw_baseline": {
+    "thread": "M2.5",
+    "rev_a_length_mm": 4.0,
+    "calculated_thread_engagement_without_washer_mm": 2.4,
+    "remaining_bottom_clearance_without_washer_mm": 0.6,
+    "m2p5x5_policy": "DO_NOT_USE with the 1.6 mm bare-PCB baseline because nominal engagement would be 3.4 mm against a measured 3.0 mm usable depth",
+    "head_or_washer_status": "OPEN_DETAIL__recheck engagement if washer thickness is introduced"
+  },
+  "pcb_mounting_holes": {
+    "type": "NPTH clearance",
+    "engineering_diameter_range_mm": [3.0, 3.2],
+    "production_diameter_status": "OPEN_UNTIL_TOLERANCE_STACK_AND_SCREW_HEAD_OR_WASHER_GEOMETRY_ARE_FINALIZED"
   },
   "ffc": {
     "physical_size_mm": {"length": 60.0, "width": 15.0},
@@ -37,56 +52,39 @@
     "display_receptacle_center_from_display_rear_pcb_top_left_mm": {"x": 110.109, "y": 33.000},
     "display_receptacle_cable_approach": "+X from the right edge",
     "display_receptacle_insertion_direction": "-X",
-    "routing_concept": "Use a controlled U-bend near the display right edge and place the M1 host DSI receptacle in the corresponding right-side region. The 60 mm cable is compatible in principle with a direct-behind-display layout, but host connector XY and bend radius remain physical-fit items.",
-    "length_screen": "PASS_FOR_ARCHITECTURE_CANDIDATE__NOT_A_PRODUCTION_BEND_RADIUS_CLAIM"
+    "routing_concept": "Use a controlled U-bend near the right edge to a display-facing host DSI receptacle on the directly mounted mainboard. Final bend radius, host XY and service-removal keepout remain open."
   },
-  "mainboard_orientation_candidate": {
+  "mainboard_orientation": {
     "plane": "parallel to DSI506 rear PCB",
     "preferred_component_side": "rear/outward, away from display",
-    "display_facing_side_policy": "Keep substantially component-free because the nominal inter-board plane gap is only 5.0 mm and display-side obstructions consume part of that gap. The host DSI receptacle may be an intentional exception after local collision validation.",
-    "assembly_sequence_candidate": [
-      "pre-insert FFC into the display-facing host receptacle if access requires it",
-      "seat mainboard directly on the four post tops at Z=10.0 mm",
-      "secure with verified thread, screw length and washer/head geometry",
-      "route the 60 x 15 mm Type-B FFC through the approved U-bend without twist or over-folding"
-    ]
+    "display_facing_side_policy": "Keep substantially component-free; permit only deliberately validated low-profile parts in known-clear regions."
   },
-  "why_preferred": [
-    "Uses existing display-relative mechanical datums instead of introducing independent enclosure standoffs.",
-    "Locks the mainboard seating plane directly to the display at Z=10.0 mm.",
-    "Keeps display-to-mainboard alignment deterministic and repeatable.",
-    "Reduces enclosure complexity and tolerance stack-up.",
-    "The 58 x 49 mm pattern is central enough to support a mainboard larger than the pattern while still allowing connector overhang toward enclosure walls.",
-    "The display DSI receptacle is close to the right edge, which is favorable for a short controlled FFC return path to a directly mounted mainboard."
+  "closed_by_b2": [
+    "direct mainboard-on-display architecture",
+    "four-post 58 x 49 mm pattern",
+    "post OD 5 mm",
+    "post height 5 mm",
+    "M2.5 thread identity",
+    "usable thread depth 3 mm",
+    "four-post coplanarity",
+    "flat-board no-collision seating-plane test",
+    "mainboard seating plane Z=10 mm",
+    "1.6 mm mainboard rear surface Z=11.6 mm",
+    "M2.5 x 4 mm Rev-A screw-length baseline"
   ],
-  "closed_or_partially_closed": [
-    "four-post center pattern = 58.000 x 49.000 mm",
-    "post outside diameter = 5.00 mm physical measurement",
-    "post height above display rear PCB = 5.00 mm physical measurement",
-    "post-top/mainboard seating plane = Z 10.00 mm",
-    "candidate mainboard rear copper plane = Z 11.60 mm for 1.6 mm PCB",
-    "FFC physical size = 60 x 15 mm",
-    "FFC Type-B cable orientation and display receptacle approach/insertion direction"
-  ],
-  "hard_gates_before_production_lock": [
-    "confirm all four marked posts are available threaded mounting points and verify coplanarity with a flat test plate/PCB",
-    "confirm thread type; M2.5 is currently only a user estimate",
-    "measure usable thread depth / safe screw engagement",
-    "select mainboard mounting-hole diameter and screw head/washer geometry",
-    "confirm the display assembly tolerates added mainboard mass and screw preload without stressing the LCD stack",
-    "create a local XY obstruction map for display-side components within the 5 mm inter-board plane gap",
-    "validate the 60 mm FFC bend path and mating/removal keepout with the final host connector position",
-    "identify display receptacle pin 1 and prove host pin 1 to module pin 1 mapping",
-    "finalize enclosure walls and user-I/O connector datums before freezing the mainboard outline"
+  "remaining_before_outline_freeze": [
+    "final NPTH clearance-hole diameter and screw-head/washer geometry",
+    "local obstruction map outside the four-post convex hull where the PCB may overhang",
+    "60 mm FFC bend radius, host connector XY and insertion/removal keepout",
+    "display receptacle pin-1 to host pin-1 proof",
+    "user-I/O connector wall assignments and cutout datums",
+    "final enclosure depth and rear-cover clearance",
+    "final mainboard X/Y Edge.Cuts"
   ],
   "evidence_files": [
     "dsi506_mechanical_evidence_b1.json",
-    "dsi506_inner_posts_evidence_b2.json"
+    "dsi506_inner_posts_evidence_b2.json",
+    "dsi506_mainboard_mount_lock_b2.json"
   ],
-  "do_not_infer": [
-    "Do not production-lock M2.5 until a known screw or measured thread proves it.",
-    "Do not treat the 5 mm plane gap as universal component clearance; local display components reduce it.",
-    "Do not freeze the mainboard outline from the 58 x 49 mm hole pattern alone.",
-    "Do not place tall components on the display-facing side before the obstruction map is established."
-  ]
+  "layout_freeze_allowed": false
 }
