@@ -1,16 +1,17 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
-  "source_class": "user physical measurements of visible-LCD offsets from front-glass edges",
+  "source_class": "user physical measurements of visible-LCD offsets from front-glass edges plus direct visible-height remeasurement",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "front_glass_mm": {
     "width": 120.0,
     "height": 75.0
   },
-  "previous_visible_area_measurement_mm": {
+  "visible_area_measurements_mm": {
     "width": 110.0,
-    "height": 66.0
+    "first_height_reading": 66.0,
+    "latest_height_recheck": 67.0
   },
   "measured_edge_offsets_mm": {
     "left": 5.0,
@@ -24,25 +25,37 @@
       "left_plus_right_mm": 10.0,
       "result": "PASS"
     },
-    "vertical": {
-      "glass_minus_visible_mm_using_previous_66mm_visible_height": 9.0,
-      "top_plus_bottom_mm": 10.0,
+    "vertical_using_first_66mm_reading": {
+      "top_plus_visible_plus_bottom_mm": 76.0,
+      "glass_height_mm": 75.0,
       "difference_mm": 1.0,
-      "result": "OPEN_REMEASUREMENT_REQUIRED"
-    }
+      "result": "FAIL_RECONCILIATION_REQUIRED"
+    },
+    "vertical_using_latest_67mm_reading": {
+      "top_plus_visible_plus_bottom_mm": 77.0,
+      "glass_height_mm": 75.0,
+      "difference_mm": 2.0,
+      "result": "FAIL_RECONCILIATION_REQUIRED"
+    },
+    "visible_height_implied_if_T3_B7_are_exact_mm": 65.0,
+    "bottom_offset_implied_if_T3_and_visible67_are_exact_mm": 5.0,
+    "top_offset_implied_if_visible67_and_B7_are_exact_mm": 1.0
   },
   "authority": {
     "horizontal_offsets": "LOCKED_AS_PHYSICAL_MEASUREMENT__L5_R5",
-    "vertical_offsets": "MEASURED_T3_B7_BUT_NOT_YET_RECONCILED_WITH_PRIOR_66MM_VISIBLE_HEIGHT",
+    "latest_direct_visible_height_reading_mm": 67.0,
+    "vertical_offsets": "MEASURED_T3_B7_BUT_INCONSISTENT_WITH_BOTH_66MM_AND_67MM_VISIBLE_HEIGHT_READINGS",
     "production_bezel_vertical_datum_locked": false
   },
+  "interpretation": "At least one of T, B or the direct visible-height readings was taken to a different visual boundary or with insufficient precision. No averaging, centering or forced correction is allowed.",
   "required_recheck": [
-    "Re-measure visible LCD height directly, preferably with caliper jaws on the visible active window.",
-    "Alternatively re-measure T and B from the same glass reference edges used for the 75.00 mm total height.",
-    "Vertical production datum closes when T + visible_height + B equals 75.00 mm within measurement tolerance."
+    "Re-measure T and B with the same exact visible-pixel/window boundary used for the visible-height measurement, preferably with calipers.",
+    "Alternatively measure the absolute Y coordinate of the visible-window top edge and bottom edge from the same top glass edge; their difference directly gives visible height and avoids adding three separate measurements.",
+    "Vertical production datum closes only when T + visible_height + B equals 75.00 mm within the selected measurement tolerance."
   ],
   "do_not_infer": [
-    "Do not average T/B or silently force centered margins.",
-    "Do not change the measured 3 mm / 7 mm values merely to match the prior 66 mm visible-height reading."
+    "Do not average the 66 mm and 67 mm visible-height readings.",
+    "Do not change T=3 mm or B=7 mm merely to force arithmetic closure.",
+    "Do not use a production bezel opening that could crop the active image until the vertical datum is reconciled."
   ]
 }
