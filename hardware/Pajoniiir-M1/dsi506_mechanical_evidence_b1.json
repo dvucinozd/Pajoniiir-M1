@@ -1,9 +1,9 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
-  "source_class": "user-provided dimensioned rear-side image plus user physical caliper Z measurements on the final DSI506/DYL0023 display module",
-  "authority_level": "nominal_XY_dimensioned_image_plus_physical_Z_evidence__XY_caliper_or_official_CAD_confirmation_required_for_production_release",
+  "source_class": "user-provided dimensioned rear-side image, physical Z measurements, and front-side photograph with physical front-glass/visible-area measurements for the final DSI506/DYL0023 display module",
+  "authority_level": "nominal_XY_dimensioned_image_plus_physical_Z_and_front_envelope_evidence__XY_caliper_or_official_CAD_confirmation_required_for_production_release",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "coordinate_system": {
     "xy_origin": "rear PCB top-left corner",
@@ -55,12 +55,27 @@
     },
     "status": "physical scalar Z envelope measured; local XY obstruction map and FFC bend envelope remain open"
   },
+  "front_glass_and_visible_area": {
+    "evidence_file": "dsi506_front_glass_evidence_b1.json",
+    "front_glass_width_mm": 120.0,
+    "front_glass_height_mm": 75.0,
+    "visible_lcd_width_mm": 110.0,
+    "visible_lcd_height_mm": 66.0,
+    "derived_if_centered_only": {
+      "left_mm": 5.0,
+      "right_mm": 5.0,
+      "top_mm": 4.5,
+      "bottom_mm": 4.5
+    },
+    "status": "physical envelope and visible-area size measured; individual four-edge offsets not yet measured, so centered margins are not a production bezel datum"
+  },
   "source_dimension_notes": [
     "The image prints 116.110 mm from the upper-left outer-hole center to the right PCB edge while the overall PCB width is 121.109 mm; subtraction gives 4.999 mm. The raster is normalized to the separately indicated nominal 5.000 mm edge offset, a 0.001 mm image-label rounding discrepancy.",
     "The 78.000 mm and 20.000 mm right-edge dimensions yield inner-hole X coordinates 43.109 mm and 101.109 mm respectively.",
     "The 7.430 mm, 56.430 mm and 72.930 mm vertical dimensions are taken directly from the dimensioned image.",
     "Z evidence is physical user measurement: A=7.00 mm, B=5.00 mm, C=10.00 mm using the definitions captured in dsi506_z_stack_evidence_b1.json.",
-    "No FFC bend radius, connector-center XY or local XY position of the 10 mm maximum rear protrusion is inferred from the scalar Z measurements."
+    "Front evidence is physical user measurement: glass 120.00 x 75.00 mm and visible LCD 110 x 66 mm.",
+    "No FFC bend radius, connector-center XY, local XY position of the 10 mm maximum rear protrusion, or asymmetric visible-area edge offsets are inferred."
   ],
   "closed_by_this_evidence": [
     "nominal rear PCB width and height",
@@ -69,15 +84,19 @@
     "nominal XY coordinates for all eight mounting holes",
     "scalar front-to-rear controller PCB Z datum",
     "scalar nominal display assembly thickness excluding DSI cable",
-    "scalar maximum rear protrusion envelope"
+    "scalar maximum rear protrusion envelope",
+    "front glass nominal width and height",
+    "visible LCD nominal width and height"
   ],
   "still_required": [
-    "physical caliper or official CAD confirmation of nominal XY dimensions before production release",
+    "physical caliper or official CAD confirmation of nominal rear PCB XY dimensions before production release",
+    "individual visible-area offsets from left, right, top and bottom glass edges",
     "local XY obstruction map for rear protrusions",
     "DSI FFC connector absolute XY/Z datum and insertion direction",
     "actual FFC conductor-side / host-to-module pin-1 continuity check",
     "FFC approach, bend radius and mating keepout",
-    "front glass / active-area / bezel stack needed for enclosure design",
+    "front glass corner/radius/chamfer details if relevant to enclosure retention",
+    "final bezel overlap/cosmetic reveal decision",
     "new enclosure depth and M1 mainboard Z/standoff selection"
   ]
 }
