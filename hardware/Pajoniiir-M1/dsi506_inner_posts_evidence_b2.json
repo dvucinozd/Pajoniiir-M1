@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "milestone": "M1-MECH-B2",
+  "updated": "2026-09-04",
+  "source_class": "user physical measurements of the four marked inner rear display posts",
+  "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
+  "post_set": {
+    "count": 4,
+    "role_candidate": "direct Pajoniiir-M1 mainboard mounting",
+    "center_pattern_mm": {
+      "x": 58.0,
+      "y": 49.0
+    },
+    "centers_from_display_rear_pcb_top_left_mm": [
+      {"name": "UL_inner", "x": 43.109, "y": 7.430},
+      {"name": "UR_inner", "x": 101.109, "y": 7.430},
+      {"name": "LL_inner", "x": 43.109, "y": 56.430},
+      {"name": "LR_inner", "x": 101.109, "y": 56.430}
+    ],
+    "measured_height_above_display_rear_pcb_mm": 5.0,
+    "measured_outer_diameter_mm": 5.0,
+    "thread": {
+      "user_estimate": "M2.5",
+      "status": "LIKELY_BUT_NOT_PRODUCTION_LOCKED",
+      "required_confirmation": "test with a known M2.5 screw or measure the screw major diameter / thread pitch"
+    },
+    "coplanarity": {
+      "status": "VISUALLY_AND_FUNCTIONALLY_EXPECTED_BUT_NOT_INSTRUMENT_VERIFIED",
+      "required_confirmation": "verify all four seating surfaces support one flat PCB without rocking"
+    }
+  },
+  "z_datum": {
+    "front_glass_plane_z_mm": 0.0,
+    "display_rear_controller_pcb_plane_z_mm": 5.0,
+    "post_height_mm": 5.0,
+    "post_top_seating_plane_z_mm": 10.0,
+    "cross_check_with_prior_C_measurement": "PASS: prior C=10.0 mm was measured from front glass to the maximum rear feature; user confirms that measurement was from the front glass, and H=5 mm above the Z=5 mm rear PCB plane independently yields Z=10 mm post tops."
+  },
+  "mainboard_direct_mount_implication": {
+    "candidate_display_facing_pcb_surface_z_mm": 10.0,
+    "pcb_thickness_mm": 1.6,
+    "candidate_rear_pcb_surface_z_mm": 11.6,
+    "interboard_plane_gap_mm": 5.0,
+    "orientation": "mainboard parallel to display rear PCB",
+    "component_policy": "Prefer no tall components on the display-facing side. Place primary components on the rear/outward side. Any display-facing exception, especially the host DSI receptacle, requires local collision and FFC bend validation."
+  },
+  "remaining_hard_gates": [
+    "confirm thread as M2.5 or identify actual thread",
+    "measure usable thread depth / safe screw engagement",
+    "verify all four post seating surfaces are coplanar and can carry the mainboard without rocking",
+    "verify screw-head/washer geometry and mainboard hole diameter",
+    "verify added mainboard mass and screw preload are acceptable for the display assembly",
+    "map local display-side obstructions within the 5 mm inter-board gap",
+    "validate the 60 x 15 mm Type-B FFC U-bend at the selected host-receptacle location"
+  ],
+  "do_not_infer": [
+    "M2.5 is not production-locked from visual judgment alone.",
+    "The 5 mm inter-board gap is a plane-to-plane value, not a universal component-height clearance.",
+    "Do not freeze the mainboard outline until connector wall placement and local obstruction checks are complete."
+  ]
+}
