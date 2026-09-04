@@ -1,4 +1,4 @@
-name: M1 MECH B4 manufacturer drawing geometry probe
+name: M1 MECH B4 Switchcraft drawing geometry probe
 
 on:
   push:
@@ -17,27 +17,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Extract spatial text from released connector drawings
+      - name: Extract spatial text from released Switchcraft drawing
         shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install --yes --no-install-recommends poppler-utils >/dev/null
           mkdir -p /tmp/drawings
-
           curl -fL --retry 3 --retry-delay 1 \
             'https://www.switchcraft.com/assets/1/24/7_%20_RAHLP%20SERIES_CD_REV0A.pdf?7826=' \
             -o /tmp/drawings/switchcraft.pdf
-          curl -fL --retry 3 --retry-delay 1 \
-            'https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/87520.pdf' \
-            -o /tmp/drawings/amphenol.pdf
-          curl -fL --retry 3 --retry-delay 1 \
-            'https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf' \
-            -o /tmp/drawings/kycon.pdf
-
-          for name in switchcraft amphenol kycon; do
-            pdfinfo "/tmp/drawings/$name.pdf" | sed "s/^/$name INFO /"
-            pdftotext -layout "/tmp/drawings/$name.pdf" "/tmp/drawings/$name.txt"
-            echo "===== $name LAYOUT TEXT ====="
-            cat "/tmp/drawings/$name.txt"
-          done
+          pdfinfo /tmp/drawings/switchcraft.pdf
+          pdftotext -layout /tmp/drawings/switchcraft.pdf /tmp/drawings/switchcraft.txt
+          echo '===== SWITCHCRAFT LAYOUT TEXT ====='
+          cat /tmp/drawings/switchcraft.txt
