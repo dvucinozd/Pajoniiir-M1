@@ -1,0 +1,177 @@
+name: M1 MECH B4 USB RCA footprint closure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/m1-mech-b4-usb-rca-footprint-lock.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply deterministic USB RCA migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 hardware/Pajoniiir-M1/tools/migrate_b4_usb_rca_footprints.py
+          python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
+          python3 hardware/Pajoniiir-M1/tools/validate_mechanical_authority.py
+          python3 hardware/Pajoniiir-M1/tools/validate_b4_panel_windows.py
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          base=Path('hardware/Pajoniiir-M1/libraries/footprints.pretty')
+          usb=(base/'Amphenol_87520-1010ALF.kicad_mod').read_text()
+          rca=(base/'Kycon_KLPX-0848A-2-x-G.kicad_mod').read_text()
+
+          # Released Amphenol 87520 recommended PCB layout:
+          # signal centers x=0,2.5,4.5,7.0; board locks 13.14 apart at y=2.71.
+          expected_usb=[
+              ('1',0.0,0.0,0.95),('2',2.5,0.0,0.95),
+              ('3',4.5,0.0,0.95),('4',7.0,0.0,0.95),
+              ('5',-3.07,2.71,2.30),('5',10.07,2.71,2.30),
+          ]
+          for pad,x,y,drill in expected_usb:
+              pat=rf'\(pad {pad} thru_hole [^\n]+\(at {re.escape(str(x)) if False else ""}'
+              needle=f'(pad {pad} thru_hole'
+              candidates=[ln.strip() for ln in usb.splitlines() if ln.strip().startswith(needle)]
+              hit=False
+              for ln in candidates:
+                  m=re.search(r'\(at ([\-0-9.]+) ([\-0-9.]+)\).*?\(drill ([0-9.]+)\)',ln)
+                  if m and abs(float(m.group(1))-x)<1e-6 and abs(float(m.group(2))-y)<1e-6 and abs(float(m.group(3))-drill)<1e-6:
+                      hit=True; break
+              assert hit,(pad,x,y,drill,candidates)
+          assert usb.count('(pad 5 thru_hole') == 2
+          assert abs((10.07)-(-3.07)-13.14) < 1e-9
+
+          # Kycon KLPX-0848A: two THT terminals on exact 4.50 mm raster.
+          assert '(pad 2 thru_hole oval (at 0 0) (size 4.0 5.5) (drill 3.30)' in rca
+          assert '(pad 1 thru_hole oval (at 4.5 0) (size 3.5 5.0) (drill 3.00)' in rca
+
+          for t in (usb,rca):
+              depth=0; quoted=False; esc=False; minimum=0
+              for ch in t:
+                  if quoted:
+                      if esc: esc=False
+                      elif ch=='\\': esc=True
+                      elif ch=='"': quoted=False
+                      continue
+                  if ch=='"': quoted=True
+                  elif ch=='(': depth+=1
+                  elif ch==')': depth-=1; minimum=min(minimum,depth)
+              assert depth==0 and minimum>=0,(depth,minimum)
+          print('PASS: USB/RCA footprint geometry and S-expression balance')
+          PY
+
+      - name: Install KiCad 9
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases >/dev/null
+          sudo apt-get update -qq
+          sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints >/dev/null
+          kicad-cli version
+
+      - name: KiCad load manufacturing and native ERC preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/m1-b4-io artifacts
+          failed=0
+          while IFS= read -r schematic; do
+            name="$(basename "$schematic" .kicad_sch)"
+            set +e
+            kicad-cli sch erc --severity-error --output "/tmp/m1-b4-io/${name}.rpt" "$schematic" >/tmp/m1-b4-io/stdout 2>/tmp/m1-b4-io/stderr
+            rc=$?
+            set -e
+            if [[ "$rc" -ne 0 ]]; then
+              echo "LOAD/ERROR ERC FAIL: $schematic rc=$rc"
+              cat /tmp/m1-b4-io/stderr || true
+              failed=1
+            fi
+          done < <(find hardware/Pajoniiir-M1 -maxdepth 1 -name '*.kicad_sch' -print | sort)
+          test "$failed" -eq 0
+
+          kicad-cli sch export bom \
+            --output artifacts/Pajoniiir-M1-manufacturing-bom.csv \
+            --fields 'Reference,Value,Footprint,${QUANTITY},${DNP}' \
+            --labels 'Refs,Value,Footprint,Qty,DNP' \
+            --sort-field 'Reference' --sort-asc --string-delimiter '"' \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          python3 hardware/Pajoniiir-M1/tools/validate_manufacturing_outputs.py \
+            artifacts/Pajoniiir-M1-manufacturing-bom.csv \
+            artifacts/Pajoniiir-M1-manufacturing-bom-audit.md
+
+          grep -q 'J2' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q 'J3' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q '87520-1010ALF' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q 'Pajoniiir-M1:Amphenol_87520-1010ALF' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q 'KLPX-0848A-2-W-G' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q 'KLPX-0848A-2-R-G' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+          grep -q 'Pajoniiir-M1:Kycon_KLPX-0848A-2-x-G' artifacts/Pajoniiir-M1-manufacturing-bom.csv
+
+          kicad-cli sch export netlist --format kicadxml \
+            --output /tmp/m1-b4-io/Pajoniiir-M1.net.xml \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          kicad-cli sch export pdf --black-and-white \
+            --output /tmp/m1-b4-io/Pajoniiir-M1.pdf \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+
+          set +e
+          kicad-cli sch erc --format json --severity-all --exit-code-violations \
+            --output /tmp/m1-b4-io/Pajoniiir-M1-erc.json \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
+          erc_rc=$?
+          set -e
+          if [[ "$erc_rc" -ne 0 && "$erc_rc" -ne 5 ]]; then exit "$erc_rc"; fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('/tmp/m1-b4-io/Pajoniiir-M1-erc.json').read_text())
+          bad=[]
+          for sheet in data.get('sheets',[]):
+              for v in sheet.get('violations',[]):
+                  if v.get('excluded'): continue
+                  if v.get('severity') in {'error','warning'}:
+                      bad.append((sheet.get('path'),v.get('severity'),v.get('type'),v.get('description')))
+          if bad:
+              for item in bad: print('ERC BAD:',item)
+              raise SystemExit(f'unexcluded ERC error/warning count={len(bad)}')
+          print('PASS: native ERC has zero unexcluded errors/warnings')
+          PY
+
+      - name: Commit validated USB RCA closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/m1-mech-b4-usb-rca-footprint-lock.yml
+          rm -f .github/workflows/m1-mech-b4-io-footprint-probe.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            hardware/Pajoniiir-M1/07_USB0_STORAGE.kicad_sch \
+            hardware/Pajoniiir-M1/08_USB1_FLX4.kicad_sch \
+            hardware/Pajoniiir-M1/09_AUDIO_PCM5102A.kicad_sch \
+            hardware/Pajoniiir-M1/libraries/footprints.pretty/Amphenol_87520-1010ALF.kicad_mod \
+            hardware/Pajoniiir-M1/libraries/footprints.pretty/Kycon_KLPX-0848A-2-x-G.kicad_mod \
+            hardware/Pajoniiir-M1/mechanical_gates.json \
+            hardware/Pajoniiir-M1/m1_mech_b4_connector_source_lock.json \
+            hardware/Pajoniiir-M1/tools/migrate_b4_usb_rca_footprints.py \
+            .github/workflows/m1-mech-b4-usb-rca-footprint-lock.yml \
+            .github/workflows/m1-mech-b4-io-footprint-probe.yml
+          git diff --cached --check
+          git commit -m "mechanical: lock USB and RCA footprints"
+          git push origin HEAD:main
