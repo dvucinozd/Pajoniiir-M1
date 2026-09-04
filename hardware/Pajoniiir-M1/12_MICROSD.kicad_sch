@@ -1035,9 +1035,9 @@
     (lib_id "Connector:Micro_SD_Card_Det1") (at 219.71 85.09 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0c000040-c000-4c00-8c00-000000000041")
     (property "Reference" "J7" (at 202.71 63.09 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "microSD SOCKET TBD-MECH" (at 202.71 65.59 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 219.71 85.09 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "~" (at 219.71 85.09 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "503398-1892" (at 202.71 65.59 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Pajoniiir-M1:Molex_503398-1892" (at 219.71 85.09 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/salesdrawingpdf/503/503398/5033981892_sd.pdf" (at 219.71 85.09 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0c000041-c000-4c00-8c00-000000000042")) (pin "2" (uuid "0c000042-c000-4c00-8c00-000000000043")) (pin "3" (uuid "0c000043-c000-4c00-8c00-000000000044")) (pin "4" (uuid "0c000044-c000-4c00-8c00-000000000045"))
     (pin "5" (uuid "0c000045-c000-4c00-8c00-000000000046")) (pin "6" (uuid "0c000046-c000-4c00-8c00-000000000047")) (pin "7" (uuid "0c000047-c000-4c00-8c00-000000000048")) (pin "8" (uuid "0c000048-c000-4c00-8c00-000000000049"))

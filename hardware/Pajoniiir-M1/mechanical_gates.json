@@ -665,18 +665,17 @@
       "refdes": "J7",
       "category": "connector_mechanical",
       "status": "open",
-      "allow_blank_footprint": true,
+      "allow_blank_footprint": false,
       "bom_scope": true,
       "blocks_layout_freeze": true,
       "required_evidence": [
-        "card insertion direction",
-        "enclosure access/cutout",
-        "push-push vs push-pull retention",
-        "card-detect switch requirement",
-        "socket height and keepout",
-        "card insertion/ejection travel and finger clearance"
+        "right-wall card-slot center and opening geometry",
+        "card insertion/ejection and finger access envelope",
+        "local courtyard clearance to lower-right M2.5 mounting screw",
+        "physical coexistence with the guarded DSI FFC corridor",
+        "final enclosure-side card access validation"
       ],
-      "closure": "Lock exact microSD socket MPN.",
+      "closure": "503398-1892 and project footprint are locked/instantiated. Gate remains open for right-wall slot/center, card insertion/ejection access, FFC coexistence and final XY placement.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "REMOVABLE_STORAGE",
       "absolute_cutout_datum_status": "open",
@@ -704,7 +703,13 @@
       ],
       "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
       "closure_path": "Prefer Molex 503398-1892; close only after exact wall sign, slot center/size, PCB edge, card travel/finger clearance and footprint review.",
-      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY"
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
+      "exact_mpn": "503398-1892",
+      "manufacturer": "Molex",
+      "exact_footprint": "Pajoniiir-M1:Molex_503398-1892",
+      "datasheet": "https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/salesdrawingpdf/503/503398/5033981892_sd.pdf",
+      "source_status": "MPN_AND_FOOTPRINT_LOCKED_M1-MECH-B4-J7",
+      "footprint_status": "CLOSED__MOLEX_DRAWING_CHECKED_PROJECT_FOOTPRINT"
     },
     {
       "id": "J9_USB_SERVICE_POGO",
