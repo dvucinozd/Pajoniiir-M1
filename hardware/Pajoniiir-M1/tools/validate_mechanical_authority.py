@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Fail-closed validator for the B2-converged M1-MECH-A13 authority.
+"""Fail-closed validator for the current Pajoniiir-M1 mechanical authority.
 
-This validates consistency, not physical fit.  It deliberately requires the layout
-freeze to remain blocked until real DSI506/enclosure/connector/EVT evidence closes
-all mechanical gates.
+This validates repository consistency, not final physical fit.  B2 direct display
+mounting, B3 screening envelopes/wall assignments and B4 connector MPN choices are
+now machine-checked, while final Edge.Cuts/layout freeze remain deliberately blocked
+until the remaining physical placement/EVT gates close.
 """
 from __future__ import annotations
 
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -18,6 +20,10 @@ GATES = BASE / "mechanical_gates.json"
 PCB_CONSTRAINTS = BASE / "pcb_constraints.json"
 FINAL_DISPLAY = BASE / "final_display_module.json"
 CONNECTOR = BASE / "display_connector_b1.json"
+MOUNT_LOCK = BASE / "dsi506_inner_posts_lock_b2.json"
+B3 = BASE / "m1_mech_b3_mainboard_io_envelope.json"
+ENC = BASE / "m1_mech_b3_enclosure_candidate.json"
+B4 = BASE / "m1_mech_b4_connector_source_lock.json"
 PCB = BASE / "Pajoniiir-M1.kicad_pcb"
 DISPLAY_SCH = BASE / "10_DISPLAY_MIPI.kicad_sch"
 
@@ -49,6 +55,10 @@ def load(path: Path, errors: list[str]) -> dict:
     return value
 
 
+def close(a: float | None, b: float, tol: float = 1e-6) -> bool:
+    return isinstance(a, (int, float)) and math.isclose(float(a), b, abs_tol=tol)
+
+
 def main() -> int:
     errors: list[str] = []
     mech = load(MECH, errors)
@@ -56,7 +66,14 @@ def main() -> int:
     pcb = load(PCB_CONSTRAINTS, errors)
     display = load(FINAL_DISPLAY, errors)
     connector = load(CONNECTOR, errors)
+    mount = load(MOUNT_LOCK, errors)
+    b3 = load(B3, errors)
+    enc = load(ENC, errors)
+    b4 = load(B4, errors)
 
+    # ------------------------------------------------------------------
+    # A13/B2 display authority remains the parent fail-closed baseline.
+    # ------------------------------------------------------------------
     authority = mech.get("authoritative_display_reference", {})
     if authority.get("family") != "EYOYO DSI506 / DYL0023":
         errors.append("mech_a active display authority is not DSI506/DYL0023")
@@ -105,12 +122,6 @@ def main() -> int:
             errors.append(f"final_display_module freeze flag must be true: {key}")
     if freeze.get("placement_routing_freeze_allowed") is not False:
         errors.append("final_display_module placement/routing freeze must remain false")
-    stale_remaining = {
-        "exact production 15-pin 1.0 mm FFC receptacle MPN",
-        "top/bottom contact orientation and cable inversion for the selected receptacle",
-    }
-    if stale_remaining.intersection(display.get("remaining_gates", [])):
-        errors.append("final_display_module still lists connector-selection work already closed by B1/B2")
 
     conn = connector.get("connector", {})
     fp = connector.get("footprint", {})
@@ -121,6 +132,123 @@ def main() -> int:
     if fp.get("library_id") != "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF":
         errors.append("display_connector_b1 footprint authority drift")
 
+    # ---------------------------------------------------------------
+    # B2 direct-mount lock: physical user measurements, now authoritative.
+    # ---------------------------------------------------------------
+    if mount.get("status") != "LOCKED_FOR_M1_MAINBOARD_DIRECT_DISPLAY_MOUNT":
+        errors.append("B2 direct display mount is not locked")
+    post = mount.get("post", {})
+    if post.get("count") != 4 or post.get("thread") != "M2.5" or post.get("thread_status") != "PHYSICALLY_CONFIRMED":
+        errors.append("B2 four-post M2.5 thread authority drift")
+    if not close(post.get("outer_diameter_mm"), 5.0) or not close(post.get("height_above_display_rear_pcb_mm"), 5.0):
+        errors.append("B2 post OD/height drift")
+    if not close(post.get("usable_thread_depth_mm"), 3.0) or post.get("coplanarity") != "PHYSICALLY_CONFIRMED":
+        errors.append("B2 post depth/coplanarity drift")
+    pattern = mount.get("mount_pattern", {})
+    if not close(pattern.get("spacing_x_mm"), 58.0) or not close(pattern.get("spacing_y_mm"), 49.0):
+        errors.append("B2 58 x 49 mm mount pattern drift")
+    zlock = mount.get("z_lock", {})
+    if not close(zlock.get("mainboard_display_facing_surface_z_mm"), 10.0) or not close(zlock.get("mainboard_rear_surface_z_mm_for_1p6mm_pcb"), 11.6):
+        errors.append("B2 mainboard Z authority drift")
+    screw = mount.get("rev_a_screw_baseline", {})
+    if screw.get("thread") != "M2.5" or not close(screw.get("nominal_length_mm"), 4.0):
+        errors.append("B2 Rev-A screw baseline is not M2.5 x 4.0 mm")
+    if not close(screw.get("nominal_thread_engagement_mm_without_washer"), 2.4) or not close(screw.get("nominal_bottoming_margin_mm"), 0.6):
+        errors.append("B2 screw engagement arithmetic drift")
+
+    # ------------------------------------------------------------------
+    # B3 104 x 62 placement-screening envelope and absolute wall topology.
+    # ------------------------------------------------------------------
+    if b3.get("milestone") != "M1-MECH-B3":
+        errors.append("B3 mainboard authority missing")
+    core = b3.get("core_mainboard_envelope_candidate", {})
+    ext = core.get("display_relative_extents_mm", {})
+    if not (close(core.get("width_mm"), 104.0) and close(core.get("height_mm"), 62.0)):
+        errors.append("B3 core mainboard envelope drift")
+    if not all((
+        close(ext.get("x_min"), 8.5), close(ext.get("x_max"), 112.5),
+        close(ext.get("y_min"), 0.93), close(ext.get("y_max"), 62.93),
+    )):
+        errors.append("B3 display-relative core extents drift")
+    if not close(float(ext.get("x_max", 0)) - float(ext.get("x_min", 0)), 104.0):
+        errors.append("B3 X extent arithmetic does not equal 104 mm")
+    if not close(float(ext.get("y_max", 0)) - float(ext.get("y_min", 0)), 62.0):
+        errors.append("B3 Y extent arithmetic does not equal 62 mm")
+    holes = b3.get("mainboard_mount_holes_local_mm", [])
+    expected_holes = {(34.609, 6.5), (92.609, 6.5), (34.609, 55.5), (92.609, 55.5)}
+    observed_holes = {(round(float(h.get("x", -999)), 3), round(float(h.get("y", -999)), 3)) for h in holes if isinstance(h, dict)}
+    if observed_holes != expected_holes:
+        errors.append(f"B3 local mounting-hole coordinates drift: {sorted(observed_holes)}")
+    hp = b3.get("mount_hole_policy", {})
+    if hp.get("type") != "NPTH clearance holes" or hp.get("production_diameter_locked") is not False:
+        errors.append("B3 NPTH policy must remain an unlocked 3.0-3.2 mm engineering range")
+    if hp.get("engineering_diameter_range_mm") != [3.0, 3.2]:
+        errors.append("B3 mounting-hole engineering range drift")
+
+    walls = b3.get("absolute_io_wall_assignment", {})
+    expected_walls = {
+        "PRIMARY_LONG_IO_WALL": ("Y_NEG", ["J2_USB0", "J3_USB1", "J4_RCA_L", "J5_RCA_R"]),
+        "POWER_WALL": ("X_NEG", ["J1_POWER_INPUT"]),
+        "MEDIA_SERVICE_WALL": ("X_POS", ["J7_MICROSD", "SW1_RESET", "SW2_BOOT"]),
+        "CLEAR_LONG_WALL": ("Y_POS", []),
+    }
+    for name, (axis, funcs) in expected_walls.items():
+        w = walls.get(name, {})
+        if w.get("axis") != axis or w.get("functions") != funcs:
+            errors.append(f"B3 wall assignment drift for {name}: {w}")
+    if b3.get("freeze", {}).get("final_board_outline_locked") is not False or b3.get("freeze", {}).get("layout_freeze_allowed") is not False:
+        errors.append("B3 must not final-lock board outline/layout")
+
+    # ------------------------------------------------------------------
+    # B3 compact enclosure screening candidate, deliberately non-production.
+    # ------------------------------------------------------------------
+    ee = enc.get("external_envelope_candidate_mm", {})
+    if not (close(ee.get("width_x"), 128.0) and close(ee.get("height_y"), 84.0) and close(ee.get("depth_z"), 30.0)):
+        errors.append("B3 enclosure screening envelope drift")
+    if not close(enc.get("wall_thickness_candidate_mm"), 2.0):
+        errors.append("B3 enclosure wall screening thickness drift")
+    inner = enc.get("inner_cavity_candidate_mm", {})
+    if not (close(inner.get("width_x"), 124.0) and close(inner.get("height_y"), 80.0) and close(inner.get("rear_inner_plane_z"), 28.0)):
+        errors.append("B3 inner cavity arithmetic drift")
+    dfit = enc.get("display_fit_screen", {}).get("nominal_clearance_each_side_mm", {})
+    if not close(dfit.get("x"), 1.4455, 1e-4) or not close(dfit.get("y"), 1.4035, 1e-4):
+        errors.append("B3 display/cavity clearance arithmetic drift")
+    zscreen = enc.get("z_stack_screen", {})
+    if not close(zscreen.get("gross_mainboard_rear_to_rear_inner_clearance_mm"), 16.4):
+        errors.append("B3 rear cavity Z arithmetic drift")
+    efreeze = enc.get("freeze", {})
+    if efreeze.get("production_enclosure_dimensions_locked") is not False or efreeze.get("layout_freeze_allowed") is not False:
+        errors.append("B3 enclosure candidate was incorrectly promoted to production/layout freeze")
+
+    # ------------------------------------------------------------------
+    # B4 exact MPN intent is locked while mechanical placement remains open.
+    # ------------------------------------------------------------------
+    selections = b4.get("selections", [])
+    by_refs: dict[tuple[str, ...], dict] = {}
+    for sel in selections:
+        if isinstance(sel, dict):
+            by_refs[tuple(sel.get("refdes", []))] = sel
+    expected_mpns = {
+        ("J1",): ("Switchcraft", "722RAHLP"),
+        ("J2", "J3"): ("Amphenol Communications Solutions / FCI", "87520-1010ALF"),
+        ("J4",): ("Kycon", "KLPX-0848A-2-W-G"),
+        ("J5",): ("Kycon", "KLPX-0848A-2-R-G"),
+        ("J7",): ("Molex", "503398-1892"),
+        ("SW1", "SW2"): ("Aratas (formerly Omron Components)", "B3U-3000P-B"),
+    }
+    for refs, expected in expected_mpns.items():
+        sel = by_refs.get(refs, {})
+        observed = (sel.get("manufacturer"), sel.get("mpn"))
+        if observed != expected:
+            errors.append(f"B4 MPN drift for {refs}: {observed} != {expected}")
+        if "LOCKED" not in str(sel.get("selection_status", "")):
+            errors.append(f"B4 selection not locked for {refs}")
+    if b4.get("gates_closed_by_this_milestone") != []:
+        errors.append("B4 MPN lock must not claim connector mechanical gates closed")
+
+    # ------------------------------------------------------------------
+    # Existing open-gate / PCB constraints remain fail-closed.
+    # ------------------------------------------------------------------
     gate_list = gates.get("gates", [])
     blockers = {
         gate.get("id") for gate in gate_list
@@ -142,17 +270,10 @@ def main() -> int:
     active_j6_text = json.dumps({"known": j6.get("known"), "required": j6.get("required_evidence")}, ensure_ascii=False)
     if "0.5TBQP-30P-1" in active_j6_text or "30 contacts" in active_j6_text:
         errors.append("J_LCD_DISPLAY_FPC active gate still contains legacy 30-pin Guition assumptions")
-    required_physical = {
-        "actual DSI506 FFC conductor-side / host-to-module pin-1 continuity check",
-        "FFC bend/insertion/mating keepout in final enclosure",
-        "absolute J6 XY/Z placement relative to final DSI506 and custom mainboard",
-    }
-    if set(j6.get("required_evidence", [])) != required_physical:
-        errors.append("J_LCD_DISPLAY_FPC required evidence drift")
 
     outline = by_id.get("PCB_OUTLINE", {})
     if outline.get("status") != "open" or outline.get("blocks_layout_freeze") is not True:
-        errors.append("PCB_OUTLINE must remain open until new enclosure/mainboard datums exist")
+        errors.append("PCB_OUTLINE must remain open while B3 is only a screening envelope")
     if outline.get("legacy_enclosure_decision") != "REJECTED__HARD_FAIL_FOR_DSI506":
         errors.append("PCB_OUTLINE does not record rejection of the old enclosure")
 
@@ -189,23 +310,25 @@ def main() -> int:
         sch = ""
     if 'SFW15R-2STE1LF' not in sch or 'Pajoniiir-M1:Amphenol_SFW15R-2STE1LF' not in sch:
         errors.append("10_DISPLAY_MIPI does not carry the locked J6 identity/footprint")
-    # Match actual instance references, not cached library symbol reference prefixes.
     if re.search(r'\(reference "(?:U9|L3|D4)"\)', sch):
         errors.append("legacy discrete backlight instance survived in 10_DISPLAY_MIPI")
 
-    print("Pajoniiir-M1 M1-MECH-A13 mechanical authority validation")
+    print("Pajoniiir-M1 mechanical authority validation through M1-MECH-B4")
     print(f"  active display: {authority.get('family', '?')}")
-    print(f"  preliminary rear PCB: {rear.get('x', '?')} x {rear.get('y', '?')} mm")
-    print(f"  J6: {host.get('mpn', '?')} / {host.get('contacts', '?')}P / {host.get('pitch_mm', '?')} mm / {host.get('contact_location', '?')} contact")
+    print("  direct mount: 4x M2.5 / 58 x 49 mm / seating Z=10.0 mm")
+    print("  B3 core board screen: 104 x 62 mm")
+    print("  B3 enclosure screen: 128 x 84 x 30 mm")
+    print("  walls: Y- USB/RCA; X- power; X+ media/service; Y+ clear")
+    print(f"  B4 locked MPN groups: {len(expected_mpns)}")
     print(f"  open layout blockers: {len(blockers)}")
-    print(f"  board outline locked: {pcb.get('board_outline_locked')}")
+    print(f"  final board outline locked: {pcb.get('board_outline_locked')}")
     print(f"  layout freeze allowed: {gates.get('layout_freeze_allowed')}")
 
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
         return 1
-    print("PASS: B2-converged mechanical authority is internally consistent and fail-closed.")
+    print("PASS: B2/B3/B4 mechanical authority is internally consistent and remains fail-closed for final layout.")
     return 0
 
 
