@@ -1,0 +1,57 @@
+name: M1 MECH B4 remaining connector footprint probe
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/m1-mech-b4-io-footprint-probe.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import exact catalog ECAD candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user easyeda2kicad >/dev/null
+          rm -rf /tmp/io-probe
+          mkdir -p /tmp/io-probe
+          for spec in \
+            switchcraft:C3095909 \
+            amphenol:C599116 \
+            kycon:C7503011; do
+            name="${spec%%:*}"
+            id="${spec##*:}"
+            "$HOME/.local/bin/easyeda2kicad" --footprint --lcsc_id="$id" --output "/tmp/io-probe/$name"
+          done
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          for name in ('switchcraft','amphenol','kycon'):
+              files=list((Path('/tmp/io-probe')/f'{name}.pretty').glob('*.kicad_mod'))
+              if len(files)!=1:
+                  raise SystemExit(f'{name}: expected one footprint, got {files}')
+              p=files[0]
+              t=p.read_text()
+              print(f'=== {name.upper()} {p.name} ===')
+              pads=[]
+              for m in re.finditer(r'\(pad\s+"?([^"\s)]+)"?\s+([^\s)]+).*?\(at\s+([-+0-9.]+)\s+([-+0-9.]+)(?:\s+[-+0-9.]+)?\).*?\(size\s+([-+0-9.]+)\s+([-+0-9.]+)\)',t,re.S):
+                  pad=(m.group(1),m.group(2),float(m.group(3)),float(m.group(4)),float(m.group(5)),float(m.group(6)))
+                  pads.append(pad)
+                  print('PAD',pad)
+              print('PAD_COUNT',len(pads))
+              print('PAD_NAMES',sorted({x[0] for x in pads}))
+              print('RAW_BEGIN')
+              print(t)
+              print('RAW_END')
+          PY
