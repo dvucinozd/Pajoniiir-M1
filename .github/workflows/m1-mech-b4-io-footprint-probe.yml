@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Import exact catalog ECAD candidates
+      - name: Import Amphenol and Kycon catalog ECAD candidates
         shell: bash
         run: |
           set -euo pipefail
@@ -25,7 +25,6 @@ jobs:
           rm -rf /tmp/io-probe
           mkdir -p /tmp/io-probe
           for spec in \
-            switchcraft:C3095909 \
             amphenol:C599116 \
             kycon:C7503011; do
             name="${spec%%:*}"
@@ -37,7 +36,7 @@ jobs:
           from pathlib import Path
           import re
 
-          for name in ('switchcraft','amphenol','kycon'):
+          for name in ('amphenol','kycon'):
               files=list((Path('/tmp/io-probe')/f'{name}.pretty').glob('*.kicad_mod'))
               if len(files)!=1:
                   raise SystemExit(f'{name}: expected one footprint, got {files}')
