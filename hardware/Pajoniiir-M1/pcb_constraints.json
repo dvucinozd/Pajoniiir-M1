@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated": "2026-09-03",
-  "layout_state": "pre_mechanical_layout",
+  "updated": "2026-09-04",
+  "layout_state": "pre_mechanical_layout__DSI506_enclosure_rebase",
   "logical_copper_layers": 4,
   "board_outline_locked": false,
   "stackup_locked": true,
@@ -14,13 +14,41 @@
     "outer_copper_oz": 1,
     "inner_copper_oz": 0.5,
     "layers": [
-      {"layer":"F.Cu","copper_mm":0.035,"role":"components + critical signals; preferred USB/MIPI routing layer"},
-      {"dielectric":"7628 prepreg","thickness_mm":0.2104,"er":4.4},
-      {"layer":"In1.Cu","copper_mm":0.0152,"role":"continuous solid GND reference plane"},
-      {"dielectric":"FR-4 core","thickness_mm":1.065,"er":4.6},
-      {"layer":"In2.Cu","copper_mm":0.0152,"role":"power distribution + low-speed routing; no split-plane reference for high-speed routes"},
-      {"dielectric":"7628 prepreg","thickness_mm":0.2104,"er":4.4},
-      {"layer":"B.Cu","copper_mm":0.035,"role":"secondary signals/components; no primary USB/MIPI routing unless reference-plane strategy is revalidated"}
+      {
+        "layer": "F.Cu",
+        "copper_mm": 0.035,
+        "role": "components + critical signals; preferred USB/MIPI routing layer"
+      },
+      {
+        "dielectric": "7628 prepreg",
+        "thickness_mm": 0.2104,
+        "er": 4.4
+      },
+      {
+        "layer": "In1.Cu",
+        "copper_mm": 0.0152,
+        "role": "continuous solid GND reference plane"
+      },
+      {
+        "dielectric": "FR-4 core",
+        "thickness_mm": 1.065,
+        "er": 4.6
+      },
+      {
+        "layer": "In2.Cu",
+        "copper_mm": 0.0152,
+        "role": "power distribution + low-speed routing; no split-plane reference for high-speed routes"
+      },
+      {
+        "dielectric": "7628 prepreg",
+        "thickness_mm": 0.2104,
+        "er": 4.4
+      },
+      {
+        "layer": "B.Cu",
+        "copper_mm": 0.035,
+        "role": "secondary signals/components; no primary USB/MIPI routing unless reference-plane strategy is revalidated"
+      }
     ],
     "controlled_impedance": {
       "fabricator_capability_confirmed": true,
@@ -39,50 +67,285 @@
     ]
   },
   "layer_intent": [
-    {"layer":"F.Cu","role":"components + critical signals; preferred USB/MIPI routing layer"},
-    {"layer":"In1.Cu","role":"continuous GND reference plane; do not split under USB/MIPI/clock/RF return paths"},
-    {"layer":"In2.Cu","role":"power distribution + low-speed routing as stackup permits; preserve return-path continuity"},
-    {"layer":"B.Cu","role":"secondary signals/components; GND fill where compatible with antenna/connector keepouts"}
+    {
+      "layer": "F.Cu",
+      "role": "components + critical signals; preferred USB/MIPI routing layer"
+    },
+    {
+      "layer": "In1.Cu",
+      "role": "continuous GND reference plane; do not split under USB/MIPI/clock/RF return paths"
+    },
+    {
+      "layer": "In2.Cu",
+      "role": "power distribution + low-speed routing as stackup permits; preserve return-path continuity"
+    },
+    {
+      "layer": "B.Cu",
+      "role": "secondary signals/components; GND fill where compatible with antenna/connector keepouts"
+    }
   ],
   "routing_targets": {
-    "USB0_HS": {"target_diff_ohms":90,"tolerance_percent":10,"source_series":"R80/R81","connector_esd":"D2","rules":["route on F.Cu referenced continuously to solid In1.Cu unless a separately recalculated geometry is approved","continuous adjacent GND reference","minimal vias","no stubs","ESD physically adjacent to J2","series elements near ESP32-P4","do not cross switching-node voids","final width/spacing must be recorded from current JLCPCB impedance calculator before controlled_impedance_locked becomes true"]},
-    "USB1_FS": {"target_diff_ohms":90,"tolerance_percent":10,"source_series":"R82/R83","connector_esd":"D3","rules":["preserve pair geometry","prefer F.Cu referenced to solid In1.Cu","ESD physically adjacent to J3","DNP shunt capacitors symmetric if ever populated","keep away from switch nodes","final width/spacing must be recorded from current JLCPCB impedance calculator before controlled_impedance_locked becomes true"]},
-    "MIPI_DSI": {"target_diff_ohms":100,"tolerance_percent":10,"intra_pair_skew_mil_max":10,"pair_to_pair_target_mil_max":30,"rules":["route on F.Cu referenced continuously to solid In1.Cu unless a separately recalculated geometry is approved","continuous adjacent GND reference","six inline 0R tuning footprints stay in-line with no stubs","minimize layer changes","keep away from backlight SW node and inductors","connector geometry not final until J_LCD gate closes","final width/spacing must be recorded from current JLCPCB impedance calculator before controlled_impedance_locked becomes true"]},
-    "P4_QSPI": {"rules":["U2 close to U1","series tuning resistors near source","short matched data/clock topology","continuous GND reference"]},
-    "C6_SDIO": {"rules":["U4 close enough for compact SDIO escape","preserve antenna edge keepout","CLK series element near source","CMD/DAT pull-ups in quiet 3V3_C6 area"]},
-    "MICROSD_SDMMC": {"rules":["U13/J7 power-switch loop compact","series elements placed to control source edge","user-accessible socket ESD decision at final connector","no switch-node routing under bus"]},
-    "AUDIO": {"rules":["U5 and output RC network in quiet analog zone","J4/J5 at enclosure edge after mechanics close","keep MAIN_L/R away from buck/backlight switch nodes","preserve clean GND return to DAC/output connectors"]},
-    "HIGH_CURRENT_5V": {"rules":["J1->U7->R120->5V_SYS is the primary current spine","Kelvin sense taps only at R120 terminals","USB0/USB1 VBUS branches from U6/U12 remain short and wide","avoid routing sensitive signals through high-current return bottlenecks"]},
-    "BACKLIGHT": {"rules":["U9/L3/D4/input-output capacitors form a compact switch loop","keep SW node copper minimal","separate from MIPI, audio and RF zones","LEDA route sized for LED current and isolated from DSI pairs"]},
-    "RF": {"rules":["U4 antenna at board edge","official antenna keepout on every copper layer","no connector metal/cable/enclosure intrusion into antenna clearance without revalidation"]}
+    "USB0_HS": {
+      "target_diff_ohms": 90,
+      "tolerance_percent": 10,
+      "source_series": "R80/R81",
+      "connector_esd": "D2",
+      "rules": [
+        "route on F.Cu referenced continuously to solid In1.Cu unless a separately recalculated geometry is approved",
+        "continuous adjacent GND reference",
+        "minimal vias",
+        "no stubs",
+        "ESD physically adjacent to J2",
+        "series elements near ESP32-P4",
+        "do not cross switching-node voids",
+        "final width/spacing must be recorded from current JLCPCB impedance calculator before controlled_impedance_locked becomes true"
+      ]
+    },
+    "USB1_FS": {
+      "target_diff_ohms": 90,
+      "tolerance_percent": 10,
+      "source_series": "R82/R83",
+      "connector_esd": "D3",
+      "rules": [
+        "preserve pair geometry",
+        "prefer F.Cu referenced to solid In1.Cu",
+        "ESD physically adjacent to J3",
+        "DNP shunt capacitors symmetric if ever populated",
+        "keep away from switch nodes",
+        "final width/spacing must be recorded from current JLCPCB impedance calculator before controlled_impedance_locked becomes true"
+      ]
+    },
+    "MIPI_DSI": {
+      "target_diff_ohms": 100,
+      "tolerance_percent": 10,
+      "intra_pair_skew_mil_max": 10,
+      "pair_to_pair_target_mil_max": 30,
+      "rules": [
+        "route on F.Cu referenced continuously to solid In1.Cu unless a separately recalculated geometry is approved",
+        "continuous adjacent GND reference",
+        "six inline 0R tuning footprints stay in-line with no stubs",
+        "minimize layer changes",
+        "keep away from backlight SW node and inductors",
+        "J6 MPN/footprint locked; absolute J6/FFC placement remains open until the DSI506 enclosure datum closes",
+        "final width/spacing must be recorded from current JLCPCB impedance calculator before controlled_impedance_locked becomes true"
+      ]
+    },
+    "P4_QSPI": {
+      "rules": [
+        "U2 close to U1",
+        "series tuning resistors near source",
+        "short matched data/clock topology",
+        "continuous GND reference"
+      ]
+    },
+    "C6_SDIO": {
+      "rules": [
+        "U4 close enough for compact SDIO escape",
+        "preserve antenna edge keepout",
+        "CLK series element near source",
+        "CMD/DAT pull-ups in quiet 3V3_C6 area"
+      ]
+    },
+    "MICROSD_SDMMC": {
+      "rules": [
+        "U13/J7 power-switch loop compact",
+        "series elements placed to control source edge",
+        "user-accessible socket ESD decision at final connector",
+        "no switch-node routing under bus"
+      ]
+    },
+    "AUDIO": {
+      "rules": [
+        "U5 and output RC network in quiet analog zone",
+        "J4/J5 at enclosure edge after mechanics close",
+        "keep MAIN_L/R away from buck/backlight switch nodes",
+        "preserve clean GND return to DAC/output connectors"
+      ]
+    },
+    "HIGH_CURRENT_5V": {
+      "rules": [
+        "J1->U7->R120->5V_SYS is the primary current spine",
+        "Kelvin sense taps only at R120 terminals",
+        "USB0/USB1 VBUS branches from U6/U12 remain short and wide",
+        "avoid routing sensitive signals through high-current return bottlenecks"
+      ]
+    },
+    "RF": {
+      "rules": [
+        "U4 antenna at board edge",
+        "official antenna keepout on every copper layer",
+        "no connector metal/cable/enclosure intrusion into antenna clearance without revalidation"
+      ]
+    }
   },
   "placement_domains": [
-    {"id":"P4_CORE","members":["U1","U2","U3","L1","Y1"],"priority":"central compute island; shortest flash/crystal/core-power loops","z_note":"prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"},
-    {"id":"C6_RF","members":["U4"],"priority":"board edge with antenna keepout","z_note":"prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"},
-    {"id":"USB_POWER","members":["U6","U12"],"priority":"between 5V_SYS spine and respective USB connectors"},
-    {"id":"USB0_EDGE","members":["D2","J2"],"priority":"J2 at final enclosure edge; D2 immediately behind connector","z_note":"perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"},
-    {"id":"USB1_EDGE","members":["D3","J3"],"priority":"J3 at final enclosure edge; D3 immediately behind connector","z_note":"perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"},
-    {"id":"AUDIO","members":["U5","J4","J5"],"priority":"quiet edge zone separated from switchers","z_note":"perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"},
-    {"id":"DISPLAY","members":["U9","L3","D4"],"priority":"backlight power cluster separated from DSI corridor","z_note":"prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"},
-    {"id":"MICROSD","members":["U13","J7"],"priority":"card-access edge zone","z_note":"perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"},
-    {"id":"POWER_ENTRY","members":["J1","U7","R120","U8","L2"],"priority":"short high-current spine with Kelvin monitor geometry","z_note":"perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"},
-    {"id":"FACTORY","members":["J8","J9","J10"],"priority":"fixture-accessible area that does not consume user-facing panel space"}
+    {
+      "id": "P4_CORE",
+      "members": [
+        "U1",
+        "U2",
+        "U3",
+        "L1",
+        "Y1"
+      ],
+      "priority": "central compute island; shortest flash/crystal/core-power loops",
+      "z_note": "prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"
+    },
+    {
+      "id": "C6_RF",
+      "members": [
+        "U4"
+      ],
+      "priority": "board edge with antenna keepout",
+      "z_note": "prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"
+    },
+    {
+      "id": "USB_POWER",
+      "members": [
+        "U6",
+        "U12"
+      ],
+      "priority": "between 5V_SYS spine and respective USB connectors"
+    },
+    {
+      "id": "USB0_EDGE",
+      "members": [
+        "D2",
+        "J2"
+      ],
+      "priority": "J2 at final enclosure edge; D2 immediately behind connector",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+    },
+    {
+      "id": "USB1_EDGE",
+      "members": [
+        "D3",
+        "J3"
+      ],
+      "priority": "J3 at final enclosure edge; D3 immediately behind connector",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+    },
+    {
+      "id": "AUDIO",
+      "members": [
+        "U5",
+        "J4",
+        "J5"
+      ],
+      "priority": "quiet edge zone separated from switchers",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+    },
+    {
+      "id": "DISPLAY",
+      "members": [
+        "J6",
+        "FB3",
+        "C93",
+        "C94"
+      ],
+      "priority": "J6 at final DSI506 FFC approach edge; FB3/C93/C94 local to the 3V3 display-module branch while preserving the MIPI corridor",
+      "z_note": "J6 housing height is 2.7 mm; final cable bend and absolute XY/Z placement remain mechanical gates"
+    },
+    {
+      "id": "MICROSD",
+      "members": [
+        "U13",
+        "J7"
+      ],
+      "priority": "card-access edge zone",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+    },
+    {
+      "id": "POWER_ENTRY",
+      "members": [
+        "J1",
+        "U7",
+        "R120",
+        "U8",
+        "L2"
+      ],
+      "priority": "short high-current spine with Kelvin monitor geometry",
+      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+    },
+    {
+      "id": "FACTORY",
+      "members": [
+        "J8",
+        "J9",
+        "J10"
+      ],
+      "priority": "fixture-accessible area that does not consume user-facing panel space"
+    }
   ],
   "freeze_requirements": [
     "mechanical_gates.json: all blocks_layout_freeze gates closed",
-    "authoritative Edge.Cuts and mounting datums committed",
+    "new DSI506-compatible enclosure and authoritative Edge.Cuts/mounting datums committed",
+    "J6 FFC approach/bend and all mated user-connector envelopes validated in enclosure CAD/physical evidence",
+    "C3/C8 EVT converted to exact production packages",
     "M1-MECH-A11 JLC04161H-7628 stackup remains selected",
-    "controlled_impedance_locked=true only after exact 90 ohm USB / 100 ohm MIPI width-spacing values are recorded from current JLCPCB calculator for JLC04161H-7628",
-    "final connector courtyards and enclosure clearance reviewed"
+    "controlled_impedance_locked=true only after exact 90 ohm USB / 100 ohm MIPI width-spacing is recorded from the current JLCPCB calculator for the locked stackup"
   ],
-  "mechanical_reference": {"authority":"mech_a.json","coordinate_system":"M1_FRONT_CENTER","candidate_rear_working_envelope":{"x_max":108,"y_max":65.06},"candidate_mounting_centers":[[-51.3,-30],[51.3,-30],[-51.3,30],[51.3,30]],"note":"candidate only; Edge.Cuts remain forbidden until PCB_OUTLINE gate closes"},
-  "component_height_zones": {
-    "source":"mech_a.json",
-    "under_display_front_side":{"gross_clearance_mm":6.5,"production_limit_locked":false,"rules":["use only low-profile components until mechanical safety margin is validated","do not place unselected C3/C8 bulk packages here unless their final height is proven","avoid tall connector bodies under the display/module footprint"],"verified_critical_screen":{"gross_clearance_mm":6.5,"highest_verified_fixed_part_max_mm":3.25,"minimum_verified_gross_headroom_mm":3.25,"result":"PASS_GEOMETRY_SCREEN","production_limit_locked":false,"source":"mech_a.json mechanical_height_audit"}},
-    "pcb_back_side":{"gross_clearance_mm":6,"production_limit_locked":false,"rules":["prefer no backside parts in mounting/standoff zones","fixture/test pads are preferred over tall backside components","account for screw heads, bosses and rear-wall ribs before any backside population"]},
-    "perimeter_connector_zone":{"rule":"USB-A/RCA/microSD/power connector bodies may exceed the central under-display height only where side/rear enclosure cutouts and local keepouts explicitly permit it"}
+  "mechanical_reference": {
+    "authority": "mech_a.json + final_display_module.json",
+    "coordinate_system": "M1_FRONT_CENTER",
+    "final_display": "EYOYO DSI506 / DYL0023",
+    "display_rear_pcb_preliminary_mm": [
+      121.109,
+      77.193
+    ],
+    "old_enclosure_verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED",
+    "new_enclosure_required": true,
+    "board_outline_locked": false,
+    "note": "Do not use the JC4880-era 108 x 65.06 mm rectangle or +/-51.3 x +/-30 mm mount pattern as final Edge.Cuts authority."
   },
-  "candidate_board_envelope":{"revision":"M1-MECH-A0","width_mm":108,"height_mm":65.06,"area_mm2":7026.48,"extents_in_M1_FRONT_CENTER":{"x_min":-54,"x_max":54,"y_min":-32.53,"y_max":32.53},"modeled_inner_cavity_clearance_each_side_mm":{"x":4.504,"y":2.174},"status":"placement feasibility only","edge_cuts_allowed":false},
-  "connector_cluster_rules":{"source":"mech_a.json","front_face_reserved":true,"rule":"perimeter connector placement must preserve cluster grouping and remain provisional until absolute wall/cutout datums close","clusters":["AUDIO_OUT","USB_HOST_PAIR","POWER_IN","REMOVABLE_STORAGE","RECOVERY_BUTTONS","FACTORY_SERVICE"]},
-  "rev_a_removed_features":[{"refdes":"J6","feature":"optional 3.5 mm line out","revision":"M1-MECH-A8","rule":"No footprint, panel aperture, courtyard or placement budget is reserved in Rev A."}]
+  "component_height_zones": {
+    "status": "DSI506_PRODUCTION_Z_STACK_NOT_LOCKED",
+    "production_limit_locked": false,
+    "legacy_JC4880_screen": {
+      "gross_front_mm": 6.5,
+      "gross_rear_mm": 6.0,
+      "authority": "historical screening only; superseded for final DSI506 enclosure design"
+    },
+    "current_rule": "No production component-height limit may be derived until the final DSI506 enclosure, PCB Z plane, bosses, FFC motion and mated connector envelopes are locked."
+  },
+  "candidate_board_envelope": {
+    "revision": "M1-MECH-A0",
+    "width_mm": 108,
+    "height_mm": 65.06,
+    "area_mm2": 7026.48,
+    "extents_in_M1_FRONT_CENTER": {
+      "x_min": -54,
+      "x_max": 54,
+      "y_min": -32.53,
+      "y_max": 32.53
+    },
+    "modeled_inner_cavity_clearance_each_side_mm": {
+      "x": 4.504,
+      "y": 2.174
+    },
+    "status": "SUPERSEDED_JC4880_PLACEMENT_FEASIBILITY_ONLY",
+    "edge_cuts_allowed": false,
+    "production_authority": false
+  },
+  "connector_cluster_rules": {
+    "source": "mech_a.json",
+    "front_face_reserved": true,
+    "rule": "perimeter connector placement must preserve cluster grouping and remain provisional until absolute wall/cutout datums close",
+    "clusters": [
+      "AUDIO_OUT",
+      "USB_HOST_PAIR",
+      "POWER_IN",
+      "REMOVABLE_STORAGE",
+      "RECOVERY_BUTTONS",
+      "FACTORY_SERVICE"
+    ]
+  },
+  "rev_a_removed_features": [
+    {
+      "refdes": "J6",
+      "feature": "optional 3.5 mm line out",
+      "revision": "M1-MECH-A8",
+      "rule": "No footprint, panel aperture, courtyard or placement budget is reserved in Rev A."
+    }
+  ]
 }

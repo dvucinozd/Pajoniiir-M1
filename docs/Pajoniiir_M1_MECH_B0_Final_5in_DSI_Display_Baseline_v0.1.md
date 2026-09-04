@@ -1,4 +1,4 @@
-# Pajoniiir-M1 — M1-MECH-B0 Final 5-inch DSI Display Baseline v0.2
+# Pajoniiir-M1 — M1-MECH-B0 Final 5-inch DSI Display Baseline v0.3
 
 **Date:** 2026-09-04  
 **Revision:** M1-MECH-B0 / corrected by M1-ELEC-B0  
@@ -237,12 +237,13 @@ shared I2C/touch/backlight behavior known     YES
 old 30-pin Guition FPC superseded             YES
 old MP3202 backlight architecture superseded  YES
 old GT911 RST/INT architecture superseded     YES
-production 15-pin receptacle MPN locked       NO
-FFC contact-side/cable inversion locked       NO
+production 15-pin receptacle MPN locked       YES — SFW15R-2STE1LF
+host receptacle TOP-contact geometry locked    YES
+actual FFC conductor-side/pin-1 continuity       NO — physical check required
 3V3 all-on/transition EVT complete             NO
 new enclosure locked                           NO
 mainboard outline locked                       NO
 placement/routing freeze allowed               NO
 ```
 
-The next electrical step is no longer reverse-engineering the display pinout. It is selecting the production 15-pin connector and migrating `10_DISPLAY_MIPI` / touch support to this already bench-proven module contract.
+M1-ELEC-B1/B2 has now selected and instantiated Amphenol `SFW15R-2STE1LF`, verified its footprint, and migrated the final display path. The next remaining display work is mechanical: actual cable conductor-side/pin-1 continuity, FFC bend keepout, full module Z/mounting evidence, and the new enclosure/mainboard datum set.

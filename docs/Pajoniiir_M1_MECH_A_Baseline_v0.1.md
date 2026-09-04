@@ -1,5 +1,8 @@
 # Pajoniiir-M1 — M1-MECH-A Mechanical Baseline v0.1
 
+> **SUPERSEDED FOR FINAL-PRODUCT DISPLAY MECHANICS — M1-MECH-A13 / M1-ELEC-B2 (2026-09-04)**
+> The JC4880/Guition geometry below is retained only as historical enclosure evidence. The final M1 display is EYOYO DSI506 / DYL0023, and its 121.109 × 77.193 mm preliminary rear-PCB evidence makes the old enclosure a hard fail. Do not derive final Edge.Cuts, mounting or Z clearances from this document. Current authority: `final_display_module.json`, `display_connector_b1.json`, `mech_a.json`.
+
 **Datum:** 2026-09-03  
 **Milestone:** M1-MECH-A  
 **Status:** Display datum locked; legacy enclosure candidate validated; final PCB outline still open  

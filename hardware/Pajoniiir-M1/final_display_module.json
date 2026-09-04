@@ -243,12 +243,11 @@
     "verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED"
   },
   "remaining_gates": [
-    "exact production 15-pin 1.0 mm FFC receptacle MPN",
-    "top/bottom contact orientation and cable inversion for the selected receptacle",
-    "FFC approach/bend/mating keepout",
-    "local 3V3 display branch transient/decoupling EVT",
-    "full module Z envelope and all mounting-hole coordinates",
-    "new enclosure XY/Z and custom-mainboard placement"
+    "actual DSI506 FFC conductor-side / host-to-module pin-1 continuity check",
+    "FFC approach/bend/mating keepout in the final enclosure",
+    "local 3V3 display branch all-on/startup/transient EVT",
+    "full module Z envelope and all eight mounting-hole coordinates",
+    "new enclosure XY/Z datums and custom-mainboard placement/outline"
   ],
   "freeze": {
     "final_display_selected": true,

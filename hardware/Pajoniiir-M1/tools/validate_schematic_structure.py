@@ -210,127 +210,61 @@ def main() -> int:
             errors.append(
                 f"{MECH_A.name}: final_board_outline_locked=true while PCB_OUTLINE gate is open"
             )
+        # M1-MECH-A13 final DSI506 mechanical authority.
         display = mech_a.get("authoritative_display_reference", {})
-        bare = display.get("bare_display_front_envelope", {})
-        active = display.get("active_display_area", {})
-        expected_display = {
-            "bare_x": 114.40,
-            "bare_y": 66.80,
-            "active_x": 93.60,
-            "active_y": 56.16,
+        if display.get("family") != "EYOYO DSI506 / DYL0023":
+            errors.append(f"{MECH_A.name}: active display authority must be final DSI506/DYL0023")
+        rear = display.get("rear_pcb_envelope", {})
+        observed_rear = {"x": rear.get("x"), "y": rear.get("y")}
+        expected_rear = {"x": 121.109, "y": 77.193}
+        if observed_rear != expected_rear:
+            errors.append(f"{MECH_A.name}: final DSI506 rear-PCB evidence drift: {observed_rear} != {expected_rear}")
+        host = display.get("host_connector", {})
+        expected_host = {
+            "mpn": "SFW15R-2STE1LF",
+            "contacts": 15,
+            "pitch_mm": 1.0,
+            "contact_location": "top",
+            "footprint": "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
         }
-        rear_shell = display.get("rear_shell_reference", {})
-        mount = display.get("legacy_mounting_pattern", {})
-        expected_rear_mount = {
-            "rear_x": 108.0,
-            "rear_y": 65.06,
-            "mount_x": 102.6,
-            "mount_y": 60.0,
-            "hole_diameter": 2.0,
-        }
-        observed_rear_mount = {
-            "rear_x": rear_shell.get("x"),
-            "rear_y": rear_shell.get("y"),
-            "mount_x": mount.get("center_spacing_x"),
-            "mount_y": mount.get("center_spacing_y"),
-            "hole_diameter": mount.get("hole_diameter"),
-        }
-        if observed_rear_mount != expected_rear_mount:
-            errors.append(
-                f"{MECH_A.name}: rear-shell/mount geometry drift: "
-                f"{observed_rear_mount} != {expected_rear_mount}"
-            )
-        z_stack = mech_a.get("m1_enclosure_baseline", {}).get("z_stack_candidate", {})
-        expected_z = {
-            "rear_inner_surface_z": 28.0,
-            "pcb_rear_face_z": 22.0,
-            "pcb_front_face_z": 20.4,
-            "gross_front_component_clearance_under_module": 6.5,
-            "gross_back_component_clearance_to_rear_inner": 6.0,
-        }
-        observed_z = {key: z_stack.get(key) for key in expected_z}
-        if observed_z != expected_z:
-            errors.append(
-                f"{MECH_A.name}: candidate Z-stack drift: "
-                f"{observed_z} != {expected_z}"
-            )
-        pcb_candidate = mech_a.get("m1_enclosure_baseline", {}).get(
-            "pcb_envelope_candidate", {}
-        )
-        expected_pcb_candidate = {
-            "width": 108.0,
-            "height": 65.06,
-            "area_mm2": 7026.48,
-        }
-        observed_pcb_candidate = {
-            key: pcb_candidate.get(key) for key in expected_pcb_candidate
-        }
-        if observed_pcb_candidate != expected_pcb_candidate:
-            errors.append(
-                f"{MECH_A.name}: M1-MECH-A0 PCB envelope drift: "
-                f"{observed_pcb_candidate} != {expected_pcb_candidate}"
-            )
-        connector_baseline = mech_a.get("connector_cluster_baseline", {})
-        surfaces = connector_baseline.get("panel_surfaces", {})
-        if surfaces.get("FRONT_Z0", {}).get("usable_for_user_io") is not False:
-            errors.append(
-                f"{MECH_A.name}: FRONT_Z0 must remain reserved for display/touch"
-            )
-        expected_cluster_refs = {
-            "AUDIO_OUT": {"J4", "J5"},
-            "USB_HOST_PAIR": {"J2", "J3"},
-            "POWER_IN": {"J1"},
-            "REMOVABLE_STORAGE": {"J7"},
-            "RECOVERY_BUTTONS": {"SW1", "SW2"},
-            "FACTORY_SERVICE": {"J9"},
-        }
-        observed_cluster_refs = {
-            cluster.get("id"): set(cluster.get("refs", []))
-            for cluster in connector_baseline.get("clusters", [])
-            if isinstance(cluster, dict) and isinstance(cluster.get("id"), str)
-        }
-        if observed_cluster_refs != expected_cluster_refs:
-            errors.append(
-                f"{MECH_A.name}: connector cluster membership drift: "
-                f"{observed_cluster_refs} != {expected_cluster_refs}"
-            )
-        height_audit = mech_a.get("mechanical_height_audit", {})
-        if height_audit.get("gross_under_display_clearance_mm") != 6.5:
-            errors.append(
-                f"{MECH_A.name}: under-display gross clearance must remain 6.5 mm "
-                "until the Z-stack is intentionally revised"
-            )
-        expected_height_max = {
-            "ESP32-P4NRW32X": 0.90,
-            "ESP32-C6-WROOM-1-N4": 3.25,
-            "XGL4030-222MEC": 3.10,
-            "XGL4030-103MEC": 3.10,
-        }
-        observed_height_max = {}
-        for entry in height_audit.get("verified_critical_fixed_parts", []):
-            if isinstance(entry, dict) and isinstance(entry.get("part"), str):
-                observed_height_max[entry["part"]] = entry.get("height_max_mm")
-        if observed_height_max != expected_height_max:
-            errors.append(
-                f"{MECH_A.name}: verified critical height baseline drift: "
-                f"{observed_height_max} != {expected_height_max}"
-            )
-        if height_audit.get("production_allowable_component_height_mm") is not None:
-            errors.append(
-                f"{MECH_A.name}: production allowable height must remain unlocked "
-                "until tolerance/safety clearance is defined"
-            )
-        observed_display = {
-            "bare_x": bare.get("x"),
-            "bare_y": bare.get("y"),
-            "active_x": active.get("x"),
-            "active_y": active.get("y"),
-        }
-        if observed_display != expected_display:
-            errors.append(
-                f"{MECH_A.name}: manufacturer display geometry drift: "
-                f"{observed_display} != {expected_display}"
-            )
+        observed_host = {key: host.get(key) for key in expected_host}
+        if observed_host != expected_host:
+            errors.append(f"{MECH_A.name}: final display host connector drift: {observed_host} != {expected_host}")
+        legacy = mech_a.get("legacy_guition_display_reference", {})
+        if "JC4880" not in str(legacy.get("family", "")):
+            errors.append(f"{MECH_A.name}: historical Guition reference must remain preserved under legacy_guition_display_reference")
+        rebase = mech_a.get("m1_enclosure_baseline", {}).get("final_display_rebase", {})
+        if rebase.get("old_enclosure_verdict") != "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED":
+            errors.append(f"{MECH_A.name}: old enclosure must remain a hard fail for DSI506")
+        if rebase.get("new_enclosure_required") is not True:
+            errors.append(f"{MECH_A.name}: DSI506 convergence requires a new enclosure")
+
+        final_display_path = BASE / "final_display_module.json"
+        display_connector_path = BASE / "display_connector_b1.json"
+        for authority_path in (final_display_path, display_connector_path):
+            if not authority_path.exists():
+                errors.append(f"missing display authority {authority_path.name}")
+        if final_display_path.exists():
+            try:
+                final_display = json.loads(final_display_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                errors.append(f"{final_display_path.name}: invalid JSON: {exc}")
+                final_display = {}
+            freeze = final_display.get("freeze", {})
+            for key in ("final_display_selected", "production_connector_mpn_locked", "production_connector_contact_side_locked", "production_connector_footprint_locked", "schematic_migrated_to_final_display"):
+                if freeze.get(key) is not True:
+                    errors.append(f"{final_display_path.name}: {key} must remain true after B2")
+            if freeze.get("placement_routing_freeze_allowed") is not False:
+                errors.append(f"{final_display_path.name}: placement/routing freeze must remain false while mechanical blockers exist")
+        if display_connector_path.exists():
+            try:
+                dc = json.loads(display_connector_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                errors.append(f"{display_connector_path.name}: invalid JSON: {exc}")
+                dc = {}
+            conn = dc.get("connector", {})
+            if (conn.get("mpn"), conn.get("contacts"), conn.get("pitch_mm"), conn.get("contact_location")) != ("SFW15R-2STE1LF", 15, 1.0, "top"):
+                errors.append(f"{display_connector_path.name}: production J6 identity/contact geometry drift")
 
     if not PCB_CONSTRAINTS.exists():
         errors.append(f"missing PCB constraint authority {PCB_CONSTRAINTS.name}")

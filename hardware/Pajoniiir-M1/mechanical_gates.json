@@ -157,7 +157,8 @@
       ],
       "wall_class_preference": "X_SIDE_WALL_SIGN_TBD",
       "closure_path": "Prefer Switchcraft 722RAHLP + S760KHZ. Gate closes only after exact X wall sign, center/cutout, nut/washer engagement, PCB body keepout and plug/cable envelope are authoritative.",
-      "durability_requirement": ">=5000 mating cycles at system level"
+      "durability_requirement": ">=5000 mating cycles at system level",
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY"
     },
     {
       "id": "SW1_RESET",
@@ -204,7 +205,8 @@
         }
       ],
       "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
-      "closure_path": "Prefer B3U-3000P-B recessed/tool-access configuration; close only after exact actuator-to-wall/tool-hole/spacing and boss footprint geometry pass."
+      "closure_path": "Prefer B3U-3000P-B recessed/tool-access configuration; close only after exact actuator-to-wall/tool-hole/spacing and boss footprint geometry pass.",
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY"
     },
     {
       "id": "SW2_BOOT",
@@ -251,7 +253,8 @@
         }
       ],
       "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
-      "closure_path": "Prefer B3U-3000P-B recessed/tool-access configuration; close only after exact actuator-to-wall/tool-hole/spacing and boss footprint geometry pass."
+      "closure_path": "Prefer B3U-3000P-B recessed/tool-access configuration; close only after exact actuator-to-wall/tool-hole/spacing and boss footprint geometry pass.",
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY"
     },
     {
       "id": "J2_USB0",
@@ -297,7 +300,7 @@
           ]
         },
         {
-          "manufacturer": "W\u00fcrth Elektronik",
+          "manufacturer": "Würth Elektronik",
           "mpn": "614004190021",
           "role": "active_lifecycle_stable_alternate",
           "status": "screened_not_locked",
@@ -331,9 +334,11 @@
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
       ],
-      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; W\u00fcrth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
-      "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve"
+      "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
+      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure"
     },
     {
       "id": "J3_USB1",
@@ -379,7 +384,7 @@
           ]
         },
         {
-          "manufacturer": "W\u00fcrth Elektronik",
+          "manufacturer": "Würth Elektronik",
           "mpn": "614004190021",
           "role": "active_lifecycle_stable_alternate",
           "status": "screened_not_locked",
@@ -413,9 +418,11 @@
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
       ],
-      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; W\u00fcrth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
-      "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve"
+      "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
+      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure"
     },
     {
       "id": "J4_RCA_L",
@@ -449,7 +456,7 @@
             "right-angle THT",
             "board lock",
             "active distributor listing",
-            "\u00d88.3 mm actual barrel",
+            "Ø8.3 mm actual barrel",
             "white"
           ],
           "screen_result": "aperture first-order pass; local Z/body/plug clearance must be proven",
@@ -480,7 +487,9 @@
       ],
       "closure_path": "Prefer Kycon main-board candidate if exact local perimeter/body/plug clearance passes; otherwise use panel-mount fallback. Gate stays open until panel datum + MPN + courtyard/keepout are authoritative.",
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
-      "panel_packing_screen": "PASS as RCA pair co-packed with USB_HOST_PAIR: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve"
+      "panel_packing_screen": "PASS as RCA pair co-packed with USB_HOST_PAIR: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
+      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure"
     },
     {
       "id": "J5_RCA_R",
@@ -514,7 +523,7 @@
             "right-angle THT",
             "board lock",
             "active distributor listing",
-            "\u00d88.3 mm actual barrel",
+            "Ø8.3 mm actual barrel",
             "red"
           ],
           "screen_result": "aperture first-order pass; local Z/body/plug clearance must be proven",
@@ -545,7 +554,9 @@
       ],
       "closure_path": "Prefer Kycon main-board candidate if exact local perimeter/body/plug clearance passes; otherwise use panel-mount fallback. Gate stays open until panel datum + MPN + courtyard/keepout are authoritative.",
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
-      "panel_packing_screen": "PASS as RCA pair co-packed with USB_HOST_PAIR: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve"
+      "panel_packing_screen": "PASS as RCA pair co-packed with USB_HOST_PAIR: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
+      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure"
     },
     {
       "id": "J6_LINE35",
@@ -569,7 +580,7 @@
       "wall_class_preference": "NOT_PRIMARY_LONG_WALL_SAME_PCB_EDGE_ROW",
       "panel_packing_screen": {
         "result": "fail_same_edge_row",
-        "reason": "USB pair + RCA pair + 5 mm reserve + legacy \u00d86.97 J6 aperture yields 99.55 mm occupied span; centered on 108 mm candidate PCB edge leaves only 0.525 mm from packed envelope to candidate D2 mounting-hole edge before any boss/courtyard allowance",
+        "reason": "USB pair + RCA pair + 5 mm reserve + legacy Ø6.97 J6 aperture yields 99.55 mm occupied span; centered on 108 mm candidate PCB edge leaves only 0.525 mm from packed envelope to candidate D2 mounting-hole edge before any boss/courtyard allowance",
         "closure_paths": [
           "different wall",
           "different Z row / panel-mounted or harness",
@@ -592,56 +603,41 @@
       "id": "J_LCD_DISPLAY_FPC",
       "sheet": "10_DISPLAY_MIPI",
       "refdes": "J6",
-      "documentation_alias": "J_LCD",
+      "documentation_alias": "J_DISPLAY_DSI506 (legacy documents may use J_LCD)",
       "category": "display_module_connector_mechanical",
       "status": "open",
       "allow_blank_footprint": false,
       "bom_scope": true,
       "blocks_layout_freeze": true,
       "known": [
-        "SOFNG 0.5TBQP-30P-1",
-        "JLCPCB C3975120",
-        "30 contacts",
-        "0.5 mm pitch",
-        "bare display/front envelope 114.40 x 66.80 mm",
-        "active display area 93.60 x 56.16 mm",
-        "original shell mounting reference 4xD2 on 102.6 x 60.0 mm centers",
-        "original FPC pins 15/16/18/19 = NC",
-        "Altium symbol refs 31/32 = auxiliary GND shell/mount pins, not contacts 31/32",
-        "physical electrical contact sequence = 1..30",
-        "original JC4880 assembly uses component-side right-angle/side-entry LCD FPC connection",
-        "original flex insertion direction is lateral relative to PCB surface"
+        "final product display = EYOYO DSI506 / DYL0023, 5-inch 800x480",
+        "host receptacle = Amphenol SFW15R-2STE1LF",
+        "15 contacts, 1.0 mm pitch, TOP contact",
+        "right-angle / side-entry SMT ZIF",
+        "housing height 2.7 mm",
+        "project footprint Pajoniiir-M1:Amphenol_SFW15R-2STE1LF is drawing-verified and instantiated",
+        "electrical map and initial operating profile are bench-derived from Pajoniiir-M3"
       ],
-      "source": "https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120",
+      "source": "hardware/Pajoniiir-M1/display_connector_b1.json",
       "required_evidence": [
         "actual DSI506 FFC conductor-side / host-to-module pin-1 continuity check",
-        "FFC bend/insertion keepout in final enclosure",
-        "absolute J6 XY/Z placement relative to final display and custom mainboard"
+        "FFC bend/insertion/mating keepout in final enclosure",
+        "absolute J6 XY/Z placement relative to final DSI506 and custom mainboard"
       ],
-      "closure": "Electrical connector, MPN and footprint are locked/instantiated. Gate remains open only for actual cable orientation and final enclosure placement evidence.",
-      "evidence_file": "mech_a.json",
-      "height_audit": "M1-MECH-A-H1: still open / MPN-dependent",
-      "partial_closure_revision": "M1-MECH-A10",
+      "closure": "Connector identity/contact side/footprint are closed electrically. Mechanical gate remains open only for actual cable orientation, FFC motion keepout and final absolute placement.",
+      "evidence_file": "display_connector_b1.json + final_display_module.json + mech_a.json",
+      "height_audit": "Connector housing height 2.7 mm locked; mated cable bend/Z envelope still open",
+      "partial_closure_revision": "M1-MECH-A13 / M1-ELEC-B2",
       "resolved_evidence": [
         {
-          "item": "30-vs-32 symbol discrepancy",
-          "resolution": "SOFNG/JLC part is 30-contact. Original Guition schematic raster shows contacts 1..30 plus two separate auxiliary shell/mount references 31 and 32, both tied to GND.",
-          "sources": [
-            "https://github.com/wegi1/ESP32P4-JC4880P443C-I-W/blob/main/5-Schematic/2_LCD%26CSI.png",
-            "https://jlcpcb.com/partdetail/SOFNG-0_5TBQP_30P1/C3975120"
-          ]
+          "item": "production host receptacle",
+          "resolution": "Amphenol SFW15R-2STE1LF, 15P 1.0 mm TOP-contact right-angle SMT ZIF; footprint verified and instantiated in M1-ELEC-B2.",
+          "authority": "display_connector_b1.json"
         },
         {
-          "item": "pins 15/16/18/19",
-          "resolution": "Original Guition LCD schematic raster marks FPC1 pins 15, 16, 18 and 19 with explicit no-connect markers. Treat as NC for the original JC4880 electrical variant.",
-          "source": "https://github.com/wegi1/ESP32P4-JC4880P443C-I-W/blob/main/5-Schematic/2_LCD%26CSI.png"
-        },
-        {
-          "item": "original assembly insertion architecture",
-          "resolution": "Official Guition product photo shows the LCD flex entering laterally into a right-angle/side-entry FPC connector mounted on the component side of the original PCB.",
-          "limitation": "Photo does not reliably prove top-vs-bottom electrical contact side or exact connector/mated Z height.",
-          "source": "https://www.guition.com/icms/upload/fb081940d6fc11f09850077a33e1404f/FTPData/UEditor/file/2026121/1768961095795/JC4880P443C_I_W%20Specifications-EN-V1.0.pdf",
-          "page": 5
+          "item": "legacy 30-pin Guition path",
+          "resolution": "Superseded by the final DSI506 module contract; retained only as historical evidence outside the active gate.",
+          "authority": "final_display_module.json"
         }
       ],
       "exact_mpn": "SFW15R-2STE1LF",
@@ -699,7 +695,8 @@
         }
       ],
       "wall_class_preference": "X_SIDE_OPPOSITE_POWER_WALL",
-      "closure_path": "Prefer Molex 503398-1892; close only after exact wall sign, slot center/size, PCB edge, card travel/finger clearance and footprint review."
+      "closure_path": "Prefer Molex 503398-1892; close only after exact wall sign, slot center/size, PCB edge, card travel/finger clearance and footprint review.",
+      "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY"
     },
     {
       "id": "J9_USB_SERVICE_POGO",
@@ -772,30 +769,25 @@
       "bom_scope": false,
       "blocks_layout_freeze": true,
       "required_evidence": [
-        "explicit freeze/reject decision for validated legacy enclosure candidate",
-        "final PCB X/Y dimensions within chosen enclosure",
-        "final M1 mounting-hole coordinates / standoff hardware",
-        "edge clearances",
-        "connector/display/enclosure datums",
-        "connector-driven PCB Z/standoff rebalance or proven local perimeter relief for tall edge connectors"
+        "new enclosure XY/Z and wall/boss datums sized for the final DSI506 module",
+        "final custom-mainboard X/Y dimensions and Edge.Cuts",
+        "final mounting-hole coordinates / standoff and screw hardware",
+        "edge clearances to the final DSI506 rear PCB and all enclosure bosses/ribs",
+        "absolute J6 FFC approach/bend envelope",
+        "all user connector body/cutout/mated-plug clearances",
+        "final PCB Z plane after connector and display-envelope validation"
       ],
-      "closure": "Validate connector/boss/edge clearances, then commit authoritative Edge.Cuts and final mounting datums; M1-MECH-A0 is not final.",
+      "closure": "Design and validate a new DSI506-compatible enclosure/mainboard datum set, then commit authoritative Edge.Cuts and mounting datums. The old 108 x 65.06 mm JC4880 feasibility rectangle is superseded and is not Edge.Cuts authority.",
       "known_evidence": [
-        "validated legacy enclosure candidate 121.008 x 73.408 x 30.000 mm",
-        "2.0 mm legacy wall thickness",
-        "conservative M1 board-bay candidate <=108 x 60 mm",
-        "original GUITION shell mounting reference 102.6 x 60.0 mm, 4xD2",
-        "M1-MECH-A0 placement-feasibility PCB envelope 108.00 x 65.06 mm",
-        "candidate outline cavity clearance 4.504 mm/side X and 2.174 mm/side Y",
-        "candidate mounting centers X=+/-51.3 mm, Y=+/-30.0 mm",
-        "M1-MECH-A1 connector envelope screen: USB-A is margin-limited, Micro-Fit power is marginal under conservative central Z screen, and ~10 mm right-angle RCA is the dominant Z-stack driver",
-        "M1-MECH-A3 USB active-candidate screen: Amphenol 87520-1010ALF worst-case 7.1 mm profile implies ~4.9 mm gross rear spacing with temporary 0.5 mm front screening gap",
-        "M1-MECH-A4 primary long-wall first-order packing: USB pair 48.50 mm + 8.00 mm reserve + RCA aperture pair 31.08 mm = 87.58 mm; centered on 108 mm PCB edge leaves 10.21 mm/end before body/boss keepouts",
-        "M1-MECH-A4 J6 same-row screen fails candidate mounting clearance: total span 99.55 mm leaves only 0.525 mm to the candidate D2 hole edge before boss/courtyard allowance",
-        "M1-MECH-A5 J1 preferred architecture: Switchcraft 722RAHLP threaded panel/PCB jack + S760KHZ plug; 7.5 A, 10000 jack cycles / 5000 plug cycles; local X-side-wall envelope replaces old central-Z Micro-Fit screen",
-        "M1-MECH-A6 wall relation: MEDIA_SERVICE_WALL is opposite POWER_WALL; first-order J7 + SW1/SW2 packing uses 49.10 mm of 73.408 mm wall, leaving 12.154 mm/end centered before exact body/boss/tool-hole validation"
+        "final DSI506 rear PCB preliminary envelope = 121.109 x 77.193 mm",
+        "eight mounting holes are visible; outer four preliminary centers imply 111.109 x 67.930 mm spacing with ~2.5 mm holes",
+        "old external enclosure 121.008 x 73.408 mm and inner cavity 117.008 x 69.408 mm are a HARD FAIL for the final display",
+        "old 108.00 x 65.06 mm mainboard envelope and +/-51.3 x +/-30.0 mounting candidate were JC4880-era feasibility data only",
+        "final display connector is J6 Amphenol SFW15R-2STE1LF; cable/bend/absolute placement remains open",
+        "JLCPCB JLC04161H-7628 4-layer 1.6 mm fabrication stackup remains locked"
       ],
-      "evidence_file": "mech_a.json"
+      "evidence_file": "final_display_module.json + mech_a.json",
+      "legacy_enclosure_decision": "REJECTED__HARD_FAIL_FOR_DSI506"
     },
     {
       "id": "FAB_STACKUP",
@@ -857,5 +849,5 @@
     }
   ],
   "milestone": "M1-MECH-A",
-  "mechanical_authority": "mech_a.json"
+  "mechanical_authority": "mech_a.json / M1-MECH-A13 B2-converged"
 }
