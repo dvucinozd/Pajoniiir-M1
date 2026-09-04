@@ -1,9 +1,9 @@
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
-  "source_class": "user-provided rear dimensioned image, physical Z measurements, reconciled front-glass/visible-window measurements, and orientation-controlled full-cable FFC photograph for the final DSI506/DYL0023 display module",
-  "authority_level": "nominal_rear_XY_image_plus_physical_Z_front_visible_window_and_FFC_type_evidence__rear_XY_caliper_or_official_CAD_confirmation_required_for_production_release",
+  "source_class": "user-provided rear dimensioned image, physical Z measurements, reconciled front-glass/visible-window measurements, orientation-controlled full-cable FFC photograph, and physical DSI receptacle center measurements for the final DSI506/DYL0023 display module",
+  "authority_level": "nominal_rear_XY_image_plus_physical_Z_front_visible_window_FFC_type_and_receptacle_XY_evidence__rear_XY_caliper_or_official_CAD_confirmation_required_for_production_release",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "coordinate_system": {
     "xy_origin": "rear PCB top-left corner",
@@ -94,13 +94,30 @@
     "host_to_module_pin1_mapping_status": "OPEN",
     "cable_twist_required_for_normal_mating": false
   },
+  "dsi_module_receptacle": {
+    "evidence_file": "dsi506_receptacle_position_evidence_b1.json",
+    "center_from_right_edge_mm": 11.0,
+    "center_from_top_edge_mm": 33.0,
+    "absolute_center_from_rear_pcb_top_left_mm": {
+      "x": 110.109,
+      "y": 33.0
+    },
+    "entry_face": "+X / right PCB edge",
+    "cable_approach_direction": "+X toward receptacle",
+    "insertion_vector": "-X",
+    "absolute_xy_status": "LOCKED_FROM_PHYSICAL_MEASUREMENT",
+    "insertion_direction_status": "LOCKED_FROM_PHOTO_AND_BOARD_ORIENTATION",
+    "pin1_contact_side_status": "OPEN"
+  },
   "source_dimension_notes": [
     "Rear PCB and eight-hole nominal XY raster come from the user-provided dimensioned rear image; the 0.001 mm edge-label discrepancy is treated as image rounding and nominalized to 5.000 mm where explicitly dimensioned.",
     "Z evidence is physical user measurement: A=7.00 mm, B=5.00 mm, C=10.00 mm.",
     "Front glass is physically measured at 120.00 x 75.00 mm and visible width at 110.00 mm; L=5.00 mm and R=5.00 mm reconcile exactly.",
     "Final vertical datum is resolved from one common top-glass reference: Y1=2.00 mm to visible top and Y2=69.00 mm to visible bottom, giving visible height 67.00 mm and bottom offset 6.00 mm. This supersedes the earlier inconsistent T=3/B=7 readings.",
     "The full DSI FFC photographed flat and untwisted proves opposite-side exposed contacts: Type-B/reverse-contact cable.",
-    "No FFC bend radius, module receptacle pin-1 orientation, connector-center XY, or local XY position of the 10 mm maximum rear protrusion is inferred."
+    "DSI module receptacle center is physically measured 11.00 mm from the right PCB edge and 33.00 mm from the top edge, giving absolute center X=110.109 mm, Y=33.000 mm from rear PCB top-left.",
+    "The close-up shows the receptacle entry face toward the right PCB edge; cable approaches from +X and inserts toward -X.",
+    "No production pin-1 assignment, FFC bend radius, module receptacle Z height or local XY position of the 10 mm maximum rear protrusion is inferred."
   ],
   "closed_by_this_evidence": [
     "nominal rear PCB width and height",
@@ -114,14 +131,16 @@
     "visible LCD width and height",
     "visible-window datum from glass top-left: x=5 mm, y=2 mm, width=110 mm, height=67 mm",
     "front visible-area edge offsets L=5 mm, R=5 mm, T=2 mm, B=6 mm",
-    "DSI FFC same-side versus opposite-side cable type: Type-B/reverse-contact"
+    "DSI FFC same-side versus opposite-side cable type: Type-B/reverse-contact",
+    "DSI506 module receptacle absolute XY center: x=110.109 mm, y=33.000 mm from rear PCB top-left",
+    "DSI506 module receptacle cable approach from +X/right edge and insertion toward -X"
   ],
   "still_required": [
     "physical caliper or official CAD confirmation of nominal rear PCB XY dimensions before production release",
     "local XY obstruction map for rear protrusions",
-    "DSI506 module receptacle absolute XY/Z datum and insertion direction",
     "DSI506 module receptacle pin-1/contact-side identification and host-to-module pin-1 continuity/orientation verification",
-    "FFC approach, bend radius and mating keepout",
+    "DSI506 module receptacle Z height / cable neutral-plane datum if required for final bend modelling",
+    "FFC minimum bend radius and mating/removal keepout",
     "front glass corner/radius/chamfer details if relevant to enclosure retention",
     "final bezel overlap/cosmetic reveal decision",
     "new enclosure depth and M1 mainboard Z/standoff selection"
