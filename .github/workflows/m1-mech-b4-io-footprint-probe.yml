@@ -1,4 +1,4 @@
-name: M1 MECH B4 Kycon RCA footprint probe
+name: M1 MECH B4 manufacturer drawing geometry probe
 
 on:
   push:
@@ -17,32 +17,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Import Kycon catalog ECAD candidate
+      - name: Extract spatial text from released connector drawings
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m pip install --user easyeda2kicad >/dev/null
-          rm -rf /tmp/kycon-probe
-          mkdir -p /tmp/kycon-probe
-          "$HOME/.local/bin/easyeda2kicad" --footprint --lcsc_id=C7503011 --output /tmp/kycon-probe/kycon
+          sudo apt-get update -qq
+          sudo apt-get install --yes --no-install-recommends poppler-utils >/dev/null
+          mkdir -p /tmp/drawings
 
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          files=list(Path('/tmp/kycon-probe/kycon.pretty').glob('*.kicad_mod'))
-          if len(files)!=1:
-              raise SystemExit(f'expected one footprint, got {files}')
-          p=files[0]
-          t=p.read_text()
-          print('FOOTPRINT_FILE',p)
-          pads=[]
-          for m in re.finditer(r'\(pad\s+"?([^"\s)]+)"?\s+([^\s)]+).*?\(at\s+([-+0-9.]+)\s+([-+0-9.]+)(?:\s+[-+0-9.]+)?\).*?\(size\s+([-+0-9.]+)\s+([-+0-9.]+)\)',t,re.S):
-              pad=(m.group(1),m.group(2),float(m.group(3)),float(m.group(4)),float(m.group(5)),float(m.group(6)))
-              pads.append(pad)
-              print('PAD',pad)
-          print('PAD_COUNT',len(pads))
-          print('PAD_NAMES',sorted({x[0] for x in pads}))
-          print('RAW_BEGIN')
-          print(t)
-          print('RAW_END')
-          PY
+          curl -fL --retry 3 --retry-delay 1 \
+            'https://www.switchcraft.com/assets/1/24/7_%20_RAHLP%20SERIES_CD_REV0A.pdf?7826=' \
+            -o /tmp/drawings/switchcraft.pdf
+          curl -fL --retry 3 --retry-delay 1 \
+            'https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/87520.pdf' \
+            -o /tmp/drawings/amphenol.pdf
+          curl -fL --retry 3 --retry-delay 1 \
+            'https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf' \
+            -o /tmp/drawings/kycon.pdf
+
+          for name in switchcraft amphenol kycon; do
+            pdfinfo "/tmp/drawings/$name.pdf" | sed "s/^/$name INFO /"
+            pdftotext -layout "/tmp/drawings/$name.pdf" "/tmp/drawings/$name.txt"
+            echo "===== $name LAYOUT TEXT ====="
+            cat "/tmp/drawings/$name.txt"
+          done
