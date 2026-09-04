@@ -11,6 +11,7 @@ on:
       - "hardware/Pajoniiir-M1/dsi506_mainboard_mount_candidate_b2.json"
       - "hardware/Pajoniiir-M1/m1_mech_b3_*.json"
       - "hardware/Pajoniiir-M1/m1_mech_b4_*.json"
+      - "hardware/Pajoniiir-M1/m1_mech_b5_*.json"
       - "hardware/Pajoniiir-M1/final_display_module.json"
       - "hardware/Pajoniiir-M1/display_connector_b1.json"
       - "hardware/Pajoniiir-M1/mechanical_gates.json"
@@ -20,6 +21,7 @@ on:
       - "hardware/Pajoniiir-M1/10_DISPLAY_MIPI.kicad_sch"
       - "hardware/Pajoniiir-M1/tools/validate_mechanical_authority.py"
       - "hardware/Pajoniiir-M1/tools/validate_b4_panel_windows.py"
+      - "hardware/Pajoniiir-M1/tools/validate_b5_placement_skeleton.py"
       - ".github/workflows/mechanical-authority.yml"
 
 concurrency:
@@ -43,6 +45,9 @@ jobs:
       - name: Validate B4 panel and FFC windows
         run: python3 hardware/Pajoniiir-M1/tools/validate_b4_panel_windows.py
 
+      - name: Validate B5 placement skeleton
+        run: python3 hardware/Pajoniiir-M1/tools/validate_b5_placement_skeleton.py
+
       - name: Verify JSON syntax for current mechanical authorities
         shell: bash
         run: |
@@ -57,6 +62,7 @@ jobs:
               + list(base.glob('dsi506_*lock*.json'))
               + list(base.glob('m1_mech_b3_*.json'))
               + list(base.glob('m1_mech_b4_*.json'))
+              + list(base.glob('m1_mech_b5_*.json'))
           )
           seen = set()
           for path in paths:
