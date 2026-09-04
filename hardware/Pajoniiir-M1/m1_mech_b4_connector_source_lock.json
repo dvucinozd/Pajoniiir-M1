@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-B4",
   "updated": "2026-09-04",
-  "status": "EXTERNAL_USER_IO_MPN_SELECTION_LOCKED__FOOTPRINT_AND_ABSOLUTE_PANEL_DATUM_CLOSURE_FOLLOWS",
+  "status": "EXTERNAL_USER_IO_MPN_SELECTION_LOCKED__USB_RCA_MICROSD_SWITCH_FOOTPRINTS_LOCKED__J1_AND_PANEL_DATUMS_OPEN",
   "policy": "This file locks exact production MPN intent and wall assignment. It does not claim final connector XY/Z, panel cutouts, cable envelopes or Edge.Cuts until manufacturer land patterns and enclosure placement are validated.",
   "wall_assignment_authority": "m1_mech_b3_mainboard_io_envelope.json",
   "selections": [
@@ -53,7 +53,7 @@
       "wall": "Y_NEG_TOP / PRIMARY_LONG_IO_WALL",
       "manufacturer": "Amphenol Communications Solutions / FCI",
       "mpn": "87520-1010ALF",
-      "selection_status": "COMMON_PART_MPN_LOCKED_FOR_BOTH_PORTS",
+      "selection_status": "COMMON_PART_MPN_AND_FOOTPRINT_LOCKED_FOR_BOTH_PORTS",
       "electrical_mechanical_evidence": {
         "usb_type": "USB 2.0 Type-A receptacle",
         "orientation": "right-angle through-hole",
@@ -65,7 +65,6 @@
       },
       "why_locked": "Preferred active common part for both host ports, with 3 A power-contact rating, board locks and 5000 mating cycles.",
       "still_open": [
-        "manufacturer land pattern / exact footprint committed and checked",
         "top-wall shell-center coordinates and pair spacing",
         "panel cutout and insertion clearance",
         "USB plug/cable body and strain envelope"
@@ -73,7 +72,9 @@
       "sources": [
         "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/87520.pdf",
         "https://www.digikey.com/en/products/detail/amphenol-cs-fci/87520-1010ALF/1528948"
-      ]
+      ],
+      "exact_footprint": "Pajoniiir-M1:Amphenol_87520-1010ALF",
+      "footprint_source": "Amphenol released 87520 drawing Rev AR; 4 signal holes and 2 board-lock/shell holes machine-checked in project-local footprint."
     },
     {
       "refdes": [
@@ -83,7 +84,7 @@
       "wall": "Y_NEG_TOP / PRIMARY_LONG_IO_WALL",
       "manufacturer": "Kycon",
       "mpn": "KLPX-0848A-2-W-G",
-      "selection_status": "MPN_LOCKED",
+      "selection_status": "MPN_AND_FOOTPRINT_LOCKED",
       "electrical_mechanical_evidence": {
         "color": "white",
         "orientation": "right-angle PCB mount",
@@ -93,13 +94,14 @@
         "barrel_plating": "gold option"
       },
       "still_open": [
-        "manufacturer land pattern / exact footprint committed and checked",
         "top-wall RCA center/cutout",
         "mated RCA plug body/cable clearance"
       ],
       "sources": [
         "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
-      ]
+      ],
+      "exact_footprint": "Pajoniiir-M1:Kycon_KLPX-0848A-2-x-G",
+      "footprint_source": "Current Kycon KLPX-0848A-2-x-G drawing, cross-checked against an independently used KLPX-0848A board footprint; 4.50 mm terminal raster."
     },
     {
       "refdes": [
@@ -109,7 +111,7 @@
       "wall": "Y_NEG_TOP / PRIMARY_LONG_IO_WALL",
       "manufacturer": "Kycon",
       "mpn": "KLPX-0848A-2-R-G",
-      "selection_status": "MPN_LOCKED",
+      "selection_status": "MPN_AND_FOOTPRINT_LOCKED",
       "electrical_mechanical_evidence": {
         "color": "red",
         "orientation": "right-angle PCB mount",
@@ -119,13 +121,14 @@
         "barrel_plating": "gold option"
       },
       "still_open": [
-        "manufacturer land pattern / exact footprint committed and checked",
         "top-wall RCA center/cutout",
         "mated RCA plug body/cable clearance"
       ],
       "sources": [
         "https://www.kycon.com/Pub_Eng_Draw/KLPX-0848A-2-x-G.pdf"
-      ]
+      ],
+      "exact_footprint": "Pajoniiir-M1:Kycon_KLPX-0848A-2-x-G",
+      "footprint_source": "Current Kycon KLPX-0848A-2-x-G drawing, cross-checked against an independently used KLPX-0848A board footprint; 4.50 mm terminal raster."
     },
     {
       "refdes": [
@@ -211,10 +214,10 @@
   "gates_closed_by_this_milestone": [],
   "gate_reclassification": "The external connector gates remain open because final footprints, XY/Z panel datums and mating envelopes are still required, but exact MPN selection is no longer an open sourcing decision.",
   "next_actions": [
-    "commit manufacturer-checked footprints for J1/J2/J3/J4/J5/J7/SW1/SW2",
-    "place connector courtyard proxies on the B3 104 x 62 mm core / side-wing envelope",
-    "solve exact panel centers and cutouts within the 128 x 84 x 30 mm enclosure candidate",
-    "validate DSI FFC bend against right-side J7/SW1/SW2 placement",
+    "close J1 Switchcraft footprint only after the three-terminal PCB hole centers are unambiguously encoded from released drawing/CAD evidence",
+    "place exact connector courtyards in the B3 104 x 62 mm placement skeleton",
+    "solve final panel centers/cutouts and mated cable envelopes",
+    "validate DSI FFC bend and local rear-display obstruction map",
     "then promote PCB_OUTLINE from screening candidate to mechanical pre-freeze"
   ]
 }

@@ -1110,9 +1110,9 @@
     (lib_id "Connector:USB_A") (at 184.785 59.69 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "08000026-8000-4800-8800-000000000027")
     (property "Reference" "J3" (at 176.785 42.69 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "USB-A FLX4 TBD-MECH" (at 176.785 45.69 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 184.785 59.69 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "~" (at 184.785 59.69 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "87520-1010ALF" (at 176.785 45.69 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Pajoniiir-M1:Amphenol_87520-1010ALF" (at 184.785 59.69 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/87520.pdf" (at 184.785 59.69 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "08000027-8000-4800-8800-000000000028")) (pin "2" (uuid "08000028-8000-4800-8800-000000000029")) (pin "3" (uuid "08000029-8000-4800-8800-00000000002a")) (pin "4" (uuid "0800002a-8000-4800-8800-00000000002b")) (pin "5" (uuid "0800002b-8000-4800-8800-00000000002c"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000008-6b2a-4a3a-8c91-000000000008" (reference "J3") (unit 1))))

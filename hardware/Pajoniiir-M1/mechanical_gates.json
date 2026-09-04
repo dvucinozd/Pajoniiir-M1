@@ -270,18 +270,16 @@
       "refdes": "J2",
       "category": "connector_mechanical",
       "status": "open",
-      "allow_blank_footprint": true,
+      "allow_blank_footprint": false,
       "bom_scope": true,
       "blocks_layout_freeze": true,
       "required_evidence": [
         "USB-A board-edge datum",
         "vertical/right-angle orientation",
-        "shell retention style",
         "enclosure cutout and insertion clearance",
-        "rear-side clearance after connector-driven PCB Z rebalance",
-        "exact production MPN lifecycle/availability confirmation"
+        "rear-side clearance after connector-driven PCB Z rebalance"
       ],
-      "closure": "Lock exact USB-A receptacle MPN for storage port.",
+      "closure": "87520-1010ALF and Pajoniiir-M1:Amphenol_87520-1010ALF are locked/instantiated. Gate remains open only for final panel center/cutout, mated connector/cable envelope and absolute XY/Z placement.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "USB_HOST_PAIR",
       "absolute_cutout_datum_status": "open",
@@ -308,7 +306,7 @@
           ]
         },
         {
-          "manufacturer": "W\u00fcrth Elektronik",
+          "manufacturer": "Würth Elektronik",
           "mpn": "614004190021",
           "role": "active_lifecycle_stable_alternate",
           "status": "screened_not_locked",
@@ -342,11 +340,15 @@
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
       ],
-      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; W\u00fcrth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
       "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
       "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
-      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure"
+      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure",
+      "exact_mpn": "87520-1010ALF",
+      "exact_footprint": "Pajoniiir-M1:Amphenol_87520-1010ALF",
+      "footprint_status": "CLOSED__MANUFACTURER_CHECKED_PROJECT_LOCAL_FOOTPRINT",
+      "source_status": "MPN_AND_FOOTPRINT_LOCKED_M1-MECH-B4-IO"
     },
     {
       "id": "J3_USB1",
@@ -354,18 +356,16 @@
       "refdes": "J3",
       "category": "connector_mechanical",
       "status": "open",
-      "allow_blank_footprint": true,
+      "allow_blank_footprint": false,
       "bom_scope": true,
       "blocks_layout_freeze": true,
       "required_evidence": [
         "USB-A board-edge datum",
         "vertical/right-angle orientation",
-        "shell retention style",
         "enclosure cutout and insertion clearance",
-        "rear-side clearance after connector-driven PCB Z rebalance",
-        "exact production MPN lifecycle/availability confirmation"
+        "rear-side clearance after connector-driven PCB Z rebalance"
       ],
-      "closure": "Lock exact USB-A receptacle MPN for FLX4 port.",
+      "closure": "87520-1010ALF and Pajoniiir-M1:Amphenol_87520-1010ALF are locked/instantiated. Gate remains open only for final panel center/cutout, mated connector/cable envelope and absolute XY/Z placement.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "USB_HOST_PAIR",
       "absolute_cutout_datum_status": "open",
@@ -392,7 +392,7 @@
           ]
         },
         {
-          "manufacturer": "W\u00fcrth Elektronik",
+          "manufacturer": "Würth Elektronik",
           "mpn": "614004190021",
           "role": "active_lifecycle_stable_alternate",
           "status": "screened_not_locked",
@@ -426,11 +426,15 @@
           "source": "https://gct.co/usb-connector/usb-a-type"
         }
       ],
-      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; W\u00fcrth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
+      "closure_path": "Prefer Amphenol 87520-1010ALF for both host ports if absolute panel/cable/Z/footprint checks pass; Würth 614004190021 is the active >10-year alternate. GCT USB1125 is reference-only due NRND.",
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
       "panel_packing_screen": "PASS as USB_HOST_PAIR co-packed with RCA J4/J5: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
       "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
-      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure"
+      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure",
+      "exact_mpn": "87520-1010ALF",
+      "exact_footprint": "Pajoniiir-M1:Amphenol_87520-1010ALF",
+      "footprint_status": "CLOSED__MANUFACTURER_CHECKED_PROJECT_LOCAL_FOOTPRINT",
+      "source_status": "MPN_AND_FOOTPRINT_LOCKED_M1-MECH-B4-IO"
     },
     {
       "id": "J4_RCA_L",
@@ -438,7 +442,7 @@
       "refdes": "J4",
       "category": "connector_mechanical",
       "status": "open",
-      "allow_blank_footprint": true,
+      "allow_blank_footprint": false,
       "bom_scope": true,
       "blocks_layout_freeze": true,
       "required_evidence": [
@@ -449,7 +453,7 @@
         "local display/module perimeter relief at the intended RCA wall/board-edge region",
         "full RCA plug/cable mating envelope"
       ],
-      "closure": "Lock exact RCA LEFT connector MPN.",
+      "closure": "KLPX-0848A-2-W-G and Pajoniiir-M1:Kycon_KLPX-0848A-2-x-G are locked/instantiated. Gate remains open only for final panel center/cutout, mated connector/cable envelope and absolute XY/Z placement.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
       "absolute_cutout_datum_status": "open",
@@ -464,7 +468,7 @@
             "right-angle THT",
             "board lock",
             "active distributor listing",
-            "\u00d88.3 mm actual barrel",
+            "Ø8.3 mm actual barrel",
             "white"
           ],
           "screen_result": "aperture first-order pass; local Z/body/plug clearance must be proven",
@@ -497,7 +501,11 @@
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
       "panel_packing_screen": "PASS as RCA pair co-packed with USB_HOST_PAIR: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
       "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
-      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure"
+      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure",
+      "exact_mpn": "KLPX-0848A-2-W-G",
+      "exact_footprint": "Pajoniiir-M1:Kycon_KLPX-0848A-2-x-G",
+      "footprint_status": "CLOSED__MANUFACTURER_CHECKED_PROJECT_LOCAL_FOOTPRINT",
+      "source_status": "MPN_AND_FOOTPRINT_LOCKED_M1-MECH-B4-IO"
     },
     {
       "id": "J5_RCA_R",
@@ -505,7 +513,7 @@
       "refdes": "J5",
       "category": "connector_mechanical",
       "status": "open",
-      "allow_blank_footprint": true,
+      "allow_blank_footprint": false,
       "bom_scope": true,
       "blocks_layout_freeze": true,
       "required_evidence": [
@@ -516,7 +524,7 @@
         "local display/module perimeter relief at the intended RCA wall/board-edge region",
         "full RCA plug/cable mating envelope"
       ],
-      "closure": "Lock exact RCA RIGHT connector MPN.",
+      "closure": "KLPX-0848A-2-R-G and Pajoniiir-M1:Kycon_KLPX-0848A-2-x-G are locked/instantiated. Gate remains open only for final panel center/cutout, mated connector/cable envelope and absolute XY/Z placement.",
       "panel_policy": "side/rear wall baseline; front face reserved for display/touch",
       "connector_cluster": "AUDIO_OUT",
       "absolute_cutout_datum_status": "open",
@@ -531,7 +539,7 @@
             "right-angle THT",
             "board lock",
             "active distributor listing",
-            "\u00d88.3 mm actual barrel",
+            "Ø8.3 mm actual barrel",
             "red"
           ],
           "screen_result": "aperture first-order pass; local Z/body/plug clearance must be proven",
@@ -564,7 +572,11 @@
       "wall_class_preference": "Y_LONG_WALL_SIGN_TBD",
       "panel_packing_screen": "PASS as RCA pair co-packed with USB_HOST_PAIR: total primary long-wall occupied span 87.58 mm including 8 mm intercluster reserve",
       "post_b2_geometry_status": "REQUIRES_NEW_DSI506_ENCLOSURE_DATUM__PRE_B0_PANEL_PACKING_IS_SCREENING_ONLY",
-      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure"
+      "panel_packing_authority": "legacy_JC4880_enclosure_screen_only__must_revalidate_in_new_DSI506_enclosure",
+      "exact_mpn": "KLPX-0848A-2-R-G",
+      "exact_footprint": "Pajoniiir-M1:Kycon_KLPX-0848A-2-x-G",
+      "footprint_status": "CLOSED__MANUFACTURER_CHECKED_PROJECT_LOCAL_FOOTPRINT",
+      "source_status": "MPN_AND_FOOTPRINT_LOCKED_M1-MECH-B4-IO"
     },
     {
       "id": "J6_LINE35",
@@ -588,7 +600,7 @@
       "wall_class_preference": "NOT_PRIMARY_LONG_WALL_SAME_PCB_EDGE_ROW",
       "panel_packing_screen": {
         "result": "fail_same_edge_row",
-        "reason": "USB pair + RCA pair + 5 mm reserve + legacy \u00d86.97 J6 aperture yields 99.55 mm occupied span; centered on 108 mm candidate PCB edge leaves only 0.525 mm from packed envelope to candidate D2 mounting-hole edge before any boss/courtyard allowance",
+        "reason": "USB pair + RCA pair + 5 mm reserve + legacy Ø6.97 J6 aperture yields 99.55 mm occupied span; centered on 108 mm candidate PCB edge leaves only 0.525 mm from packed envelope to candidate D2 mounting-hole edge before any boss/courtyard allowance",
         "closure_paths": [
           "different wall",
           "different Z row / panel-mounted or harness",

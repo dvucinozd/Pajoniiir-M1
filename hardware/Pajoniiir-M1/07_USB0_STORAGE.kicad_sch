@@ -10,7 +10,7 @@
     (rev "A / M1-SCH-A")
     (company "Pajoniiir")
     (comment 1 "USB 2.0 High-Speed host for Rekordbox storage")
-    (comment 2 "90 ohm differential target; connector footprint TBD-MECH")
+    (comment 2 "90 ohm differential target; J2 Amphenol 87520-1010ALF footprint locked")
   )
   (lib_symbols
 (symbol "power:PWR_FLAG"
@@ -1064,9 +1064,9 @@
     (lib_id "Connector:USB_A") (at 184.785 59.69 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0700001a-7000-4700-8700-00000000001b")
     (property "Reference" "J2" (at 176.785 42.69 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "USB-A STORAGE TBD-MECH" (at 176.785 45.69 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 184.785 59.69 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "~" (at 184.785 59.69 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Value" "87520-1010ALF" (at 176.785 45.69 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "Pajoniiir-M1:Amphenol_87520-1010ALF" (at 184.785 59.69 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/87520.pdf" (at 184.785 59.69 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0700001b-7000-4700-8700-00000000001c")) (pin "2" (uuid "0700001c-7000-4700-8700-00000000001d")) (pin "3" (uuid "0700001d-7000-4700-8700-00000000001e")) (pin "4" (uuid "0700001e-7000-4700-8700-00000000001f")) (pin "5" (uuid "0700001f-7000-4700-8700-000000000020"))
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000007-6b2a-4a3a-8c91-000000000007" (reference "J2") (unit 1))))
