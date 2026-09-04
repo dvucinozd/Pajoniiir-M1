@@ -304,7 +304,7 @@
   (label "DISPLAY_I2C_SCL" (at 177.8 31.115 0) (effects (font (size 1.27 1.27))) (uuid "0e100011-e100-4e10-8e10-000000000012"))
   (label "SYS_POWER_ALERT_N" (at 177.8 59.055 0) (effects (font (size 1.27 1.27))) (uuid "0e100012-e100-4e10-8e10-000000000013"))
   (label "3V3_SYS" (at 72.39 111.125 180) (effects (font (size 1.27 1.27))) (uuid "0a10000e-a100-4a10-8a10-00000000000f"))
-  (label "5V_SYS" (at 72.39 114.935 180) (effects (font (size 1.27 1.27))) (uuid "0a10000f-a100-4a10-8a10-000000000010"))
+
   (label "P4_LDO_MIPI_2V5" (at 72.39 118.745 180) (effects (font (size 1.27 1.27))) (uuid "0a100010-a100-4a10-8a10-000000000011"))
 
   (label "DISPLAY_I2C_SDA" (at 122.555 116.84 0) (effects (font (size 1.27 1.27))) (uuid "0a100012-a100-4a10-8a10-000000000013"))
@@ -319,8 +319,8 @@
   
   
   (label "P4_LDO_MIPI_2V5" (at 127.635 83.185 180) (effects (font (size 1.27 1.27))) (uuid "0a10001d-a100-4a10-8a10-00000000001e"))
-  (label "DISPLAY_I2C_SDA" (at 177.8 24.765 0) (effects (font (size 1.27 1.27))) (uuid "0a10001e-a100-4a10-8a10-00000000001f"))
-  (label "DISPLAY_I2C_SCL" (at 177.8 27.305 0) (effects (font (size 1.27 1.27))) (uuid "0a10001f-a100-4a10-8a10-000000000020"))
+
+
 
   (label "DSI_D1_P" (at 127.635 71.12 180) (effects (font (size 1.27 1.27))) (uuid "0a100021-a100-4a10-8a10-000000000022"))
   (label "DSI_D1_N" (at 127.635 73.025 180) (effects (font (size 1.27 1.27))) (uuid "0a100022-a100-4a10-8a10-000000000023"))
@@ -329,8 +329,8 @@
   (label "DSI_D0_P" (at 127.635 78.74 180) (effects (font (size 1.27 1.27))) (uuid "0a100025-a100-4a10-8a10-000000000026"))
   (label "DSI_D0_N" (at 127.635 81.28 180) (effects (font (size 1.27 1.27))) (uuid "0a100026-a100-4a10-8a10-000000000027"))
 
-  (label "DISPLAY_I2C_SDA" (at 237.49 116.84 180) (effects (font (size 1.27 1.27))) (uuid "0b100007-b100-4b10-8b10-000000000008"))
-  (label "DISPLAY_I2C_SCL" (at 237.49 121.285 180) (effects (font (size 1.27 1.27))) (uuid "0b100008-b100-4b10-8b10-000000000009"))
+
+
 
 
   
