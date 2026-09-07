@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-B2",
   "updated": "2026-09-04",
-  "status": "LOCKED_FOR_M1_MAINBOARD_DIRECT_DISPLAY_MOUNT",
+  "status": "HISTORICAL_DISPLAY_SPECIFIC_SCREENING_ONLY__SUPERSEDED_BY_M1_MECH_B7",
   "authority": "Physical user verification of the four DSI506 inner rear posts: known M2.5 screw fits by hand, usable thread depth measured 3.0 mm, all four post tops support a flat plate without rocking or display-component contact.",
   "supersedes": [
     "the provisional M2.5/user-estimate wording in dsi506_inner_posts_evidence_b2.json",
@@ -23,10 +23,26 @@
     "spacing_x_mm": 58.0,
     "spacing_y_mm": 49.0,
     "centers_from_display_rear_pcb_top_left_mm": [
-      {"name": "UL", "x": 43.109, "y": 7.430},
-      {"name": "UR", "x": 101.109, "y": 7.430},
-      {"name": "LL", "x": 43.109, "y": 56.430},
-      {"name": "LR", "x": 101.109, "y": 56.430}
+      {
+        "name": "UL",
+        "x": 43.109,
+        "y": 7.43
+      },
+      {
+        "name": "UR",
+        "x": 101.109,
+        "y": 7.43
+      },
+      {
+        "name": "LL",
+        "x": 43.109,
+        "y": 56.43
+      },
+      {
+        "name": "LR",
+        "x": 101.109,
+        "y": 56.43
+      }
     ],
     "status": "LOCKED_AS_PRIMARY_M1_DISPLAY_RELATIVE_MAINBOARD_DATUM"
   },
@@ -52,7 +68,10 @@
   },
   "mainboard_hole_policy": {
     "type": "NPTH clearance",
-    "engineering_diameter_range_mm": [3.0, 3.2],
+    "engineering_diameter_range_mm": [
+      3.0,
+      3.2
+    ],
     "production_diameter_locked": false,
     "remaining_dependency": "final screw-head/washer choice plus PCB fabrication and assembly tolerance stack"
   },
@@ -70,5 +89,8 @@
     "final M2.5 screw head/washer geometry and NPTH diameter",
     "added-mainboard mass/preload acceptance in assembled prototype",
     "final enclosure/connector Edge.Cuts"
-  ]
+  ],
+  "production_authority": false,
+  "superseded_by": "board_first_mechanical_contract.json",
+  "retained_scope": "DSI506-specific compatibility, cable, bracket or enclosure reference only"
 }

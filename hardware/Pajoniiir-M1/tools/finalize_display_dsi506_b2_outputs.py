@@ -17,7 +17,7 @@ P14 = B / "14_TEST_MONITORING.kicad_sch"
 VAL = B / "tools/validate_schematic_structure.py"
 MIG = B / "tools/migrate_display_dsi506_b2.py"
 GATES = B / "mechanical_gates.json"
-FD = B / "final_display_module.json"
+FD = B / "display_compatibility_dsi506.json"
 DC = B / "display_connector_b1.json"
 
 

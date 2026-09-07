@@ -16,6 +16,8 @@ on:
       - "hardware/Pajoniiir-M1/mechanical_gates.json"
       - "hardware/Pajoniiir-M1/mech_a.json"
       - "hardware/Pajoniiir-M1/pcb_constraints.json"
+      - "hardware/Pajoniiir-M1/board_first_mechanical_contract.json"
+      - "hardware/Pajoniiir-M1/display_compatibility_*.json"
       - "hardware/Pajoniiir-M1/*.kicad_pcb"
       - ".github/workflows/kicad-erc.yml"
 
@@ -345,6 +347,9 @@ jobs:
             --output artifacts/Pajoniiir-M1.net.xml \
             hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_sch
 
+          python3 hardware/Pajoniiir-M1/tools/validate_board_packing_inventory.py \
+            artifacts/Pajoniiir-M1.net.xml
+
           kicad-cli sch export pdf \
             --black-and-white \
             --output artifacts/Pajoniiir-M1-schematic.pdf \
@@ -434,3 +439,9 @@ jobs:
           if unexplained or warnings:
               raise SystemExit(1)
           PY
+
+      - name: Validate PG diagnostics and library closure
+        run: |
+          python3 hardware/Pajoniiir-M1/tools/validate_power_good_closure.py \
+            artifacts/Pajoniiir-M1.net.xml \
+            artifacts/Pajoniiir-M1-erc.json

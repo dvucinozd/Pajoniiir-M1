@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
-  "source_class": "user-provided front-side photograph plus user physical dimensions of the final DSI506/DYL0023 display module",
+  "source_class": "user-provided front-side photograph plus user physical dimensions of the validated DSI506/DYL0023 compatibility-profile display module",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "orientation": "landscape dimensions; photograph may be held portrait",
   "front_glass_envelope_mm": {

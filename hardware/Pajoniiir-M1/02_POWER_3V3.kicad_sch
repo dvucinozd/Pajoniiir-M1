@@ -788,6 +788,114 @@
 			)
 			(embedded_fonts no)
 		)
+
+    (symbol "Connector:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.762)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "TP"
+				(at 0 6.858 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "test point"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "test point tp"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Pin* Test*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 3.302)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 0 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
   )
   (symbol
     (lib_id "Pajoniiir-M1:TPS62132_M1")
@@ -1097,7 +1205,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000002-6b2a-4a3a-8c91-000000000002" (reference "R21") (unit 1))))
   )
   (label "3V3_SYS" (at 189.865 50.165 0) (effects (font (size 1.27 1.27))) (uuid "b2000061-2222-4222-8222-000000000062"))
-  
+
   (symbol
     (lib_id "Device:R_US") (at 205.105 53.975 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -1148,4 +1256,15 @@
   )
   (sheet_instances (path "/" (page "3")))
   (embedded_fonts no)
+
+  (symbol (lib_id "Connector:TestPoint") (at 225.425 110.49 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "936af5b0-b724-538b-95cd-b7ab8a5caf51")
+    (property "Reference" "TP26" (at 225.425 103.49 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "3V3_PG" (at 225.425 105.49 0) (effects (font (size 1.27 1.27))))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (at 225.425 110.49 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Datasheet" "~" (at 225.425 110.49 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (pin "1" (uuid "b15533d9-9bf7-58e6-8479-31a14f149186"))
+    (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000002-6b2a-4a3a-8c91-000000000002" (reference "TP26") (unit 1))))
+  )
+  (label "3V3_PG" (at 225.425 110.49 0) (effects (font (size 1.27 1.27))) (uuid "b9cfce9a-e362-5104-9da1-19925b339879"))
 )

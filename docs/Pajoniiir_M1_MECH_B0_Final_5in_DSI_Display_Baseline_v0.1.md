@@ -1,7 +1,10 @@
 # Pajoniiir-M1 — M1-MECH-B0 Final 5-inch DSI Display Baseline v0.3
 
-**Date:** 2026-09-04  
-**Revision:** M1-MECH-B0 / corrected by M1-ELEC-B0  
+> **M1-MECH-B7 NOTE (2026-09-06):** This is display-specific historical evidence. DSI506 is a validated compatibility profile and does not define Pajoniiir-M1 board `Edge.Cuts`, mounting holes, connector coordinates or enclosure. Current authority: `board_first_mechanical_contract.json`.
+
+
+**Date:** 2026-09-04
+**Revision:** M1-MECH-B0 / corrected by M1-ELEC-B0
 **Status:** FINAL PRODUCT DISPLAY MODULE SELECTED; M3 BENCH IDENTITY/PINOUT ADOPTED
 
 ---
@@ -194,7 +197,7 @@ Do not resurrect separate `3V3_LCD` / `3V3_TOUCH` domains unless measurement dem
 The user-provided dimensioned rear image remains the current M1 mechanical authority for preliminary CAD:
 
 ```text
-rear PCB envelope      121.109 x 77.193 mm
+rear PCB envelope      121.109 x 77.93 mm
 outer hole diameter    ~2.50 mm
 outer hole centers     (5.000,5.000)
                        (116.109,5.000)
@@ -219,7 +222,7 @@ inner    117.008 x 69.408 mm
 Display PCB:
 
 ```text
-121.109 x 77.193 mm
+121.109 x 77.93 mm
 ```
 
 Therefore the old enclosure remains a hard fail and must be redesigned.

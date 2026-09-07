@@ -1,6 +1,9 @@
 # Pajoniiir-M1 — M1-MECH-A Physical Evidence Boundary v0.2
 
-> **A13 BOUNDARY RECORD.** B3/B4/B5 later added display mounting, connector selection and placement/routing screening. The current open evidence gates are summarized in `Pajoniiir_M1_Current_Design_Status_B5.md`.
+> **M1-MECH-B7 NOTE (2026-09-06):** This is display-specific historical evidence. DSI506 is a validated compatibility profile and does not define Pajoniiir-M1 board `Edge.Cuts`, mounting holes, connector coordinates or enclosure. Current authority: `board_first_mechanical_contract.json`.
+
+
+> **A13 BOUNDARY RECORD.** Later milestones added connector selection and placement/routing screening, then rebased mechanical authority onto the board. The current open evidence gates are summarized in `Pajoniiir_M1_Current_Design_Status_B8.md`.
 
 **Date:** 2026-09-04
 **Revision:** M1-MECH-A13 / post M1-ELEC-B2 convergence
@@ -10,11 +13,11 @@
 
 The active final-product display is **EYOYO DSI506 / DYL0023, 5-inch 800×480**. The production host receptacle is **Amphenol SFW15R-2STE1LF**, 15 contacts, 1.0 mm pitch, TOP contact, right-angle/side-entry SMT ZIF. Its project footprint is drawing-verified and instantiated in `10_DISPLAY_MIPI`. The older 30-pin Guition/JC4880 FPC path is historical evidence only.
 
-Preliminary dimensioned-image evidence for the final display rear PCB is **121.109 × 77.193 mm**, with eight visible mounting holes. The outer four image-derived centers imply approximately **111.109 × 67.930 mm** spacing and ~2.5 mm holes. These dimensions are sufficient to reject the old enclosure, but not sufficient for production CAD release without physical caliper data or official CAD.
+Preliminary dimensioned-image evidence for the final display rear PCB is **121.109 × 77.93 mm**, with eight visible mounting holes. The outer four image-derived centers imply approximately **111.109 × 67.930 mm** spacing and ~2.5 mm holes. These dimensions are sufficient to reject the old enclosure, but not sufficient for production CAD release without physical caliper data or official CAD.
 
 ## 2. Old enclosure decision is closed: REJECTED
 
-The previous external enclosure was 121.008 × 73.408 mm with a 117.008 × 69.408 mm inner cavity. The final display rear PCB is larger than even the old external Y dimension. `final_display_module.json` therefore records `HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED`.
+The previous external enclosure was 121.008 × 73.408 mm with a 117.008 × 69.408 mm inner cavity. The final display rear PCB is larger than even the old external Y dimension. `display_compatibility_dsi506.json` therefore records `HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED`.
 
 Consequences:
 

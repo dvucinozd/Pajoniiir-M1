@@ -4,7 +4,7 @@
 
 **MCU:** ESP32-P4 v3.2+ / ESP32-P4NRW32X production target
 
-**Datum:** 2026-09-04
+**Datum:** 2026-09-06
 
 **Status:** Current central GPIO authority after M1-ELEC-B2 implementation
 
@@ -14,7 +14,7 @@
 
 This file remains the central GPIO source of truth for the custom M1 board.
 
-M1-ELEC-B0 replaces the old 4.3-inch Guition display/touch assignment with the same 5-inch DSI506/DYL0023 module already accepted in Pajoniiir-M3. The final display needs only the shared I2C GPIO7/8 in addition to the dedicated MIPI DSI PHY.
+M1-ELEC-B0 replaces the old 4.3-inch Guition display/touch assignment with a generic 15-pin DSI host interface. The board provides shared I2C GPIO7/8 in addition to the dedicated MIPI DSI PHY; DSI506/DYL0023 is the first validated profile.
 
 Therefore old `TOUCH_RST`, `TOUCH_INT`, `LCD_RST`, `LCD_TE` and external `LCD_BL_PWM` GPIO ownership is released.
 
@@ -31,8 +31,8 @@ Therefore old `TOUCH_RST`, `TOUCH_INT`, `LCD_RST`, `LCD_TE` and external `LCD_BL
 | 4 | Spare | **FREE** | released from old GT911 TOUCH_INT by M1-ELEC-B0 |
 | 5 | Spare | **FREE** | released from old bare-panel LCD_RST by M1-ELEC-B0 |
 | 6 | Spare | **FREE** | released from old bare-panel LCD_TE by M1-ELEC-B0 |
-| 7 | **DISPLAY_I2C_SDA** | **LOCKED** | DSI506 J2 pin 12; touch 0x38 + panel controller 0x45 |
-| 8 | **DISPLAY_I2C_SCL** | **LOCKED** | DSI506 J2 pin 11; 100 kHz accepted baseline |
+| 7 | **DISPLAY_I2C_SDA** | **LOCKED** | J6 pin 12; controller addresses are display-profile specific (DSI506: 0x38 and 0x45) |
+| 8 | **DISPLAY_I2C_SCL** | **LOCKED** | J6 pin 11; bus rate is display-profile specific (DSI506 baseline: 100 kHz) |
 | 9 | Spare | FREE | old ES8311 DOUT removed |
 | 10 | Spare | FREE | old ES8311 LRCK removed |
 | 11 | Spare | FREE | old speaker PA removed |
@@ -47,7 +47,7 @@ Therefore old `TOUCH_RST`, `TOUCH_INT`, `LCD_RST`, `LCD_TE` and external `LCD_BL
 | 20 | **USB0_PWR_EN** | LOCK-CANDIDATE | TPS25221 USB0 |
 | 21 | **USB0_FAULT_N** | LOCK-CANDIDATE | TPS25221 USB0 |
 | 22 | **USB1_PWR_EN** | LOCK-CANDIDATE | TPS25221 USB1 |
-| 23 | Spare | **FREE** | external display PWM not used in DSI506 factory configuration |
+| 23 | Spare | **FREE** | no external display PWM is present on the generic 15-pin J6 interface |
 | 24 | **P4_USB_SERIAL_JTAG_DM** | RESERVED | factory/service |
 | 25 | **P4_USB_SERIAL_JTAG_DP** | RESERVED | factory/service |
 | 26 | **USB1_FS_DM** | LOCK-CANDIDATE | DDJ-FLX4 |
@@ -100,13 +100,13 @@ DSI_REXT
 VDD_MIPI_DPHY
 ```
 
-The final DSI506 connector exposes both data lanes. M1 routes both lanes, while the initial accepted firmware profile uses lane0 + clock at 800 Mbps.
+J6 exposes both data lanes. M1 routes both lanes; the DSI506 compatibility profile uses lane0 + clock at 800 Mbps.
 
 ---
 
-## 4. Final display GPIO contract
+## 4. Display-profile GPIO contract
 
-M3 bench evidence for the same physical display locks:
+M3 bench evidence locks the DSI506 profile:
 
 ```text
 GPIO7 -> DSI506 J2 pin 12 SDA

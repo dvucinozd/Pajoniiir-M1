@@ -4,7 +4,7 @@
 
 **Updated:** 2026-09-04
 
-**Baseline:** M1-ELEC-B2 / M1-MECH-B5
+**Baseline:** M1-ELEC-B2 / M1-MECH-B7
 
 **Status:** current engineering-intent BOM companion to the live KiCad hierarchy
 
@@ -14,10 +14,10 @@ This document records current component intent and unresolved production choices
 
 | Metric | Count |
 |---|---:|
-| Unique `in_bom=yes` RefDes | 242 |
+| Unique `in_bom=yes` RefDes | 244 |
 | DNP RefDes | 15 |
 | Intentional blank footprints | 3 |
-| Instantiated RefDes including DNL service items | 245 |
+| Instantiated RefDes including DNL service items | 247 |
 
 Intentional blank footprints are `C3`, `C8` and `J1`. Any additional blank footprint is a validation failure.
 
@@ -33,8 +33,8 @@ C24 C72 C76 C77 C78 C79 C80 C106 C107 C108 C109 R70 R74 R99 R100
 - Firmware storage: W25Q128JVPIQ, 16 MB external QSPI flash
 - Wi-Fi: ESP32-C6-WROOM-1-N4 over four-bit SDIO
 - MAIN audio: PCM5102APWR stereo DAC
-- Display: EYOYO DSI506 / DYL0023, 5-inch 800 x 480 DSI module
-- Touch/backlight: module-integrated, controlled over shared display I2C
+- Display interface: generic 15-pin Raspberry-Pi-style MIPI DSI host; DSI506/DYL0023 is one validated profile
+- Touch/backlight: supplied by the selected display profile over shared display I2C where supported
 - Storage: USB0 High-Speed host plus native four-bit microSD
 - Controller/audio host: USB1 Full-Speed DDJ-FLX4 MIDI and four-channel USB Audio
 - CUE/PFL: DDJ-FLX4 USB Audio/headphone path
@@ -54,7 +54,7 @@ The former ST7701S/GT911/MP3202 bare-panel path and optional 3.5 mm line output 
 | U7 | 1 | Input eFuse | TPS259474ARPWR | `Pajoniiir-M1:Texas_RPW0010A_VQFN-HR-10_2x2mm` | land pattern locked |
 | U8 | 1 | 3.3 V / 3 A system buck | TPS62132RGTR | `Package_DFN_QFN:VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias` | captured |
 | U13 | 1 | microSD load switch | TPS22918DBVR | `Package_TO_SOT_SMD:SOT-23-6` | captured |
-| U14 | 1 | System power monitor | INA238AIDGSR | `Package_SO:VSSOP-10_3x3mm_P0.5mm` | captured for EVT/DVT telemetry |
+| U14 | 1 | System power monitor | INA238AIDGSR | `Pajoniiir-M1:Texas_DGS0010A_VSSOP-10_3x3mm_P0.5mm` | captured for EVT/DVT telemetry |
 
 ## Power and monitoring
 
@@ -75,6 +75,8 @@ J1 -> D1/input capacitance -> U7 TPS259474A -> 5V_PROTECTED
 | R120 | System current shunt | WSK25125L000FEA, 5 mOhm, 1%, 1 W, four-terminal | Vishay WSK2512 Kelvin footprint |
 | U14 | Current/voltage monitor | INA238AIDGSR, address 0x40 | captured |
 | U8 | 3.3 V buck | TPS62132RGTR | captured |
+| TP25 | eFuse PG diagnostic | EFUSE_PG | TestPoint:TestPoint_Pad_D1.5mm |
+| TP26 | 3.3 V PG diagnostic | 3V3_PG | TestPoint:TestPoint_Pad_D1.5mm |
 | L2 | 3.3 V buck inductor | XGL4030-222MEC, 2.2 uH | `Inductor_SMD:L_Coilcraft_XxL4030` |
 
 Initial eFuse targets remain UVLO about 4.42 V, OVLO about 5.70 V and current limit about 4.45 A typical. C3/C8 require startup, inrush, transient, ESR, ripple-current and physical-envelope evidence before production lock.
@@ -130,7 +132,7 @@ Connector panel centers, cutouts, insertion clearance and mated cable envelopes 
 
 GPIO50 is BCLK, GPIO51 DATA, GPIO52 LRCK and GPIO49 XSMT. The DAC boots muted. The retired 3.5 mm line-output connector has no Rev A footprint.
 
-## Display module
+## DSI host interface
 
 | RefDes | Function | MPN/value | Footprint/state |
 |---|---|---|---|
@@ -151,7 +153,7 @@ J6 pin map:
 13 GND     14 3V3       15 3V3
 ```
 
-The remaining display gate is physical: actual cable pin-1 continuity, FFC bend/removal keepout and absolute J6 placement. There is no discrete MP3202 backlight block or GT911 reset/interrupt network in the active BOM.
+The remaining J6 gate covers board-edge placement, branch power budget, service access and a cable/adapter orientation record for each supported display. DSI506 is the first validated profile. There is no discrete MP3202 backlight block or GT911 reset/interrupt network in the active BOM.
 
 ## microSD
 
@@ -180,7 +182,7 @@ The following are not production BOM locks:
 2. C3 and C8 exact capacitance technology, MPN and footprint
 3. final mounting-hole diameter and screw head/washer hardware
 4. panel cutouts and absolute connector centers
-5. DSI FFC bend/orientation and absolute J6 location
+5. board-edge J6 service placement, power budget and per-display cable/adapter profiles
 6. final PCB side wings/notches and `Edge.Cuts`
 7. exact 90 ohm USB and 100 ohm MIPI width/spacing
 

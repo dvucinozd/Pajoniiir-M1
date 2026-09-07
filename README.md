@@ -8,27 +8,27 @@ This repository contains the live hierarchical KiCad design, electrical and firm
 
 **Electrical milestone:** M1-ELEC-B2
 
-**Mechanical milestone:** M1-MECH-B5
+**Mechanical milestone:** M1-MECH-B7
 
-**Pre-layout milestone:** M1-PRELAYOUT-B5
+**Pre-layout milestone:** M1-PRELAYOUT-B8 — 244 assigned footprints and 193 named nets populated into eight reversible working domains
 
 **Schematic structure:** PASS — 15/15 leaf sheets
 
-**Native KiCad 9 ERC:** PASS — 0 unexplained errors, 0 excluded errors, 0 warnings in the latest B5 schematic run
+**Local native KiCad 10.0.4 ERC:** PASS — zero violations after PG diagnostics/library closure; fresh KiCad 9 CI pending for these changes
 
-**Manufacturing BOM parity:** PASS — 242 source / 242 exported, 15 DNP, 3 intentional blank footprints
+**Manufacturing BOM parity:** PASS — 244 source / 244 exported, 15 DNP, 3 intentional blank footprints
 
-**Mechanical B2/B3/B4 contracts:** PASS
+**Board-first mechanical contract:** PASS — display profiles cannot define the PCB outline or mounts
 
-**B4 panel-window contract:** PASS
-
-**B5 placement skeleton:** PASS
+**Display-derived B2-B6 geometry:** historical screening only
 
 **Final placement/routing freeze:** BLOCKED — 12 physical/EVT gates remain
 
 **Gerber/EVT order:** NOT AUTHORIZED
 
-The current human-readable snapshot is [Pajoniiir M1 Current Design Status B5](docs/Pajoniiir_M1_Current_Design_Status_B5.md).
+Evidence updates: [ERC/library closure](docs/Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md), [DSI506 rear image and corrected height](docs/Pajoniiir_M1_DSI506_Evidence_2026-09-04.md).
+
+The current human-readable snapshot is [Pajoniiir M1 Current Design Status B8](docs/Pajoniiir_M1_Current_Design_Status_B8.md).
 
 ## Architecture
 
@@ -54,11 +54,11 @@ The current human-readable snapshot is [Pajoniiir M1 Current Design Status B5](d
   ESP32-P4 ESP32-C6  PCM5102A
       |      SDIO      MAIN L/R
       |
-      +-- MIPI DSI + shared I2C --> DSI506 5-inch module
+      +-- 15-pin MIPI DSI + I2C --> qualified display profile
       +-- SDMMC -----------------> microSD
 ```
 
-The final product display is **EYOYO DSI506 / DYL0023, 5-inch, 800 x 480**. Touch and backlight are module-integrated and controlled through the shared display I2C bus. The former JC4880 4.3-inch ST7701S/GT911/MP3202 path is historical evidence only.
+The mainboard exposes a generic 15-pin Raspberry-Pi-style MIPI DSI host interface. EYOYO DSI506 / DYL0023 is the first validated display profile; other models may use the same board after electrical, power, firmware and cable qualification.
 
 ## Electrical baseline
 
@@ -74,46 +74,25 @@ The final product display is **EYOYO DSI506 / DYL0023, 5-inch, 800 x 480**. Touc
 - P4 UART, P4 USB Serial/JTAG pogo and C6 recovery paths
 - optional INA238 system power telemetry
 
-## Final display contract
+## DSI host contract
 
 ```text
-Display           EYOYO DSI506 / DYL0023
-Resolution        800 x 480 native landscape
 Host connector    Amphenol SFW15R-2STE1LF
-FFC               15 contacts, 1.0 mm, Type-B/reverse contact
-Supply            3V3_DISPLAY_MODULE, up to 340 mA documented
+Interface         15 contacts, 1.0 mm, Raspberry-Pi-style DSI map
+Supply branch     3V3_DISPLAY_MODULE; final multi-model budget open
 DSI routing       clock + lane0 + lane1
-Initial profile   lane0 active, 800 Mbps, RGB888, 27.777 MHz DPI
-I2C               GPIO7 SDA / GPIO8 SCL, 100 kHz
-Touch             0x38, FT5426/FT5x06-compatible
-Panel controller  0x45, module power/backlight
+I2C               GPIO7 SDA / GPIO8 SCL
+Cable             qualified per display model or adapter
+Validated profile DSI506 / DYL0023: lane0, 800 Mbps, RGB888, 27.777 MHz
 ```
 
-GPIO3, GPIO4, GPIO5, GPIO6 and GPIO23 were released by the display migration and remain unassigned spare candidates.
+Connector shape alone does not prove compatibility. Every supported display needs a recorded pin map, power envelope, DSI timing/controller profile and cable orientation.
 
 ## Mechanical baseline
 
-The mainboard mounts directly to four physically confirmed M2.5 posts on the display.
+The mainboard is a standalone assembly and mounts to its own chassis or enclosure bosses. Its outline, mounting pattern and connector coordinates remain open until complete footprint packing, routing, thermal and service-envelope work establishes a viable board.
 
-```text
-post pattern                   58 x 49 mm
-usable thread depth            3.0 mm
-Rev A screw baseline           M2.5 x 4.0 mm
-mainboard seating plane        Z = 10.0 mm
-mainboard rear surface         Z = 11.6 mm at 1.6 mm thickness
-core board screening envelope  104 x 62 mm
-enclosure screening envelope   128 x 84 x 30 mm
-candidate wall thickness       2.0 mm
-```
-
-Wall assignment:
-
-- top / `Y_NEG`: J2 USB0, J3 USB1, J4/J5 RCA
-- left / `X_NEG`: J1 power
-- right / `X_POS`: J7 microSD, SW1/SW2 and guarded DSI FFC corridor
-- bottom / `Y_POS`: intentionally clear
-
-The enclosure and core board dimensions are screening values. They are not production `Edge.Cuts`.
+DSI506-derived values such as the 58 x 49 mm rear posts, 104 x 62 mm board screen and 128 x 84 x 30 mm enclosure screen are retained only for optional DSI506 bracket/enclosure work. They are not production `Edge.Cuts` authority.
 
 ## Connector and footprint state
 
@@ -122,7 +101,7 @@ The enclosure and core board dimensions are screening values. They are not produ
 | J1 | Switchcraft 722RAHLP | open | terminal-center and panel geometry required |
 | J2/J3 | Amphenol 87520-1010ALF | locked | panel/cable envelope open |
 | J4/J5 | Kycon KLPX-0848A-2-W-G / -R-G | locked | panel/cable envelope open |
-| J6 | Amphenol SFW15R-2STE1LF | locked | FFC pin-1/bend/placement open |
+| J6 | Amphenol SFW15R-2STE1LF | locked | board-edge placement, power budget and per-display cable profile open |
 | J7 | Molex 503398-1892 | locked | slot/access/clearance open |
 | SW1/SW2 | B3U-3000P-B | locked | recessed tool-hole placement open |
 | J9 | project-local factory pogo | closed, DNL | normal placement work only |
@@ -131,7 +110,11 @@ Only `J1`, `C3` and `C8` intentionally have blank footprints in the manufacturin
 
 ## PCB and routing state
 
-`hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb` is intentionally an empty four-copper-layer shell. It contains no placed footprints, routes or `Edge.Cuts`.
+`hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb` is a populated four-copper-layer pre-layout canvas. It contains all 244 assigned footprints and 193 named schematic nets in eight `Dwgs.User` working domains, with no footprint bounding-box overlaps, routes, zones or `Edge.Cuts`.
+
+`m1_board_packing_inventory_b7.json` records all 247 schematic components, 244 assigned footprints, 33 footprint classes including the blank-gate class, and the seven board-first packing phases.
+
+`m1_board_placement_seed_b8.json` records the generated domain coordinates and explicitly marks every coordinate as non-production. The seed and validator scripts preserve schematic UUID paths so KiCad can continue synchronizing the board with the hierarchy.
 
 The stackup is locked to JLCPCB `JLC04161H-7628`, 1.6 mm, 1 oz outer copper and 0.5 oz inner copper.
 
@@ -176,7 +159,7 @@ Although most connector MPNs and footprints are locked, their gates stay open un
 docs/                         engineering and status documents
 hardware/Pajoniiir-M1/        KiCad project and machine contracts
   *.kicad_sch                 root plus 15 hierarchical sheets
-  Pajoniiir-M1.kicad_pcb      empty four-layer pre-layout shell
+  Pajoniiir-M1.kicad_pcb      populated four-layer B8 placement canvas
   *.json                      electrical/mechanical/freeze authorities
   libraries/                  project symbols and footprints
   tools/                      migration and fail-closed validators
@@ -188,21 +171,20 @@ hardware/Pajoniiir-M1/        KiCad project and machine contracts
 When sources disagree:
 
 1. live `hardware/Pajoniiir-M1/*.kicad_sch`
-2. `mechanical_gates.json`
-3. B5 placement and routing JSON contracts
-4. B4 connector source lock
-5. B3 mainboard/enclosure screening contracts
-6. final-display and DSI506 evidence/lock JSON files
-7. [Engineering BOM v0.3](docs/Pajoniiir_Mainboard_BOM_v0.3.md)
-8. [Global GPIO allocation](docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md)
-9. subsystem documents
-10. explicitly superseded A/JC4880 documents as historical evidence
+2. `board_first_mechanical_contract.json` and `mechanical_gates.json`
+3. `pcb_constraints.json` and the current routing contract
+4. B4 exact connector source lock
+5. display compatibility profiles, beginning with `display_compatibility_dsi506.json`
+6. [Engineering BOM v0.3](docs/Pajoniiir_Mainboard_BOM_v0.3.md)
+7. [Global GPIO allocation](docs/Pajoniiir_Global_GPIO_Allocation_v0.1.md)
+8. subsystem documents
+9. superseded display-mounted B2-B6 and JC4880 records as historical evidence
 
 ## Current documents
 
 ### Status and release gates
 
-- [Current Design Status B5](docs/Pajoniiir_M1_Current_Design_Status_B5.md)
+- [Current Design Status B8](docs/Pajoniiir_M1_Current_Design_Status_B8.md)
 - [Schematic Audit](docs/Pajoniiir_M1_Schematic_Audit_v0.1.md)
 - [Schematic Readiness Review](docs/Pajoniiir_RevA_Schematic_Readiness_Review_v0.1.md)
 - [Manufacturing Output Contract](docs/Pajoniiir_Manufacturing_Output_Contract_v0.1.md)
@@ -216,11 +198,12 @@ When sources disagree:
 - [Hardware/Firmware Contract](docs/Pajoniiir_M1_Hardware_Firmware_Contract_v0.1.md)
 - [5-inch DSI Interface Migration](docs/Pajoniiir_M1_ELEC_B0_5in_DSI_Interface_Migration_v0.1.md)
 - [15-pin DSI Connector Lock](docs/Pajoniiir_M1_ELEC_B1_DSI15_Connector_Lock_v0.1.md)
-- [Final 5-inch Display Baseline](docs/Pajoniiir_M1_MECH_B0_Final_5in_DSI_Display_Baseline_v0.1.md)
+- [Board-first mechanical rebase](docs/Pajoniiir_M1_MECH_B7_Board_First_Rebase_v0.1.md)
+- [DSI506 compatibility evidence](docs/Pajoniiir_M1_DSI506_Evidence_2026-09-04.md)
 
 ### Historical and subsystem design records
 
-The original architecture, schematic plan, JC4880 display/backlight, GT911 and M1-MECH-A documents remain in `docs/` as design provenance. Their old display, enclosure and pre-capture status statements do not override the current B5 authorities.
+The original architecture, schematic plan, JC4880 display/backlight, GT911 and M1-MECH-A documents remain in `docs/` as design provenance. Their display-specific geometry does not override the B7 board-first authority.
 
 ## Validation
 
@@ -229,8 +212,6 @@ From the repository root:
 ```bash
 python hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 python hardware/Pajoniiir-M1/tools/validate_mechanical_authority.py
-python hardware/Pajoniiir-M1/tools/validate_b4_panel_windows.py
-python hardware/Pajoniiir-M1/tools/validate_b5_placement_skeleton.py
 python hardware/Pajoniiir-M1/tools/report_mech_gate_snapshot.py
 ```
 

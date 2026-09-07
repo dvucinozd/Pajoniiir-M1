@@ -1,9 +1,12 @@
 # Pajoniiir Mainboard — Power Input Design v0.1
 
-**Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1  
-**Ploča:** Pajoniiir Mainboard Rev A  
-**Blok:** 01_POWER_INPUT  
-**Datum:** 2026-09-02  
+**Captured update 2026-09-04:** `EFUSE_PG` is available at `TP25` on `01_POWER_INPUT` with the existing pull-up. It is a diagnostic testpoint; no P4 GPIO is assigned. See [ERC closure](Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md).
+
+
+**Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1
+**Ploča:** Pajoniiir Mainboard Rev A
+**Blok:** 01_POWER_INPUT
+**Datum:** 2026-09-02
 **Status:** Captured in KiCad; J1 land pattern and C3/C8 EVT selections remain open
 
 > **Post-capture update (2026-09-04):** U7 and D1 are captured with locked footprints. J1 is selected as Switchcraft 722RAHLP with S760KHZ mating plug, but its land pattern remains intentionally blank pending unambiguous terminal-center evidence. C3/C8 remain EVT-selected production packages.
@@ -53,7 +56,7 @@ TPS259474A daje:
 
 Važno:
 
-**TPS259474A nema zaseban FLT pin.**  
+**TPS259474A nema zaseban FLT pin.**
 TPS259474x koristi `PG` i `PGTH`.
 
 Zato Pajoniiir signalni model treba biti:
@@ -589,9 +592,9 @@ TP_EFUSE_ITIMER
 
 Oscilloscope:
 
-CH1 = VIN_5V  
-CH2 = 5V_SYS  
-CH3 = 3V3_SYS  
+CH1 = VIN_5V
+CH2 = 5V_SYS
+CH3 = 3V3_SYS
 CH4 = P4_VDD_HP
 
 Provjeriti:

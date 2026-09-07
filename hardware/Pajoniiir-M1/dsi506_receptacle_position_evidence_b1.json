@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
   "source_class": "user close-up photographs of the DSI506 module receptacle plus physical center-datum measurements",
@@ -25,7 +25,10 @@
     "cable_approach_direction": "+X side toward the receptacle",
     "insertion_vector": "-X",
     "connector_axis": "long contact row parallel to Y axis in the established rear-PCB coordinate system",
-    "visible_pin1_marker": "not reliably visible in the supplied photographs"
+    "visible_pin1_marker": "not reliably visible in the supplied photographs",
+    "solder_tails_visible": 15,
+    "internal_contact_side": "not proven by the supplied overhead views",
+    "closeup_orientation": "DSI at bottom of supplied closeup, solder tails above housing, fan header to left; module +X is downward in this image"
   },
   "locked_by_this_evidence": [
     "DSI506 module-side receptacle absolute XY center: (110.109, 33.000) mm from rear PCB top-left",
@@ -42,5 +45,10 @@
     "Do not assign module pin 1 to either end of the contact row from routing appearance alone.",
     "Do not infer a production bend radius from the photograph.",
     "Do not assume the module-side receptacle height equals the M1 host-side SFW15R-2STE1LF housing height."
+  ],
+  "source_review": "dsi506_source_review_2026-09-04.json",
+  "source_artifacts": [
+    "evidence/dsi506_actual_rear_connector_context.png",
+    "evidence/dsi506_actual_dsi_closeup.png"
   ]
 }

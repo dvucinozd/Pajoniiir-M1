@@ -1,7 +1,7 @@
 # Pajoniiir-M1 — Hardware / Firmware Contract v0.2
 
-**Projekt:** Pajoniiir-M1 Rev A  
-**Datum:** 2026-09-04  
+**Projekt:** Pajoniiir-M1 Rev A
+**Datum:** 2026-09-06
 **Status:** Current pre-bring-up custom-PCB contract after M1-ELEC-B2 implementation
 
 ---
@@ -14,9 +14,9 @@ The custom M1 PCB gets a dedicated firmware target:
 bsp_pajoniiir_m1
 ```
 
-The board is not a JC4880 clone. It combines M1-specific power/USB/audio/service hardware with the same 5-inch DSI506/DYL0023 display module already accepted in Pajoniiir-M3.
+The board is a standalone M1-specific power/USB/audio/service platform with a generic 15-pin Raspberry-Pi-style DSI host interface. DSI506/DYL0023 is one validated display profile already accepted in Pajoniiir-M3.
 
-The M3 display BSP is the reference for display/touch behavior; M1 must not carry forward the old 4.3-inch ST7701S/GT911/MP3202 assumptions.
+The M3 DSI506 BSP is the reference for that display profile. Other supported displays require their own timing, controller, touch and cable profile; the board must not carry forward the old 4.3-inch ST7701S/GT911/MP3202 assumptions.
 
 ---
 

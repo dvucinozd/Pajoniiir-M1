@@ -33,7 +33,7 @@
 					)
 				)
 			)
-			(property "Footprint" "Package_SO:VSSOP-10_3x3mm_P0.5mm"
+			(property "Footprint" "Pajoniiir-M1:Texas_DGS0010A_VSSOP-10_3x3mm_P0.5mm"
 				(at 20.32 -11.43 0)
 				(effects
 					(font
@@ -822,7 +822,7 @@
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e00000a-e000-4e00-8e00-00000000000b")
     (property "Reference" "U14" (at 154.1 55.93 0) (effects (font (size 1.27 1.27))))
     (property "Value" "INA238AIDGSR" (at 154.1 58.93 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "Package_SO:VSSOP-10_3x3mm_P0.5mm" (at 165.1 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Footprint" "Pajoniiir-M1:Texas_DGS0010A_VSSOP-10_3x3mm_P0.5mm" (at 165.1 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina238.pdf" (at 165.1 74.93 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "0e00000b-e000-4e00-8e00-00000000000c")) (pin "2" (uuid "0e00000c-e000-4e00-8e00-00000000000d")) (pin "3" (uuid "0e00000d-e000-4e00-8e00-00000000000e")) (pin "4" (uuid "0e00000e-e000-4e00-8e00-00000000000f")) (pin "5" (uuid "0e00000f-e000-4e00-8e00-000000000010"))

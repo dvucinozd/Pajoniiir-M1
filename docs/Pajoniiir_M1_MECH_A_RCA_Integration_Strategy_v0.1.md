@@ -1,10 +1,10 @@
 # Pajoniiir-M1 — M1-MECH-A RCA Integration Strategy v0.1
 
-> **HISTORICAL SELECTION RECORD.** B4 subsequently locked and instantiated the Kycon KLPX-0848A-family project footprint for J4/J5; final panel datums remain open. See `Pajoniiir_M1_Current_Design_Status_B5.md`.
+> **HISTORICAL SELECTION RECORD.** B4 subsequently locked and instantiated the Kycon KLPX-0848A-family project footprint for J4/J5; final panel datums remain open. See `Pajoniiir_M1_Current_Design_Status_B8.md`.
 
-**Datum:** 2026-09-03  
-**Revision:** M1-MECH-A2  
-**Status:** Preferred conditional architecture selected; J4/J5 remain open hard gates  
+**Datum:** 2026-09-03
+**Revision:** M1-MECH-A2
+**Status:** Preferred conditional architecture selected; J4/J5 remain open hard gates
 **Authority:** `hardware/Pajoniiir-M1/mech_a.json`
 
 ---

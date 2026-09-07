@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-B2",
   "updated": "2026-09-04",
-  "status": "DIRECT_MAINBOARD_MOUNT_ARCHITECTURE_LOCKED__PCB_OUTLINE_AND_LOCAL_CLEARANCE_STILL_OPEN",
+  "status": "HISTORICAL_DSI506_BRACKET_SCREENING_ONLY__NOT_MAINBOARD_MOUNT_AUTHORITY",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "authority": "Physical user measurements and screw-fit test on the final display module.",
   "mounting_architecture": {
@@ -14,19 +14,50 @@
   "mount_pattern": {
     "coordinate_system": "display rear PCB top-left origin; +X right; +Y down",
     "centers_mm": [
-      {"name": "UL", "x": 43.109, "y": 7.430},
-      {"name": "UR", "x": 101.109, "y": 7.430},
-      {"name": "LL", "x": 43.109, "y": 56.430},
-      {"name": "LR", "x": 101.109, "y": 56.430}
+      {
+        "name": "UL",
+        "x": 43.109,
+        "y": 7.43
+      },
+      {
+        "name": "UR",
+        "x": 101.109,
+        "y": 7.43
+      },
+      {
+        "name": "LL",
+        "x": 43.109,
+        "y": 56.43
+      },
+      {
+        "name": "LR",
+        "x": 101.109,
+        "y": 56.43
+      }
     ],
-    "spacing_mm": {"x": 58.000, "y": 49.000},
+    "spacing_mm": {
+      "x": 58.0,
+      "y": 49.0
+    },
     "mainboard_mount_frame": {
       "origin": "UL post center",
       "holes_mm": [
-        [0.000, 0.000],
-        [58.000, 0.000],
-        [0.000, 49.000],
-        [58.000, 49.000]
+        [
+          0.0,
+          0.0
+        ],
+        [
+          58.0,
+          0.0
+        ],
+        [
+          0.0,
+          49.0
+        ],
+        [
+          58.0,
+          49.0
+        ]
       ]
     }
   },
@@ -60,14 +91,23 @@
   },
   "pcb_mounting_holes": {
     "type": "NPTH clearance holes",
-    "diameter_engineering_range_mm": [3.0, 3.2],
+    "diameter_engineering_range_mm": [
+      3.0,
+      3.2
+    ],
     "production_diameter_status": "OPEN_UNTIL_BOARD_TOLERANCE_STACK_AND_HEAD_OR_WASHER_GEOMETRY_ARE_FINALIZED",
     "copper_keepout_policy": "No copper beneath screw head/bearing region; exact keepout diameter to be finalized with screw-head/washer selection."
   },
   "ffc_context": {
-    "cable_mm": {"length": 60.0, "width": 15.0},
+    "cable_mm": {
+      "length": 60.0,
+      "width": 15.0
+    },
     "type": "Type-B / reverse-contact",
-    "display_receptacle_center_mm": {"x": 110.109, "y": 33.000},
+    "display_receptacle_center_mm": {
+      "x": 110.109,
+      "y": 33.0
+    },
     "display_insertion_vector": "-X",
     "routing_concept": "Controlled U-bend near right edge to a display-facing host receptacle on the directly mounted mainboard."
   },
@@ -93,5 +133,8 @@
     "mainboard X/Y outline and user-I/O wall datums",
     "final enclosure depth and rear-cover clearance"
   ],
-  "layout_freeze_allowed": false
+  "layout_freeze_allowed": false,
+  "production_authority": false,
+  "superseded_by": "board_first_mechanical_contract.json",
+  "retained_scope": "optional DSI506-specific bracket or enclosure variant"
 }

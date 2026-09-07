@@ -1,12 +1,12 @@
 # Pajoniiir Mainboard — Hardverska arhitektura i početni PCB BOM
 
-> **HISTORICAL ARCHITECTURE RECORD.** The active Rev A display and mechanical architecture changed at M1-ELEC-B2/M1-MECH-B5. Do not use this document's JC4880/ST7701S/GT911/MP3202, old enclosure or pre-capture BOM statements as current authority. Use `Pajoniiir_M1_Current_Design_Status_B5.md`, the live KiCad hierarchy and current machine-readable contracts.
+> **HISTORICAL ARCHITECTURE RECORD.** The active Rev A display and mechanical architecture changed after this record. Do not use this document's JC4880/ST7701S/GT911/MP3202, old enclosure or pre-capture BOM statements as current authority. Use `Pajoniiir_M1_Current_Design_Status_B8.md`, the live KiCad hierarchy and current machine-readable contracts.
 
-**Projekt:** Pajoniiir BL-A1800  
-**Repozitorij:** `dvucinozd/Pajoniiir`  
-**Branch:** `feat/p4-dual-usb-host`  
-**Analizirani commit:** `af597d8`  
-**Namjena dokumenta:** početni hardverski baseline za izradu vlastite Pajoniiir PCB ploče  
+**Projekt:** Pajoniiir BL-A1800
+**Repozitorij:** `dvucinozd/Pajoniiir`
+**Branch:** `feat/p4-dual-usb-host`
+**Analizirani commit:** `af597d8`
+**Namjena dokumenta:** početni hardverski baseline za izradu vlastite Pajoniiir PCB ploče
 **Datum:** 2026-09-02
 
 ---
@@ -1729,10 +1729,10 @@ Ako se napajanje, USB VBUS i PCB signal-integrity naprave pravilno, ostatak proj
 
 ---
 
-**Predloženi naziv ploče:**  
+**Predloženi naziv ploče:**
 `Pajoniiir Mainboard Rev A`
 
-**Predloženi sljedeći dokument:**  
+**Predloženi sljedeći dokument:**
 `Pajoniiir_Mainboard_BOM_v0.1.md`
 
 u kojem će svaki dio imati:

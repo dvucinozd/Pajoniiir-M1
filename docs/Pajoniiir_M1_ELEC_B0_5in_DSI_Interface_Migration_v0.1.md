@@ -1,15 +1,15 @@
 # Pajoniiir-M1 — M1-ELEC-B0 5-inch DSI Interface Migration v0.1
 
-**Date:** 2026-09-04  
+**Date:** 2026-09-04
 **Status:** MIGRATION IMPLEMENTED BY M1-ELEC-B2; signal map, connector MPN/contact side and project footprint locked; physical FFC integration remains open
 
-> **Post-migration note:** The live KiCad project now implements this migration with J6 Amphenol `SFW15R-2STE1LF`. Use `Pajoniiir_M1_Current_Design_Status_B5.md` and the live `10_DISPLAY_MIPI.kicad_sch` for current implementation status. The step-by-step text below is retained as decision and migration evidence.
+> **Post-migration note:** The live KiCad project now implements this migration with J6 Amphenol `SFW15R-2STE1LF`. Use `Pajoniiir_M1_Current_Design_Status_B8.md` and the live `10_DISPLAY_MIPI.kicad_sch` for current implementation status. The step-by-step text below is retained as decision and migration evidence.
 
 ---
 
 ## 1. Why this migration is now authoritative
 
-The final M1 display is user-confirmed to be the same physical display already used in Pajoniiir-M3.
+The DSI506/DYL0023 compatibility profile is user-confirmed to be the same physical display already used in Pajoniiir-M3. M1-MECH-B7 later made the host interface display-independent.
 
 Pajoniiir-M3 has already performed the expensive uncertainty-reduction work:
 

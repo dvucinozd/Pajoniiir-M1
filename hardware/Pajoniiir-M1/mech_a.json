@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "milestone": "M1-MECH-A",
-  "updated": "2026-09-04",
-  "status": "repo_only_M1_MECH_A13_B2_convergence_complete__layout_freeze_blocked_by_physical_EVT_and_new_enclosure_evidence",
+  "milestone": "M1-MECH-B7",
+  "updated": "2026-09-06",
+  "status": "BOARD_FIRST_REBASE_ACTIVE__HISTORICAL_DISPLAY_GEOMETRY_RETAINED_AS_PROFILE_EVIDENCE",
   "final_board_outline_locked": false,
   "coordinate_system": {
     "name": "M1_FRONT_CENTER",
@@ -14,79 +14,6 @@
       "z": "+rear/inward from the front glass plane"
     },
     "handedness": "right-handed"
-  },
-  "authoritative_display_reference": {
-    "family": "EYOYO DSI506 / DYL0023",
-    "orientation_for_M1": "landscape",
-    "authority": "final_display_module.json + display_connector_b1.json; supersedes JC4880/Guition for final-product mechanics",
-    "status": "FINAL_PRODUCT_DISPLAY__PRELIMINARY_DIMENSIONED_IMAGE_EVIDENCE__PHYSICAL_CALIPER_OR_OFFICIAL_CAD_REQUIRED_FOR_PRODUCTION",
-    "rear_pcb_envelope": {
-      "x": 121.109,
-      "y": 77.193,
-      "status": "authoritative preliminary M1-B0 evidence; physical caliper or official CAD required for production release"
-    },
-    "mounting_evidence": {
-      "visible_hole_count": 8,
-      "outer_hole_diameter_mm": 2.5,
-      "outer_hole_centers_from_rear_pcb_top_left_mm": [
-        [
-          5.0,
-          5.0
-        ],
-        [
-          116.109,
-          5.0
-        ],
-        [
-          5.0,
-          72.93
-        ],
-        [
-          116.109,
-          72.93
-        ]
-      ],
-      "outer_hole_center_spacing_mm": [
-        111.109,
-        67.93
-      ],
-      "status": "preliminary image-derived evidence; all eight centers and full Z stack require physical/CAD confirmation"
-    },
-    "host_connector": {
-      "refdes": "J6",
-      "mpn": "SFW15R-2STE1LF",
-      "manufacturer": "Amphenol Communications Solutions / FCI",
-      "contacts": 15,
-      "pitch_mm": 1.0,
-      "contact_location": "top",
-      "orientation": "right-angle / side-entry SMT ZIF",
-      "housing_height_mm": 2.7,
-      "footprint": "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
-      "status": "MPN/contact-side/footprint locked and instantiated M1-ELEC-B2"
-    },
-    "legacy_enclosure_compatibility": {
-      "old_external_envelope_mm": [
-        121.008,
-        73.408
-      ],
-      "old_inner_cavity_mm": [
-        117.008,
-        69.408
-      ],
-      "display_rear_pcb_mm": [
-        121.109,
-        77.193
-      ],
-      "verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED",
-      "new_enclosure_required": true
-    },
-    "unresolved": [
-      "actual DSI506 FFC conductor-side / host-to-module pin-1 continuity check",
-      "FFC approach/bend/mating keepout in final enclosure",
-      "complete module Z envelope",
-      "all eight mounting-hole coordinates confirmed from physical measurement or official CAD",
-      "new enclosure and custom-mainboard absolute XY/Z datums"
-    ]
   },
   "legacy_blender_evidence": {
     "source_file": "D:\\AI\\BLENDER\\flx4_0407.blend",
@@ -382,11 +309,12 @@
       ],
       "production_authority": false
     },
-    "final_display_rebase": {
+    "status": "HISTORICAL_DISPLAY_SPECIFIC_SCREENING_ONLY",
+    "historical_dsi506_enclosure_rebase": {
       "revision": "M1-MECH-A13",
       "display_rear_pcb_mm": [
         121.109,
-        77.193
+        77.93
       ],
       "old_enclosure_verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED",
       "old_external_envelope_mm": [
@@ -401,21 +329,17 @@
       "new_enclosure_locked": false,
       "custom_mainboard_outline_locked": false,
       "production_z_stack_locked": false,
-      "rule": "Do not derive DSI506 Edge.Cuts, standoffs or component-height limits from the old JC4880 enclosure/Z stack."
+      "rule": "Do not derive DSI506 Edge.Cuts, standoffs or component-height limits from the old JC4880 enclosure/Z stack.",
+      "production_board_geometry_authority": false,
+      "status": "DISPLAY_VARIANT_HISTORY_ONLY"
     }
   },
   "next_closure_inputs": [
-    "recover or explicitly define which Y wall is the primary long I/O wall and assign exact J2/J3/J4/J5 centers",
-    "verify the M1-MECH-A4 87.58 mm USB+RCA packing against real boss OD, connector bodies, plug/cable keepouts and board functional placement",
-    "choose which X side is POWER_WALL; the opposite X side is now locked as MEDIA_SERVICE_WALL",
-    "validate Switchcraft 722RAHLP panel hole/nut/washer/body/cable geometry on POWER_WALL",
-    "validate Molex 503398-1892 card slot/travel/finger envelope and B3U-3000P-B recessed tool-access geometry on MEDIA_SERVICE_WALL",
-    "prove or reject main-board Kycon KLPX-0848A-2-W/-R local Z/body/plug clearance",
-    "validate Amphenol 87520-1010ALF shell/aperture/cable envelope and ~4.9 mm gross rear-clearance consequence",
-    "rebalance PCB Z/standoff only after local RCA and USB geometry are known",
-    "resolve remaining J_LCD gate: final panel variant + top/bottom contact-side + exact connector/mated height + internal-common status of 3V3 pins 4/21/29",
-    "validate/revise M1-MECH-A0 108.00 x 65.06 mm PCB envelope after connector-body and boss clearance",
-    "lock M1 mounting-hole coordinates and screw/standoff system"
+    "complete mainboard footprint inventory and courtyard packing",
+    "board-owned chassis mounting pattern and product enclosure datums",
+    "external connector cutouts and full mated-cable envelopes",
+    "J6 board-edge service and route feasibility",
+    "C3/C8 startup/inrush and protected-rail transient EVT sweep"
   ],
   "connector_cluster_baseline": {
     "status": "relative_topology_defined__candidate_mpn_envelopes_screened__absolute_wall_datums_open__z_stack_rebalance_required",
@@ -721,7 +645,7 @@
           "J_LCD"
         ],
         "reason": "display FPC mating height/contact geometry unresolved",
-        "action": "resolve before final display/PCB Z-stack sign-off"
+        "action": "resolve only for the relevant display-profile cable/Z-stack sign-off"
       }
     ],
     "conclusion": "Known fixed central compute/power/RF parts remain <=3.25 mm and pass the 6.5 mm gross cavity screen. External connector screening changes the mechanical verdict: USB-A has effectively zero gross tolerance margin, the screened Micro-Fit power header needs more than 6.5 mm under the conservative screen, and the screened right-angle RCA family is the dominant ~10 mm Z driver. The 6 mm legacy standoff/Z-stack therefore remains candidate-only until local perimeter relief or an alternate connector strategy is proven."
@@ -1520,8 +1444,8 @@
     "schematic_status": "locked in 01_POWER_INPUT.kicad_sch"
   },
   "repo_only_analysis_boundary": {
-    "revision": "M1-MECH-A13",
-    "status": "B2-converged repo-only mechanical authority complete; remaining blockers require physical/EVT/new-enclosure evidence",
+    "revision": "M1-MECH-B7",
+    "status": "board-first authority locked; outline, placement, chassis mounts and EVT remain open",
     "remaining_open_blockers": [
       "C3_INPUT_BULK",
       "C8_PROTECTED_BULK",
@@ -1537,12 +1461,14 @@
       "PCB_OUTLINE"
     ],
     "remaining_blocker_count": 12,
-    "rule": "Do not close remaining gates from assumptions. They require EVT measurement, direct physical measurement, authoritative final panel data, or enclosure/PCB CAD datums.",
+    "rule": "Display measurements may close a display compatibility profile but cannot close mainboard Edge.Cuts, mount or placement gates.",
     "resume_inputs": [
-      "DSI506 physical/caliper or official CAD package including full Z and all eight hole centers",
-      "new enclosure interior/wall/boss datums in M1_FRONT_CENTER",
-      "final side/rear connector cutout and mated-cable envelopes",
-      "C3/C8 startup/inrush and protected-rail transient EVT sweep"
+      "complete footprint population and courtyard packing",
+      "board-owned chassis mounting pattern and edge clearances",
+      "power, USB, MIPI, SDIO, QSPI and audio routing feasibility",
+      "thermal and component-height zoning",
+      "user connector cutouts plus mated cable/service envelopes",
+      "manufacturing panelization and assembly constraints"
     ]
   },
   "legacy_guition_display_reference": {
@@ -1613,5 +1539,89 @@
       "J_LCD contact-side orientation and mating height",
       "panel-side pin-domain questions tracked in mechanical_gates.json"
     ]
+  },
+  "board_first_architecture": {
+    "authority": "board_first_mechanical_contract.json",
+    "mainboard_is_primary_product": true,
+    "display_model_defines_board_geometry": false,
+    "display_profiles": [
+      "display_compatibility_dsi506.json"
+    ]
+  },
+  "validated_display_compatibility_profile": {
+    "family": "EYOYO DSI506 / DYL0023",
+    "orientation_for_M1": "landscape",
+    "authority": "display_compatibility_dsi506.json",
+    "status": "VALIDATED_COMPATIBILITY_PROFILE__NOT_MAINBOARD_GEOMETRY_AUTHORITY",
+    "rear_pcb_envelope": {
+      "x": 121.109,
+      "y": 77.93,
+      "status": "USER_CONFIRMED_IMAGE_DIMENSION_2026-09-04: 77.93 mm nominal; production tolerances still require validation",
+      "source_review": "dsi506_source_review_2026-09-04.json"
+    },
+    "mounting_evidence": {
+      "visible_hole_count": 8,
+      "outer_hole_diameter_mm": 2.5,
+      "outer_hole_centers_from_rear_pcb_top_left_mm": [
+        [
+          5.0,
+          5.0
+        ],
+        [
+          116.109,
+          5.0
+        ],
+        [
+          5.0,
+          72.93
+        ],
+        [
+          116.109,
+          72.93
+        ]
+      ],
+      "outer_hole_center_spacing_mm": [
+        111.109,
+        67.93
+      ],
+      "status": "preliminary image-derived evidence; all eight centers and full Z stack require physical/CAD confirmation"
+    },
+    "host_connector": {
+      "refdes": "J6",
+      "mpn": "SFW15R-2STE1LF",
+      "manufacturer": "Amphenol Communications Solutions / FCI",
+      "contacts": 15,
+      "pitch_mm": 1.0,
+      "contact_location": "top",
+      "orientation": "right-angle / side-entry SMT ZIF",
+      "housing_height_mm": 2.7,
+      "footprint": "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
+      "status": "MPN/contact-side/footprint locked and instantiated M1-ELEC-B2"
+    },
+    "legacy_enclosure_compatibility": {
+      "old_external_envelope_mm": [
+        121.008,
+        73.408
+      ],
+      "old_inner_cavity_mm": [
+        117.008,
+        69.408
+      ],
+      "display_rear_pcb_mm": [
+        121.109,
+        77.93
+      ],
+      "verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED",
+      "new_enclosure_required": true
+    },
+    "unresolved": [
+      "actual DSI506 FFC conductor-side / host-to-module pin-1 continuity check",
+      "FFC approach/bend/mating keepout in final enclosure",
+      "complete module Z envelope",
+      "all eight mounting-hole coordinates confirmed from physical measurement or official CAD",
+      "new enclosure and custom-mainboard absolute XY/Z datums"
+    ],
+    "production_board_geometry_authority": false,
+    "scope": "DSI506-specific cable, firmware and optional bracket/enclosure work only"
   }
 }

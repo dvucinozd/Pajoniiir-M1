@@ -114,7 +114,7 @@
 			)
 			(embedded_fonts no)
 		)
-(symbol "Connector:USB_A" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+(symbol "Pajoniiir-M1:USB_A_M1" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at -5.08 11.43 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
@@ -136,7 +136,7 @@
       (property "ki_fp_filters" "USB*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (symbol "USB_A_0_1"
+      (symbol "USB_A_M1_0_1"
         (rectangle (start -5.08 -7.62) (end 5.08 7.62)
           (stroke (width 0.254) (type default))
           (fill (type background))
@@ -208,7 +208,7 @@
           (fill (type none))
         )
       )
-      (symbol "USB_A_1_1"
+      (symbol "USB_A_M1_1_1"
         (polyline
           (pts
             (xy -1.905 2.159)
@@ -1107,7 +1107,7 @@
     (instances (project "Pajoniiir-M1" (path "/2c8dd352-b7b8-4d9e-8f93-5dd43be2a100/31000008-6b2a-4a3a-8c91-000000000008" (reference "#PWR0803") (unit 1))))
   )
   (symbol
-    (lib_id "Connector:USB_A") (at 184.785 59.69 0) (unit 1)
+    (lib_id "Pajoniiir-M1:USB_A_M1") (at 184.785 59.69 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "08000026-8000-4800-8800-000000000027")
     (property "Reference" "J3" (at 176.785 42.69 0) (effects (font (size 1.27 1.27))))
     (property "Value" "87520-1010ALF" (at 176.785 45.69 0) (effects (font (size 1.27 1.27))))

@@ -1,11 +1,11 @@
 # Pajoniiir Mainboard — MIPI DSI Display & Backlight Design v0.2
 
-> **SUPERSEDED FOR THE ACTIVE REV A DISPLAY.** This document records the retired JC4880/ST7701S/MP3202 design. M1-ELEC-B2 uses the EYOYO DSI506/DYL0023 module, Amphenol SFW15R-2STE1LF, module-integrated touch/backlight and no external GPIO23 PWM. Current authority: `Pajoniiir_M1_Current_Design_Status_B5.md`, `Pajoniiir_M1_Hardware_Firmware_Contract_v0.1.md` and the live `10_DISPLAY_MIPI.kicad_sch`.
+> **SUPERSEDED DISPLAY-SPECIFIC DESIGN.** This document records the retired JC4880/ST7701S/MP3202 design. M1-ELEC-B2 exposes a generic 15-pin DSI host using Amphenol SFW15R-2STE1LF; DSI506/DYL0023 is one qualified peripheral profile with module-integrated touch/backlight and no external GPIO23 PWM. Current authority: `Pajoniiir_M1_Current_Design_Status_B8.md`, `Pajoniiir_M1_Hardware_Firmware_Contract_v0.1.md` and the live `10_DISPLAY_MIPI.kicad_sch`.
 
-**Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1  
-**Ploča:** Pajoniiir Mainboard Rev A  
-**Blok:** 10_DISPLAY_MIPI  
-**Datum:** 2026-09-02  
+**Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1
+**Ploča:** Pajoniiir Mainboard Rev A
+**Blok:** 10_DISPLAY_MIPI
+**Datum:** 2026-09-02
 **Status:** Engineering design candidate — DSI and backlight electrical baseline locked as candidate; exact LCD/FPC mechanics remain pre-layout gate
 
 ---

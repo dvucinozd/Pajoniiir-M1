@@ -1,12 +1,12 @@
 # Pajoniiir Mainboard — Test & Power Monitoring Design v0.1
 
-**Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1  
-**Ploča:** Pajoniiir Mainboard Rev A  
-**Blok:** 14_TEST_MONITORING  
-**Datum:** 2026-09-02  
+**Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1
+**Ploča:** Pajoniiir Mainboard Rev A
+**Blok:** 14_TEST_MONITORING
+**Datum:** 2026-09-02
 **Status:** Captured in KiCad; telemetry is present for EVT/DVT validation
 
-> **Post-capture update (2026-09-04):** INA238 is captured on the shared `DISPLAY_I2C_SDA/SCL` bus with the DSI506 module devices at `0x38` and `0x45`. References below to GT911 coexistence should be read as shared-bus coexistence with the active display module.
+> **Post-capture update (2026-09-06):** INA238 is captured on the shared `DISPLAY_I2C_SDA/SCL` bus. DSI506 uses devices at `0x38` and `0x45`; other qualified display profiles must document their own addresses and coexistence. References below to GT911 describe historical shared-bus analysis.
 
 ---
 
@@ -147,8 +147,8 @@ IN+ -- 10 Ω --+
 IN- -- 10 Ω --+
 ~~~
 
-R_FILTER_P = 10 Ω  
-R_FILTER_N = 10 Ω  
+R_FILTER_P = 10 Ω
+R_FILTER_N = 10 Ω
 C_FILTER = 100 nF
 
 TI dopušta do 100 Ω, ali koristimo 10 Ω radi minimalne dodatne gain error osjetljivosti.
@@ -189,7 +189,7 @@ Odabrana adresa:
 
 **0x40**
 
-A0 = GND  
+A0 = GND
 A1 = GND
 
 To ne kolidira s GT911 0x5D.

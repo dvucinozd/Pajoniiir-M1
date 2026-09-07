@@ -1,6 +1,6 @@
 # Pajoniiir-M1 — Manufacturing Output Contract v0.2
 
-**Milestone:** M1-ELEC-B2 / M1-MECH-B5
+**Milestone:** M1-ELEC-B2 / M1-MECH-B7
 
 **Updated:** 2026-09-04
 
@@ -18,7 +18,7 @@ The current source-derived baseline is:
 
 | Metric | Current value |
 |---|---:|
-| Unique `in_bom=yes` RefDes | 242 |
+| Unique `in_bom=yes` RefDes | 244 |
 | DNP RefDes | 15 |
 | Intentional blank-footprint gates | 3 |
 | Blank-footprint RefDes | `C3`, `C8`, `J1` |
@@ -83,6 +83,8 @@ all 16 schematic files load: PASS
 manufacturing BOM parity: source=242 bom=242 dnp=15 blank_gates=3 PASS
 native ERC: unexplained_errors=0 excluded_errors=0 warnings=0
 ```
+
+Local KiCad 10.0.4 verification after TP25/TP26 and library closure: **244 source / 244 exported, 15 DNP, 3 blank gates; zero native ERC violations**. The KiCad 9 result above predates these edits; a fresh run is pending. See [closure evidence](Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md).
 
 Historical run #76 reported 270/270, 17 DNP and 12 blank gates before the J6 audio removal, D1 lock, DSI506 migration and B4 footprint locks. Those numbers are retained only as historical evidence and are not the current baseline.
 

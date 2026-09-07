@@ -8,12 +8,31 @@
   "proposal": "Mount the Pajoniiir-M1 custom mainboard directly to the four inner rear threaded posts on the display module, parallel to the display rear PCB.",
   "mount_pattern": {
     "centers_from_display_rear_pcb_top_left_mm": [
-      {"name": "UL_inner", "x": 43.109, "y": 7.430},
-      {"name": "UR_inner", "x": 101.109, "y": 7.430},
-      {"name": "LL_inner", "x": 43.109, "y": 56.430},
-      {"name": "LR_inner", "x": 101.109, "y": 56.430}
+      {
+        "name": "UL_inner",
+        "x": 43.109,
+        "y": 7.43
+      },
+      {
+        "name": "UR_inner",
+        "x": 101.109,
+        "y": 7.43
+      },
+      {
+        "name": "LL_inner",
+        "x": 43.109,
+        "y": 56.43
+      },
+      {
+        "name": "LR_inner",
+        "x": 101.109,
+        "y": 56.43
+      }
     ],
-    "center_spacing_mm": {"x": 58.000, "y": 49.000},
+    "center_spacing_mm": {
+      "x": 58.0,
+      "y": 49.0
+    },
     "measured_post_outer_diameter_mm": 5.0,
     "measured_post_height_above_display_rear_pcb_mm": 5.0,
     "thread": "M2.5",
@@ -43,13 +62,22 @@
   },
   "pcb_mounting_holes": {
     "type": "NPTH clearance",
-    "engineering_diameter_range_mm": [3.0, 3.2],
+    "engineering_diameter_range_mm": [
+      3.0,
+      3.2
+    ],
     "production_diameter_status": "OPEN_UNTIL_TOLERANCE_STACK_AND_SCREW_HEAD_OR_WASHER_GEOMETRY_ARE_FINALIZED"
   },
   "ffc": {
-    "physical_size_mm": {"length": 60.0, "width": 15.0},
+    "physical_size_mm": {
+      "length": 60.0,
+      "width": 15.0
+    },
     "type": "Type-B / reverse-contact / opposite-side exposed conductors",
-    "display_receptacle_center_from_display_rear_pcb_top_left_mm": {"x": 110.109, "y": 33.000},
+    "display_receptacle_center_from_display_rear_pcb_top_left_mm": {
+      "x": 110.109,
+      "y": 33.0
+    },
     "display_receptacle_cable_approach": "+X from the right edge",
     "display_receptacle_insertion_direction": "-X",
     "routing_concept": "Use a controlled U-bend near the right edge to a display-facing host DSI receptacle on the directly mounted mainboard. Final bend radius, host XY and service-removal keepout remain open."
@@ -86,5 +114,9 @@
     "dsi506_inner_posts_evidence_b2.json",
     "dsi506_mainboard_mount_lock_b2.json"
   ],
-  "layout_freeze_allowed": false
+  "layout_freeze_allowed": false,
+  "status": "HISTORICAL_DSI506_BRACKET_SCREENING_ONLY__NOT_MAINBOARD_MOUNT_AUTHORITY",
+  "production_authority": false,
+  "superseded_by": "board_first_mechanical_contract.json",
+  "retained_scope": "optional DSI506-specific bracket or enclosure variant"
 }

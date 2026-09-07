@@ -1,6 +1,9 @@
 # Pajoniiir-M1 — M1-MECH-A13 B2 Convergence & Physical Handoff v0.1
 
-> **MILESTONE RECORD.** This handoff remains valid as A13/B2 evidence; B3/B4/B5 later advanced the active mechanical and routing contracts. Use `Pajoniiir_M1_Current_Design_Status_B5.md` for current status.
+> **M1-MECH-B7 NOTE (2026-09-06):** This is display-specific historical evidence. DSI506 is a validated compatibility profile and does not define Pajoniiir-M1 board `Edge.Cuts`, mounting holes, connector coordinates or enclosure. Current authority: `board_first_mechanical_contract.json`.
+
+
+> **MILESTONE RECORD.** This handoff remains valid as A13/B2 evidence; later milestones advanced the active mechanical and routing contracts. Use `Pajoniiir_M1_Current_Design_Status_B8.md` for current status.
 
 **Date:** 2026-09-04
 **Milestone:** M1-MECH-A13
@@ -13,7 +16,7 @@ M1-ELEC-B2 changed the final product from the legacy JC4880/Guition 4.3-inch dis
 ## Current mechanical authority
 
 - Display: EYOYO DSI506 / DYL0023, 5-inch, 800×480.
-- Preliminary rear PCB evidence: 121.109 × 77.193 mm.
+- Preliminary rear PCB evidence: 121.109 × 77.93 mm.
 - Visible holes: 8; outer four image-derived centers ~111.109 × 67.930 mm, ~Ø2.5 mm.
 - Host connector: J6 Amphenol SFW15R-2STE1LF, 15P, 1.0 mm, TOP contact, right-angle side-entry SMT ZIF, 2.7 mm housing height.
 - Old JC4880 geometry: preserved under `legacy_guition_display_reference`; not active authority.

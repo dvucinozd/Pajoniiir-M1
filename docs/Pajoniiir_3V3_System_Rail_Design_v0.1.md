@@ -1,12 +1,15 @@
 # Pajoniiir Mainboard — 3V3 System Rail Design v0.1
 
-**Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1  
-**Ploča:** Pajoniiir Mainboard Rev A  
-**Blok:** 02_POWER_3V3  
-**Datum:** 2026-09-02  
+**Captured update 2026-09-04:** `3V3_PG` is available at `TP26` on `02_POWER_3V3` with the existing pull-up. It is a diagnostic testpoint; no P4 GPIO is assigned. See [ERC closure](Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md).
+
+
+**Projekt:** Pajoniiir BL-A1800 / Pajoniiir-M1
+**Ploča:** Pajoniiir Mainboard Rev A
+**Blok:** 02_POWER_3V3
+**Datum:** 2026-09-02
 **Status:** Captured in KiCad; production validation remains EVT work
 
-> **Post-capture update (2026-09-04):** The TPS62132 design is captured. The active display load is the DSI506 module on `3V3_DISPLAY_MODULE` (up to 340 mA documented), and the former separate GT911/MP3202 display path is retired. Final all-on rail and display-transient margin remain EVT work.
+> **Post-capture update (2026-09-06):** The TPS62132 design is captured. `3V3_DISPLAY_MODULE` powers the generic 15-pin J6 interface; DSI506 is one validated 340 mA profile. The production rail budget must cover the supported display matrix, and all-on/startup/transient margin remains EVT work.
 
 ---
 
@@ -494,9 +497,9 @@ BUCK_DEF
 
 Oscilloscope:
 
-CH1 = 5V_SYS  
-CH2 = 3V3_SYS  
-CH3 = 3V3_PG  
+CH1 = 5V_SYS
+CH2 = 3V3_SYS
+CH3 = 3V3_PG
 CH4 = P4_VDD_HP
 
 Provjeriti:

@@ -199,8 +199,8 @@ def main() -> int:
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"{MECH_A.name}: invalid JSON: {exc}")
             mech_a = {}
-        if mech_a.get("milestone") != "M1-MECH-A":
-            errors.append(f"{MECH_A.name}: milestone must remain M1-MECH-A")
+        if mech_a.get("milestone") != "M1-MECH-B7":
+            errors.append(f"{MECH_A.name}: milestone must remain M1-MECH-B7")
         if mech_a.get("final_board_outline_locked") and any(
             isinstance(gate, dict)
             and gate.get("id") == "PCB_OUTLINE"
@@ -210,52 +210,54 @@ def main() -> int:
             errors.append(
                 f"{MECH_A.name}: final_board_outline_locked=true while PCB_OUTLINE gate is open"
             )
-        # M1-MECH-A13 final DSI506 mechanical authority.
-        display = mech_a.get("authoritative_display_reference", {})
-        if display.get("family") != "EYOYO DSI506 / DYL0023":
-            errors.append(f"{MECH_A.name}: active display authority must be final DSI506/DYL0023")
-        rear = display.get("rear_pcb_envelope", {})
-        observed_rear = {"x": rear.get("x"), "y": rear.get("y")}
-        expected_rear = {"x": 121.109, "y": 77.193}
-        if observed_rear != expected_rear:
-            errors.append(f"{MECH_A.name}: final DSI506 rear-PCB evidence drift: {observed_rear} != {expected_rear}")
-        host = display.get("host_connector", {})
-        expected_host = {
-            "mpn": "SFW15R-2STE1LF",
-            "contacts": 15,
-            "pitch_mm": 1.0,
-            "contact_location": "top",
-            "footprint": "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
-        }
-        observed_host = {key: host.get(key) for key in expected_host}
-        if observed_host != expected_host:
-            errors.append(f"{MECH_A.name}: final display host connector drift: {observed_host} != {expected_host}")
-        legacy = mech_a.get("legacy_guition_display_reference", {})
-        if "JC4880" not in str(legacy.get("family", "")):
-            errors.append(f"{MECH_A.name}: historical Guition reference must remain preserved under legacy_guition_display_reference")
-        rebase = mech_a.get("m1_enclosure_baseline", {}).get("final_display_rebase", {})
-        if rebase.get("old_enclosure_verdict") != "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED":
-            errors.append(f"{MECH_A.name}: old enclosure must remain a hard fail for DSI506")
-        if rebase.get("new_enclosure_required") is not True:
-            errors.append(f"{MECH_A.name}: DSI506 convergence requires a new enclosure")
-
-        final_display_path = BASE / "final_display_module.json"
+        # M1-MECH-B7 board-first mechanical authority.
+        board_path = BASE / "board_first_mechanical_contract.json"
+        profile_path = BASE / "display_compatibility_dsi506.json"
         display_connector_path = BASE / "display_connector_b1.json"
-        for authority_path in (final_display_path, display_connector_path):
+        for authority_path in (board_path, profile_path, display_connector_path):
             if not authority_path.exists():
-                errors.append(f"missing display authority {authority_path.name}")
-        if final_display_path.exists():
+                errors.append(f"missing board/display authority {authority_path.name}")
+
+        board = {}
+        if board_path.exists():
             try:
-                final_display = json.loads(final_display_path.read_text(encoding="utf-8"))
+                board = json.loads(board_path.read_text(encoding="utf-8"))
             except (OSError, json.JSONDecodeError) as exc:
-                errors.append(f"{final_display_path.name}: invalid JSON: {exc}")
-                final_display = {}
-            freeze = final_display.get("freeze", {})
-            for key in ("final_display_selected", "production_connector_mpn_locked", "production_connector_contact_side_locked", "production_connector_footprint_locked", "schematic_migrated_to_final_display"):
-                if freeze.get(key) is not True:
-                    errors.append(f"{final_display_path.name}: {key} must remain true after B2")
-            if freeze.get("placement_routing_freeze_allowed") is not False:
-                errors.append(f"{final_display_path.name}: placement/routing freeze must remain false while mechanical blockers exist")
+                errors.append(f"{board_path.name}: invalid JSON: {exc}")
+            arch = board.get("architecture", {})
+            if board.get("milestone") != "M1-MECH-B7":
+                errors.append(f"{board_path.name}: milestone must be M1-MECH-B7")
+            if arch.get("mainboard_is_standalone_assembly") is not True:
+                errors.append(f"{board_path.name}: mainboard must remain a standalone assembly")
+            for key in ("display_model_defines_board_outline", "display_model_defines_mainboard_mount_pattern"):
+                if arch.get(key) is not False:
+                    errors.append(f"{board_path.name}: {key} must remain false")
+            release = board.get("board_release_boundary", {})
+            if release.get("board_outline_locked") is not False or release.get("layout_freeze_allowed") is not False:
+                errors.append(f"{board_path.name}: outline/layout must remain fail-closed")
+
+        compat = mech_a.get("validated_display_compatibility_profile", {})
+        if compat.get("family") != "EYOYO DSI506 / DYL0023":
+            errors.append(f"{MECH_A.name}: DSI506 compatibility profile missing")
+        if compat.get("production_board_geometry_authority") is not False:
+            errors.append(f"{MECH_A.name}: display profile must not govern mainboard geometry")
+        if "authoritative_display_reference" in mech_a:
+            errors.append(f"{MECH_A.name}: display still exposed as main mechanical authority")
+        if mech_a.get("milestone") != "M1-MECH-B7":
+            errors.append(f"{MECH_A.name}: milestone must be M1-MECH-B7")
+
+        if profile_path.exists():
+            try:
+                profile = json.loads(profile_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                errors.append(f"{profile_path.name}: invalid JSON: {exc}")
+                profile = {}
+            if profile.get("profile_id") != "DSI506_DYL0023":
+                errors.append(f"{profile_path.name}: profile identity drift")
+            for key, value in profile.get("mainboard_authority", {}).items():
+                if key.startswith("defines_") and value is not False:
+                    errors.append(f"{profile_path.name}: {key} must remain false")
+
         if display_connector_path.exists():
             try:
                 dc = json.loads(display_connector_path.read_text(encoding="utf-8"))
@@ -265,6 +267,8 @@ def main() -> int:
             conn = dc.get("connector", {})
             if (conn.get("mpn"), conn.get("contacts"), conn.get("pitch_mm"), conn.get("contact_location")) != ("SFW15R-2STE1LF", 15, 1.0, "top"):
                 errors.append(f"{display_connector_path.name}: production J6 identity/contact geometry drift")
+            if dc.get("board_scope", {}).get("display_model_defines_board_geometry") is not False:
+                errors.append(f"{display_connector_path.name}: board-first scope missing")
 
     if not PCB_CONSTRAINTS.exists():
         errors.append(f"missing PCB constraint authority {PCB_CONSTRAINTS.name}")
@@ -739,18 +743,18 @@ def main() -> int:
             errors.append("RPW0010A footprint must retain 16 TI stencil paste primitives")
         if rpw_text.count("(solder_mask_margin 0.05)") != 14:
             errors.append("RPW0010A footprint must retain +0.05 mm NSMD mask expansion")
-    # M1-ELEC-B2 final DSI506 display contract.
+    # Generic M1 15-pin DSI host contract; display profiles are separate.
     if '(property "Reference" "J6"' not in p10:
-        errors.append("final DSI506 J6 connector missing")
+        errors.append("generic DSI host J6 connector missing")
     for token in (
-        "DSI506 / DYL0023",
+        "DSI15_HOST",
         "SFW15R-2STE1LF",
         "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF",
         "DISPLAY_I2C_SDA",
         "DISPLAY_I2C_SCL",
     ):
         if token not in p10:
-            errors.append(f"final DSI506 display contract token missing: {token}")
+            errors.append(f"generic DSI host contract token missing: {token}")
     active_p10 = "\n".join(instantiated_symbol_blocks(p10))
     for legacy_ref in (
         "U9", "L3", "D4", "C95", "C96", "C97", "C98",
@@ -761,7 +765,7 @@ def main() -> int:
             errors.append(f"legacy 4.3-inch display component remains instantiated: {legacy_ref}")
     if any(True for _ in instantiated_symbol_blocks(child_text.get("11_TOUCH_GT911", ""))):
         errors.append("retired 11_TOUCH_GT911 sheet must contain no instantiated components")
-    if "separate GT911 support retired" not in child_text.get("11_TOUCH_GT911", ""):
+    if "separate GT911 hardware retired" not in child_text.get("11_TOUCH_GT911", ""):
         errors.append("retired GT911 sheet migration annotation missing")
     p03 = child_text.get("03_P4_CORE", "")
     for legacy_hier in ("TOUCH_RST", "TOUCH_INT", "LCD_RST", "LCD_TE", "LCD_BL_PWM"):

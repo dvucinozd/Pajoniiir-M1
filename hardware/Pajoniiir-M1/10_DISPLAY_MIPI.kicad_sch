@@ -5,12 +5,12 @@
   (uuid "4100000a-7c3b-4b4b-9da2-00000000000a")
   (paper "A3")
   (title_block
-    (title "Pajoniiir-M1 Rev A — 10_DISPLAY_DSI506")
+    (title "Pajoniiir-M1 Rev A — 10_DISPLAY_DSI_HOST")
     (date "2026-09-04")
     (rev "B / M1-ELEC-B2")
     (company "Pajoniiir")
-    (comment 1 "DSI506/DYL0023 5in module; M3 bench-proven 15-pin interface")
-    (comment 2 "1-lane firmware baseline; route both DSI data lanes; module handles touch/backlight")
+    (comment 1 "Generic 15-pin Raspberry-Pi-style DSI host; display profiles qualified separately")
+    (comment 2 "Route both DSI data lanes; timing, touch and backlight behavior are display-profile specific")
   )
   (lib_symbols
 (symbol "Pajoniiir-M1:MP3202DJ"
@@ -931,23 +931,23 @@
 		(embedded_fonts no)
 	)
 
-    (symbol "Pajoniiir-M1:DSI506_15PIN"
+    (symbol "Pajoniiir-M1:DSI15_HOST"
     (pin_names (offset 1.016))
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
     (property "Reference" "J" (at 0 22.86 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "DSI506_15PIN" (at 0 20.32 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "DSI15_HOST" (at 0 20.32 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10172241.pdf" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Description" "Pajoniiir-M1 final DSI506/DYL0023 15-pin Raspberry-Pi-style DSI module interface" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (symbol "DSI506_15PIN_0_1"
+    (property "Description" "Pajoniiir-M1 generic 15-pin Raspberry-Pi-style MIPI DSI host interface" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (symbol "DSI15_HOST_0_1"
       (rectangle (start -5.08 19.05) (end 5.08 -19.05)
         (stroke (width 0.254) (type default))
         (fill (type background))
       )
     )
-    (symbol "DSI506_15PIN_1_1"
+    (symbol "DSI15_HOST_1_1"
       (pin passive line (at -7.62 17.78 0) (length 2.54)
         (name "GND" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
@@ -1274,10 +1274,10 @@
   )
   (label "J6_I2C_SCL" (at 144.78 118.11 0) (effects (font (size 1.27 1.27))) (uuid "5e1b6cfb-28c6-5425-9501-2af1d4e68162"))
   (symbol
-    (lib_id "Pajoniiir-M1:DSI506_15PIN") (at 209.55 90.17 0) (unit 1)
+    (lib_id "Pajoniiir-M1:DSI15_HOST") (at 209.55 90.17 0) (unit 1)
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "5e7dcb99-0f80-5f1e-a699-093d687aa594")
     (property "Reference" "J6" (at 213.36 87.63 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "DSI506 / DYL0023 15-pin DSI" (at 213.36 91.44 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "15-pin Raspberry-Pi-style DSI host" (at 213.36 91.44 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "Pajoniiir-M1:Amphenol_SFW15R-2STE1LF" (at 209.55 90.17 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "https://cdn.amphenol-cs.com/media/wysiwyg/files/drawing/10172241.pdf" (at 209.55 90.17 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (pin "1" (uuid "b45363d7-53ff-548a-8af2-14fa186e75df")) (pin "2" (uuid "e772e9d9-2bb1-563d-a21c-6d7cc60394c0")) (pin "3" (uuid "2e9f1bf1-b308-5944-b9ac-d4270d875e3f")) (pin "4" (uuid "ade2efef-3f54-5bf6-a8bd-d42d4de1b138")) (pin "5" (uuid "c5e27cda-96b9-58aa-bfb4-f44ebe5367d1")) (pin "6" (uuid "c20dbc18-8a08-55bd-825f-2167d838f7fe")) (pin "7" (uuid "51b0172d-e154-5a72-99cc-eb7f45af7806")) (pin "8" (uuid "c7f40ccf-9fe4-5c79-ae58-04b6a6366a2e")) (pin "9" (uuid "989dd4db-689b-5f33-bd15-aa7245a61282")) (pin "10" (uuid "6623be79-cc44-5201-933d-fe8d20ff55e7")) (pin "11" (uuid "ea740fce-c12f-51e3-9cc1-a975010603be")) (pin "12" (uuid "d4cc8b61-6883-56e9-a9aa-86b5e525aa46")) (pin "13" (uuid "c437fbb5-cff8-527e-897c-624615e1e9d7")) (pin "14" (uuid "2c5c63c3-40d8-5248-8cfc-082d92c9c63e")) (pin "15" (uuid "4a390e48-82be-5a06-9bff-b7986dfd9b05"))
@@ -1343,10 +1343,10 @@
   )
   (label "3V3_DISPLAY_MODULE" (at 201.93 105.41 0) (effects (font (size 1.27 1.27))) (uuid "9cfbe998-28ef-51d1-b2ad-388c5fadba03"))
   (label "3V3_DISPLAY_MODULE" (at 201.93 107.95 0) (effects (font (size 1.27 1.27))) (uuid "dc654b50-479f-5803-bc47-ad9d3d1d06d9"))
-  (text "FINAL DISPLAY: EYOYO DSI506 / DYL0023, 5in 800x480; interface bench-accepted in Pajoniiir-M3." (exclude_from_sim no) (at 144.78 134.62 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c3a7bbaa-377c-55b6-a5e3-6ac36ed0b7d0"))
-  (text "J6 = Amphenol SFW15R-2STE1LF, 15P 1.0mm TOP contact. Pin map follows M3 accepted J2: GND/D1/CLK/D0/I2C/3V3." (exclude_from_sim no) (at 144.78 139.7 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "ce461665-b487-5837-8e53-43feef74e815"))
-  (text "Backlight/panel power are controlled inside the module over I2C 0x45; touch is 0x38 at 100kHz. No MP3202, LEDA/LEDK, LCD_RST, TE or external BL PWM on M1." (exclude_from_sim no) (at 144.78 144.78 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "a506676f-4107-5675-8169-6b10354332b0"))
-  (text "Initial firmware: 1 data lane @ 800Mbps, RGB888, 27.777MHz, H 59/2/45, V 109/2/22; both physical data lanes are routed." (exclude_from_sim no) (at 144.78 149.86 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "5923a759-309b-5823-8015-3473c9169fc3"))
+  (text "DISPLAY INTERFACE: generic 15-pin Raspberry-Pi-style DSI host. DSI506/DYL0023 is one validated profile." (exclude_from_sim no) (at 144.78 134.62 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c3a7bbaa-377c-55b6-a5e3-6ac36ed0b7d0"))
+  (text "J6 = Amphenol SFW15R-2STE1LF, 15P 1.0mm TOP contact. Locked host map: GND/D1/CLK/D0/I2C/3V3." (exclude_from_sim no) (at 144.78 139.7 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "ce461665-b487-5837-8e53-43feef74e815"))
+  (text "DSI506 PROFILE: panel power/backlight 0x45; touch 0x38 at 100kHz. Other displays require a qualified profile." (exclude_from_sim no) (at 144.78 144.78 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "a506676f-4107-5675-8169-6b10354332b0"))
+  (text "DSI506 PROFILE: 1 lane @ 800Mbps, RGB888, 27.777MHz, H 59/2/45, V 109/2/22; both physical lanes are routed." (exclude_from_sim no) (at 144.78 149.86 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "5923a759-309b-5823-8015-3473c9169fc3"))
   (text "DSI routing target 100R differential; MIPI DPHY 2.5V LDO and 4.02k DSI_REXT remain in 03_P4_CORE." (exclude_from_sim no) (at 144.78 154.94 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "83c35866-5807-59e8-b7ee-a8f086f98c71"))
   (wire (pts (xy 30.48 39.37) (xy 119.38 39.37)) (stroke (width 0) (type default)) (uuid "62ec64b1-c924-58dd-bb1f-9804ea28dcc2"))
   (sheet_instances (path "/" (page "11")))

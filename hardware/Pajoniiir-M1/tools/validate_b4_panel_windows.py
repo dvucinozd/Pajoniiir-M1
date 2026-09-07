@@ -55,10 +55,10 @@ def main() -> int:
     assembly = windows.get("assembly_screen", {})
     gaps = assembly.get("core_to_inner_wall_gap_mm", {})
     expected_gaps = {
-        "top": 2.3335,
+        "top": 1.965,
         "left": 9.9455,
         "right": 10.0545,
-        "bottom": 15.6665,
+        "bottom": 16.035,
     }
     for name, expected in expected_gaps.items():
         if not close(gaps.get(name), expected):

@@ -1,10 +1,10 @@
 # Pajoniiir-M1 — RefDes Annotation Map v0.1
 
-> **HISTORICAL M1-SCH-A NORMALIZATION MAP.** Rows for the old `10_DISPLAY_MIPI` and `11_TOUCH_GT911` contents describe the pre-DSI506 source and are no longer instantiated. Current RefDes, values and footprints come from the live KiCad sheets. The active display connector is J6; R95..R100 and TP9/TP10 now belong to the DSI506 display sheet. Do not use this table as a current component inventory.
+> **HISTORICAL M1-SCH-A NORMALIZATION MAP.** Rows for the old `10_DISPLAY_MIPI` and `11_TOUCH_GT911` contents describe retired source and are no longer instantiated. Current RefDes, values and footprints come from the live KiCad sheets. J6 is now the generic 15-pin DSI host; R95..R100 and TP9/TP10 belong to that sheet. Do not use this table as a current component inventory.
 
-**Datum:** 2026-09-03  
-**Milestone:** M1-SCH-A manufacturing normalization  
-**Source electrical baseline:** `276e803ec72994dd6d69dfb1c1e0ad5fbb26a8ef`  
+**Datum:** 2026-09-03
+**Milestone:** M1-SCH-A manufacturing normalization
+**Source electrical baseline:** `276e803ec72994dd6d69dfb1c1e0ad5fbb26a8ef`
 **Status:** Complete traceability map for capture-era descriptive aliases
 
 ---
@@ -17,7 +17,7 @@ The manufacturing normalization changes **Reference fields only**. The safe rewr
 
 Do not recover semantic meaning by renaming RefDes values again. Use this map, Value/Description fields, net names and subsystem documentation.
 
-Existing valid numeric references were preserved at the time of the original normalization. Later M1-ELEC-B2 migration removed U9 and the old touch/backlight components, then instantiated the final DSI506 connector as J6. Current component intent is documented in Engineering BOM v0.3.
+Existing valid numeric references were preserved at the time of the original normalization. Later M1-ELEC-B2 removed U9 and the old touch/backlight components, then instantiated the 15-pin DSI host connector as J6. M1-MECH-B7 separated display profiles from board geometry. Current component intent is documented in Engineering BOM v0.3.
 
 ---
 
@@ -261,6 +261,8 @@ Existing valid numeric references were preserved at the time of the original nor
 | `TP_5V_SYS` | `TP22` | `14_TEST_MONITORING` |
 | `TP_3V3_SYS` | `TP23` | `14_TEST_MONITORING` |
 | `TP_SYS_ALERT` | `TP24` | `14_TEST_MONITORING` |
+| `TP_EFUSE_PG` | `TP25` | `01_POWER_INPUT` |
+| `TP_3V3_PG` | `TP26` | `02_POWER_3V3` |
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-09-04",
+  "updated": "2026-09-06",
   "layout_state": "pre_mechanical_layout__DSI506_enclosure_rebase",
   "logical_copper_layers": 4,
   "board_outline_locked": false,
@@ -189,7 +189,7 @@
         "Y1"
       ],
       "priority": "central compute island; shortest flash/crystal/core-power loops",
-      "z_note": "prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "C6_RF",
@@ -197,7 +197,7 @@
         "U4"
       ],
       "priority": "board edge with antenna keepout",
-      "z_note": "prefer within 6.5 mm gross front-side under-display clearance; final safety margin TBD-MECH"
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "USB_POWER",
@@ -205,7 +205,8 @@
         "U6",
         "U12"
       ],
-      "priority": "between 5V_SYS spine and respective USB connectors"
+      "priority": "between 5V_SYS spine and respective USB connectors",
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "USB0_EDGE",
@@ -214,7 +215,7 @@
         "J2"
       ],
       "priority": "J2 at final enclosure edge; D2 immediately behind connector",
-      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "USB1_EDGE",
@@ -223,7 +224,7 @@
         "J3"
       ],
       "priority": "J3 at final enclosure edge; D3 immediately behind connector",
-      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "AUDIO",
@@ -233,7 +234,7 @@
         "J5"
       ],
       "priority": "quiet edge zone separated from switchers",
-      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "DISPLAY",
@@ -243,8 +244,8 @@
         "C93",
         "C94"
       ],
-      "priority": "J6 at final DSI506 FFC approach edge; FB3/C93/C94 local to the 3V3 display-module branch while preserving the MIPI corridor",
-      "z_note": "J6 housing height is 2.7 mm; final cable bend and absolute XY/Z placement remain mechanical gates"
+      "priority": "Place J6 at a service-accessible board edge after U1-to-J6 MIPI route feasibility and generic cable insertion clearance are established; keep FB3/C93/C94 local to the 3V3 display branch.",
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "MICROSD",
@@ -253,7 +254,7 @@
         "J7"
       ],
       "priority": "card-access edge zone",
-      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "POWER_ENTRY",
@@ -265,7 +266,7 @@
         "L2"
       ],
       "priority": "short high-current spine with Kelvin monitor geometry",
-      "z_note": "perimeter/mechanical zone; connector/body height must be validated against side/rear wall cutout"
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     },
     {
       "id": "FACTORY",
@@ -274,39 +275,36 @@
         "J9",
         "J10"
       ],
-      "priority": "fixture-accessible area that does not consume user-facing panel space"
+      "priority": "fixture-accessible area that does not consume user-facing panel space",
+      "z_note": "Component height and chassis clearance are open until the board-first placement study and product enclosure datums exist."
     }
   ],
   "freeze_requirements": [
     "mechanical_gates.json: all blocks_layout_freeze gates closed",
-    "new DSI506-compatible enclosure and authoritative Edge.Cuts/mounting datums committed",
-    "J6 FFC approach/bend and all mated user-connector envelopes validated in enclosure CAD/physical evidence",
+    "board-owned Edge.Cuts and chassis mounting datums committed",
+    "complete footprint population passes courtyard and routing feasibility packing",
+    "all user connectors and J6 pass mated-cable/service-envelope validation",
     "C3/C8 EVT converted to exact production packages",
     "M1-MECH-A11 JLC04161H-7628 stackup remains selected",
-    "controlled_impedance_locked=true only after exact 90 ohm USB / 100 ohm MIPI width-spacing is recorded from the current JLCPCB calculator for the locked stackup"
+    "controlled_impedance_locked=true only after exact 90 ohm USB / 100 ohm MIPI width-spacing is recorded for the locked stackup"
   ],
   "mechanical_reference": {
-    "authority": "mech_a.json + final_display_module.json",
-    "coordinate_system": "M1_FRONT_CENTER",
-    "final_display": "EYOYO DSI506 / DYL0023",
-    "display_rear_pcb_preliminary_mm": [
-      121.109,
-      77.193
+    "authority": "board_first_mechanical_contract.json",
+    "coordinate_system": "M1_BOARD_LOCAL_TBD",
+    "product_priority": "standalone mainboard",
+    "display_interface": "generic 15-pin Raspberry-Pi-style MIPI DSI on J6",
+    "validated_display_profiles": [
+      "display_compatibility_dsi506.json"
     ],
-    "old_enclosure_verdict": "HARD_FAIL__ENCLOSURE_REDIMENSION_REQUIRED",
-    "new_enclosure_required": true,
+    "display_model_defines_board_outline": false,
+    "display_model_defines_mainboard_mount_pattern": false,
     "board_outline_locked": false,
-    "note": "Do not use the JC4880-era 108 x 65.06 mm rectangle or +/-51.3 x +/-30 mm mount pattern as final Edge.Cuts authority."
+    "note": "Derive final Edge.Cuts and mounts from board component/routing/chassis requirements, not from any display PCB."
   },
   "component_height_zones": {
-    "status": "DSI506_PRODUCTION_Z_STACK_NOT_LOCKED",
+    "status": "BOARD_FIRST_ZONES_NOT_LOCKED",
     "production_limit_locked": false,
-    "legacy_JC4880_screen": {
-      "gross_front_mm": 6.5,
-      "gross_rear_mm": 6.0,
-      "authority": "historical screening only; superseded for final DSI506 enclosure design"
-    },
-    "current_rule": "No production component-height limit may be derived until the final DSI506 enclosure, PCB Z plane, bosses, FFC motion and mated connector envelopes are locked."
+    "current_rule": "Assign component-height zones after preliminary board placement and product-chassis Z datums exist; do not use DSI506 or JC4880 rear clearance as the board limit."
   },
   "candidate_board_envelope": {
     "revision": "M1-MECH-A0",
@@ -323,9 +321,10 @@
       "x": 4.504,
       "y": 2.174
     },
-    "status": "SUPERSEDED_JC4880_PLACEMENT_FEASIBILITY_ONLY",
+    "status": "HISTORICAL_JC4880_SCREENING_ONLY",
     "edge_cuts_allowed": false,
-    "production_authority": false
+    "production_authority": false,
+    "superseded_by": "board_first_mechanical_contract.json"
   },
   "connector_cluster_rules": {
     "source": "mech_a.json",
@@ -347,5 +346,26 @@
       "revision": "M1-MECH-A8",
       "rule": "No footprint, panel aperture, courtyard or placement budget is reserved in Rev A."
     }
-  ]
+  ],
+  "board_first_layout_policy": {
+    "board_outline_locked": false,
+    "edge_cuts_allowed": false,
+    "layout_freeze_allowed": false,
+    "outline_must_be_derived_from": [
+      "complete footprint population and courtyard packing",
+      "board-owned chassis mounting pattern and edge clearances",
+      "power, USB, MIPI, SDIO, QSPI and audio routing feasibility",
+      "thermal and component-height zoning",
+      "user connector cutouts plus mated cable/service envelopes",
+      "manufacturing panelization and assembly constraints"
+    ],
+    "forbidden_as_outline_authority": [
+      "DSI506 58 x 49 mm rear-post pattern",
+      "DSI506-derived 104 x 62 mm board screen",
+      "DSI506-derived 128 x 84 x 30 mm enclosure screen",
+      "DSI506 right-edge FFC corridor",
+      "legacy JC4880 enclosure and mounting geometry"
+    ]
+  },
+  "packing_inventory": "m1_board_packing_inventory_b7.json"
 }

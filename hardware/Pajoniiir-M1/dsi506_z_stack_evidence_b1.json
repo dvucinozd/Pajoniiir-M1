@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M1-MECH-B1",
   "updated": "2026-09-04",
-  "source_class": "user physical measurement with caliper on final DSI506/DYL0023 display assembly",
+  "source_class": "user physical measurement with caliper on validated DSI506/DYL0023 compatibility-profile display assembly",
   "display": "EYOYO DSI506 / DYL0023 5-inch 800x480 DSI module",
   "reference_plane": "front-most display/glass plane = Z 0.00 mm",
   "measurements": {

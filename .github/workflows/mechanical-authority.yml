@@ -12,7 +12,9 @@ on:
       - "hardware/Pajoniiir-M1/m1_mech_b3_*.json"
       - "hardware/Pajoniiir-M1/m1_mech_b4_*.json"
       - "hardware/Pajoniiir-M1/m1_mech_b5_*.json"
-      - "hardware/Pajoniiir-M1/final_display_module.json"
+      - "hardware/Pajoniiir-M1/board_first_mechanical_contract.json"
+      - "hardware/Pajoniiir-M1/m1_board_packing_inventory_b7.json"
+      - "hardware/Pajoniiir-M1/display_compatibility_*.json"
       - "hardware/Pajoniiir-M1/display_connector_b1.json"
       - "hardware/Pajoniiir-M1/mechanical_gates.json"
       - "hardware/Pajoniiir-M1/mech_a.json"
@@ -20,8 +22,7 @@ on:
       - "hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb"
       - "hardware/Pajoniiir-M1/10_DISPLAY_MIPI.kicad_sch"
       - "hardware/Pajoniiir-M1/tools/validate_mechanical_authority.py"
-      - "hardware/Pajoniiir-M1/tools/validate_b4_panel_windows.py"
-      - "hardware/Pajoniiir-M1/tools/validate_b5_placement_skeleton.py"
+      - "hardware/Pajoniiir-M1/tools/validate_board_packing_inventory.py"
       - ".github/workflows/mechanical-authority.yml"
 
 concurrency:
@@ -39,14 +40,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate B2 B3 B4 mechanical authority
+      - name: Validate board-first mechanical authority
         run: python3 hardware/Pajoniiir-M1/tools/validate_mechanical_authority.py
 
-      - name: Validate B4 panel and FFC windows
-        run: python3 hardware/Pajoniiir-M1/tools/validate_b4_panel_windows.py
-
-      - name: Validate B5 placement skeleton
-        run: python3 hardware/Pajoniiir-M1/tools/validate_b5_placement_skeleton.py
+      - name: Validate board packing inventory contract
+        run: python3 hardware/Pajoniiir-M1/tools/validate_board_packing_inventory.py
 
       - name: Verify JSON syntax for current mechanical authorities
         shell: bash
@@ -58,7 +56,9 @@ jobs:
 
           base = Path('hardware/Pajoniiir-M1')
           paths = sorted(
-              list(base.glob('dsi506_*evidence*.json'))
+              list(base.glob('board_first_*.json'))
+              + list(base.glob('display_compatibility_*.json'))
+              + list(base.glob('dsi506_*evidence*.json'))
               + list(base.glob('dsi506_*lock*.json'))
               + list(base.glob('m1_mech_b3_*.json'))
               + list(base.glob('m1_mech_b4_*.json'))

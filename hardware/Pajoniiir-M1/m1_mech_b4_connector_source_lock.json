@@ -214,10 +214,8 @@
   "gates_closed_by_this_milestone": [],
   "gate_reclassification": "The external connector gates remain open because final footprints, XY/Z panel datums and mating envelopes are still required, but exact MPN selection is no longer an open sourcing decision.",
   "next_actions": [
-    "close J1 Switchcraft footprint only after the three-terminal PCB hole centers are unambiguously encoded from released drawing/CAD evidence",
-    "place exact connector courtyards in the B3 104 x 62 mm placement skeleton",
-    "solve final panel centers/cutouts and mated cable envelopes",
-    "validate DSI FFC bend and local rear-display obstruction map",
-    "then promote PCB_OUTLINE from screening candidate to mechanical pre-freeze"
+    "place exact connector courtyards in a board-first functional packing study",
+    "derive panel centers only after the board-owned chassis and Edge.Cuts are established",
+    "validate full mated cable and service envelopes"
   ]
 }

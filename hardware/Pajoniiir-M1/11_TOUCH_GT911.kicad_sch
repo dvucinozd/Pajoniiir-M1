@@ -9,7 +9,7 @@
     (date "2026-09-04")
     (rev "B / M1-ELEC-B2")
     (company "Pajoniiir")
-    (comment 1 "Retired: final DSI506 touch is integrated through J8 shared I2C")
+    (comment 1 "Retired: supported DSI modules provide touch through J6 shared I2C")
     (comment 2 "No GT911 RST/INT/address-select network on final M1")
   )
   (lib_symbols
@@ -534,7 +534,7 @@
 			(embedded_fonts no)
 		)
   )
-  (text "M1-ELEC-B2: separate GT911 support retired. Final DSI506/DYL0023 touch is module-integrated at I2C 0x38." (exclude_from_sim no) (at 35 55 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "4aa41b1a-a40a-5a75-b2a7-ef51d94d74cf"))
+  (text "M1-ELEC-B2/B7: separate GT911 hardware retired. Touch is supplied by the selected DSI display profile over shared I2C; DSI506 uses 0x38." (exclude_from_sim no) (at 35 55 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "4aa41b1a-a40a-5a75-b2a7-ef51d94d74cf"))
   (text "GPIO7/8 I2C conditioning, pull-ups and test points moved into 10_DISPLAY_MIPI next to final J8 connector." (exclude_from_sim no) (at 35 60 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "80ae7537-3f72-5f45-822e-abb81c3e361a"))
   (text "GPIO3 TOUCH_RST and GPIO4 TOUCH_INT are released/NC in final M1 architecture." (exclude_from_sim no) (at 35 65 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "44cab70a-f241-56bf-aded-3b7aba1ac8a9"))
   (sheet_instances (path "/" (page "12")))

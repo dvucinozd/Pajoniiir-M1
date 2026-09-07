@@ -4,7 +4,7 @@
 
 **Electrical milestone:** M1-ELEC-B2
 
-**Mechanical milestone:** M1-MECH-B5
+**Mechanical milestone:** M1-MECH-B7
 
 **Pre-layout milestone:** M1-PRELAYOUT-B5
 
@@ -12,12 +12,12 @@
 
 ## Executive verdict
 
-The Rev A electrical design is captured in the 15-sheet KiCad hierarchy and passes the current structural, native KiCad 9 ERC and manufacturing-output checks.
+The Rev A electrical design is captured in the 15-sheet KiCad hierarchy and passes local structural, native KiCad 10.0.4 ERC and manufacturing-output checks. Fresh KiCad 9 CI is pending after the [PG/library changes](Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md). The B7 rebase makes the mainboard independent of display geometry. The user-confirmed DSI506 height remains profile evidence only.
 
 ```text
 KiCad files loaded       16/16 PASS
 ERC                      0 unexplained / 0 excluded / 0 warnings
-Manufacturing BOM        242 source / 242 export PASS
+Manufacturing BOM        244 source / 244 export PASS
 DNP                      15
 Blank-footprint gates     3
 Mechanical blockers      12
@@ -30,10 +30,10 @@ The design is ready for controlled exploratory placement and physical closure wo
 
 1. live KiCad schematic sources
 2. `mechanical_gates.json`
-3. B5 placement and routing contracts
+3. `pcb_constraints.json` and the routing contract
 4. B4 connector source lock
-5. B3 board/enclosure screening contracts
-6. final-display and DSI506 evidence/lock contracts
+5. display compatibility profiles
+6. historical display-mounted screening records
 7. `Pajoniiir_Mainboard_BOM_v0.3.md`
 8. global GPIO and hardware/firmware contracts
 9. subsystem documents
@@ -52,26 +52,25 @@ The design is ready for controlled exploratory placement and physical closure wo
 | USB0 HS data | captured; J2 footprint locked |
 | USB1 FLX4 FS data | captured; J3 footprint locked |
 | PCM5102A MAIN output | captured; J4/J5 footprints locked |
-| DSI506 display | captured; J6 MPN/pin map/footprint locked |
+| Generic 15-pin DSI host | captured; J6 MPN/pin map/footprint locked |
 | Touch/backlight | module-integrated over display I2C |
 | microSD | captured; J7 footprint locked |
 | Debug/service | captured; J9 gate closed |
 | Power monitoring | INA238 and Kelvin shunt captured |
 | DNP/DNL policy | captured and CI-checked |
 
-## Current display readiness
+## Current DSI interface readiness
 
-The final display is EYOYO DSI506 / DYL0023, 5-inch, 800 x 480. The active connector is Amphenol SFW15R-2STE1LF, 15 contacts, 1.0 mm, top-contact and right-angle.
+The board provides a generic 15-pin Raspberry-Pi-style DSI host using Amphenol SFW15R-2STE1LF, 15 contacts, 1.0 mm, top-contact and right-angle. DSI506/DYL0023 is one validated display profile.
 
 Electrical pin map, module power, DSI lanes and shared I2C are locked. The initial M3-derived firmware profile is also defined.
 
 Remaining display work is physical:
 
-- host-to-module pin-1 continuity/orientation
-- 60 x 15 mm Type-B FFC U-bend and insertion/removal keepout
-- local display-side obstruction map
-- absolute J6 placement in the final mainboard/enclosure geometry
-- all-on/startup/transient display-rail EVT
+- board-edge J6 placement and viable MIPI route
+- generic insertion/removal service clearance
+- per-display cable or adapter orientation
+- supported-display startup/transient power budget
 
 The retired ST7701S/GT911/MP3202 architecture is not a current blocker and must not be reintroduced.
 
@@ -82,7 +81,7 @@ The retired ST7701S/GT911/MP3202 architecture is not a current blocker and must 
 | J1 | Switchcraft 722RAHLP | open | unambiguous pad centers, wall/cutout and plug geometry |
 | J2/J3 | Amphenol 87520-1010ALF | locked | final top-wall centers/cutouts/cables |
 | J4/J5 | Kycon KLPX-0848A-2-W-G / -R-G | locked | final centers/cutouts/mated plugs |
-| J6 | Amphenol SFW15R-2STE1LF | locked | FFC continuity/bend/absolute placement |
+| J6 | Amphenol SFW15R-2STE1LF | locked | board-edge placement, power budget and display-profile cables |
 | J7 | Molex 503398-1892 | locked | slot, card access, screw and FFC clearance |
 | SW1/SW2 | B3U-3000P-B | locked | recessed tool holes and local clearance |
 
@@ -92,24 +91,22 @@ Connector sourcing is substantially closed. The remaining gates are placement an
 
 Locked:
 
-- direct mainboard mount to four DSI506 inner posts
-- M2.5 thread, 3.0 mm usable depth and 58 x 49 mm pattern
-- Z=10.0 mm mainboard seating plane
-- M2.5 x 4.0 mm screw-length baseline
-- wall assignment for top/left/right/bottom
-- 104 x 62 mm core placement screen
-- B5 top-wall screening anchors
+- mainboard is a standalone assembly
+- display models cannot define board `Edge.Cuts`, mounts or connector coordinates
+- JLCPCB four-layer 1.6 mm stackup
+- J6 connector, footprint and 15-pin electrical map
+- exact external connector part intent where recorded
 
 Open:
 
-- production NPTH diameter and screw head/washer keepout
-- local display obstruction map
-- side wings/notches
+- board-owned chassis mounting pattern and screw keepouts
+- complete footprint/courtyard packing and critical-route feasibility
+- component-height and thermal zones
 - absolute panel datums and cutouts
 - enclosure bosses/ribs/rear cover and thermal/ventilation review
 - final `Edge.Cuts`
 
-The 128 x 84 x 30 mm enclosure is a preferred compact screening envelope, not a production lock.
+The former DSI506-derived board, mount and enclosure dimensions are historical profile screening and cannot constrain the production mainboard.
 
 ## Stackup and routing readiness
 
