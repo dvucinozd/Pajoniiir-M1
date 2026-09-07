@@ -181,6 +181,23 @@ def main() -> int:
         errors.append("component height zones were locked without board/chassis evidence")
     if pcb.get("packing_inventory") != "m1_board_packing_inventory_b7.json":
         errors.append("pcb_constraints does not reference the B7 board packing inventory")
+    if pcb.get("layout_state") != "M1_PRELAYOUT_B9__BOARD_FIRST_P4_CORE_ISLAND":
+        errors.append("pcb_constraints is not synchronized to the B9 board-first placement state")
+    prelayout = pcb.get("current_prelayout", {})
+    expected_prelayout = {
+        "milestone": "M1-PRELAYOUT-B9",
+        "board": "Pajoniiir-M1.kicad_pcb",
+        "source_canvas": "m1_board_placement_seed_b8.json",
+        "placement_authority": "m1_prelayout_b9_core_island.json",
+        "production_layout": False,
+        "layout_freeze_allowed": False,
+        "edge_cuts_allowed": False,
+    }
+    if prelayout != expected_prelayout:
+        errors.append("pcb_constraints current_prelayout authority drift")
+    active_routing = json.dumps(pcb.get("routing_targets", {}), ensure_ascii=False)
+    if "DSI506 enclosure datum" in active_routing:
+        errors.append("active routing constraints still depend on the DSI506 enclosure")
 
     selections = {tuple(s.get("refdes", [])): s for s in b4.get("selections", []) if isinstance(s, dict)}
     expected_mpns = {

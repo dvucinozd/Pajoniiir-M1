@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated": "2026-09-06",
-  "layout_state": "pre_mechanical_layout__DSI506_enclosure_rebase",
+  "updated": "2026-09-07",
+  "layout_state": "M1_PRELAYOUT_B9__BOARD_FIRST_P4_CORE_ISLAND",
   "logical_copper_layers": 4,
   "board_outline_locked": false,
   "stackup_locked": true,
@@ -126,7 +126,7 @@
         "six inline 0R tuning footprints stay in-line with no stubs",
         "minimize layer changes",
         "keep away from backlight SW node and inductors",
-        "J6 MPN/footprint locked; absolute J6/FFC placement remains open until the DSI506 enclosure datum closes",
+        "J6 MPN/footprint locked; absolute J6/FFC placement remains open until board-owned outline, service access and per-display cable-profile gates close",
         "final width/spacing must be recorded from current JLCPCB impedance calculator before controlled_impedance_locked becomes true"
       ]
     },
@@ -367,5 +367,14 @@
       "legacy JC4880 enclosure and mounting geometry"
     ]
   },
-  "packing_inventory": "m1_board_packing_inventory_b7.json"
+  "packing_inventory": "m1_board_packing_inventory_b7.json",
+  "current_prelayout": {
+    "milestone": "M1-PRELAYOUT-B9",
+    "board": "Pajoniiir-M1.kicad_pcb",
+    "source_canvas": "m1_board_placement_seed_b8.json",
+    "placement_authority": "m1_prelayout_b9_core_island.json",
+    "production_layout": false,
+    "layout_freeze_allowed": false,
+    "edge_cuts_allowed": false
+  }
 }
