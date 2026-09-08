@@ -186,6 +186,7 @@ When sources disagree:
 
 ### Status and release gates
 
+- [Development handoff and remaining work](docs/Pajoniiir_M1_Development_Handoff_2026-09-08.md)
 - [Current Design Status B10](docs/Pajoniiir_M1_Current_Design_Status_B10.md)
 - [B10 P4 Critical Routes](docs/Pajoniiir_M1_PRELAYOUT_B10_P4_Critical_Routes_v0.1.md)
 - [B9 P4 Core Island](docs/Pajoniiir_M1_PRELAYOUT_B9_P4_Core_Island_v0.1.md)

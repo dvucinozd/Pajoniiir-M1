@@ -32,6 +32,8 @@ The B2-B6 display-mounted placement and enclosure JSON files are retained as his
 
 Human-readable current state: `../../docs/Pajoniiir_M1_Current_Design_Status_B10.md`.
 
+Next-session development sequence: `../../docs/Pajoniiir_M1_Development_Handoff_2026-09-08.md`.
+
 ## Mechanical and routing boundary
 
 The board mounts to its own chassis. Final `Edge.Cuts`, chassis holes, connector coordinates and height zones must come from board component packing, routing and service requirements. Display rear posts and display-derived board/enclosure screens are not production authority.
