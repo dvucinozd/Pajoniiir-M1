@@ -137,6 +137,24 @@ def place(footprints: dict[str, pcbnew.FOOTPRINT]) -> None:
         fp.SetIsPlaced(True)
 
 
+def upgrade_u8_thermal_vias(footprints: dict[str, pcbnew.FOOTPRINT]) -> None:
+    u8 = footprints["U8"]
+    u8.SetFPID(
+        pcbnew.LIB_ID(
+            "Pajoniiir-M1",
+            "VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias",
+        )
+    )
+    thermal_vias = [
+        pad for pad in u8.Pads()
+        if pad.GetNumber() == "17" and pad.GetDrillSize().x > 0
+    ]
+    if len(thermal_vias) != 4:
+        raise RuntimeError(f"Expected four U8 thermal vias, found {len(thermal_vias)}")
+    for pad in thermal_vias:
+        pad.SetDrillSize(vector(0.3, 0.3))
+
+
 def board_net(board: pcbnew.BOARD, name: str) -> pcbnew.NETINFO_ITEM:
     nets = board.GetNetsByName()
     if name not in nets:
@@ -399,6 +417,7 @@ def report_payload(board: pcbnew.BOARD, footprints: dict[str, pcbnew.FOOTPRINT])
                 "height": round(max(ys) - min(ys), 3),
             },
             "p4_footprint_bbox_overlap_count": len(overlaps),
+            "u8_thermal_via_drill_mm": 0.3,
         },
         "rules": [
             "B10 routes are routing-feasibility evidence and may move during final escape and SI review.",
@@ -428,6 +447,7 @@ def main() -> int:
         raise RuntimeError("B10 refuses a board with Edge.Cuts")
 
     footprints = {fp.GetReference(): fp for fp in board.GetFootprints()}
+    upgrade_u8_thermal_vias(footprints)
     place(footprints)
     overlaps = overlap_pairs([footprints[ref] for ref in sorted(p4_refs(board))])
     if overlaps:

@@ -85,6 +85,21 @@ def main() -> int:
     footprints = {fp.GetReference(): fp for fp in board.GetFootprints()}
     if len(footprints) != 244:
         errors.append(f"expected 244 footprints, found {len(footprints)}")
+
+    u8 = footprints.get("U8")
+    if u8 is None:
+        errors.append("U8 footprint is missing")
+    else:
+        expected_u8_fpid = "Pajoniiir-M1:VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias"
+        if u8.GetFPID().GetUniStringLibId() != expected_u8_fpid:
+            errors.append("U8 must use the project-local 0.30 mm thermal-via footprint")
+        thermal_drills = sorted(
+            round(pcbnew.ToMM(pad.GetDrillSize().x), 3)
+            for pad in u8.Pads()
+            if pad.GetNumber() == "17" and pad.GetDrillSize().x > 0
+        )
+        if thermal_drills != [0.3, 0.3, 0.3, 0.3]:
+            errors.append(f"U8 must retain four 0.30 mm thermal drills, found {thermal_drills}")
     for ref, record in report.get("placement_changes", {}).items():
         fp = footprints.get(ref)
         if fp is None:
@@ -151,6 +166,8 @@ def main() -> int:
         errors.append(f"B10 vias must use the project-safe 0.60/0.30 mm geometry: {sorted(via_sizes)}")
 
     metrics = report.get("metrics", {})
+    if metrics.get("u8_thermal_via_drill_mm") != 0.3:
+        errors.append("B10 report must record the 0.30 mm U8 thermal-via drill")
     named_net_count = board.GetNetCount() - 1
     if named_net_count != 193 or metrics.get("named_net_count") != named_net_count:
         errors.append(f"expected 193 named nets and matching report, found {named_net_count}")

@@ -193,6 +193,7 @@ def main() -> int:
         "placement_authority": "m1_prelayout_b9_core_island.json",
         "routing_authority": "m1_prelayout_b10_core_routes.json",
         "default_clearance_mm": 0.15,
+        "u8_thermal_via_drill_mm": 0.3,
         "route_geometry_drc_violations": 0,
         "remaining_unconnected_items": 499,
         "production_layout": False,

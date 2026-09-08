@@ -76,9 +76,8 @@ In2.Cu     1 segment
 
 KiCad 10.0.4 reports zero violations involving a B10 track or via for clearance, shorts, crossing tracks, hole clearance, track width, dangling vias or drill size.
 
-The full unfinished board still reports 13 non-routing findings:
+The full unfinished board reports nine non-routing findings after replacing U8's four 0.20 mm thermal drills with a project-local 0.30 mm variant:
 
-- four 0.20 mm thermal-via drills inside the existing U8 exposed pad against the 0.30 mm project minimum;
 - six silkscreen-over-copper findings;
 - two silkscreen-overlap findings;
 - one intentionally missing-outline finding because `Edge.Cuts` remains prohibited.
@@ -117,7 +116,7 @@ The validator fails on placement or metric drift, unapproved routed nets, crysta
 
 B10 proves only the routed core subset. It does not authorize a production outline, placement freeze, planes, Gerbers or an EVT order. C60 and the other local grounds await the plane/stitching pass.
 
-The next pass should place U4 at a candidate outer edge, preserve its all-layer antenna keepout and prove the four-bit SDIO route to U1. That pass should also correct U8's 0.20 mm thermal-via drill conflict and begin the complete P4 power/GND escape.
+The next pass should place U4 at a candidate outer edge, preserve its all-layer antenna keepout and prove the four-bit SDIO route to U1. It should also begin the complete P4 power/GND escape.
 
 ## Source guidance
 

@@ -35,7 +35,7 @@ B8 populated the eight reversible `Dwgs.User` electrical domains. B9 compacted t
 
 The B10 live board contains 78 track segments and 11 vias. There are no footprint bounding-box overlaps in the P4 group, no zones and no `Edge.Cuts`. The crystal body is 5.203 mm from U1. The six QSPI paths have a 12.208 mm screening length spread and three package-opposed paths use one via pair each.
 
-KiCad 10.0.4 reports zero route-specific geometry violations. The unfinished whole board still has 499 unconnected items and 13 non-routing findings: four U8 0.20 mm thermal-via drill findings, eight silkscreen findings and the intentionally absent outline.
+KiCad 10.0.4 reports zero route-specific geometry violations. U8 now uses a project-local KiCad 10 footprint with four 0.30 mm thermal-via drills, clearing the previous minimum-drill conflict. The unfinished whole board still has 499 unconnected items and nine non-routing findings: eight silkscreen findings and the intentionally absent outline.
 
 `m1_prelayout_b10_core_routes.json` is the current machine-readable route authority. B9 remains the reproducible unrouted source placement.
 
@@ -55,6 +55,7 @@ Locked today:
 - most external connector MPN and footprint intent;
 - DSI506 compatibility profile;
 - reproducible B9 source placement and B10 critical-route proof;
+- U8 project-local VQFN thermal-via variant with 0.30 mm drills;
 - 0.15 mm Default clearance for current fine-pitch escape validation;
 - `layout_freeze_allowed=false` while blockers remain.
 
@@ -78,7 +79,7 @@ PCB_OUTLINE
 ## Next board work
 
 1. Place U4 at a candidate board edge, enforce its all-layer antenna keepout and prove the four-bit SDIO escape to U1.
-2. Correct the U8 0.20 mm thermal-via drill conflict and add the complete P4 power/GND plane and stitching strategy.
+2. Add the complete P4 power/GND plane and stitching strategy.
 3. Compact the power spine and connector domains around the P4 and C6 islands, then derive the minimum board-owned envelope.
 4. Add a chassis mounting pattern and validate cables, height zones, thermal clearance and user access.
 5. Close J1/C3/C8 EVT and exact controlled-impedance geometry before final route freeze.

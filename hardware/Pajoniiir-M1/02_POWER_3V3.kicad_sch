@@ -121,7 +121,7 @@
     (property "Value" "TPS62132" (at 3.81 11.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Package_DFN_QFN:VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias" (at 3.81 -11.43 0)
+    (property "Footprint" "Pajoniiir-M1:VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias" (at 3.81 -11.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps62130.pdf" (at 0 0 0)
@@ -904,7 +904,7 @@
     (fields_autoplaced yes) (uuid "b2000012-2222-4222-8222-000000000013")
     (property "Reference" "U8" (at 122.015 38.245 0) (effects (font (size 1.27 1.27))))
     (property "Value" "TPS62132RGTR" (at 122.015 41.245 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "Package_DFN_QFN:VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias" (at 120.015 55.245 0) (effects (font (size 1.27 1.27)) (hide yes)))
+    (property "Footprint" "Pajoniiir-M1:VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias" (at 120.015 55.245 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (property "Datasheet" "https://www.ti.com/lit/ds/symlink/tps62130.pdf" (at 120.015 55.245 0) (effects (font (size 1.27 1.27)) (hide yes)))
 
     (pin "1" (uuid "b2000001-2222-4222-8222-000000000002"))

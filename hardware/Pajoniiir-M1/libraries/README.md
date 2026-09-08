@@ -28,6 +28,10 @@ Do not substitute a generic symmetric QFN footprint. Re-run `tools/validate_sche
 
 `footprints.pretty/Texas_DGS0010A_VSSOP-10_3x3mm_P0.5mm.kicad_mod` uses the TI INA238 DGS0010A example land pattern: ten 1.45 x 0.30 mm pads, 0.50 mm pitch, 4.40 mm row centers, no exposed pad. Source: [TI INA238 datasheet](https://www.ti.com/lit/ds/symlink/ina238.pdf), DGS0010A example board layout. Native pcbnew loading and pad geometry were checked locally.
 
+## TPS62132 / VQFN-16 thermal-via footprint
+
+`footprints.pretty/VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias.kicad_mod` is the KiCad 10 standard VQFN geometry copied into the project and adjusted to four 0.30 mm exposed-pad drills. The 0.50 mm copper diameter is retained, giving a 0.10 mm annular ring while meeting the project's 0.30 mm minimum drill rule. U8's schematic and live-board footprint IDs point to this reviewed project copy.
+
 ## Stable connector symbols
 
 `USB_A_M1` (J2/J3) and `MicroSD_Det1_M1` (J7) retain the existing symbol geometry and electrical numbering. Their shield pins are 5 and 10 respectively, matching the project footprints. They isolate the design from standard-library shield renumbering. After changes, export the native netlist/ERC and run `tools/validate_power_good_closure.py`.

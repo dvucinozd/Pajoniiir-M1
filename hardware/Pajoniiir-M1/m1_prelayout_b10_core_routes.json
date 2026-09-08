@@ -297,7 +297,8 @@
       "width": 55.15,
       "height": 49.735
     },
-    "p4_footprint_bbox_overlap_count": 0
+    "p4_footprint_bbox_overlap_count": 0,
+    "u8_thermal_via_drill_mm": 0.3
   },
   "rules": [
     "B10 routes are routing-feasibility evidence and may move during final escape and SI review.",
