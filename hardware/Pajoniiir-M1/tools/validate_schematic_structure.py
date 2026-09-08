@@ -402,7 +402,7 @@ def main() -> int:
             severities = erc.get("rule_severities", {})
             for rule in ("label_dangling", "pin_not_driven"):
                 # Missing entry means KiCad's built-in default severity. Both
-                # rules are error-level by default in KiCad 9; only an explicit
+                # rules are error-level by default in KiCad 10; only an explicit
                 # non-error override is forbidden here.
                 if severities.get(rule, "error") != "error":
                     errors.append(
@@ -1058,7 +1058,7 @@ def main() -> int:
         return 1
 
     print("\nPASS: structural contracts are clean.")
-    print("Native KiCad ERC is enforced separately by the KiCad 9 CI workflow.")
+    print("Native KiCad ERC is enforced separately by the KiCad 10 CI workflow.")
     return 0
 
 if __name__ == "__main__":

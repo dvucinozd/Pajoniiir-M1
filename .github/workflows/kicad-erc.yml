@@ -1,4 +1,4 @@
-name: KiCad 9 schematic ERC
+name: KiCad 10 schematic ERC and PCB DRC
 
 on:
   workflow_dispatch:
@@ -17,6 +17,7 @@ on:
       - "hardware/Pajoniiir-M1/mech_a.json"
       - "hardware/Pajoniiir-M1/pcb_constraints.json"
       - "hardware/Pajoniiir-M1/board_first_mechanical_contract.json"
+      - "hardware/Pajoniiir-M1/m1_prelayout_b*.json"
       - "hardware/Pajoniiir-M1/display_compatibility_*.json"
       - "hardware/Pajoniiir-M1/*.kicad_pcb"
       - ".github/workflows/kicad-erc.yml"
@@ -36,16 +37,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install KiCad 9
+      - name: Install KiCad 10
         shell: bash
         run: |
-          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
+          sudo add-apt-repository --yes ppa:kicad/kicad-10.0-releases
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends kicad kicad-symbols kicad-footprints
           kicad-cli version
 
       - name: Structural schematic contracts
         run: python3 hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
+
+      - name: B10 P4 critical-route contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          kicad-cli pcb drc \
+            --format json \
+            --output /tmp/Pajoniiir-M1-B10-drc.json \
+            hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb
+          python3 hardware/Pajoniiir-M1/tools/validate_core_routing_b10.py \
+            --board hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb \
+            --project hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pro \
+            --report hardware/Pajoniiir-M1/m1_prelayout_b10_core_routes.json \
+            --drc /tmp/Pajoniiir-M1-B10-drc.json
 
       - name: Root loader delta diagnostics
         continue-on-error: true

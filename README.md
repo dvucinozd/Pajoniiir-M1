@@ -10,11 +10,11 @@ This repository contains the live hierarchical KiCad design, electrical and firm
 
 **Mechanical milestone:** M1-MECH-B7
 
-**Pre-layout milestone:** M1-PRELAYOUT-B9 - compact, reproducible ESP32-P4 core/flash/DCDC/clock routing seed inside the B8 canvas
+**Pre-layout milestone:** M1-PRELAYOUT-B10 - routed ESP32-P4 flash, crystal and external-DCDC feasibility proof
 
 **Schematic structure:** PASS — 15/15 leaf sheets
 
-**Local native KiCad 10.0.4 ERC:** PASS — zero violations after PG diagnostics/library closure; fresh KiCad 9 CI pending for these changes
+**KiCad toolchain:** KiCad 10 only; local KiCad 10.0.4 ERC passes with zero violations and CI installs the KiCad 10 stable release
 
 **Manufacturing BOM parity:** PASS — 244 source / 244 exported, 15 DNP, 3 intentional blank footprints
 
@@ -28,7 +28,7 @@ This repository contains the live hierarchical KiCad design, electrical and firm
 
 Evidence updates: [ERC/library closure](docs/Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md), [DSI506 rear image and corrected height](docs/Pajoniiir_M1_DSI506_Evidence_2026-09-04.md).
 
-The current human-readable snapshot is [Pajoniiir M1 Current Design Status B9](docs/Pajoniiir_M1_Current_Design_Status_B9.md).
+The current human-readable snapshot is [Pajoniiir M1 Current Design Status B10](docs/Pajoniiir_M1_Current_Design_Status_B10.md).
 
 ## Architecture
 
@@ -110,13 +110,13 @@ Only `J1`, `C3` and `C8` intentionally have blank footprints in the manufacturin
 
 ## PCB and routing state
 
-`hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb` is a populated four-copper-layer pre-layout canvas. It contains all 244 assigned footprints and 193 named schematic nets in eight `Dwgs.User` working domains. B9 compacts all 63 P4/flash/clock footprints into a 52.602 x 50.033 mm routing-feasibility island with no local bounding-box overlaps. The board has no routes, zones or `Edge.Cuts`.
+`hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb` is a populated four-copper-layer pre-layout canvas. It contains all 244 assigned footprints and 193 named schematic nets in eight `Dwgs.User` working domains. B10 adds 78 track segments and 11 vias for the P4 external flash, crystal and external-DCDC proof. The P4 group has no footprint bounding-box overlaps; the board still has no zones or `Edge.Cuts`.
 
 `m1_board_packing_inventory_b7.json` records all 247 schematic components, 244 assigned footprints, 33 footprint classes including the blank-gate class, and the seven board-first packing phases.
 
 `m1_board_placement_seed_b8.json` records the generated domain coordinates and explicitly marks every coordinate as non-production. The seed and validator scripts preserve schematic UUID paths so KiCad can continue synchronizing the board with the hierarchy.
 
-`m1_prelayout_b9_core_island.json` records the B9 P4 placement and metrics. Its validator enforces the 7.285 mm U1/Y1 body gap, anchor-distance screening, zero P4 bounding-box overlaps and the continuing ban on tracks, zones and `Edge.Cuts`.
+`m1_prelayout_b9_core_island.json` remains the reproducible unrouted source placement. `m1_prelayout_b10_core_routes.json` records the live critical routes and metrics. Its validator enforces the 5.203 mm U1/Y1 body gap, QSPI transition topology, 0.60/0.30 mm B10 vias, power-trunk widths, zero P4 bounding-box overlaps and zero route-geometry DRC violations.
 
 The stackup is locked to JLCPCB `JLC04161H-7628`, 1.6 mm, 1 oz outer copper and 0.5 oz inner copper.
 
@@ -161,7 +161,7 @@ Although most connector MPNs and footprints are locked, their gates stay open un
 docs/                         engineering and status documents
 hardware/Pajoniiir-M1/        KiCad project and machine contracts
   *.kicad_sch                 root plus 15 hierarchical sheets
-  Pajoniiir-M1.kicad_pcb      populated four-layer B9 core-island canvas
+  Pajoniiir-M1.kicad_pcb      populated four-layer B10 critical-route canvas
   *.json                      electrical/mechanical/freeze authorities
   libraries/                  project symbols and footprints
   tools/                      migration and fail-closed validators
@@ -186,7 +186,8 @@ When sources disagree:
 
 ### Status and release gates
 
-- [Current Design Status B9](docs/Pajoniiir_M1_Current_Design_Status_B9.md)
+- [Current Design Status B10](docs/Pajoniiir_M1_Current_Design_Status_B10.md)
+- [B10 P4 Critical Routes](docs/Pajoniiir_M1_PRELAYOUT_B10_P4_Critical_Routes_v0.1.md)
 - [B9 P4 Core Island](docs/Pajoniiir_M1_PRELAYOUT_B9_P4_Core_Island_v0.1.md)
 - [Schematic Audit](docs/Pajoniiir_M1_Schematic_Audit_v0.1.md)
 - [Schematic Readiness Review](docs/Pajoniiir_RevA_Schematic_Readiness_Review_v0.1.md)
@@ -216,11 +217,13 @@ From the repository root:
 python hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 python hardware/Pajoniiir-M1/tools/validate_mechanical_authority.py
 python hardware/Pajoniiir-M1/tools/report_mech_gate_snapshot.py
-"C:/Program Files/KiCad/10.0/bin/python.exe" hardware/Pajoniiir-M1/tools/validate_core_placement_b9.py \
+"C:/Program Files/KiCad/10.0/bin/python.exe" hardware/Pajoniiir-M1/tools/validate_core_routing_b10.py \
   --board hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb \
-  --report hardware/Pajoniiir-M1/m1_prelayout_b9_core_island.json
+  --project hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pro \
+  --report hardware/Pajoniiir-M1/m1_prelayout_b10_core_routes.json \
+  --drc <fresh-kicad-drc.json>
 ```
 
-Native KiCad 9 CI separately loads every schematic, exports and cross-checks the manufacturing BOM, exports the hierarchy netlist/PDF and enforces ERC cleanliness.
+Native KiCad 10 CI loads every schematic, exports and cross-checks the manufacturing BOM, exports the hierarchy netlist/PDF, enforces ERC cleanliness and validates the B10 PCB routing contract against a fresh DRC report.
 
 Final placement, routing, Gerbers and EVT ordering remain blocked until every `blocks_layout_freeze` gate is closed and the production impedance geometry is recorded.

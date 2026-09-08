@@ -1,5 +1,7 @@
 # Pajoniiir-M1 M1-PRELAYOUT-B9 P4 core island
 
+> **HISTORICAL PLACEMENT SEED.** B10 uses this unrouted state as its reproducible source and is the current live-board milestone.
+
 **Date:** 2026-09-07
 
 **Result:** PASS - compact, reproducible routing-feasibility seed

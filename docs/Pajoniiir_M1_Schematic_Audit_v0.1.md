@@ -6,7 +6,7 @@
 
 **Mechanical context:** M1-MECH-B7
 
-**Status:** local KiCad 10.0.4 ERC and export validation pass; fresh KiCad 9 CI pending after PG/library changes; final PCB placement/routing remains blocked
+**Status:** local KiCad 10.0.4 ERC and export validation pass; KiCad 10 is the sole current CI/ECAD toolchain; final PCB placement/routing remains blocked
 
 ## Scope
 
@@ -63,7 +63,7 @@ J1 -> D1 -> U7 TPS259474A -> 5V_PROTECTED
 
 ### ESP32-P4
 
-U1 is ESP32-P4NRW32X with a project-local KiCad 9 symbol/footprint derived from current Espressif data. Both symbol units are instantiated. The P4 v3.x power model, physical pin 54 `VDD_HP_1`, TLV62569 core regulator, 499 k/499 k/22 pF feedback network, DSI_REXT, MIPI LDO and USB PHY supplies are captured.
+U1 is ESP32-P4NRW32X with a reviewed project-local KiCad 10 symbol/footprint derived from current Espressif data. Both symbol units are instantiated. The P4 v3.x power model, physical pin 54 `VDD_HP_1`, TLV62569 core regulator, 499 k/499 k/22 pF feedback network, DSI_REXT, MIPI LDO and USB PHY supplies are captured.
 
 ### Flash, clock and recovery
 

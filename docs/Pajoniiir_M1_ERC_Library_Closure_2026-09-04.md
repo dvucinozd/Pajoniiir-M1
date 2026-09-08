@@ -26,4 +26,4 @@ KiCad 10 netlist export prints a non-fatal annotation warning both on the pre-ch
 
 ## Remaining boundary
 
-This closes the observed local ERC/library findings. It does not close J1's land-pattern or panel geometry, display FFC continuity/clearance, final enclosure tolerances after the rear-PCB height correction, or the other mechanical/EVT release gates. Current changes still require a fresh KiCad 9 CI run after publication.
+This closes the observed local ERC/library findings. It does not close J1's land-pattern or panel geometry, display FFC continuity/clearance, final enclosure tolerances after the rear-PCB height correction, or the other mechanical/EVT release gates. Future local and CI validation uses KiCad 10 only.

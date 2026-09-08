@@ -23,7 +23,7 @@ Cilj je da KiCad projekt od početka bude:
 - kompatibilan s postojećim Pajoniiir firmwareom
 - pogodan za buduće PCB revizije bez velikog refaktora sheme
 
-Preporučeni CAD alat: **KiCad 9.x ili noviji aktualni stabilni release**.
+Podržani CAD alat: **KiCad 10 stable**.
 
 Predloženi root projekt:
 

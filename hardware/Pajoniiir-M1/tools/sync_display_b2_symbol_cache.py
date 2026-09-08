@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Synchronize M1-ELEC-B2 cached symbols with their authoritative KiCad libraries.
 
-Run after KiCad 9 is installed. This keeps standard Device/Connector library IDs intact
+Run after KiCad 10 is installed. This keeps standard Device/Connector library IDs intact
 while replacing the sheet-local cached definitions with byte-equivalent current library
 symbols. It also removes the final two audited orphan labels left at the retired touch
 sheet's former I2C pins.
@@ -53,13 +53,14 @@ def sexpr_at(text: str, start: int) -> tuple[str, int]:
 
 def system_symbol_dir() -> Path:
     candidates = [
+        Path(r"C:\Program Files\KiCad\10.0\share\kicad\symbols"),
         Path("/usr/share/kicad/symbols"),
         Path("/usr/local/share/kicad/symbols"),
     ]
     for candidate in candidates:
         if (candidate / "Device.kicad_sym").is_file():
             return candidate
-    raise SystemExit("KiCad 9 system symbol directory not found")
+    raise SystemExit("KiCad 10 system symbol directory not found")
 
 
 def extract_symbol(lib_text: str, name: str) -> str:

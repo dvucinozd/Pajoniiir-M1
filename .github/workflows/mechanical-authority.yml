@@ -14,6 +14,7 @@ on:
       - "hardware/Pajoniiir-M1/m1_mech_b5_*.json"
       - "hardware/Pajoniiir-M1/board_first_mechanical_contract.json"
       - "hardware/Pajoniiir-M1/m1_board_packing_inventory_b7.json"
+      - "hardware/Pajoniiir-M1/m1_prelayout_b*.json"
       - "hardware/Pajoniiir-M1/display_compatibility_*.json"
       - "hardware/Pajoniiir-M1/display_connector_b1.json"
       - "hardware/Pajoniiir-M1/mechanical_gates.json"
@@ -63,6 +64,7 @@ jobs:
               + list(base.glob('m1_mech_b3_*.json'))
               + list(base.glob('m1_mech_b4_*.json'))
               + list(base.glob('m1_mech_b5_*.json'))
+              + list(base.glob('m1_prelayout_b*.json'))
           )
           seen = set()
           for path in paths:

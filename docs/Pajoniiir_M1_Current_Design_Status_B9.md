@@ -1,5 +1,7 @@
 # Pajoniiir-M1 current design status B9
 
+> **HISTORICAL STATUS.** B10 added the routed P4 flash, crystal and external-DCDC feasibility proof. Use `Pajoniiir_M1_Current_Design_Status_B10.md` for the current state.
+
 **Date:** 2026-09-07
 
 **Electrical milestone:** M1-ELEC-B2

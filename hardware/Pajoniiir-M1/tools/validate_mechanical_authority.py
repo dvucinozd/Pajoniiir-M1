@@ -181,14 +181,20 @@ def main() -> int:
         errors.append("component height zones were locked without board/chassis evidence")
     if pcb.get("packing_inventory") != "m1_board_packing_inventory_b7.json":
         errors.append("pcb_constraints does not reference the B7 board packing inventory")
-    if pcb.get("layout_state") != "M1_PRELAYOUT_B9__BOARD_FIRST_P4_CORE_ISLAND":
-        errors.append("pcb_constraints is not synchronized to the B9 board-first placement state")
+    if pcb.get("layout_state") != "M1_PRELAYOUT_B10__P4_CRITICAL_ROUTES":
+        errors.append("pcb_constraints is not synchronized to the B10 critical-route state")
+    if pcb.get("ecad_toolchain") != "KiCad 10.x only":
+        errors.append("pcb_constraints must keep KiCad 10.x as the sole ECAD toolchain")
     prelayout = pcb.get("current_prelayout", {})
     expected_prelayout = {
-        "milestone": "M1-PRELAYOUT-B9",
+        "milestone": "M1-PRELAYOUT-B10",
         "board": "Pajoniiir-M1.kicad_pcb",
         "source_canvas": "m1_board_placement_seed_b8.json",
         "placement_authority": "m1_prelayout_b9_core_island.json",
+        "routing_authority": "m1_prelayout_b10_core_routes.json",
+        "default_clearance_mm": 0.15,
+        "route_geometry_drc_violations": 0,
+        "remaining_unconnected_items": 499,
         "production_layout": False,
         "layout_freeze_allowed": False,
         "edge_cuts_allowed": False,

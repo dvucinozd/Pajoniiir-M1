@@ -76,7 +76,7 @@ DNP entries remain visible in the exported assembly data so EVT tuning choices a
 
 ## Latest verified result
 
-The latest KiCad 9 CI run covering the B5 schematic state reported:
+The historical KiCad 9 CI run covering the B5 schematic state reported:
 
 ```text
 all 16 schematic files load: PASS
@@ -84,7 +84,7 @@ manufacturing BOM parity: source=242 bom=242 dnp=15 blank_gates=3 PASS
 native ERC: unexplained_errors=0 excluded_errors=0 warnings=0
 ```
 
-Local KiCad 10.0.4 verification after TP25/TP26 and library closure: **244 source / 244 exported, 15 DNP, 3 blank gates; zero native ERC violations**. The KiCad 9 result above predates these edits; a fresh run is pending. See [closure evidence](Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md).
+Current KiCad 10.0.4 verification after TP25/TP26 and library closure: **244 source / 244 exported, 15 DNP, 3 blank gates; zero native ERC violations**. The KiCad 9 result above is retained only as historical evidence. KiCad 10 is the sole current CI/ECAD toolchain. See [closure evidence](Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md).
 
 Historical run #76 reported 270/270, 17 DNP and 12 blank gates before the J6 audio removal, D1 lock, DSI506 migration and B4 footprint locks. Those numbers are retained only as historical evidence and are not the current baseline.
 
@@ -93,7 +93,7 @@ Historical run #76 reported 270/270, 17 DNP and 12 blank gates before the J6 aud
 Passing the workflow proves:
 
 1. structural schematic contracts pass
-2. every schematic loads under native KiCad 9
+2. every schematic loads under native KiCad 10
 3. native ERC has no unexplained errors or warnings
 4. KiCad exports the manufacturing BOM
 5. exported RefDes/Value/Footprint data match the source hierarchy

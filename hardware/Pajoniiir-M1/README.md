@@ -1,15 +1,15 @@
 # Pajoniiir-M1 KiCad Rev A
 
-Live KiCad 9 project for the Pajoniiir-M1 custom mainboard.
+Live KiCad 10 project for the Pajoniiir-M1 custom mainboard. KiCad 10 is the only supported ECAD toolchain for future edits and CI.
 
 ## Current design state
 
 - Electrical milestone: M1-ELEC-B2
 - Mechanical milestone: M1-MECH-B7
-- Pre-layout milestone: M1-PRELAYOUT-B8 populated domain canvas
+- Pre-layout milestone: M1-PRELAYOUT-B10 P4 critical-route proof
 - Root schematic plus 15 leaf sheets: structurally clean
 - Current manufacturing source: 244 `in_bom=yes`, 15 DNP, 3 intentional blank footprints
-- PCB: 244 footprints and 193 named nets in eight reversible working domains; no routes/zones/`Edge.Cuts`
+- PCB: 244 footprints, 193 named nets, 78 B10 track segments and 11 vias; no zones/`Edge.Cuts`
 - Board packing inventory: 247 schematic components, 244 assigned footprints, 3 intentional blanks
 - Final placement/routing freeze: blocked by 12 physical/EVT gates
 
@@ -23,12 +23,14 @@ J6 is a generic 15-pin Raspberry-Pi-style MIPI DSI host using Amphenol SFW15R-2S
 4. `m1_prelayout_b5_routing_contract.json` — routing topology and impedance state
 5. `m1_board_packing_inventory_b7.json` — footprint population and packing sequence
 6. `m1_board_placement_seed_b8.json` — populated-domain coordinates and non-production boundary
-7. `m1_mech_b4_connector_source_lock.json` — exact external connector intent
-8. `display_compatibility_dsi506.json` — first qualified display profile
+7. `m1_prelayout_b9_core_island.json` — reproducible unrouted P4 source placement
+8. `m1_prelayout_b10_core_routes.json` — current critical-route placement and copper metrics
+9. `m1_mech_b4_connector_source_lock.json` — exact external connector intent
+10. `display_compatibility_dsi506.json` — first qualified display profile
 
 The B2-B6 display-mounted placement and enclosure JSON files are retained as historical DSI506 screening only.
 
-Human-readable current state: `../../docs/Pajoniiir_M1_Current_Design_Status_B8.md`.
+Human-readable current state: `../../docs/Pajoniiir_M1_Current_Design_Status_B10.md`.
 
 ## Mechanical and routing boundary
 
@@ -47,10 +49,11 @@ python hardware/Pajoniiir-M1/tools/validate_schematic_structure.py
 python hardware/Pajoniiir-M1/tools/validate_mechanical_authority.py
 python hardware/Pajoniiir-M1/tools/validate_board_packing_inventory.py
 python hardware/Pajoniiir-M1/tools/report_mech_gate_snapshot.py
-"C:/Program Files/KiCad/10.0/bin/python.exe" hardware/Pajoniiir-M1/tools/validate_board_placement_b8.py \
+"C:/Program Files/KiCad/10.0/bin/python.exe" hardware/Pajoniiir-M1/tools/validate_core_routing_b10.py \
   --board hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pcb \
-  --netlist <fresh-kicad-xml-netlist> \
-  --report hardware/Pajoniiir-M1/m1_board_placement_seed_b8.json
+  --project hardware/Pajoniiir-M1/Pajoniiir-M1.kicad_pro \
+  --report hardware/Pajoniiir-M1/m1_prelayout_b10_core_routes.json \
+  --drc <fresh-kicad-drc.json>
 ```
 
-Native KiCad ERC, hierarchy load, manufacturing BOM parity, netlist and PDF export are enforced in CI. B8 placement validation additionally uses KiCad's bundled `pcbnew` Python module locally.
+Native KiCad ERC, hierarchy load, manufacturing BOM parity, netlist and PDF export are enforced in CI. B10 routing validation additionally uses KiCad's bundled `pcbnew` Python module and a fresh KiCad DRC JSON locally.

@@ -12,7 +12,7 @@
 
 ## Executive verdict
 
-The Rev A electrical design is captured in the 15-sheet KiCad hierarchy and passes local structural, native KiCad 10.0.4 ERC and manufacturing-output checks. Fresh KiCad 9 CI is pending after the [PG/library changes](Pajoniiir_M1_ERC_Library_Closure_2026-09-04.md). The B7 rebase makes the mainboard independent of display geometry. The user-confirmed DSI506 height remains profile evidence only.
+The Rev A electrical design is captured in the 15-sheet KiCad hierarchy and passes local structural, native KiCad 10.0.4 ERC and manufacturing-output checks. KiCad 10 is the sole current CI/ECAD toolchain. The B7 rebase makes the mainboard independent of display geometry. The user-confirmed DSI506 height remains profile evidence only.
 
 ```text
 KiCad files loaded       16/16 PASS
