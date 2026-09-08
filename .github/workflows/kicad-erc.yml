@@ -392,6 +392,7 @@ jobs:
 
       - name: Upload M1-SCH-A review bundle
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: Pajoniiir-M1-M1-SCH-A
