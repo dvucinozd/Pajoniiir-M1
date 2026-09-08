@@ -39,7 +39,7 @@
       "Crystal:Crystal_SMD_2016-4Pin_2.0x1.6mm": 1,
       "Diode_SMD:D_SMB": 1,
       "Inductor_SMD:L_Coilcraft_XxL4030": 2,
-      "Package_DFN_QFN:VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias": 1,
+      "Pajoniiir-M1:VQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm_ThermalVias": 1,
       "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm": 1,
       "Package_SON:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm": 2,
       "Package_SON:WSON-8-1EP_6x5mm_P1.27mm_EP3.4x4.3mm": 1,
