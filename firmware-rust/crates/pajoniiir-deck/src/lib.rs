@@ -60,6 +60,18 @@ impl Default for BeatFxState {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum PadFxBank {
+    One,
+    Two,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct ActivePadFx {
+    pub bank: PadFxBank,
+    pub pad: u8,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum PerformanceMode {
     HotCue,
     LoopRoll,
@@ -197,6 +209,7 @@ pub struct DeckState {
     pub tempo_range_percent: u16,
     pub perf_mode: PerformanceMode,
     pub pad_mode: PadMode,
+    pub active_pad_fx: Option<ActivePadFx>,
     pub sync_enabled: bool,
     pub sync_master: bool,
     pub quantize_enabled: bool,
@@ -223,6 +236,7 @@ impl DeckState {
             tempo_range_percent: DEFAULT_TEMPO_RANGE_PERCENT,
             perf_mode: PerformanceMode::HotCue,
             pad_mode: PadMode::HotCue,
+            active_pad_fx: None,
             sync_enabled: false,
             sync_master: false,
             quantize_enabled: false,
@@ -280,6 +294,12 @@ pub enum DeckEffect {
         state: BeatFxState,
         delay_ms: u32,
         flanger_period_ms: u32,
+    },
+    ApplyPadFx {
+        deck: DeckId,
+        bank: PadFxBank,
+        pad: u8,
+        active: bool,
     },
 }
 
@@ -954,8 +974,39 @@ impl DeckProductState {
                     DeckEffects::NONE
                 }
             }
+            PadMode::PadFx1 | PadMode::PadFx2 => {
+                self.handle_pad_fx_action(deck, action.mode, action.pad, action.pressed)
+            }
             _ => DeckEffects::NONE,
         }
+    }
+
+    fn handle_pad_fx_action(
+        &mut self,
+        deck: DeckId,
+        mode: PadMode,
+        pad: u8,
+        active: bool,
+    ) -> DeckEffects {
+        let bank = match mode {
+            PadMode::PadFx1 => PadFxBank::One,
+            PadMode::PadFx2 => PadFxBank::Two,
+            _ => return DeckEffects::NONE,
+        };
+
+        let state = &mut self.decks[deck_index(deck)];
+        if active {
+            state.active_pad_fx = Some(ActivePadFx { bank, pad });
+        } else if state.active_pad_fx == Some(ActivePadFx { bank, pad }) {
+            state.active_pad_fx = None;
+        }
+
+        DeckEffects::one(DeckEffect::ApplyPadFx {
+            deck,
+            bank,
+            pad,
+            active,
+        })
     }
 
     fn handle_hot_cue_pad_action(&mut self, deck: DeckId, pad: u8, shifted: bool) -> DeckEffects {
@@ -2248,6 +2299,25 @@ mod tests {
         }
     }
 
+    fn pad_fx_pad(
+        deck: DeckId,
+        mode: PadMode,
+        pad: u8,
+        shifted: bool,
+        pressed: bool,
+    ) -> ControlEvent {
+        ControlEvent {
+            deck: Some(deck),
+            control: SemanticControl::PadAction,
+            value: ControlValue::PadAction(PadAction {
+                pad,
+                mode,
+                shifted,
+                pressed,
+            }),
+        }
+    }
+
     fn beat_loop_pad(deck: DeckId, pad: u8, shifted: bool, pressed: bool) -> ControlEvent {
         ControlEvent {
             deck: Some(deck),
@@ -2646,6 +2716,94 @@ mod tests {
             DeckEffects::NONE
         );
         assert_eq!(state.deck(DeckId::One).loop_state, before);
+    }
+
+    #[test]
+    fn pad_fx1_press_and_release_route_to_audio_without_transport_side_effects() {
+        let mut state = DeckProductState::new();
+
+        let pressed_fx =
+            state.handle_control(pad_fx_pad(DeckId::One, PadMode::PadFx1, 2, false, true));
+        assert_eq!(
+            pressed_fx.items[0],
+            Some(DeckEffect::ApplyPadFx {
+                deck: DeckId::One,
+                bank: PadFxBank::One,
+                pad: 2,
+                active: true,
+            })
+        );
+        assert_eq!(
+            state.deck(DeckId::One).active_pad_fx,
+            Some(ActivePadFx {
+                bank: PadFxBank::One,
+                pad: 2,
+            })
+        );
+        assert!(!state.deck(DeckId::One).playing);
+
+        let released =
+            state.handle_control(pad_fx_pad(DeckId::One, PadMode::PadFx1, 2, false, false));
+        assert_eq!(
+            released.items[0],
+            Some(DeckEffect::ApplyPadFx {
+                deck: DeckId::One,
+                bank: PadFxBank::One,
+                pad: 2,
+                active: false,
+            })
+        );
+        assert_eq!(state.deck(DeckId::One).active_pad_fx, None);
+    }
+
+    #[test]
+    fn pad_fx2_routes_by_mode_even_when_shifted_flag_is_set() {
+        let mut state = DeckProductState::new();
+
+        let effects =
+            state.handle_control(pad_fx_pad(DeckId::Two, PadMode::PadFx2, 3, true, true));
+        assert_eq!(
+            effects.items[0],
+            Some(DeckEffect::ApplyPadFx {
+                deck: DeckId::Two,
+                bank: PadFxBank::Two,
+                pad: 3,
+                active: true,
+            })
+        );
+        assert_eq!(
+            state.deck(DeckId::Two).active_pad_fx,
+            Some(ActivePadFx {
+                bank: PadFxBank::Two,
+                pad: 3,
+            })
+        );
+    }
+
+    #[test]
+    fn mismatched_pad_fx_release_does_not_clear_newer_active_pad() {
+        let mut state = DeckProductState::new();
+        state.handle_control(pad_fx_pad(DeckId::One, PadMode::PadFx1, 2, false, true));
+        state.handle_control(pad_fx_pad(DeckId::One, PadMode::PadFx1, 3, false, true));
+
+        let release =
+            state.handle_control(pad_fx_pad(DeckId::One, PadMode::PadFx1, 2, false, false));
+        assert_eq!(
+            release.items[0],
+            Some(DeckEffect::ApplyPadFx {
+                deck: DeckId::One,
+                bank: PadFxBank::One,
+                pad: 2,
+                active: false,
+            })
+        );
+        assert_eq!(
+            state.deck(DeckId::One).active_pad_fx,
+            Some(ActivePadFx {
+                bank: PadFxBank::One,
+                pad: 3,
+            })
+        );
     }
 
     #[test]
