@@ -7,4 +7,6 @@ publish.workspace = true
 
 [dependencies]
 pajoniiir-controller-core.workspace = true
+pajoniiir-core.workspace = true
+pajoniiir-hot-cues.workspace = true
 pajoniiir-track-analysis.workspace = true
