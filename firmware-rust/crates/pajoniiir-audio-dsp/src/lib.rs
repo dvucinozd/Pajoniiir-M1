@@ -575,6 +575,201 @@ fn smooth_q15(current: u16, target: u16) -> u16 {
     (current as i32 + step) as u16
 }
 
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct FlangerConfig {
+    pub enabled: bool,
+    pub period_ms: u32,
+    pub depth_q15: u16,
+}
+
+impl Default for FlangerConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            period_ms: 500,
+            depth_q15: 0,
+        }
+    }
+}
+
+const FLANGER_MIN_DELAY_US: u32 = 250;
+const FLANGER_MAX_DELAY_US: u32 = 6_000;
+const FLANGER_MIN_PERIOD_MS: u32 = 100;
+const FLANGER_MAX_PERIOD_MS: u32 = 8_000;
+const FLANGER_WET_MAX_Q15: u16 = 22_938;
+const FLANGER_FB_MAX_Q15: u16 = 24_576;
+
+pub fn flanger_required_frames(sample_rate: u32) -> usize {
+    let max_frames =
+        (sample_rate as u64 * FLANGER_MAX_DELAY_US as u64).div_ceil(1_000_000) as usize;
+    max_frames.saturating_add(4)
+}
+
+pub struct FlangerFx<'a> {
+    left: &'a mut [f32],
+    right: &'a mut [f32],
+    capacity_frames: usize,
+    sample_rate: u32,
+    write_index: usize,
+    config: FlangerConfig,
+    allocated: bool,
+    lfo_phase_q32: u32,
+    lfo_step_q32: u32,
+    min_delay_q16: u32,
+    span_delay_q16: u32,
+    wet_cur_q15: u16,
+    feedback_cur_q15: u16,
+}
+
+impl<'a> FlangerFx<'a> {
+    pub fn new(left: &'a mut [f32], right: &'a mut [f32], sample_rate: u32) -> Self {
+        let capacity_frames = left.len().min(right.len());
+        let allocated = sample_rate > 0
+            && capacity_frames >= flanger_required_frames(sample_rate);
+
+        let mut state = Self {
+            left,
+            right,
+            capacity_frames,
+            sample_rate,
+            write_index: 0,
+            config: FlangerConfig::default(),
+            allocated,
+            lfo_phase_q32: 0,
+            lfo_step_q32: 0,
+            min_delay_q16: 0,
+            span_delay_q16: 0,
+            wet_cur_q15: 0,
+            feedback_cur_q15: 0,
+        };
+        state.reset();
+        state
+    }
+
+    pub fn reset(&mut self) {
+        self.write_index = 0;
+        self.lfo_phase_q32 = 0;
+        self.wet_cur_q15 = 0;
+        self.feedback_cur_q15 = 0;
+        for sample in &mut self.left[..self.capacity_frames] {
+            *sample = 0.0;
+        }
+        for sample in &mut self.right[..self.capacity_frames] {
+            *sample = 0.0;
+        }
+    }
+
+    pub fn configure(&mut self, config: FlangerConfig) {
+        let was_enabled = self.config.enabled;
+        let mut next = config;
+        next.depth_q15 = next.depth_q15.min(32_767);
+        next.period_ms = next
+            .period_ms
+            .clamp(FLANGER_MIN_PERIOD_MS, FLANGER_MAX_PERIOD_MS);
+
+        if next.enabled && !was_enabled {
+            self.reset();
+            self.wet_cur_q15 = ((next.depth_q15 as u32 * FLANGER_WET_MAX_Q15 as u32) >> 15) as u16;
+            self.feedback_cur_q15 =
+                ((next.depth_q15 as u32 * FLANGER_FB_MAX_Q15 as u32) >> 15) as u16;
+        }
+
+        self.config = next;
+
+        let fs = if self.sample_rate == 0 {
+            44_100
+        } else {
+            self.sample_rate
+        };
+        let period_frames = ((fs as u64 * self.config.period_ms as u64) / 1_000).max(1);
+        self.lfo_step_q32 = ((1u64 << 32) / period_frames) as u32;
+
+        let min_q16 =
+            ((fs as u64 * FLANGER_MIN_DELAY_US as u64) << 16) / 1_000_000;
+        let max_q16 =
+            ((fs as u64 * FLANGER_MAX_DELAY_US as u64) << 16) / 1_000_000;
+        self.min_delay_q16 = min_q16 as u32;
+        self.span_delay_q16 = (max_q16 - min_q16) as u32;
+    }
+
+    pub const fn config(&self) -> FlangerConfig {
+        self.config
+    }
+
+    pub const fn is_allocated(&self) -> bool {
+        self.allocated
+    }
+
+    pub fn process_frame(&mut self, input: DspFrame) -> DspFrame {
+        if !self.allocated || !self.config.enabled {
+            return input;
+        }
+
+        let wet_target =
+            ((self.config.depth_q15 as u32 * FLANGER_WET_MAX_Q15 as u32) >> 15) as u16;
+        let feedback_target =
+            ((self.config.depth_q15 as u32 * FLANGER_FB_MAX_Q15 as u32) >> 15) as u16;
+        self.wet_cur_q15 = smooth_q15(self.wet_cur_q15, wet_target);
+        self.feedback_cur_q15 = smooth_q15(self.feedback_cur_q15, feedback_target);
+
+        self.lfo_phase_q32 = self.lfo_phase_q32.wrapping_add(self.lfo_step_q32);
+        let phase = self.lfo_phase_q32;
+        let tri_q16 = if phase < 0x8000_0000 {
+            phase >> 15
+        } else {
+            (u32::MAX - phase) >> 15
+        };
+
+        let delay_q16 = self.min_delay_q16
+            + (((self.span_delay_q16 as u64 * tri_q16 as u64) >> 16) as u32);
+        let delay_int = (delay_q16 >> 16) as usize;
+        let frac_q16 = delay_q16 & 0xffff;
+
+        let idx0 = if self.write_index >= delay_int {
+            self.write_index - delay_int
+        } else {
+            self.write_index + self.capacity_frames - delay_int
+        };
+        let idx1 = if idx0 == 0 {
+            self.capacity_frames - 1
+        } else {
+            idx0 - 1
+        };
+
+        let delayed_l = read_delayed(self.left, idx0, idx1, frac_q16);
+        let delayed_r = read_delayed(self.right, idx0, idx1, frac_q16);
+
+        let wet_gain = self.wet_cur_q15 as f32 / 32_768.0;
+        let feedback_gain = self.feedback_cur_q15 as f32 / 32_768.0;
+
+        let out_l = input.left + delayed_l * wet_gain;
+        let out_r = input.right + delayed_r * wet_gain;
+
+        self.left[self.write_index] = input.left + delayed_l * feedback_gain;
+        self.right[self.write_index] = input.right + delayed_r * feedback_gain;
+
+        self.write_index += 1;
+        if self.write_index >= self.capacity_frames {
+            self.write_index = 0;
+        }
+
+        DspFrame {
+            left: out_l,
+            right: out_r,
+        }
+    }
+
+    pub fn process_pcm_frame(&mut self, input: PcmFrame) -> PcmFrame {
+        self.process_frame(input.into()).into()
+    }
+}
+
+fn read_delayed(buffer: &[f32], idx0: usize, idx1: usize, frac_q16: u32) -> f32 {
+    let fraction = frac_q16 as f32 / 65_536.0;
+    buffer[idx0] + (buffer[idx1] - buffer[idx0]) * fraction
+}
+
 pub fn smart_cfx_curve_raw(raw: u16) -> u16 {
     let raw = raw.min(FILTER_RAW_MAX);
     if raw == FILTER_RAW_CENTER || raw == FILTER_RAW_MIN || raw == FILTER_RAW_MAX {
@@ -834,6 +1029,291 @@ mod tests {
             filter.process_frame(true, DspFrame::default());
         }
         assert_ne!(filter.a1, poison);
+    }
+
+
+    #[test]
+    fn flanger_required_frames_cover_released_max_delay() {
+        let frames = flanger_required_frames(48_000);
+        assert!(frames >= 290);
+        assert!(frames <= 512);
+    }
+
+    #[test]
+    fn disabled_flanger_bypasses_input() {
+        let mut left = [0.0; 512];
+        let mut right = [0.0; 512];
+        let mut fx = FlangerFx::new(&mut left, &mut right, 48_000);
+
+        let input = PcmFrame {
+            left: 4_321,
+            right: -1_234,
+        };
+        assert_eq!(fx.process_pcm_frame(input), input);
+    }
+
+    #[test]
+    fn unallocated_flanger_bypasses_input() {
+        let mut left = [];
+        let mut right = [];
+        let mut fx = FlangerFx::new(&mut left, &mut right, 48_000);
+        fx.configure(FlangerConfig {
+            enabled: true,
+            period_ms: 500,
+            depth_q15: 32_767,
+        });
+
+        let input = PcmFrame {
+            left: 4_321,
+            right: -1_234,
+        };
+        assert!(!fx.is_allocated());
+        assert_eq!(fx.process_pcm_frame(input), input);
+    }
+
+    #[test]
+    fn zero_depth_flanger_is_transparent() {
+        let mut left = [0.0; 512];
+        let mut right = [0.0; 512];
+        let mut fx = FlangerFx::new(&mut left, &mut right, 48_000);
+        fx.configure(FlangerConfig {
+            enabled: true,
+            period_ms: 500,
+            depth_q15: 0,
+        });
+
+        for i in 0..400 {
+            let sample = (libm::sinf(i as f32 * 0.05) * 12_000.0) as i16;
+            let out = fx.process_pcm_frame(PcmFrame {
+                left: sample,
+                right: sample,
+            });
+            assert_eq!(out.left, sample);
+            assert_eq!(out.right, sample);
+        }
+    }
+
+    #[test]
+    fn impulse_reappears_inside_released_delay_bounds() {
+        let mut left = [0.0; 512];
+        let mut right = [0.0; 512];
+        let mut fx = FlangerFx::new(&mut left, &mut right, 48_000);
+        fx.configure(FlangerConfig {
+            enabled: true,
+            period_ms: 2_000,
+            depth_q15: 32_767,
+        });
+
+        let first = fx.process_pcm_frame(PcmFrame {
+            left: 16_000,
+            right: 16_000,
+        });
+        assert_eq!(first.left, 16_000);
+        assert_eq!(first.right, 16_000);
+
+        let mut first_wet_frame = None;
+        for i in 1..400 {
+            let out = fx.process_pcm_frame(PcmFrame::default());
+            if out.left != 0 || out.right != 0 {
+                first_wet_frame = Some(i);
+                break;
+            }
+        }
+
+        let frame = first_wet_frame.expect("impulse must return");
+        assert!(frame >= 10);
+        assert!(frame <= 292);
+    }
+
+    #[test]
+    fn enabled_flanger_colours_a_tone() {
+        let mut left = [0.0; 512];
+        let mut right = [0.0; 512];
+        let mut fx = FlangerFx::new(&mut left, &mut right, 48_000);
+        fx.configure(FlangerConfig {
+            enabled: true,
+            period_ms: 300,
+            depth_q15: 32_767,
+        });
+
+        let mut changed = 0;
+        for i in 0..4_800 {
+            let sample = (libm::sinf(i as f32 * 0.13) * 10_000.0) as i16;
+            let out = fx.process_pcm_frame(PcmFrame {
+                left: sample,
+                right: sample,
+            });
+            if out.left != sample {
+                changed += 1;
+            }
+        }
+
+        assert!(changed > 4_000);
+    }
+
+    #[test]
+    fn flanger_sweep_produces_deep_notch_and_resonant_peak() {
+        const SR: u32 = 48_000;
+        let mut left = [0.0; 512];
+        let mut right = [0.0; 512];
+        let mut fx = FlangerFx::new(&mut left, &mut right, SR);
+        fx.configure(FlangerConfig {
+            enabled: true,
+            period_ms: 300,
+            depth_q15: 32_767,
+        });
+
+        let amplitude = 3_000.0f32;
+        let omega = 2.0 * core::f32::consts::PI * 400.0 / SR as f32;
+        let window = 128usize;
+        let total = (SR as usize * 700) / 1_000;
+        let lead_in = SR as usize / 10;
+
+        let mut weakest = amplitude;
+        let mut strongest = 0.0f32;
+        let mut window_peak = 0.0f32;
+
+        for i in 0..total {
+            let sample = (libm::sinf(i as f32 * omega) * amplitude) as i16;
+            let out = fx.process_pcm_frame(PcmFrame {
+                left: sample,
+                right: sample,
+            });
+            window_peak = window_peak.max((out.left as f32).abs());
+
+            if i % window == window - 1 {
+                if i > lead_in {
+                    weakest = weakest.min(window_peak);
+                    strongest = strongest.max(window_peak);
+                }
+                window_peak = 0.0;
+            }
+        }
+
+        assert!(strongest > 0.0);
+        assert!(weakest < strongest * 0.25);
+        assert!(strongest > amplitude * 2.8);
+        assert!(strongest <= amplitude * 3.6);
+    }
+
+    #[test]
+    fn flanger_wide_path_preserves_headroom_without_internal_clamp() {
+        const SR: u32 = 48_000;
+        let mut left = [0.0; 512];
+        let mut right = [0.0; 512];
+        let mut fx = FlangerFx::new(&mut left, &mut right, SR);
+        fx.configure(FlangerConfig {
+            enabled: true,
+            period_ms: 300,
+            depth_q15: 32_767,
+        });
+
+        let quiet = fx.process_frame(DspFrame {
+            left: 20_000.0,
+            right: -20_000.0,
+        });
+        assert_eq!(quiet.left, 20_000.0);
+        assert_eq!(quiet.right, -20_000.0);
+
+        let omega = 2.0 * core::f32::consts::PI * 400.0 / SR as f32;
+        let total = (SR as usize * 700) / 1_000;
+        let mut saw_above_pcm_ceiling = false;
+
+        for i in 0..total {
+            let sample = libm::sinf(i as f32 * omega) * 26_000.0;
+            let out = fx.process_frame(DspFrame {
+                left: sample,
+                right: sample,
+            });
+            assert!(out.left.is_finite());
+            assert!(out.right.is_finite());
+            assert!(out.left.abs() < 100_000.0);
+            assert!(out.right.abs() < 100_000.0);
+
+            if out.left.abs() > 32_768.0 || out.right.abs() > 32_768.0 {
+                saw_above_pcm_ceiling = true;
+            }
+        }
+
+        assert!(saw_above_pcm_ceiling);
+    }
+
+    #[test]
+    fn flanger_reenable_clears_stale_buffer() {
+        let mut left = [0.0; 512];
+        let mut right = [0.0; 512];
+        let mut fx = FlangerFx::new(&mut left, &mut right, 48_000);
+        let mut config = FlangerConfig {
+            enabled: true,
+            period_ms: 500,
+            depth_q15: 32_767,
+        };
+        fx.configure(config);
+
+        for _ in 0..64 {
+            fx.process_pcm_frame(PcmFrame {
+                left: 16_000,
+                right: -16_000,
+            });
+        }
+
+        config.enabled = false;
+        fx.configure(config);
+        config.enabled = true;
+        fx.configure(config);
+
+        for _ in 0..400 {
+            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        }
+    }
+
+    #[test]
+    fn flanger_fractional_interpolation_matches_wide_float_reference() {
+        let mut left = [0.0; 512];
+        let mut right = [0.0; 512];
+        let mut fx = FlangerFx::new(&mut left, &mut right, 48_000);
+        fx.configure(FlangerConfig {
+            enabled: true,
+            period_ms: 333,
+            depth_q15: 32_767,
+        });
+
+        for i in 0..fx.capacity_frames {
+            let sample = if i & 1 == 0 {
+                i16::MIN as f32
+            } else {
+                i16::MAX as f32
+            };
+            fx.left[i] = sample;
+            fx.right[i] = sample;
+        }
+
+        let phase = fx.lfo_phase_q32.wrapping_add(fx.lfo_step_q32);
+        let tri_q16 = if phase < 0x8000_0000 {
+            phase >> 15
+        } else {
+            (u32::MAX - phase) >> 15
+        };
+        let delay_q16 = fx.min_delay_q16
+            + (((fx.span_delay_q16 as u64 * tri_q16 as u64) >> 16) as u32);
+        let delay_int = (delay_q16 >> 16) as usize;
+        let frac_q16 = delay_q16 & 0xffff;
+        let idx0 = if fx.write_index >= delay_int {
+            fx.write_index - delay_int
+        } else {
+            fx.write_index + fx.capacity_frames - delay_int
+        };
+        let idx1 = if idx0 == 0 {
+            fx.capacity_frames - 1
+        } else {
+            idx0 - 1
+        };
+        let delayed = read_delayed(fx.left, idx0, idx1, frac_q16);
+        let expected = delayed * (fx.wet_cur_q15 as f32 / 32_768.0);
+
+        let out = fx.process_frame(DspFrame::default());
+        assert!((out.left - expected).abs() < 1.0);
+        assert!((out.right - expected).abs() < 1.0);
     }
 
     fn delay_config(
