@@ -151,7 +151,7 @@ const fn target_includes(target: BeatFxTarget, deck_index: usize) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use pajoniiir_deck::{BeatFxBeat, LoopRegion};
+    use pajoniiir_deck::BeatFxBeat;
 
     fn state(effect: BeatFxEffect, target: BeatFxTarget, depth: u8, enabled: bool) -> BeatFxState {
         BeatFxState {
@@ -173,7 +173,6 @@ mod tests {
             }),
             None
         );
-        let _ = LoopRegion::new(1_000, 2_000).unwrap();
     }
 
     #[test]
