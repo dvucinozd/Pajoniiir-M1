@@ -472,7 +472,6 @@ mod tests {
         assert!(!state.master_cue_enabled());
     }
 
-
     #[test]
     fn smart_buttons_toggle_only_on_press_and_shift_variants_are_noops() {
         let mut state = MixerState::new();
@@ -487,16 +486,8 @@ mod tests {
         assert!(!state.handle_control(pressed(None, SemanticControl::SmartFader, false)));
         assert!(state.smart_fader_enabled());
 
-        assert!(!state.handle_control(pressed(
-            None,
-            SemanticControl::SmartCfxShift,
-            true,
-        )));
-        assert!(!state.handle_control(pressed(
-            None,
-            SemanticControl::SmartFaderShift,
-            true,
-        )));
+        assert!(!state.handle_control(pressed(None, SemanticControl::SmartCfxShift, true,)));
+        assert!(!state.handle_control(pressed(None, SemanticControl::SmartFaderShift, true,)));
         assert!(state.smart_cfx_enabled());
         assert!(state.smart_fader_enabled());
     }
