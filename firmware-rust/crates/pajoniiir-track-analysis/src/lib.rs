@@ -128,7 +128,7 @@ pub fn beat_jump_target_ms(
         let adjacent_ms = grid.beats()[adjacent_index].time_ms;
         let interval_ms = closest_ms.abs_diff(adjacent_ms) as u64;
         let magnitude = beat_numerator.unsigned_abs() as u64;
-        let delta_ms = (interval_ms * magnitude + denominator - 1) / denominator;
+        let delta_ms = (interval_ms * magnitude).div_ceil(denominator);
 
         if forward {
             return (closest_ms as u64 + delta_ms).min(u32::MAX as u64) as u32;
@@ -143,7 +143,7 @@ pub fn beat_jump_target_ms(
     let safe_bpm_x100 = if bpm_x100 == 0 { 12_000 } else { bpm_x100 };
     let beat_len_ms = 6_000_000u64 / safe_bpm_x100 as u64;
     let magnitude = beat_numerator.unsigned_abs() as u64;
-    let delta_ms = (beat_len_ms * magnitude + denominator - 1) / denominator;
+    let delta_ms = (beat_len_ms * magnitude).div_ceil(denominator);
 
     if beat_numerator < 0 {
         if delta_ms >= position_ms as u64 {
@@ -185,7 +185,7 @@ pub fn beat_loop_duration_ms(
 
     let numerator = beat_numerator.max(1) as u64;
     let denominator = beat_denominator.max(1) as u64;
-    let duration = (beat_len_ms as u64 * numerator + denominator - 1) / denominator;
+    let duration = (beat_len_ms as u64 * numerator).div_ceil(denominator);
     duration.max(1).min(u32::MAX as u64) as u32
 }
 
