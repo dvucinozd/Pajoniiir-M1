@@ -4,6 +4,7 @@ members = [
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",
+    "crates/pajoniiir-control-scheduler",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
 ]
@@ -12,6 +13,7 @@ default-members = [
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",
+    "crates/pajoniiir-control-scheduler",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
 ]
@@ -31,5 +33,6 @@ slint-build = { version = "=1.18.1" }
 pajoniiir-core = { path = "crates/pajoniiir-core" }
 pajoniiir-controller-core = { path = "crates/pajoniiir-controller-core" }
 pajoniiir-controller-profile = { path = "crates/pajoniiir-controller-profile" }
+pajoniiir-control-scheduler = { path = "crates/pajoniiir-control-scheduler" }
 pajoniiir-ui-model = { path = "crates/pajoniiir-ui-model" }
 pajoniiir-waveform = { path = "crates/pajoniiir-waveform" }
