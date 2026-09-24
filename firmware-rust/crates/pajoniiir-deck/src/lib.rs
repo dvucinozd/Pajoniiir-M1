@@ -493,7 +493,6 @@ impl DeckProductState {
         }
     }
 
-
     fn handle_beat_jump(
         &mut self,
         deck: DeckId,
@@ -1136,7 +1135,6 @@ mod tests {
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 0);
     }
 
-
     fn beat_jump_analysis<'a>(beats: &'a [Beat], bpm_x100: u32) -> TrackAnalysis<'a> {
         TrackAnalysis::new(
             AnalysisProvider::RekordboxImport,
@@ -1146,12 +1144,7 @@ mod tests {
         )
     }
 
-    fn beat_jump_pad(
-        deck: DeckId,
-        pad: u8,
-        shifted: bool,
-        pressed: bool,
-    ) -> ControlEvent {
+    fn beat_jump_pad(deck: DeckId, pad: u8, shifted: bool, pressed: bool) -> ControlEvent {
         ControlEvent {
             deck: Some(deck),
             control: SemanticControl::PadAction,

@@ -89,7 +89,6 @@ impl<'a> BeatGrid<'a> {
     }
 }
 
-
 pub fn beat_jump_target_ms(
     position_ms: u32,
     bpm_x100: u32,
@@ -115,8 +114,7 @@ pub fn beat_jump_target_ms(
         }
 
         let forward = beat_numerator > 0;
-        if (forward && closest_index + 1 >= grid.beats().len())
-            || (!forward && closest_index == 0)
+        if (forward && closest_index + 1 >= grid.beats().len()) || (!forward && closest_index == 0)
         {
             return grid.beats()[closest_index].time_ms;
         }
@@ -272,7 +270,6 @@ mod tests {
         assert_eq!(grid.nearest_index(1500), Some(0));
     }
 
-
     #[test]
     fn released_integer_jump_uses_nearest_grid_entry() {
         let beats = [
@@ -372,14 +369,8 @@ mod tests {
         ];
         let grid = BeatGrid::new(&beats);
 
-        assert_eq!(
-            beat_loop_duration_ms(1750, 12_000, 1, 1, Some(grid)),
-            500
-        );
-        assert_eq!(
-            beat_loop_duration_ms(1750, 12_000, 4, 1, Some(grid)),
-            2000
-        );
+        assert_eq!(beat_loop_duration_ms(1750, 12_000, 1, 1, Some(grid)), 500);
+        assert_eq!(beat_loop_duration_ms(1750, 12_000, 4, 1, Some(grid)), 2000);
         assert_eq!(beat_loop_duration_ms(1000, 12_000, 1, 2, None), 250);
         assert_eq!(beat_loop_duration_ms(1000, 12_000, 1, 4, None), 125);
         assert_eq!(beat_loop_duration_ms(1000, 12_000, 1, 32, None), 16);
