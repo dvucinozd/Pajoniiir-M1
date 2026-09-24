@@ -1,0 +1,404 @@
+# Pajoniiir-M1 Rust Architecture
+
+**Status:** architecture baseline v0.1  
+**Date:** 2026-09-24
+
+## 1. Goals
+
+M1 Rust is a clean product implementation for the custom Pajoniiir-M1 hardware while preserving the released Pajoniiir M2.2 feature contract.
+
+The architecture optimizes for:
+
+- deterministic real-time audio;
+- data-driven multi-controller support;
+- host-testable product logic;
+- explicit ownership and bounded queues;
+- a provider-neutral media/analysis model;
+- Slint UI with a dedicated high-throughput waveform renderer;
+- fail-closed storage/update/recovery behavior;
+- minimal, auditable hardware-specific and unsafe code.
+
+## 2. Runtime boundary
+
+The permanent application architecture is native Rust `no_std` on ESP32-P4.
+
+ESP-IDF application runtime, FreeRTOS and `esp-idf-sys` are not architectural dependencies. Compatibility with the Espressif boot/partition/OTA ecosystem may be retained using Rust-native bootloader/partition support where appropriate.
+
+Current starting platform:
+
+```text
+ESP32-P4NRW32X v3.2+
+        |
+    esp-hal 1.2.0
+        |
+   platform / M1 BSP
+        |
+ product-domain crates
+```
+
+Unstable esp-hal APIs are allowed only inside narrow hardware integration crates.
+
+## 3. System ownership
+
+```text
+USB DJ controller      Touch        Web Remote
+      |                  |              |
+      +-------- raw input adapters ------+
+                         |
+                  ControlEvent
+                         |
+                Control Scheduler
+                         |
+               Authoritative State
+             /          |          \
+          Decks        Mixer       System
+             \          |          /
+                  State Diff
+              /        |         \
+       Controller LED  Slint UI   Web state
+```
+
+No UI/controller/network adapter mutates deck internals directly.
+
+## 4. High-level crate map
+
+Planned workspace:
+
+```text
+firmware-rust/
+  apps/
+    m1-firmware/
+    m1-factory/
+    desktop-simulator/
+  crates/
+    pajoniiir-core/
+    pajoniiir-controller-core/
+    pajoniiir-controller-profile/
+    pajoniiir-controller-usb/
+    pajoniiir-controller-audio/
+    pajoniiir-control-scheduler/
+    pajoniiir-deck/
+    pajoniiir-mixer/
+    pajoniiir-audio-core/
+    pajoniiir-audio-codecs/
+    pajoniiir-audio-dsp/
+    pajoniiir-media-block/
+    pajoniiir-media-fs/
+    pajoniiir-media-catalog/
+    pajoniiir-media-identity/
+    pajoniiir-rekordbox/
+    pajoniiir-track-analysis/
+    pajoniiir-apta-adapter/
+    pajoniiir-waveform/
+    pajoniiir-ui-model/
+    pajoniiir-ui-slint/
+    pajoniiir-settings/
+    pajoniiir-networking/
+    pajoniiir-web-api/
+    pajoniiir-ota/
+    pajoniiir-telemetry/
+    pajoniiir-firmware-health/
+    pajoniiir-m1-bsp/
+    pajoniiir-p4-ppa/
+```
+
+The first foundation commit intentionally creates only the host-safe crates needed to establish boundaries. Hardware crates are added after their API contracts are separately reviewed.
+
+## 5. UI architecture
+
+Slint owns layout, text, controls, library/settings views and normal UI state.
+
+The large moving waveforms are rendered by `pajoniiir-waveform`, not by constructing thousands of Slint elements.
+
+```text
+             immutable UI snapshot
+                     |
+                Slint render
+                     |
+                RGB565 frame
+                     |
+           waveform/compositor pass
+          /         |           \
+  waveform spans  beat grid   cue markers
+          \         |           /
+                RGB565 frame
+                     |
+                P4 PPA
+             RGB565 -> RGB888
+                     |
+                 MIPI DSI
+```
+
+On desktop, the PPA/DSI tail is replaced by a simulator presentation path.
+
+Waveform hot paths may write vertical RGB565 spans directly. `embedded-graphics` is preferred for suitable primitives, markers, lines, labels and testable DrawTarget integrations.
+
+Only one runtime context owns Slint. Other workers communicate through bounded messages and immutable snapshots.
+
+## 6. Framebuffer policy
+
+Initial target is full-frame correctness before optimization.
+
+For 800x480:
+
+- RGB565 frame: 768,000 bytes.
+- RGB888 DSI frame: 1,152,000 bytes.
+
+Initial hardware hypothesis:
+
+```text
+RGB565 composition A
+RGB565 composition B
+RGB888 DSI output
+```
+
+This consumes about 2.69 MiB before alignment/metadata and fits within the 32 MiB PSRAM budget, subject to real DMA/cache-coherency qualification.
+
+Dirty rectangles/partial rendering are optimizations after measured full-frame behavior.
+
+## 7. Audio architecture
+
+Audio is split into pure product DSP/state and hardware sinks.
+
+```text
+media source
+   -> decoder
+   -> canonical PCM timeline/cache
+   -> source arbitration (normal / scratch)
+   -> resampler / Master Tempo
+   -> trim
+   -> EQ
+   -> filter / Pad FX / Beat FX
+   -> PFL branch ----------------------> controller cue/UAC
+   -> fader / crossfader
+   -> dual-deck sum
+   -> master volume / trim
+   -> MAIN limiter
+   -> PCM5102A MAIN
+```
+
+The real-time path does not perform filesystem, network, OTA, logging-format, profile parsing or unbounded allocation.
+
+Audio health is observable through counters rather than logs in deadline-critical code.
+
+## 8. Controller architecture
+
+```text
+USB MIDI packets
+      |
+transport parser
+      |
+controller profile runtime (S3CP v2 initially)
+      |
+Semantic ControlEvent
+      |
+scheduler / reconciler
+      |
+authoritative product state
+      |
+Semantic LedState
+      |
+controller profile output mapper
+      |
+USB MIDI OUT
+```
+
+Controller audio is a sibling capability, not a hidden FLX4 special case.
+
+A controller audio capability describes interface/alternate setting, endpoints, sample formats, channel map, sample rates, headphone mapping, sync/feedback mode and quirks.
+
+S3CP v2 remains the R1 control/LED compatibility format. A future schema extension for UAC metadata must be versioned without silently breaking installed profiles.
+
+## 9. Media architecture
+
+```text
+USB HS / microSD / test fixture
+             |
+         BlockDevice
+             |
+          Partition
+             |
+         Filesystem
+             |
+        Media I/O gate
+             |
+   +---------+----------+
+   |                    |
+Library/catalog      Deck source
+   |
+MediaIdentity
+```
+
+All retained references carry a media generation or equivalent validity token so disconnect/reinsert cannot resurrect stale handles.
+
+## 10. TrackAnalysis architecture
+
+Application logic must not depend directly on Rekordbox ANLZ.
+
+```text
+Rekordbox PDB/ANLZ ---\
+                      -> immutable TrackAnalysis -> Deck/UI/Sync/Waveform
+libapta native/cache --/
+```
+
+The analysis model owns BPM/grid/waveform/meter/downbeat/key/confidence/provenance data as applicable. A loaded deck pins an immutable generation.
+
+libapta is integrated only after its upstream embedded/release gates are met; the neutral model is implemented before that dependency.
+
+## 11. Networking
+
+```text
+ESP32-C6
+   |
+SDIO transport
+   |
+ESP-Hosted protocol boundary
+   |
+network stack
+   |
+HTTP/API/Web Remote
+```
+
+Network code emits semantic product commands and consumes snapshots. It cannot directly manipulate deck or audio structures.
+
+## 12. Persistence
+
+Every persistent binary format is explicitly versioned:
+
+```text
+magic
+schema version
+payload length
+payload
+CRC / integrity field
+```
+
+Migrations are explicit. Rust memory layout is never serialized as the storage ABI.
+
+This applies to settings, Hot Cues/loops, media catalog, analysis sidecars, seek indexes and controller profile metadata as applicable.
+
+## 13. OTA / boot health
+
+The intended state machine preserves the released product properties:
+
+```text
+download/upload
+ -> validate container/manifest/signature
+ -> write inactive slot
+ -> activate candidate
+ -> reboot
+ -> critical startup self-tests
+ -> mark READY
+```
+
+Failure before READY leaves rollback possible.
+
+The M2.2 post-OTA reboot panic class must have a regression gate in the M1 test plan.
+
+## 14. Diagnostics
+
+Producers emit bounded fixed-size events/counters. Formatting/storage occurs outside the real-time path.
+
+M1 health includes:
+
+- reset/boot reason;
+- running image / rollback status;
+- USB0/USB1 power/fault/recovery;
+- controller MIDI/UAC health;
+- PCM/audio timing;
+- internal RAM/PSRAM reserves;
+- media generation/errors;
+- C6/network state;
+- INA238 system voltage/current when fitted/enabled;
+- UI frame/render health;
+- OTA state.
+
+## 15. Multicore starting hypothesis
+
+Until measured on hardware:
+
+**Core 0 / real-time bias**
+- controller UAC deadlines;
+- decode deadline work;
+- canonical PCM/timeline;
+- resampler/Master Tempo;
+- DSP/mixer;
+- PCM5102A sink.
+
+**Core 1 / system bias**
+- USB MIDI/control;
+- USB MSC/library;
+- storage background work;
+- analysis;
+- Slint/waveform/PPA coordination;
+- C6/network/Web;
+- OTA and service work.
+
+This is a hypothesis, not a frozen scheduling contract. Hardware profiling may move tasks, but the real-time/non-real-time boundary remains.
+
+## 16. Memory policy
+
+Internal SRAM is preferred for latency-critical descriptors, small queues and DMA/USB/audio structures that require it.
+
+PSRAM is preferred for large retained data:
+
+- UI framebuffers/assets;
+- waveforms;
+- library metadata;
+- analysis/cache objects;
+- bounded PCM blocks only after DMA/cache behavior is proven safe.
+
+No subsystem may assume PSRAM is DMA-safe without an explicit hardware/platform proof.
+
+## 17. Unsafe policy
+
+Application/domain crates use `#![forbid(unsafe_code)]` where practical.
+
+Unsafe code is restricted to audited boundary crates such as:
+
+- low-level P4 PPA/PAC access;
+- DMA/cache wrappers when required;
+- tightly scoped external-library FFI if retained.
+
+An unsafe boundary must document the invariant it upholds.
+
+## 18. Testing strategy
+
+Host tests are the primary development engine before hardware exists.
+
+Required test families:
+
+- controller profile golden/parity;
+- reconnect/replay/state reconciliation;
+- deck/Hot Cue/loop/Beat Jump/Sync;
+- PDB/ANLZ fixtures;
+- media identity properties;
+- WAV/MP3/FLAC format/error fixtures;
+- DSP deterministic PCM fixtures;
+- waveform golden images;
+- settings/persistence corruption/migration;
+- OTA manifest/signature/failure matrix;
+- Web API contract;
+- storage/partition/filesystem fault injection.
+
+Fuzz targets are planned for PDB, ANLZ, WAV/FLAC metadata, partition tables, controller profiles, OTA manifests and HTTP/parser boundaries.
+
+## 19. Hardware gate boundary
+
+The following cannot be considered closed without physical M1/P4 hardware:
+
+- PSRAM/cache/DMA placement assumptions;
+- PPA throughput and coherency;
+- MIPI DSI timings/scanout;
+- touch electrical/runtime behavior;
+- PCM5102A clocks/output;
+- USB0 HS MSC sustained throughput/hotplug;
+- USB1 MIDI;
+- USB1 isochronous UAC and feedback/drift behavior;
+- C6 SDIO/ESP-Hosted;
+- VBUS power/fault recovery;
+- INA238 measurements;
+- dual-core deadline behavior;
+- thermal/load/soak tests.
+
+Host success is necessary but not a substitute for these gates.

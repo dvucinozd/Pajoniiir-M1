@@ -1,0 +1,217 @@
+export component MainWindow inherits Window {
+    width: 800px;
+    height: 480px;
+    title: "Pajoniiir M1 Rust Simulator";
+    background: #0d1016;
+
+    Rectangle {
+        x: 0px;
+        y: 0px;
+        width: parent.width;
+        height: 52px;
+        background: #151b24;
+
+        Text {
+            x: 16px;
+            y: 10px;
+            text: "PAJONIIIR M1 / RUST";
+            color: #f3f6fa;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        Text {
+            x: 610px;
+            y: 15px;
+            text: "HOST SIMULATOR";
+            color: #8797aa;
+            font-size: 14px;
+        }
+    }
+
+    Rectangle {
+        x: 16px;
+        y: 68px;
+        width: 372px;
+        height: 286px;
+        background: #121822;
+        border-radius: 8px;
+
+        Text {
+            x: 14px;
+            y: 10px;
+            text: "DECK 1";
+            color: #7fd5ff;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        Text {
+            x: 264px;
+            y: 10px;
+            text: "128.00 BPM";
+            color: #f3f6fa;
+            font-size: 17px;
+        }
+
+        Rectangle {
+            x: 14px;
+            y: 52px;
+            width: 344px;
+            height: 124px;
+            background: #090d12;
+            border-radius: 4px;
+
+            Text {
+                x: 104px;
+                y: 50px;
+                text: "WAVEFORM D1";
+                color: #526276;
+                font-size: 16px;
+            }
+        }
+
+        Text {
+            x: 14px;
+            y: 194px;
+            text: "00:00.000";
+            color: #f3f6fa;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        Text {
+            x: 228px;
+            y: 202px;
+            text: "SYNC OFF   MT ON";
+            color: #8797aa;
+            font-size: 13px;
+        }
+    }
+
+    Rectangle {
+        x: 412px;
+        y: 68px;
+        width: 372px;
+        height: 286px;
+        background: #121822;
+        border-radius: 8px;
+
+        Text {
+            x: 14px;
+            y: 10px;
+            text: "DECK 2";
+            color: #ffab7f;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        Text {
+            x: 264px;
+            y: 10px;
+            text: "124.00 BPM";
+            color: #f3f6fa;
+            font-size: 17px;
+        }
+
+        Rectangle {
+            x: 14px;
+            y: 52px;
+            width: 344px;
+            height: 124px;
+            background: #090d12;
+            border-radius: 4px;
+
+            Text {
+                x: 104px;
+                y: 50px;
+                text: "WAVEFORM D2";
+                color: #526276;
+                font-size: 16px;
+            }
+        }
+
+        Text {
+            x: 14px;
+            y: 194px;
+            text: "00:00.000";
+            color: #f3f6fa;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        Text {
+            x: 228px;
+            y: 202px;
+            text: "SYNC OFF   MT ON";
+            color: #8797aa;
+            font-size: 13px;
+        }
+    }
+
+    Rectangle {
+        x: 16px;
+        y: 370px;
+        width: 768px;
+        height: 94px;
+        background: #151b24;
+        border-radius: 8px;
+
+        Text {
+            x: 18px;
+            y: 12px;
+            text: "OVERVIEW";
+            color: #f3f6fa;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        Text {
+            x: 156px;
+            y: 12px;
+            text: "LIBRARY";
+            color: #8797aa;
+            font-size: 15px;
+        }
+
+        Text {
+            x: 282px;
+            y: 12px;
+            text: "HOT CUES";
+            color: #8797aa;
+            font-size: 15px;
+        }
+
+        Text {
+            x: 422px;
+            y: 12px;
+            text: "SETTINGS";
+            color: #8797aa;
+            font-size: 15px;
+        }
+
+        Text {
+            x: 600px;
+            y: 12px;
+            text: "M1 HOST VERIFIED";
+            color: #66d49f;
+            font-size: 13px;
+        }
+
+        Rectangle {
+            x: 18px;
+            y: 52px;
+            width: 732px;
+            height: 2px;
+            background: #253140;
+        }
+
+        Text {
+            x: 18px;
+            y: 62px;
+            text: "UI foundation: Slint 1.18.1 / waveform compositor boundary reserved";
+            color: #718196;
+            font-size: 12px;
+        }
+    }
+}
