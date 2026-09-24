@@ -2011,7 +2011,10 @@ mod tests {
             fx.process_pcm_frame(PcmFrame::default());
         }
 
-        fx.set(PadFxConfig { active: false, ..cfg });
+        fx.set(PadFxConfig {
+            active: false,
+            ..cfg
+        });
         assert!(!fx.is_active());
         assert!(fx.echo_tail_active());
 
