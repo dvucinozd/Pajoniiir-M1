@@ -177,9 +177,7 @@ impl KeylockState {
         let mut reference_count = 0usize;
         for i in (0..64u32).step_by(REFERENCE_STRIDE as usize) {
             let offset = i as f32 * self.rate_ratio;
-            let Some(frame) =
-                read_fractional(read, self.origin_seq, reference + offset)
-            else {
+            let Some(frame) = read_fractional(read, self.origin_seq, reference + offset) else {
                 return nominal;
             };
             reference_frames[reference_count] = frame;
@@ -188,10 +186,8 @@ impl KeylockState {
 
         let first = (nominal - radius as f32).max(0.0);
         let first_frame = first as u32;
-        let end_frame =
-            (nominal + radius as f32 + 60.0 * self.rate_ratio) as u32 + 2;
-        let count = (end_frame - first_frame)
-            .min(KEYLOCK_SEARCH_CACHE_FRAMES as u32) as usize;
+        let end_frame = (nominal + radius as f32 + 60.0 * self.rate_ratio) as u32 + 2;
+        let count = (end_frame - first_frame).min(KEYLOCK_SEARCH_CACHE_FRAMES as u32) as usize;
         self.search_valid[..count].fill(0);
         let cache_first = self.origin_seq + first_frame as u64;
 
@@ -263,9 +259,7 @@ impl KeylockState {
         let mut error = 0u32;
         self.last_search_candidates = self.last_search_candidates.saturating_add(1);
 
-        for (sample, reference_frame) in
-            reference_frames.iter().take(reference_count).enumerate()
-        {
+        for (sample, reference_frame) in reference_frames.iter().take(reference_count).enumerate() {
             let offset = (sample as u32 * REFERENCE_STRIDE) as f32 * self.rate_ratio;
             let origin = self.origin_seq;
             let mut cached = |seq| self.read_cached(read, cache_first, cache_count, seq);
@@ -381,8 +375,7 @@ mod tests {
     fn sine_fixture() -> [PcmFrame; SOURCE_FRAMES] {
         let mut source = [PcmFrame { left: 0, right: 0 }; SOURCE_FRAMES];
         for (i, frame) in source.iter_mut().enumerate() {
-            let phase = 2.0 * core::f32::consts::PI * 1_000.0 * i as f32
-                / SAMPLE_RATE as f32;
+            let phase = 2.0 * core::f32::consts::PI * 1_000.0 * i as f32 / SAMPLE_RATE as f32;
             let value = (libm::sinf(phase) * 12_000.0) as i16;
             *frame = PcmFrame {
                 left: value,
@@ -473,10 +466,10 @@ mod tests {
         for (i, frame) in frames.iter_mut().enumerate() {
             let phase = 2.0 * core::f32::consts::PI * i as f32 / FIXTURE as f32;
             *frame = PcmFrame {
-                left: (10_000.0 * libm::sinf(phase * 71.0)
-                    + 4_000.0 * libm::sinf(phase * 179.0)) as i16,
-                right: (9_000.0 * libm::sinf(phase * 83.0)
-                    + 3_000.0 * libm::cosf(phase * 197.0)) as i16,
+                left: (10_000.0 * libm::sinf(phase * 71.0) + 4_000.0 * libm::sinf(phase * 179.0))
+                    as i16,
+                right: (9_000.0 * libm::sinf(phase * 83.0) + 3_000.0 * libm::cosf(phase * 197.0))
+                    as i16,
             };
         }
 
