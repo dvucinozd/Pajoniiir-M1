@@ -2760,8 +2760,7 @@ mod tests {
     fn pad_fx2_routes_by_mode_even_when_shifted_flag_is_set() {
         let mut state = DeckProductState::new();
 
-        let effects =
-            state.handle_control(pad_fx_pad(DeckId::Two, PadMode::PadFx2, 3, true, true));
+        let effects = state.handle_control(pad_fx_pad(DeckId::Two, PadMode::PadFx2, 3, true, true));
         assert_eq!(
             effects.items[0],
             Some(DeckEffect::ApplyPadFx {

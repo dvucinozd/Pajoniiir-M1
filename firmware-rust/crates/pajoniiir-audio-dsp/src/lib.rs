@@ -806,15 +806,69 @@ struct PadFxPreset {
 
 const fn pad_fx_preset(mode: PadFxMode, pad: u8) -> PadFxPreset {
     match (mode, pad) {
-        (PadFxMode::PadFx2, 0) => PadFxPreset { kind: PadFxKind::Filter, filter_raw: 2_300, echo_delay_ms: 0, echo_wet_q15: 0, echo_feedback_q15: 0 },
-        (PadFxMode::PadFx2, 1) => PadFxPreset { kind: PadFxKind::Filter, filter_raw: 14_000, echo_delay_ms: 0, echo_wet_q15: 0, echo_feedback_q15: 0 },
-        (PadFxMode::PadFx2, 2) => PadFxPreset { kind: PadFxKind::Echo, filter_raw: FILTER_RAW_CENTER, echo_delay_ms: 125, echo_wet_q15: 9_830, echo_feedback_q15: 9_830 },
-        (PadFxMode::PadFx2, 3) => PadFxPreset { kind: PadFxKind::Echo, filter_raw: FILTER_RAW_CENTER, echo_delay_ms: 1_000, echo_wet_q15: 9_830, echo_feedback_q15: 13_107 },
-        (PadFxMode::PadFx1, 0) => PadFxPreset { kind: PadFxKind::Filter, filter_raw: 3_600, echo_delay_ms: 0, echo_wet_q15: 0, echo_feedback_q15: 0 },
-        (PadFxMode::PadFx1, 1) => PadFxPreset { kind: PadFxKind::Filter, filter_raw: 12_700, echo_delay_ms: 0, echo_wet_q15: 0, echo_feedback_q15: 0 },
-        (PadFxMode::PadFx1, 2) => PadFxPreset { kind: PadFxKind::Echo, filter_raw: FILTER_RAW_CENTER, echo_delay_ms: 250, echo_wet_q15: 8_192, echo_feedback_q15: 9_830 },
-        (PadFxMode::PadFx1, 3) => PadFxPreset { kind: PadFxKind::Echo, filter_raw: FILTER_RAW_CENTER, echo_delay_ms: 500, echo_wet_q15: 8_192, echo_feedback_q15: 11_469 },
-        _ => PadFxPreset { kind: PadFxKind::None, filter_raw: FILTER_RAW_CENTER, echo_delay_ms: 0, echo_wet_q15: 0, echo_feedback_q15: 0 },
+        (PadFxMode::PadFx2, 0) => PadFxPreset {
+            kind: PadFxKind::Filter,
+            filter_raw: 2_300,
+            echo_delay_ms: 0,
+            echo_wet_q15: 0,
+            echo_feedback_q15: 0,
+        },
+        (PadFxMode::PadFx2, 1) => PadFxPreset {
+            kind: PadFxKind::Filter,
+            filter_raw: 14_000,
+            echo_delay_ms: 0,
+            echo_wet_q15: 0,
+            echo_feedback_q15: 0,
+        },
+        (PadFxMode::PadFx2, 2) => PadFxPreset {
+            kind: PadFxKind::Echo,
+            filter_raw: FILTER_RAW_CENTER,
+            echo_delay_ms: 125,
+            echo_wet_q15: 9_830,
+            echo_feedback_q15: 9_830,
+        },
+        (PadFxMode::PadFx2, 3) => PadFxPreset {
+            kind: PadFxKind::Echo,
+            filter_raw: FILTER_RAW_CENTER,
+            echo_delay_ms: 1_000,
+            echo_wet_q15: 9_830,
+            echo_feedback_q15: 13_107,
+        },
+        (PadFxMode::PadFx1, 0) => PadFxPreset {
+            kind: PadFxKind::Filter,
+            filter_raw: 3_600,
+            echo_delay_ms: 0,
+            echo_wet_q15: 0,
+            echo_feedback_q15: 0,
+        },
+        (PadFxMode::PadFx1, 1) => PadFxPreset {
+            kind: PadFxKind::Filter,
+            filter_raw: 12_700,
+            echo_delay_ms: 0,
+            echo_wet_q15: 0,
+            echo_feedback_q15: 0,
+        },
+        (PadFxMode::PadFx1, 2) => PadFxPreset {
+            kind: PadFxKind::Echo,
+            filter_raw: FILTER_RAW_CENTER,
+            echo_delay_ms: 250,
+            echo_wet_q15: 8_192,
+            echo_feedback_q15: 9_830,
+        },
+        (PadFxMode::PadFx1, 3) => PadFxPreset {
+            kind: PadFxKind::Echo,
+            filter_raw: FILTER_RAW_CENTER,
+            echo_delay_ms: 500,
+            echo_wet_q15: 8_192,
+            echo_feedback_q15: 11_469,
+        },
+        _ => PadFxPreset {
+            kind: PadFxKind::None,
+            filter_raw: FILTER_RAW_CENTER,
+            echo_delay_ms: 0,
+            echo_wet_q15: 0,
+            echo_feedback_q15: 0,
+        },
     }
 }
 
@@ -831,7 +885,11 @@ pub struct PadFx<'a> {
 
 impl<'a> PadFx<'a> {
     pub fn new(sample_rate_hz: u32, echo_left: &'a mut [f32], echo_right: &'a mut [f32]) -> Self {
-        let sample_rate = if sample_rate_hz == 0 { 44_100 } else { sample_rate_hz };
+        let sample_rate = if sample_rate_hz == 0 {
+            44_100
+        } else {
+            sample_rate_hz
+        };
         Self {
             filter: FilterState::new(sample_rate),
             echo: DelayFx::new(echo_left, echo_right, sample_rate),
@@ -899,10 +957,18 @@ impl<'a> PadFx<'a> {
         }
     }
 
-    pub const fn is_active(&self) -> bool { self.active }
-    pub const fn kind(&self) -> PadFxKind { self.kind }
-    pub const fn config(&self) -> PadFxConfig { self.config }
-    pub const fn echo_tail_active(&self) -> bool { self.echo_tail_active }
+    pub const fn is_active(&self) -> bool {
+        self.active
+    }
+    pub const fn kind(&self) -> PadFxKind {
+        self.kind
+    }
+    pub const fn config(&self) -> PadFxConfig {
+        self.config
+    }
+    pub const fn echo_tail_active(&self) -> bool {
+        self.echo_tail_active
+    }
 
     pub fn process_frame(&mut self, input: DspFrame) -> DspFrame {
         if self.active && self.kind == PadFxKind::Filter {
@@ -1800,7 +1866,10 @@ mod tests {
         let mut left = [];
         let mut right = [];
         let mut fx = PadFx::new(44_100, &mut left, &mut right);
-        let input = PcmFrame { left: 1_200, right: -1_200 };
+        let input = PcmFrame {
+            left: 1_200,
+            right: -1_200,
+        };
         assert_eq!(fx.process_pcm_frame(input), input);
         assert!(!fx.is_active());
         assert_eq!(fx.kind(), PadFxKind::None);
@@ -1821,10 +1890,42 @@ mod tests {
         assert_eq!((p11.kind, p11.filter_raw), (PadFxKind::Filter, 12_700));
         assert_eq!((p20.kind, p20.filter_raw), (PadFxKind::Filter, 2_300));
         assert_eq!((p21.kind, p21.filter_raw), (PadFxKind::Filter, 14_000));
-        assert_eq!((p12.kind, p12.echo_delay_ms, p12.echo_wet_q15, p12.echo_feedback_q15), (PadFxKind::Echo, 250, 8_192, 9_830));
-        assert_eq!((p13.kind, p13.echo_delay_ms, p13.echo_wet_q15, p13.echo_feedback_q15), (PadFxKind::Echo, 500, 8_192, 11_469));
-        assert_eq!((p22.kind, p22.echo_delay_ms, p22.echo_wet_q15, p22.echo_feedback_q15), (PadFxKind::Echo, 125, 9_830, 9_830));
-        assert_eq!((p23.kind, p23.echo_delay_ms, p23.echo_wet_q15, p23.echo_feedback_q15), (PadFxKind::Echo, 1_000, 9_830, 13_107));
+        assert_eq!(
+            (
+                p12.kind,
+                p12.echo_delay_ms,
+                p12.echo_wet_q15,
+                p12.echo_feedback_q15
+            ),
+            (PadFxKind::Echo, 250, 8_192, 9_830)
+        );
+        assert_eq!(
+            (
+                p13.kind,
+                p13.echo_delay_ms,
+                p13.echo_wet_q15,
+                p13.echo_feedback_q15
+            ),
+            (PadFxKind::Echo, 500, 8_192, 11_469)
+        );
+        assert_eq!(
+            (
+                p22.kind,
+                p22.echo_delay_ms,
+                p22.echo_wet_q15,
+                p22.echo_feedback_q15
+            ),
+            (PadFxKind::Echo, 125, 9_830, 9_830)
+        );
+        assert_eq!(
+            (
+                p23.kind,
+                p23.echo_delay_ms,
+                p23.echo_wet_q15,
+                p23.echo_feedback_q15
+            ),
+            (PadFxKind::Echo, 1_000, 9_830, 13_107)
+        );
     }
 
     #[test]
@@ -1832,16 +1933,26 @@ mod tests {
         let mut left = [];
         let mut right = [];
         let mut fx = PadFx::new(44_100, &mut left, &mut right);
-        let cfg = PadFxConfig { mode: PadFxMode::PadFx1, pad: 0, active: true };
+        let cfg = PadFxConfig {
+            mode: PadFxMode::PadFx1,
+            pad: 0,
+            active: true,
+        };
         fx.set(cfg);
 
-        let input = PcmFrame { left: 16_000, right: -16_000 };
+        let input = PcmFrame {
+            left: 16_000,
+            right: -16_000,
+        };
         let out = fx.process_pcm_frame(input);
         assert!(fx.is_active());
         assert_eq!(fx.kind(), PadFxKind::Filter);
         assert!(out.left != input.left || out.right != input.right);
 
-        fx.set(PadFxConfig { active: false, ..cfg });
+        fx.set(PadFxConfig {
+            active: false,
+            ..cfg
+        });
         assert!(!fx.is_active());
         assert_eq!(fx.kind(), PadFxKind::None);
     }
@@ -1851,9 +1962,17 @@ mod tests {
         let mut left = [];
         let mut right = [];
         let mut fx = PadFx::new(44_100, &mut left, &mut right);
-        let cfg = PadFxConfig { mode: PadFxMode::PadFx2, pad: 0, active: true };
+        let cfg = PadFxConfig {
+            mode: PadFxMode::PadFx2,
+            pad: 0,
+            active: true,
+        };
         fx.set(cfg);
-        fx.set(PadFxConfig { mode: PadFxMode::PadFx2, pad: 1, active: false });
+        fx.set(PadFxConfig {
+            mode: PadFxMode::PadFx2,
+            pad: 1,
+            active: false,
+        });
         assert!(fx.is_active());
         assert_eq!(fx.config(), cfg);
     }
@@ -1863,7 +1982,11 @@ mod tests {
         let mut left = [0.0; 1_100];
         let mut right = [0.0; 1_100];
         let mut fx = PadFx::new(1_000, &mut left, &mut right);
-        fx.set(PadFxConfig { mode: PadFxMode::PadFx1, pad: 7, active: true });
+        fx.set(PadFxConfig {
+            mode: PadFxMode::PadFx1,
+            pad: 7,
+            active: true,
+        });
         assert!(!fx.is_active());
         assert_eq!(fx.kind(), PadFxKind::None);
     }
@@ -1873,10 +1996,17 @@ mod tests {
         let mut left = [0.0; 1_100];
         let mut right = [0.0; 1_100];
         let mut fx = PadFx::new(1_000, &mut left, &mut right);
-        let cfg = PadFxConfig { mode: PadFxMode::PadFx2, pad: 2, active: true };
+        let cfg = PadFxConfig {
+            mode: PadFxMode::PadFx2,
+            pad: 2,
+            active: true,
+        };
         fx.set(cfg);
 
-        fx.process_pcm_frame(PcmFrame { left: 12_000, right: -12_000 });
+        fx.process_pcm_frame(PcmFrame {
+            left: 12_000,
+            right: -12_000,
+        });
         for _ in 0..8 {
             fx.process_pcm_frame(PcmFrame::default());
         }
