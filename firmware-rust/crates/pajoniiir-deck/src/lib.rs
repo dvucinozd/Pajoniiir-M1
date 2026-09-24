@@ -2,7 +2,7 @@
 #![forbid(unsafe_code)]
 
 use pajoniiir_controller_core::{
-    ControlEvent, ControlValue, DeckExtAction, DeckId, PadMode, SemanticControl,
+    BeatFxTarget, ControlEvent, ControlValue, DeckExtAction, DeckId, PadMode, SemanticControl,
 };
 use pajoniiir_core::MediaTrackId;
 use pajoniiir_hot_cues::HotCueBank;
@@ -14,6 +14,51 @@ pub const PITCH_CENTER: u16 = 8192;
 pub const PITCH_MAX: u16 = 16383;
 pub const DEFAULT_TEMPO_RANGE_PERCENT: u16 = 10;
 pub const BEAT_SYNC_MAX_PERCENT: i16 = 20;
+
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum BeatFxEffect {
+    Filter,
+    Echo,
+    Flanger,
+    Delay,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd)]
+pub enum BeatFxBeat {
+    Quarter,
+    Half,
+    One,
+    Two,
+    Four,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct BeatFxState {
+    pub effect: BeatFxEffect,
+    pub beat: BeatFxBeat,
+    pub target: BeatFxTarget,
+    pub depth: u8,
+    pub enabled: bool,
+}
+
+impl BeatFxState {
+    pub const fn new() -> Self {
+        Self {
+            effect: BeatFxEffect::Filter,
+            beat: BeatFxBeat::One,
+            target: BeatFxTarget::Both,
+            depth: 64,
+            enabled: false,
+        }
+    }
+}
+
+impl Default for BeatFxState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum PerformanceMode {
@@ -232,6 +277,11 @@ pub enum DeckEffect {
         deck: DeckId,
         bank: HotCueBank,
     },
+    ApplyBeatFx {
+        state: BeatFxState,
+        delay_ms: u32,
+        flanger_period_ms: u32,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -263,6 +313,7 @@ pub struct DeckProductState {
     beat_jump_page: BeatJumpPage,
     shifted_loop_roll: [ShiftedLoopRoll; 2],
     hot_cues: [Option<HotCueBank>; 2],
+    beat_fx: BeatFxState,
 }
 
 impl Default for DeckProductState {
@@ -279,6 +330,7 @@ impl DeckProductState {
             beat_jump_page: BeatJumpPage::Default,
             shifted_loop_roll: [ShiftedLoopRoll::new(), ShiftedLoopRoll::new()],
             hot_cues: [None, None],
+            beat_fx: BeatFxState::new(),
         }
     }
 
@@ -288,6 +340,10 @@ impl DeckProductState {
 
     pub const fn beat_jump_page(&self) -> BeatJumpPage {
         self.beat_jump_page
+    }
+
+    pub const fn beat_fx(&self) -> BeatFxState {
+        self.beat_fx
     }
 
     pub fn load_hot_cues(
@@ -340,6 +396,10 @@ impl DeckProductState {
         event: ControlEvent,
         analysis: [Option<TrackAnalysis<'_>>; 2],
     ) -> DeckEffects {
+        if is_beat_fx_control(event.control) {
+            return self.handle_beat_fx_control(event);
+        }
+
         let Some(deck) = event.deck else {
             return DeckEffects::NONE;
         };
@@ -420,6 +480,73 @@ impl DeckProductState {
             SemanticControl::DeckExtAction => self.handle_deck_ext_action(deck, event.value),
             _ => DeckEffects::NONE,
         }
+    }
+
+
+    fn handle_beat_fx_control(&mut self, event: ControlEvent) -> DeckEffects {
+        let changed = match event.control {
+            SemanticControl::BeatFxSelectNext if event.value == ControlValue::Pressed(true) => {
+                self.beat_fx.effect = next_beat_fx_effect(self.beat_fx.effect);
+                true
+            }
+            SemanticControl::BeatFxSelectPrev if event.value == ControlValue::Pressed(true) => {
+                self.beat_fx.effect = previous_beat_fx_effect(self.beat_fx.effect);
+                true
+            }
+            SemanticControl::BeatFxBeatDec if event.value == ControlValue::Pressed(true) => {
+                let next = beat_fx_step(self.beat_fx.beat, -1);
+                update_value(&mut self.beat_fx.beat, next)
+            }
+            SemanticControl::BeatFxBeatInc if event.value == ControlValue::Pressed(true) => {
+                let next = beat_fx_step(self.beat_fx.beat, 1);
+                update_value(&mut self.beat_fx.beat, next)
+            }
+            SemanticControl::BeatFxBeatDecShift if event.value == ControlValue::Pressed(true) => {
+                let next = beat_fx_step(self.beat_fx.beat, -2);
+                update_value(&mut self.beat_fx.beat, next)
+            }
+            SemanticControl::BeatFxBeatIncShift if event.value == ControlValue::Pressed(true) => {
+                let next = beat_fx_step(self.beat_fx.beat, 2);
+                update_value(&mut self.beat_fx.beat, next)
+            }
+            SemanticControl::BeatFxTarget => {
+                let ControlValue::BeatFxTarget(target) = event.value else {
+                    return DeckEffects::NONE;
+                };
+                self.beat_fx.target = target;
+                true
+            }
+            SemanticControl::BeatFxDepth => {
+                let Some(depth) = normalize_beat_fx_depth(event.value) else {
+                    return DeckEffects::NONE;
+                };
+                self.beat_fx.depth = depth;
+                true
+            }
+            SemanticControl::BeatFxOn if event.value == ControlValue::Pressed(true) => {
+                self.beat_fx.enabled = !self.beat_fx.enabled;
+                true
+            }
+            SemanticControl::BeatFxClear if event.value == ControlValue::Pressed(true) => {
+                self.beat_fx = BeatFxState::new();
+                true
+            }
+            _ => false,
+        };
+
+        if changed {
+            self.beat_fx_effect()
+        } else {
+            DeckEffects::NONE
+        }
+    }
+
+    fn beat_fx_effect(&self) -> DeckEffects {
+        DeckEffects::one(DeckEffect::ApplyBeatFx {
+            state: self.beat_fx,
+            delay_ms: beat_fx_delay_ms(self.beat_fx, &self.decks),
+            flanger_period_ms: beat_fx_flanger_period_ms(self.beat_fx, &self.decks),
+        })
     }
 
     pub fn resolve_playback_request(
@@ -1134,6 +1261,119 @@ fn resize_loop_region(region: LoopRegion, double: bool) -> Option<LoopRegion> {
     LoopRegion::new(region.start_ms, end_ms)
 }
 
+
+fn is_beat_fx_control(control: SemanticControl) -> bool {
+    matches!(
+        control,
+        SemanticControl::BeatFxSelectNext
+            | SemanticControl::BeatFxSelectPrev
+            | SemanticControl::BeatFxBeatDec
+            | SemanticControl::BeatFxBeatInc
+            | SemanticControl::BeatFxTarget
+            | SemanticControl::BeatFxDepth
+            | SemanticControl::BeatFxOn
+            | SemanticControl::BeatFxClear
+            | SemanticControl::BeatFxBeatDecShift
+            | SemanticControl::BeatFxBeatIncShift
+    )
+}
+
+fn next_beat_fx_effect(effect: BeatFxEffect) -> BeatFxEffect {
+    match effect {
+        BeatFxEffect::Filter => BeatFxEffect::Echo,
+        BeatFxEffect::Echo => BeatFxEffect::Flanger,
+        BeatFxEffect::Flanger => BeatFxEffect::Delay,
+        BeatFxEffect::Delay => BeatFxEffect::Filter,
+    }
+}
+
+fn previous_beat_fx_effect(effect: BeatFxEffect) -> BeatFxEffect {
+    match effect {
+        BeatFxEffect::Filter => BeatFxEffect::Delay,
+        BeatFxEffect::Delay => BeatFxEffect::Flanger,
+        BeatFxEffect::Flanger => BeatFxEffect::Echo,
+        BeatFxEffect::Echo => BeatFxEffect::Filter,
+    }
+}
+
+fn beat_fx_step(beat: BeatFxBeat, delta: i8) -> BeatFxBeat {
+    let index = match beat {
+        BeatFxBeat::Quarter => 0i8,
+        BeatFxBeat::Half => 1,
+        BeatFxBeat::One => 2,
+        BeatFxBeat::Two => 3,
+        BeatFxBeat::Four => 4,
+    };
+    match (index + delta).clamp(0, 4) {
+        0 => BeatFxBeat::Quarter,
+        1 => BeatFxBeat::Half,
+        2 => BeatFxBeat::One,
+        3 => BeatFxBeat::Two,
+        _ => BeatFxBeat::Four,
+    }
+}
+
+fn beat_fx_ratio(beat: BeatFxBeat) -> (u32, u32) {
+    match beat {
+        BeatFxBeat::Quarter => (1, 4),
+        BeatFxBeat::Half => (1, 2),
+        BeatFxBeat::One => (1, 1),
+        BeatFxBeat::Two => (2, 1),
+        BeatFxBeat::Four => (4, 1),
+    }
+}
+
+fn beat_fx_target_bpm_x100(state: BeatFxState, decks: &[DeckState; 2]) -> u32 {
+    let deck = match state.target {
+        BeatFxTarget::ChannelTwo => decks[1],
+        BeatFxTarget::ChannelOne | BeatFxTarget::Both => decks[0],
+    };
+    let factor = 10_000i64 + deck.pitch_centipercent as i64;
+    let effective = ((deck.base_bpm_x100 as i64 * factor) + 5_000) / 10_000;
+    if !(4_000..=30_000).contains(&effective) {
+        12_000
+    } else {
+        effective as u32
+    }
+}
+
+fn beat_fx_unclamped_time_ms(state: BeatFxState, decks: &[DeckState; 2]) -> u32 {
+    let (numerator, denominator) = beat_fx_ratio(state.beat);
+    let bpm_x100 = beat_fx_target_bpm_x100(state, decks) as u64;
+    let divisor = bpm_x100 * denominator as u64;
+    let scaled = 6_000_000u64 * numerator as u64;
+    ((scaled + divisor / 2) / divisor).max(1).min(u32::MAX as u64) as u32
+}
+
+fn beat_fx_delay_ms(state: BeatFxState, decks: &[DeckState; 2]) -> u32 {
+    beat_fx_unclamped_time_ms(state, decks).min(1_000)
+}
+
+fn beat_fx_flanger_period_ms(state: BeatFxState, decks: &[DeckState; 2]) -> u32 {
+    beat_fx_unclamped_time_ms(state, decks).clamp(100, 8_000)
+}
+
+fn normalize_beat_fx_depth(value: ControlValue) -> Option<u8> {
+    let ControlValue::Absolute { value, max } = value else {
+        return None;
+    };
+    if max == 0 {
+        return None;
+    }
+    let bounded = value.min(max) as u32;
+    let scaled = (bounded * 127 + max as u32 / 2) / max as u32;
+    Some(scaled.min(127) as u8)
+}
+
+fn update_value<T: Copy + PartialEq>(target: &mut T, next: T) -> bool {
+    if *target == next {
+        false
+    } else {
+        *target = next;
+        true
+    }
+}
+
 pub const fn tempo_centipercent_from_raw(raw: u16, range_percent: u16) -> i16 {
     let raw = if raw > PITCH_MAX { PITCH_MAX } else { raw } as i32;
     let centi_range = range_percent as i32 * 100;
@@ -1198,9 +1438,47 @@ const fn other_deck(deck: DeckId) -> DeckId {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use pajoniiir_controller_core::{DeckExtActionValue, PadAction, SemanticControl};
+    use pajoniiir_controller_core::{
+        BeatFxTarget, DeckExtActionValue, PadAction, SemanticControl,
+    };
     use pajoniiir_hot_cues::HotCueSlot;
     use pajoniiir_track_analysis::{AnalysisProvider, Beat, BeatGrid};
+
+
+    fn system_pressed(control: SemanticControl, down: bool) -> ControlEvent {
+        ControlEvent {
+            deck: None,
+            control,
+            value: ControlValue::Pressed(down),
+        }
+    }
+
+    fn beat_fx_depth(value: u16, max: u16) -> ControlEvent {
+        ControlEvent {
+            deck: None,
+            control: SemanticControl::BeatFxDepth,
+            value: ControlValue::Absolute { value, max },
+        }
+    }
+
+    fn beat_fx_target(target: BeatFxTarget) -> ControlEvent {
+        ControlEvent {
+            deck: None,
+            control: SemanticControl::BeatFxTarget,
+            value: ControlValue::BeatFxTarget(target),
+        }
+    }
+
+    fn beat_fx_command(effects: DeckEffects) -> (BeatFxState, u32, u32) {
+        match effects.items[0].unwrap() {
+            DeckEffect::ApplyBeatFx {
+                state,
+                delay_ms,
+                flanger_period_ms,
+            } => (state, delay_ms, flanger_period_ms),
+            other => panic!("expected Beat FX command, got {other:?}"),
+        }
+    }
 
     fn pressed(deck: DeckId, control: SemanticControl, value: bool) -> ControlEvent {
         ControlEvent {
@@ -1250,6 +1528,148 @@ mod tests {
             } => (deck, playing, request_id),
             other => panic!("expected playback request, got {other:?}"),
         }
+    }
+
+
+    #[test]
+    fn beat_fx_defaults_match_released_product_state() {
+        let state = DeckProductState::new();
+        assert_eq!(
+            state.beat_fx(),
+            BeatFxState {
+                effect: BeatFxEffect::Filter,
+                beat: BeatFxBeat::One,
+                target: BeatFxTarget::Both,
+                depth: 64,
+                enabled: false,
+            }
+        );
+    }
+
+    #[test]
+    fn beat_fx_effect_selector_cycles_without_none() {
+        let mut state = DeckProductState::new();
+
+        state.handle_control(system_pressed(SemanticControl::BeatFxSelectNext, true));
+        assert_eq!(state.beat_fx().effect, BeatFxEffect::Echo);
+        state.handle_control(system_pressed(SemanticControl::BeatFxSelectNext, true));
+        assert_eq!(state.beat_fx().effect, BeatFxEffect::Flanger);
+        state.handle_control(system_pressed(SemanticControl::BeatFxSelectNext, true));
+        assert_eq!(state.beat_fx().effect, BeatFxEffect::Delay);
+        state.handle_control(system_pressed(SemanticControl::BeatFxSelectNext, true));
+        assert_eq!(state.beat_fx().effect, BeatFxEffect::Filter);
+
+        state.handle_control(system_pressed(SemanticControl::BeatFxSelectPrev, true));
+        assert_eq!(state.beat_fx().effect, BeatFxEffect::Delay);
+    }
+
+    #[test]
+    fn beat_fx_beat_buttons_and_shifted_buttons_clamp_like_released_core() {
+        let mut state = DeckProductState::new();
+
+        state.handle_control(system_pressed(SemanticControl::BeatFxBeatInc, true));
+        assert_eq!(state.beat_fx().beat, BeatFxBeat::Two);
+        state.handle_control(system_pressed(SemanticControl::BeatFxBeatIncShift, true));
+        assert_eq!(state.beat_fx().beat, BeatFxBeat::Four);
+        assert_eq!(
+            state.handle_control(system_pressed(SemanticControl::BeatFxBeatInc, true)),
+            DeckEffects::NONE
+        );
+
+        state.handle_control(system_pressed(SemanticControl::BeatFxBeatDecShift, true));
+        assert_eq!(state.beat_fx().beat, BeatFxBeat::One);
+        state.handle_control(system_pressed(SemanticControl::BeatFxBeatDecShift, true));
+        assert_eq!(state.beat_fx().beat, BeatFxBeat::Quarter);
+    }
+
+    #[test]
+    fn beat_fx_target_depth_on_and_clear_emit_authoritative_commands() {
+        let mut state = DeckProductState::new();
+
+        let target = state.handle_control(beat_fx_target(BeatFxTarget::ChannelTwo));
+        let (beat_fx, delay_ms, flanger_ms) = beat_fx_command(target);
+        assert_eq!(beat_fx.target, BeatFxTarget::ChannelTwo);
+        assert_eq!(delay_ms, 500);
+        assert_eq!(flanger_ms, 500);
+
+        let depth = state.handle_control(beat_fx_depth(127, 127));
+        let (beat_fx, _, _) = beat_fx_command(depth);
+        assert_eq!(beat_fx.depth, 127);
+
+        let on = state.handle_control(system_pressed(SemanticControl::BeatFxOn, true));
+        let (beat_fx, _, _) = beat_fx_command(on);
+        assert!(beat_fx.enabled);
+        assert_eq!(
+            state.handle_control(system_pressed(SemanticControl::BeatFxOn, false)),
+            DeckEffects::NONE
+        );
+        assert!(state.beat_fx().enabled);
+
+        let clear = state.handle_control(system_pressed(SemanticControl::BeatFxClear, true));
+        let (beat_fx, _, _) = beat_fx_command(clear);
+        assert_eq!(beat_fx, BeatFxState::new());
+    }
+
+
+    #[test]
+    fn beat_fx_target_depth_and_clear_reemit_for_state_replay() {
+        let mut state = DeckProductState::new();
+
+        assert!(matches!(
+            state.handle_control(beat_fx_target(BeatFxTarget::Both)).items[0],
+            Some(DeckEffect::ApplyBeatFx { .. })
+        ));
+        assert!(matches!(
+            state.handle_control(beat_fx_depth(64, 127)).items[0],
+            Some(DeckEffect::ApplyBeatFx { .. })
+        ));
+        assert!(matches!(
+            state
+                .handle_control(system_pressed(SemanticControl::BeatFxClear, true))
+                .items[0],
+            Some(DeckEffect::ApplyBeatFx { .. })
+        ));
+    }
+
+    #[test]
+    fn beat_fx_timing_uses_target_effective_bpm_and_released_caps() {
+        let mut state = DeckProductState::new();
+        state.set_base_bpm_x100(DeckId::One, 12_000);
+        state.set_base_bpm_x100(DeckId::Two, 10_000);
+        state.handle_control(absolute(DeckId::Two, SemanticControl::Tempo, 0));
+
+        state.handle_control(beat_fx_target(BeatFxTarget::ChannelTwo));
+        let effects = state.handle_control(system_pressed(SemanticControl::BeatFxSelectNext, true));
+        let (_, delay_ms, flanger_ms) = beat_fx_command(effects);
+        assert_eq!(delay_ms, 545);
+        assert_eq!(flanger_ms, 545);
+
+        state.set_base_bpm_x100(DeckId::Two, 4_000);
+        state.handle_control(absolute(
+            DeckId::Two,
+            SemanticControl::Tempo,
+            PITCH_CENTER,
+        ));
+        state.handle_control(system_pressed(SemanticControl::BeatFxBeatIncShift, true));
+        state.handle_control(system_pressed(SemanticControl::BeatFxBeatInc, true));
+        let effects = state.handle_control(system_pressed(SemanticControl::BeatFxSelectNext, true));
+        let (_, delay_ms, flanger_ms) = beat_fx_command(effects);
+        assert_eq!(delay_ms, 1_000);
+        assert_eq!(flanger_ms, 6_000);
+
+        state.set_base_bpm_x100(DeckId::Two, 35_000);
+        let effects = state.handle_control(beat_fx_depth(64, 127));
+        let (_, delay_ms, flanger_ms) = beat_fx_command(effects);
+        assert_eq!(delay_ms, 1_000);
+        assert_eq!(flanger_ms, 2_000);
+    }
+
+    #[test]
+    fn beat_fx_depth_scales_absolute_sources_to_seven_bit_domain() {
+        let mut state = DeckProductState::new();
+        let effects = state.handle_control(beat_fx_depth(64, 255));
+        let (beat_fx, _, _) = beat_fx_command(effects);
+        assert_eq!(beat_fx.depth, 32);
     }
 
     #[test]
