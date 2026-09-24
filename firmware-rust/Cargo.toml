@@ -3,6 +3,7 @@ members = [
     "apps/desktop-simulator",
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
+    "crates/pajoniiir-controller-profile",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
 ]
@@ -10,6 +11,7 @@ default-members = [
     "apps/desktop-simulator",
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
+    "crates/pajoniiir-controller-profile",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
 ]
@@ -28,5 +30,6 @@ slint-build = { version = "=1.18.1" }
 
 pajoniiir-core = { path = "crates/pajoniiir-core" }
 pajoniiir-controller-core = { path = "crates/pajoniiir-controller-core" }
+pajoniiir-controller-profile = { path = "crates/pajoniiir-controller-profile" }
 pajoniiir-ui-model = { path = "crates/pajoniiir-ui-model" }
 pajoniiir-waveform = { path = "crates/pajoniiir-waveform" }
