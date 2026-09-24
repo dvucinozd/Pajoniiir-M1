@@ -87,10 +87,7 @@ impl EventScheduler {
         self.fifo[self.fifo_tail] = Some(event);
         self.fifo_tail = (self.fifo_tail + 1) % DISCRETE_FIFO_CAPACITY;
         self.fifo_count += 1;
-        self.stats.max_fifo_depth = self
-            .stats
-            .max_fifo_depth
-            .max(self.fifo_count as u32);
+        self.stats.max_fifo_depth = self.stats.max_fifo_depth.max(self.fifo_count as u32);
         true
     }
 
@@ -107,8 +104,7 @@ impl EventScheduler {
 
     pub fn publish_continuous(&mut self, event: ControlEvent, mode: ContinuousMode) -> bool {
         let Some(index) = self.find_continuous_slot(event) else {
-            self.stats.continuous_slot_full =
-                self.stats.continuous_slot_full.saturating_add(1);
+            self.stats.continuous_slot_full = self.stats.continuous_slot_full.saturating_add(1);
             return false;
         };
 
@@ -119,8 +115,7 @@ impl EventScheduler {
             return true;
         }
 
-        self.stats.continuous_coalesced =
-            self.stats.continuous_coalesced.saturating_add(1);
+        self.stats.continuous_coalesced = self.stats.continuous_coalesced.saturating_add(1);
 
         match mode {
             ContinuousMode::LatestValue => {
@@ -253,7 +248,9 @@ impl HeldStateReconciler {
                 SemanticControl::DeckExtAction,
                 ControlValue::DeckExtAction(action),
             ) if action.action == DeckExtAction::Censor => Some(5),
-            (Some(deck), SemanticControl::PadAction, ControlValue::PadAction(pad)) if pad.pad < 8 => {
+            (Some(deck), SemanticControl::PadAction, ControlValue::PadAction(pad))
+                if pad.pad < 8 =>
+            {
                 let mode_offset = match (pad.mode, pad.shifted) {
                     (PadMode::PadFx1, _) => 0,
                     (PadMode::PadFx2, _) => 8,
@@ -366,10 +363,7 @@ mod tests {
         ControlEvent {
             deck: None,
             control: SemanticControl::Crossfader,
-            value: ControlValue::Absolute {
-                value,
-                max: 0x3fff,
-            },
+            value: ControlValue::Absolute { value, max: 0x3fff },
         }
     }
 
@@ -406,10 +400,7 @@ mod tests {
         assert!(scheduler.enqueue_discrete(first));
         assert!(scheduler.enqueue_discrete(second));
         assert_eq!(scheduler.dequeue_discrete(), Some(first));
-        assert!(scheduler.publish_continuous(
-            crossfader(7000),
-            ContinuousMode::LatestValue
-        ));
+        assert!(scheduler.publish_continuous(crossfader(7000), ContinuousMode::LatestValue));
         assert_eq!(scheduler.dequeue_discrete(), Some(second));
         assert_eq!(scheduler.dequeue_discrete(), None);
         assert_eq!(scheduler.take_continuous(), Some(crossfader(7000)));
@@ -419,17 +410,9 @@ mod tests {
     fn discrete_fifo_is_bounded_and_measured() {
         let mut scheduler = EventScheduler::new();
         for _ in 0..DISCRETE_FIFO_CAPACITY {
-            assert!(scheduler.enqueue_discrete(pressed(
-                DeckId::One,
-                SemanticControl::Cue,
-                true
-            )));
+            assert!(scheduler.enqueue_discrete(pressed(DeckId::One, SemanticControl::Cue, true)));
         }
-        assert!(!scheduler.enqueue_discrete(pressed(
-            DeckId::Two,
-            SemanticControl::Play,
-            true
-        )));
+        assert!(!scheduler.enqueue_discrete(pressed(DeckId::Two, SemanticControl::Play, true)));
         assert_eq!(scheduler.stats().fifo_full, 1);
         assert_eq!(
             scheduler.stats().max_fifo_depth,
@@ -440,18 +423,9 @@ mod tests {
     #[test]
     fn latest_value_and_jog_accumulation_match_released_behavior() {
         let mut scheduler = EventScheduler::new();
-        assert!(scheduler.publish_continuous(
-            crossfader(10),
-            ContinuousMode::LatestValue
-        ));
-        assert!(scheduler.publish_continuous(
-            crossfader(20),
-            ContinuousMode::LatestValue
-        ));
-        assert!(scheduler.publish_continuous(
-            crossfader(30),
-            ContinuousMode::LatestValue
-        ));
+        assert!(scheduler.publish_continuous(crossfader(10), ContinuousMode::LatestValue));
+        assert!(scheduler.publish_continuous(crossfader(20), ContinuousMode::LatestValue));
+        assert!(scheduler.publish_continuous(crossfader(30), ContinuousMode::LatestValue));
 
         assert!(scheduler.publish_continuous(
             relative(DeckId::One, SemanticControl::JogBend, 32760),
@@ -465,11 +439,7 @@ mod tests {
         assert_eq!(scheduler.take_continuous(), Some(crossfader(30)));
         assert_eq!(
             scheduler.take_continuous(),
-            Some(relative(
-                DeckId::One,
-                SemanticControl::JogBend,
-                i16::MAX
-            ))
+            Some(relative(DeckId::One, SemanticControl::JogBend, i16::MAX))
         );
         assert_eq!(scheduler.take_continuous(), None);
 
@@ -487,38 +457,12 @@ mod tests {
 
     #[test]
     fn held_keys_are_precise_and_do_not_collapse_commands() {
-        let touch = HeldStateReconciler::key(pressed(
-            DeckId::One,
-            SemanticControl::JogTouch,
-            true,
-        ));
-        let shift = HeldStateReconciler::key(pressed(
-            DeckId::One,
-            SemanticControl::Shift,
-            true,
-        ));
+        let touch = HeldStateReconciler::key(pressed(DeckId::One, SemanticControl::JogTouch, true));
+        let shift = HeldStateReconciler::key(pressed(DeckId::One, SemanticControl::Shift, true));
         let censor_key = HeldStateReconciler::key(censor(DeckId::One, true));
-        let pad_fx1 = HeldStateReconciler::key(pad(
-            DeckId::One,
-            PadMode::PadFx1,
-            3,
-            false,
-            true,
-        ));
-        let pad_fx2 = HeldStateReconciler::key(pad(
-            DeckId::One,
-            PadMode::PadFx2,
-            3,
-            false,
-            true,
-        ));
-        let roll = HeldStateReconciler::key(pad(
-            DeckId::Two,
-            PadMode::BeatLoop,
-            3,
-            true,
-            true,
-        ));
+        let pad_fx1 = HeldStateReconciler::key(pad(DeckId::One, PadMode::PadFx1, 3, false, true));
+        let pad_fx2 = HeldStateReconciler::key(pad(DeckId::One, PadMode::PadFx2, 3, false, true));
+        let roll = HeldStateReconciler::key(pad(DeckId::Two, PadMode::BeatLoop, 3, true, true));
 
         assert!(touch.is_some());
         assert_ne!(shift, touch);
@@ -527,21 +471,11 @@ mod tests {
         assert_ne!(pad_fx2, pad_fx1);
         assert_ne!(roll, pad_fx2);
         assert_eq!(
-            HeldStateReconciler::key(pressed(
-                DeckId::One,
-                SemanticControl::Play,
-                true
-            )),
+            HeldStateReconciler::key(pressed(DeckId::One, SemanticControl::Play, true)),
             None
         );
         assert_eq!(
-            HeldStateReconciler::key(pad(
-                DeckId::One,
-                PadMode::HotCue,
-                3,
-                false,
-                true
-            )),
+            HeldStateReconciler::key(pad(DeckId::One, PadMode::HotCue, 3, false, true)),
             None
         );
     }
