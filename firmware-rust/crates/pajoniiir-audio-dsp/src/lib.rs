@@ -341,6 +341,31 @@ impl FilterState {
     }
 }
 
+
+pub fn smart_cfx_curve_raw(raw: u16) -> u16 {
+    let raw = raw.min(FILTER_RAW_MAX);
+    if raw == FILTER_RAW_CENTER || raw == FILTER_RAW_MIN || raw == FILTER_RAW_MAX {
+        return raw;
+    }
+
+    let delta = raw as i32 - FILTER_RAW_CENTER as i32;
+    let sign = if delta < 0 { -1 } else { 1 };
+    let mag = delta.unsigned_abs().min(FILTER_RAW_CENTER as u32);
+    let max = FILTER_RAW_CENTER as u32;
+
+    let numerator = mag as u64 * mag as u64 * (3 * max - 2 * mag) as u64;
+    let denominator = max as u64 * max as u64;
+    let mut curved = ((numerator + denominator / 2) / denominator) as u32;
+
+    let min_audible = max / 24;
+    if mag > min_audible && curved < min_audible {
+        curved = min_audible;
+    }
+
+    let out = FILTER_RAW_CENTER as i32 + sign * curved as i32;
+    out.clamp(FILTER_RAW_MIN as i32, FILTER_RAW_MAX as i32) as u16
+}
+
 pub fn eq_raw_to_gain(raw: u16) -> f32 {
     let raw = raw.min(EQ_RAW_MAX);
     if raw <= EQ_RAW_CENTER {
@@ -576,6 +601,43 @@ mod tests {
             filter.process_frame(true, DspFrame::default());
         }
         assert_ne!(filter.a1, poison);
+    }
+
+
+    #[test]
+    fn smart_cfx_center_and_extremes_are_identity() {
+        assert_eq!(smart_cfx_curve_raw(FILTER_RAW_CENTER), FILTER_RAW_CENTER);
+        assert_eq!(smart_cfx_curve_raw(FILTER_RAW_MIN), FILTER_RAW_MIN);
+        assert_eq!(smart_cfx_curve_raw(FILTER_RAW_MAX), FILTER_RAW_MAX);
+        assert_eq!(smart_cfx_curve_raw(u16::MAX), FILTER_RAW_MAX);
+    }
+
+    #[test]
+    fn smart_cfx_softens_near_center() {
+        let input = FILTER_RAW_CENTER - 512;
+        let curved = smart_cfx_curve_raw(input);
+        assert!(curved < FILTER_RAW_CENTER);
+        assert!(curved > input);
+    }
+
+    #[test]
+    fn smart_cfx_half_turn_is_near_linear() {
+        let half_low = FILTER_RAW_CENTER / 2;
+        let curved_low = smart_cfx_curve_raw(half_low);
+        assert!(curved_low >= half_low - 8);
+        assert!(curved_low <= half_low + 8);
+
+        let half_high =
+            FILTER_RAW_CENTER + (FILTER_RAW_MAX - FILTER_RAW_CENTER) / 2;
+        let curved_high = smart_cfx_curve_raw(half_high);
+        assert!(curved_high >= half_high - 8);
+        assert!(curved_high <= half_high + 8);
+    }
+
+    #[test]
+    fn smart_cfx_past_half_turn_runs_ahead_of_linear() {
+        let three_quarters_low = FILTER_RAW_CENTER / 4;
+        assert!(smart_cfx_curve_raw(three_quarters_low) < three_quarters_low);
     }
 
     #[test]
