@@ -341,6 +341,236 @@ impl FilterState {
     }
 }
 
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum DelayMode {
+    Echo,
+    Delay,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct DelayConfig {
+    pub enabled: bool,
+    pub mode: DelayMode,
+    pub delay_ms: u32,
+    pub wet_q15: u16,
+    pub feedback_q15: u16,
+}
+
+impl Default for DelayConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            mode: DelayMode::Echo,
+            delay_ms: 0,
+            wet_q15: 0,
+            feedback_q15: 0,
+        }
+    }
+}
+
+const DELAY_DAMP_OMEGA: u32 = 28_274;
+const DELAY_TAIL_SECONDS: u32 = 2;
+const DELAY_SMOOTH_SHIFT: i32 = 6;
+
+pub struct DelayFx<'a> {
+    left: &'a mut [f32],
+    right: &'a mut [f32],
+    capacity_frames: usize,
+    sample_rate: u32,
+    write_index: usize,
+    delay_frames: usize,
+    config: DelayConfig,
+    allocated: bool,
+    fb_lp: [f32; 2],
+    damp_alpha_q15: u16,
+    wet_cur_q15: u16,
+    feedback_cur_q15: u16,
+    tail_frames_remaining: u32,
+}
+
+impl<'a> DelayFx<'a> {
+    pub fn new(left: &'a mut [f32], right: &'a mut [f32], sample_rate: u32) -> Self {
+        let capacity_frames = left.len().min(right.len());
+        let allocated = capacity_frames > 1 && sample_rate > 0;
+        let mut state = Self {
+            left,
+            right,
+            capacity_frames,
+            sample_rate,
+            write_index: 0,
+            delay_frames: 0,
+            config: DelayConfig::default(),
+            allocated,
+            fb_lp: [0.0; 2],
+            damp_alpha_q15: 0,
+            wet_cur_q15: 0,
+            feedback_cur_q15: 0,
+            tail_frames_remaining: 0,
+        };
+        state.reset();
+        state
+    }
+
+    pub fn reset(&mut self) {
+        self.write_index = 0;
+        self.fb_lp = [0.0; 2];
+        self.wet_cur_q15 = 0;
+        self.feedback_cur_q15 = 0;
+        self.tail_frames_remaining = 0;
+        for sample in &mut self.left[..self.capacity_frames] {
+            *sample = 0.0;
+        }
+        for sample in &mut self.right[..self.capacity_frames] {
+            *sample = 0.0;
+        }
+    }
+
+    pub fn configure(&mut self, config: DelayConfig) {
+        let was_enabled = self.config.enabled;
+        let was_ringing = self.tail_frames_remaining > 0;
+        let previous_mode = self.config.mode;
+
+        let mut next = config;
+        next.wet_q15 = next.wet_q15.min(32_767);
+        next.feedback_q15 = next.feedback_q15.min(24_576);
+        if next.mode == DelayMode::Delay {
+            next.feedback_q15 = 0;
+        }
+
+        if !next.enabled && (was_enabled || was_ringing) {
+            next.mode = self.config.mode;
+            next.delay_ms = self.config.delay_ms;
+            next.wet_q15 = self.config.wet_q15;
+            next.feedback_q15 = self.config.feedback_q15;
+        }
+
+        if next.enabled && (!was_enabled || next.mode != previous_mode) {
+            self.reset();
+            self.wet_cur_q15 = next.wet_q15;
+            self.feedback_cur_q15 = next.feedback_q15;
+        } else if !next.enabled && was_enabled && self.allocated {
+            self.tail_frames_remaining = if previous_mode == DelayMode::Delay {
+                self.delay_frames as u32
+            } else {
+                self.sample_rate.saturating_mul(DELAY_TAIL_SECONDS)
+            };
+        }
+
+        self.config = next;
+
+        let mut frames =
+            (self.sample_rate as u64 * self.config.delay_ms as u64).div_ceil(1_000) as usize;
+        frames = frames.max(1);
+        if self.capacity_frames > 0 && frames >= self.capacity_frames {
+            frames = self.capacity_frames - 1;
+        }
+        self.delay_frames = frames;
+
+        let fs = if self.sample_rate == 0 {
+            44_100
+        } else {
+            self.sample_rate
+        };
+        self.damp_alpha_q15 =
+            ((32_768u32 * DELAY_DAMP_OMEGA) / (DELAY_DAMP_OMEGA + fs)) as u16;
+    }
+
+    pub const fn config(&self) -> DelayConfig {
+        self.config
+    }
+
+    pub const fn is_allocated(&self) -> bool {
+        self.allocated
+    }
+
+    pub const fn is_ringing(&self) -> bool {
+        self.tail_frames_remaining > 0
+    }
+
+    pub const fn delay_ms(&self) -> u32 {
+        self.config.delay_ms
+    }
+
+    pub const fn delay_frames(&self) -> usize {
+        self.delay_frames
+    }
+
+    pub const fn tail_frames_remaining(&self) -> u32 {
+        self.tail_frames_remaining
+    }
+
+    pub fn process_frame(&mut self, input: DspFrame) -> DspFrame {
+        if !self.allocated || self.delay_frames == 0 {
+            return input;
+        }
+
+        let active = self.config.enabled;
+        let ringing = self.tail_frames_remaining > 0;
+        if !active && !ringing {
+            return input;
+        }
+
+        self.wet_cur_q15 = smooth_q15(self.wet_cur_q15, self.config.wet_q15);
+        self.feedback_cur_q15 = smooth_q15(self.feedback_cur_q15, self.config.feedback_q15);
+
+        let read_index = if self.write_index >= self.delay_frames {
+            self.write_index - self.delay_frames
+        } else {
+            self.write_index + self.capacity_frames - self.delay_frames
+        };
+
+        let delayed_l = self.left[read_index];
+        let delayed_r = self.right[read_index];
+
+        let out_l = input.left + q15_mul_float(delayed_l, self.wet_cur_q15);
+        let out_r = input.right + q15_mul_float(delayed_r, self.wet_cur_q15);
+
+        let fb_l = q15_mul_float(self.damp_feedback_sample(delayed_l, 0), self.feedback_cur_q15);
+        let fb_r = q15_mul_float(self.damp_feedback_sample(delayed_r, 1), self.feedback_cur_q15);
+
+        self.left[self.write_index] = if active { input.left + fb_l } else { fb_l };
+        self.right[self.write_index] = if active { input.right + fb_r } else { fb_r };
+
+        self.write_index += 1;
+        if self.write_index >= self.capacity_frames {
+            self.write_index = 0;
+        }
+
+        if !active && ringing {
+            self.tail_frames_remaining -= 1;
+        }
+
+        DspFrame {
+            left: out_l,
+            right: out_r,
+        }
+    }
+
+    pub fn process_pcm_frame(&mut self, input: PcmFrame) -> PcmFrame {
+        self.process_frame(input.into()).into()
+    }
+
+    fn damp_feedback_sample(&mut self, delayed: f32, channel: usize) -> f32 {
+        self.fb_lp[channel] +=
+            (delayed - self.fb_lp[channel]) * (self.damp_alpha_q15 as f32 / 32_768.0);
+        self.fb_lp[channel]
+    }
+}
+
+fn q15_mul_float(sample: f32, gain_q15: u16) -> f32 {
+    sample * (gain_q15 as f32 / 32_768.0)
+}
+
+fn smooth_q15(current: u16, target: u16) -> u16 {
+    let delta = target as i32 - current as i32;
+    let mut step = delta / (1 << DELAY_SMOOTH_SHIFT);
+    if step == 0 && delta != 0 {
+        step = if delta > 0 { 1 } else { -1 };
+    }
+    (current as i32 + step) as u16
+}
+
 pub fn smart_cfx_curve_raw(raw: u16) -> u16 {
     let raw = raw.min(FILTER_RAW_MAX);
     if raw == FILTER_RAW_CENTER || raw == FILTER_RAW_MIN || raw == FILTER_RAW_MAX {
@@ -600,6 +830,298 @@ mod tests {
             filter.process_frame(true, DspFrame::default());
         }
         assert_ne!(filter.a1, poison);
+    }
+
+
+    fn delay_config(
+        enabled: bool,
+        mode: DelayMode,
+        delay_ms: u32,
+        wet_q15: u16,
+        feedback_q15: u16,
+    ) -> DelayConfig {
+        DelayConfig {
+            enabled,
+            mode,
+            delay_ms,
+            wet_q15,
+            feedback_q15,
+        }
+    }
+
+    #[test]
+    fn disabled_delay_bypasses_input() {
+        let mut left = [0.0; 16];
+        let mut right = [0.0; 16];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+        fx.configure(delay_config(false, DelayMode::Echo, 4, 16_384, 8_192));
+
+        let input = PcmFrame {
+            left: 1_234,
+            right: -2_345,
+        };
+        assert_eq!(fx.process_pcm_frame(input), input);
+    }
+
+    #[test]
+    fn one_shot_delay_reappears_once_after_configured_period() {
+        let mut left = [0.0; 16];
+        let mut right = [0.0; 16];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+        fx.configure(delay_config(true, DelayMode::Delay, 4, 16_384, 24_576));
+
+        assert_eq!(fx.config().feedback_q15, 0);
+        assert_eq!(
+            fx.process_pcm_frame(PcmFrame {
+                left: 10_000,
+                right: 10_000,
+            }),
+            PcmFrame {
+                left: 10_000,
+                right: 10_000,
+            }
+        );
+
+        for _ in 0..3 {
+            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        }
+
+        let delayed = fx.process_pcm_frame(PcmFrame::default());
+        assert!(delayed.left > 4_500 && delayed.left < 5_500);
+        assert!(delayed.right > 4_500 && delayed.right < 5_500);
+
+        for _ in 0..4 {
+            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        }
+    }
+
+    #[test]
+    fn echo_feedback_decays_and_reset_clears_line() {
+        let mut left = [0.0; 32];
+        let mut right = [0.0; 32];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+        fx.configure(delay_config(true, DelayMode::Echo, 2, 16_384, 8_192));
+
+        fx.process_pcm_frame(PcmFrame {
+            left: 12_000,
+            right: 12_000,
+        });
+        fx.process_pcm_frame(PcmFrame::default());
+        let first = fx.process_pcm_frame(PcmFrame::default());
+        fx.process_pcm_frame(PcmFrame::default());
+        let second = fx.process_pcm_frame(PcmFrame::default());
+
+        assert!(first.left > second.left);
+        assert!(second.left > 0);
+
+        fx.reset();
+        for _ in 0..8 {
+            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        }
+    }
+
+    #[test]
+    fn echo_switch_off_rings_bounded_tail() {
+        let mut left = [0.0; 32];
+        let mut right = [0.0; 32];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+        let active = delay_config(true, DelayMode::Echo, 4, 16_384, 8_192);
+        fx.configure(active);
+
+        fx.process_pcm_frame(PcmFrame {
+            left: 10_000,
+            right: 10_000,
+        });
+        for _ in 0..3 {
+            fx.process_pcm_frame(PcmFrame::default());
+        }
+
+        fx.configure(DelayConfig {
+            enabled: false,
+            ..active
+        });
+        assert!(fx.is_ringing());
+
+        let tail = fx.process_pcm_frame(PcmFrame::default());
+        assert!(tail.left > 4_000);
+        assert!(tail.right > 4_000);
+
+        for _ in 0..2_100 {
+            fx.process_pcm_frame(PcmFrame::default());
+        }
+        assert!(!fx.is_ringing());
+
+        let dry = PcmFrame {
+            left: 777,
+            right: -777,
+        };
+        assert_eq!(fx.process_pcm_frame(dry), dry);
+    }
+
+    #[test]
+    fn reenable_clears_stale_tail() {
+        let mut left = [0.0; 32];
+        let mut right = [0.0; 32];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+        let active = delay_config(true, DelayMode::Echo, 4, 16_384, 8_192);
+        fx.configure(active);
+        fx.process_pcm_frame(PcmFrame {
+            left: 10_000,
+            right: 10_000,
+        });
+
+        fx.configure(DelayConfig {
+            enabled: false,
+            ..active
+        });
+        assert!(fx.is_ringing());
+
+        fx.configure(active);
+        assert!(!fx.is_ringing());
+        for _ in 0..8 {
+            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        }
+    }
+
+    #[test]
+    fn delay_tail_is_exactly_one_delay_period() {
+        let mut left = [0.0; 32];
+        let mut right = [0.0; 32];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+        let active = delay_config(true, DelayMode::Delay, 4, 32_767, 24_576);
+        fx.configure(active);
+        fx.process_pcm_frame(PcmFrame {
+            left: 10_000,
+            right: -10_000,
+        });
+
+        fx.configure(DelayConfig {
+            enabled: false,
+            ..active
+        });
+        assert_eq!(fx.tail_frames_remaining(), 4);
+
+        for _ in 0..3 {
+            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert!(fx.is_ringing());
+        }
+
+        let final_tap = fx.process_pcm_frame(PcmFrame::default());
+        assert!(final_tap.left > 9_900 && final_tap.left <= 10_000);
+        assert!(final_tap.right < -9_900 && final_tap.right >= -10_000);
+        assert!(!fx.is_ringing());
+    }
+
+    #[test]
+    fn disabled_commands_cannot_retime_ringing_delay() {
+        let mut left = [0.0; 32];
+        let mut right = [0.0; 32];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+        let active = delay_config(true, DelayMode::Delay, 4, 32_767, 0);
+        fx.configure(active);
+        fx.process_pcm_frame(PcmFrame {
+            left: 10_000,
+            right: -10_000,
+        });
+
+        fx.configure(delay_config(false, DelayMode::Echo, 2, 1_024, 20_000));
+        assert_eq!(fx.config().mode, DelayMode::Delay);
+        assert_eq!(fx.config().delay_ms, 4);
+        assert_eq!(fx.config().wet_q15, 32_767);
+        assert_eq!(fx.delay_frames(), 4);
+        assert_eq!(fx.tail_frames_remaining(), 4);
+
+        assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        fx.configure(delay_config(false, DelayMode::Echo, 8, 16_384, 20_000));
+        assert_eq!(fx.config().delay_ms, 4);
+        assert_eq!(fx.tail_frames_remaining(), 3);
+    }
+
+    #[test]
+    fn live_echo_delay_mode_change_clears_shared_line() {
+        let mut left = [0.0; 32];
+        let mut right = [0.0; 32];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+
+        let echo = delay_config(true, DelayMode::Echo, 4, 32_767, 16_384);
+        let delay = delay_config(true, DelayMode::Delay, 4, 32_767, 16_384);
+
+        fx.configure(echo);
+        fx.process_pcm_frame(PcmFrame {
+            left: 12_000,
+            right: -12_000,
+        });
+        for _ in 0..3 {
+            fx.process_pcm_frame(PcmFrame::default());
+        }
+
+        fx.configure(delay);
+        assert_eq!(fx.config().feedback_q15, 0);
+        for _ in 0..8 {
+            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        }
+
+        fx.process_pcm_frame(PcmFrame {
+            left: -9_000,
+            right: 9_000,
+        });
+        for _ in 0..3 {
+            fx.process_pcm_frame(PcmFrame::default());
+        }
+
+        fx.configure(echo);
+        for _ in 0..12 {
+            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        }
+    }
+
+    #[test]
+    fn zero_length_buffers_are_safe_bypass() {
+        let mut left = [];
+        let mut right = [];
+        let mut fx = DelayFx::new(&mut left, &mut right, 1_000);
+        fx.configure(delay_config(true, DelayMode::Delay, 10, 32_767, 32_767));
+        assert!(!fx.is_allocated());
+
+        let input = PcmFrame {
+            left: -3_000,
+            right: 3_000,
+        };
+        assert_eq!(fx.process_pcm_frame(input), input);
+    }
+
+    #[test]
+    fn wide_echo_path_preserves_headroom_without_internal_clamp() {
+        const CAP: usize = 4_410;
+        const SR: u32 = 44_100;
+        let mut left = [0.0; CAP];
+        let mut right = [0.0; CAP];
+        let mut fx = DelayFx::new(&mut left, &mut right, SR);
+        fx.configure(delay_config(true, DelayMode::Echo, 50, 22_938, 22_282));
+
+        let quiet = fx.process_frame(DspFrame {
+            left: 20_000.0,
+            right: -20_000.0,
+        });
+        assert_eq!(quiet.left, 20_000.0);
+        assert_eq!(quiet.right, -20_000.0);
+
+        let mut saw_above_pcm_ceiling = false;
+        for i in 0..SR * 3 {
+            let sample = if i % 200 < 100 { 16_000.0 } else { -16_000.0 };
+            let out = fx.process_frame(DspFrame {
+                left: sample,
+                right: sample,
+            });
+            assert!(out.left.is_finite());
+            assert!(out.right.is_finite());
+            assert!(out.left.abs() < 80_000.0);
+            assert!(out.right.abs() < 80_000.0);
+            if out.left.abs() > 32_768.0 || out.right.abs() > 32_768.0 {
+                saw_above_pcm_ceiling = true;
+            }
+        }
+        assert!(saw_above_pcm_ceiling);
     }
 
     #[test]
