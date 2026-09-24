@@ -119,6 +119,6 @@ mod tests {
 
         surface.draw_centered_waveform(0, 0, 8, 8, WaveformView { columns: &columns });
 
-        assert!(pixels.iter().any(|pixel| *pixel == 0xffff));
+        assert!(pixels.contains(&0xffff));
     }
 }
