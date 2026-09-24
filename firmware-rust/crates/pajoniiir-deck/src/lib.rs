@@ -177,10 +177,10 @@ impl DeckProductState {
         self.handle_control_with_analysis(event, [None, None])
     }
 
-    pub fn handle_control_with_analysis<'a>(
+    pub fn handle_control_with_analysis(
         &mut self,
         event: ControlEvent,
-        analysis: [Option<TrackAnalysis<'a>>; 2],
+        analysis: [Option<TrackAnalysis<'_>>; 2],
     ) -> DeckEffects {
         let Some(deck) = event.deck else {
             return DeckEffects::NONE;
@@ -373,11 +373,11 @@ impl DeckProductState {
         })
     }
 
-    fn handle_sync<'a>(
+    fn handle_sync(
         &mut self,
         deck: DeckId,
         value: ControlValue,
-        analysis: [Option<TrackAnalysis<'a>>; 2],
+        analysis: [Option<TrackAnalysis<'_>>; 2],
     ) -> DeckEffects {
         if value != ControlValue::Pressed(true) {
             return DeckEffects::NONE;
@@ -399,11 +399,10 @@ impl DeckProductState {
             .filter(|bpm| *bpm > 0)
             .unwrap_or(self.decks[deck_idx].base_bpm_x100);
         let mut reference_state = self.decks[reference_idx];
-        if let Some(reference_analysis) = analysis[reference_idx] {
-            if reference_analysis.bpm_x100() > 0 {
-                reference_state.base_bpm_x100 = reference_analysis.bpm_x100();
-            }
-        }
+        reference_state.base_bpm_x100 = analysis[reference_idx]
+            .map(|item| item.bpm_x100())
+            .filter(|bpm| *bpm > 0)
+            .unwrap_or(reference_state.base_bpm_x100);
         let target_centipercent = centipercent_for_bpm_match(target_bpm_x100, reference_state);
 
         let pitch_effect = DeckEffect::SetPitchCentipercent {
@@ -415,14 +414,17 @@ impl DeckProductState {
         let reference_position_ms = self.decks[reference_idx].position_ms;
         let aligned_ms = match (analysis[deck_idx], analysis[reference_idx]) {
             (Some(target_analysis), Some(reference_analysis)) => {
-                match (target_analysis.beat_grid(), reference_analysis.beat_grid()) {
-                    (Some(target_grid), Some(reference_grid)) => phase_align_target_ms(
+                if let (Some(target_grid), Some(reference_grid)) =
+                    (target_analysis.beat_grid(), reference_analysis.beat_grid())
+                {
+                    phase_align_target_ms(
                         target_position_ms,
                         target_grid,
                         reference_position_ms,
                         reference_grid,
-                    ),
-                    _ => None,
+                    )
+                } else {
+                    None
                 }
             }
             _ => None,
