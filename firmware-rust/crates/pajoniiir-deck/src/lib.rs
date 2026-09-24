@@ -748,11 +748,7 @@ impl DeckProductState {
         })
     }
 
-    fn quantized_position_ms(
-        &self,
-        deck: DeckId,
-        analysis: [Option<TrackAnalysis<'_>>; 2],
-    ) -> u32 {
+    fn quantized_position_ms(&self, deck: DeckId, analysis: [Option<TrackAnalysis<'_>>; 2]) -> u32 {
         let index = deck_index(deck);
         let position_ms = self.decks[index].position_ms;
         if !self.decks[index].quantize_enabled {
@@ -815,8 +811,7 @@ impl DeckProductState {
                     return DeckEffects::NONE;
                 }
 
-                let Some((numerator, denominator)) = self.beat_jump_size_for_pad(action.pad)
-                else {
+                let Some((numerator, denominator)) = self.beat_jump_size_for_pad(action.pad) else {
                     return DeckEffects::NONE;
                 };
                 self.apply_beat_jump(deck, numerator, denominator, analysis)
@@ -838,12 +833,7 @@ impl DeckProductState {
         }
     }
 
-    fn handle_hot_cue_pad_action(
-        &mut self,
-        deck: DeckId,
-        pad: u8,
-        shifted: bool,
-    ) -> DeckEffects {
+    fn handle_hot_cue_pad_action(&mut self, deck: DeckId, pad: u8, shifted: bool) -> DeckEffects {
         let index = deck_index(deck);
         let Some(mut bank) = self.hot_cues[index] else {
             return DeckEffects::NONE;
@@ -1049,8 +1039,8 @@ impl DeckProductState {
         let movement_ms = delta as i64;
         let next = match mode {
             LoopAdjustMode::In => {
-                let target = (active.start_ms as i64 + movement_ms)
-                    .clamp(0, active.end_ms as i64 - 1);
+                let target =
+                    (active.start_ms as i64 + movement_ms).clamp(0, active.end_ms as i64 - 1);
                 LoopRegion::new(target as u32, active.end_ms)
             }
             LoopAdjustMode::Out => {
@@ -1081,12 +1071,11 @@ impl DeckProductState {
             return;
         }
 
-        self.decks[index].loop_adjust_mode =
-            if self.decks[index].loop_adjust_mode == requested {
-                LoopAdjustMode::None
-            } else {
-                requested
-            };
+        self.decks[index].loop_adjust_mode = if self.decks[index].loop_adjust_mode == requested {
+            LoopAdjustMode::None
+        } else {
+            requested
+        };
     }
 
     fn handle_deck_ext_action(&mut self, deck: DeckId, value: ControlValue) -> DeckEffects {
@@ -1665,11 +1654,7 @@ mod tests {
         assert_eq!(state.deck(DeckId::Two).loop_state.active, None);
 
         state.set_position_ms(DeckId::Two, 2600);
-        let effects = state.handle_control(pressed(
-            DeckId::Two,
-            SemanticControl::LoopOut,
-            true,
-        ));
+        let effects = state.handle_control(pressed(DeckId::Two, SemanticControl::LoopOut, true));
 
         assert_eq!(state.deck(DeckId::One).loop_state.active, None);
         assert_eq!(
@@ -1734,21 +1719,17 @@ mod tests {
     #[test]
     fn reloop_exit_clears_and_restores_last_loop() {
         let mut state = DeckProductState::new();
-        state.decks[deck_index(DeckId::One)].loop_state.active =
-            Some(loop_region(500, 2500));
-        state.decks[deck_index(DeckId::One)].loop_state.last =
-            Some(loop_region(500, 2500));
+        state.decks[deck_index(DeckId::One)].loop_state.active = Some(loop_region(500, 2500));
+        state.decks[deck_index(DeckId::One)].loop_state.last = Some(loop_region(500, 2500));
 
-        let clear =
-            state.handle_control(pressed(DeckId::One, SemanticControl::ReloopExit, true));
+        let clear = state.handle_control(pressed(DeckId::One, SemanticControl::ReloopExit, true));
         assert_eq!(
             clear.items[0],
             Some(DeckEffect::ClearLoop { deck: DeckId::One })
         );
         assert_eq!(state.deck(DeckId::One).loop_state.active, None);
 
-        let restore =
-            state.handle_control(pressed(DeckId::One, SemanticControl::ReloopExit, true));
+        let restore = state.handle_control(pressed(DeckId::One, SemanticControl::ReloopExit, true));
         assert_eq!(
             restore.items[0],
             Some(DeckEffect::SetLoop {
@@ -1766,35 +1747,23 @@ mod tests {
     #[test]
     fn loop_halve_double_and_relative_size_match_released_final_state() {
         let mut state = DeckProductState::new();
-        state.decks[deck_index(DeckId::Two)].loop_state.active =
-            Some(loop_region(1000, 5000));
-        state.decks[deck_index(DeckId::Two)].loop_state.last =
-            Some(loop_region(1000, 5000));
+        state.decks[deck_index(DeckId::Two)].loop_state.active = Some(loop_region(1000, 5000));
+        state.decks[deck_index(DeckId::Two)].loop_state.last = Some(loop_region(1000, 5000));
 
-        state.handle_control(pressed(
-            DeckId::Two,
-            SemanticControl::LoopHalve,
-            true,
-        ));
+        state.handle_control(pressed(DeckId::Two, SemanticControl::LoopHalve, true));
         assert_eq!(
             state.deck(DeckId::Two).loop_state.active,
             Some(loop_region(1000, 3000))
         );
 
-        state.handle_control(pressed(
-            DeckId::Two,
-            SemanticControl::LoopDouble,
-            true,
-        ));
+        state.handle_control(pressed(DeckId::Two, SemanticControl::LoopDouble, true));
         assert_eq!(
             state.deck(DeckId::Two).loop_state.active,
             Some(loop_region(1000, 5000))
         );
 
-        state.decks[deck_index(DeckId::One)].loop_state.active =
-            Some(loop_region(1000, 5000));
-        state.decks[deck_index(DeckId::One)].loop_state.last =
-            Some(loop_region(1000, 5000));
+        state.decks[deck_index(DeckId::One)].loop_state.active = Some(loop_region(1000, 5000));
+        state.decks[deck_index(DeckId::One)].loop_state.last = Some(loop_region(1000, 5000));
         state.handle_control(relative(DeckId::One, SemanticControl::LoopSize, -1));
         assert_eq!(
             state.deck(DeckId::One).loop_state.active,
@@ -1826,14 +1795,13 @@ mod tests {
     #[test]
     fn reloop_stop_clears_active_and_remembered_loop() {
         let mut state = DeckProductState::new();
-        state.decks[deck_index(DeckId::One)].loop_state.active =
-            Some(loop_region(1000, 4000));
-        state.decks[deck_index(DeckId::One)].loop_state.last =
-            Some(loop_region(1000, 4000));
-        state.decks[deck_index(DeckId::One)].loop_state.pending_in_ms = Some(7000);
+        state.decks[deck_index(DeckId::One)].loop_state.active = Some(loop_region(1000, 4000));
+        state.decks[deck_index(DeckId::One)].loop_state.last = Some(loop_region(1000, 4000));
+        state.decks[deck_index(DeckId::One)]
+            .loop_state
+            .pending_in_ms = Some(7000);
 
-        let effects =
-            state.handle_control(ext(DeckId::One, DeckExtAction::ReloopStop, true));
+        let effects = state.handle_control(ext(DeckId::One, DeckExtAction::ReloopStop, true));
         assert_eq!(
             effects.items[0],
             Some(DeckEffect::ClearLoop { deck: DeckId::One })
@@ -1841,11 +1809,7 @@ mod tests {
         assert_eq!(state.deck(DeckId::One).loop_state, LoopState::new());
 
         assert_eq!(
-            state.handle_control(pressed(
-                DeckId::One,
-                SemanticControl::ReloopExit,
-                true,
-            )),
+            state.handle_control(pressed(DeckId::One, SemanticControl::ReloopExit, true,)),
             DeckEffects::NONE
         );
     }
@@ -2206,10 +2170,8 @@ mod tests {
     #[test]
     fn shifted_beat_loop_restores_previous_loop_on_release() {
         let mut state = DeckProductState::new();
-        state.decks[deck_index(DeckId::One)].loop_state.active =
-            Some(loop_region(5_000, 9_000));
-        state.decks[deck_index(DeckId::One)].loop_state.last =
-            Some(loop_region(5_000, 9_000));
+        state.decks[deck_index(DeckId::One)].loop_state.active = Some(loop_region(5_000, 9_000));
+        state.decks[deck_index(DeckId::One)].loop_state.last = Some(loop_region(5_000, 9_000));
         state.set_position_ms(DeckId::One, 12_000);
 
         let pressed = state.handle_control(beat_loop_pad(DeckId::One, 5, true, true));
@@ -2301,21 +2263,28 @@ mod tests {
         let mut state = DeckProductState::new();
 
         state.handle_control(ext(DeckId::One, DeckExtAction::LoopAdjustIn, true));
-        assert_eq!(state.deck(DeckId::One).loop_adjust_mode, LoopAdjustMode::None);
+        assert_eq!(
+            state.deck(DeckId::One).loop_adjust_mode,
+            LoopAdjustMode::None
+        );
 
-        state.decks[deck_index(DeckId::One)].loop_state.active =
-            Some(loop_region(1_000, 2_000));
-        state.decks[deck_index(DeckId::One)].loop_state.last =
-            Some(loop_region(1_000, 2_000));
+        state.decks[deck_index(DeckId::One)].loop_state.active = Some(loop_region(1_000, 2_000));
+        state.decks[deck_index(DeckId::One)].loop_state.last = Some(loop_region(1_000, 2_000));
 
         state.handle_control(ext(DeckId::One, DeckExtAction::LoopAdjustIn, true));
         assert_eq!(state.deck(DeckId::One).loop_adjust_mode, LoopAdjustMode::In);
 
         state.handle_control(ext(DeckId::One, DeckExtAction::LoopAdjustIn, true));
-        assert_eq!(state.deck(DeckId::One).loop_adjust_mode, LoopAdjustMode::None);
+        assert_eq!(
+            state.deck(DeckId::One).loop_adjust_mode,
+            LoopAdjustMode::None
+        );
 
         state.handle_control(ext(DeckId::One, DeckExtAction::LoopAdjustOut, true));
-        assert_eq!(state.deck(DeckId::One).loop_adjust_mode, LoopAdjustMode::Out);
+        assert_eq!(
+            state.deck(DeckId::One).loop_adjust_mode,
+            LoopAdjustMode::Out
+        );
 
         state.handle_control(ext(DeckId::One, DeckExtAction::LoopAdjustIn, true));
         assert_eq!(state.deck(DeckId::One).loop_adjust_mode, LoopAdjustMode::In);
@@ -2327,17 +2296,11 @@ mod tests {
     #[test]
     fn loop_adjust_in_uses_one_ms_per_jog_tick_and_clamps() {
         let mut state = DeckProductState::new();
-        state.decks[deck_index(DeckId::One)].loop_state.active =
-            Some(loop_region(100, 200));
-        state.decks[deck_index(DeckId::One)].loop_state.last =
-            Some(loop_region(100, 200));
+        state.decks[deck_index(DeckId::One)].loop_state.active = Some(loop_region(100, 200));
+        state.decks[deck_index(DeckId::One)].loop_state.last = Some(loop_region(100, 200));
         state.handle_control(ext(DeckId::One, DeckExtAction::LoopAdjustIn, true));
 
-        let moved = state.handle_control(relative(
-            DeckId::One,
-            SemanticControl::JogScratch,
-            25,
-        ));
+        let moved = state.handle_control(relative(DeckId::One, SemanticControl::JogScratch, 25));
         assert_eq!(
             moved.items[0],
             Some(DeckEffect::SetLoop {
@@ -2347,21 +2310,13 @@ mod tests {
             })
         );
 
-        state.handle_control(relative(
-            DeckId::One,
-            SemanticControl::JogBend,
-            i16::MAX,
-        ));
+        state.handle_control(relative(DeckId::One, SemanticControl::JogBend, i16::MAX));
         assert_eq!(
             state.deck(DeckId::One).loop_state.active,
             Some(loop_region(199, 200))
         );
 
-        state.handle_control(relative(
-            DeckId::One,
-            SemanticControl::JogScratch,
-            i16::MIN,
-        ));
+        state.handle_control(relative(DeckId::One, SemanticControl::JogScratch, i16::MIN));
         assert_eq!(
             state.deck(DeckId::One).loop_state.active,
             Some(loop_region(0, 200))
@@ -2371,17 +2326,11 @@ mod tests {
     #[test]
     fn loop_adjust_out_uses_one_ms_per_jog_tick_and_clamps() {
         let mut state = DeckProductState::new();
-        state.decks[deck_index(DeckId::Two)].loop_state.active =
-            Some(loop_region(1_000, 2_000));
-        state.decks[deck_index(DeckId::Two)].loop_state.last =
-            Some(loop_region(1_000, 2_000));
+        state.decks[deck_index(DeckId::Two)].loop_state.active = Some(loop_region(1_000, 2_000));
+        state.decks[deck_index(DeckId::Two)].loop_state.last = Some(loop_region(1_000, 2_000));
         state.handle_control(ext(DeckId::Two, DeckExtAction::LoopAdjustOut, true));
 
-        state.handle_control(relative(
-            DeckId::Two,
-            SemanticControl::JogBend,
-            -1_500,
-        ));
+        state.handle_control(relative(DeckId::Two, SemanticControl::JogBend, -1_500));
         assert_eq!(
             state.deck(DeckId::Two).loop_state.active,
             Some(loop_region(1_000, 1_001))
@@ -2389,11 +2338,7 @@ mod tests {
 
         state.decks[deck_index(DeckId::Two)].loop_state.active =
             Some(loop_region(u32::MAX - 100, u32::MAX - 50));
-        state.handle_control(relative(
-            DeckId::Two,
-            SemanticControl::JogScratch,
-            500,
-        ));
+        state.handle_control(relative(DeckId::Two, SemanticControl::JogScratch, 500));
         assert_eq!(
             state.deck(DeckId::Two).loop_state.active,
             Some(loop_region(u32::MAX - 100, u32::MAX))
@@ -2403,20 +2348,18 @@ mod tests {
     #[test]
     fn missing_loop_drops_adjust_mode_before_jog() {
         let mut state = DeckProductState::new();
-        state.decks[deck_index(DeckId::One)].loop_state.active =
-            Some(loop_region(1_000, 2_000));
+        state.decks[deck_index(DeckId::One)].loop_state.active = Some(loop_region(1_000, 2_000));
         state.handle_control(ext(DeckId::One, DeckExtAction::LoopAdjustIn, true));
         state.decks[deck_index(DeckId::One)].loop_state.active = None;
 
         assert_eq!(
-            state.handle_control(relative(
-                DeckId::One,
-                SemanticControl::JogScratch,
-                10,
-            )),
+            state.handle_control(relative(DeckId::One, SemanticControl::JogScratch, 10,)),
             DeckEffects::NONE
         );
-        assert_eq!(state.deck(DeckId::One).loop_adjust_mode, LoopAdjustMode::None);
+        assert_eq!(
+            state.deck(DeckId::One).loop_adjust_mode,
+            LoopAdjustMode::None
+        );
     }
 
     #[test]
