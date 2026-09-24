@@ -308,6 +308,16 @@ impl HeldStateReconciler {
         None
     }
 
+    pub fn invalidate_scheduled(&mut self) {
+        for slot in &mut self.slots {
+            if slot.desired.is_none() {
+                continue;
+            }
+            slot.scheduled_value = None;
+            slot.dirty = true;
+        }
+    }
+
     pub fn release_all(&mut self, sequence: u8) {
         for slot in &mut self.slots {
             let Some(event) = slot.desired else {
@@ -336,6 +346,128 @@ fn release_event(event: ControlEvent) -> ControlEvent {
     };
 
     ControlEvent { value, ..event }
+}
+
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ConnectionState {
+    Connected,
+    Disconnected,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct ConnectionDelivery {
+    pub state: ConnectionState,
+    generation: u32,
+    disconnect_generation: Option<u32>,
+    captured_connected: bool,
+}
+
+pub struct ConnectionReconciler {
+    connected: bool,
+    generation: u32,
+    acknowledged_generation: u32,
+    disconnect_pending: bool,
+    disconnect_generation: u32,
+    snapshot_pending: bool,
+}
+
+impl Default for ConnectionReconciler {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl ConnectionReconciler {
+    pub const fn new() -> Self {
+        Self {
+            connected: false,
+            generation: 0,
+            acknowledged_generation: 0,
+            disconnect_pending: false,
+            disconnect_generation: 0,
+            snapshot_pending: false,
+        }
+    }
+
+    pub const fn connected(&self) -> bool {
+        self.connected
+    }
+
+    pub const fn generation(&self) -> u32 {
+        self.generation
+    }
+
+    pub fn set_connected(
+        &mut self,
+        connected: bool,
+        held: &mut HeldStateReconciler,
+        release_sequence: u8,
+    ) {
+        if connected == self.connected {
+            return;
+        }
+
+        self.connected = connected;
+        self.generation = self.generation.wrapping_add(1);
+
+        if connected {
+            held.invalidate_scheduled();
+            self.snapshot_pending = true;
+        } else {
+            self.disconnect_pending = true;
+            self.disconnect_generation = self.generation;
+            self.snapshot_pending = false;
+            held.release_all(release_sequence);
+        }
+    }
+
+    pub fn pending_delivery(&self) -> Option<ConnectionDelivery> {
+        if self.disconnect_pending {
+            return Some(ConnectionDelivery {
+                state: ConnectionState::Disconnected,
+                generation: self.generation,
+                disconnect_generation: Some(self.disconnect_generation),
+                captured_connected: self.connected,
+            });
+        }
+
+        if self.generation == self.acknowledged_generation {
+            return None;
+        }
+
+        Some(ConnectionDelivery {
+            state: if self.connected {
+                ConnectionState::Connected
+            } else {
+                ConnectionState::Disconnected
+            },
+            generation: self.generation,
+            disconnect_generation: None,
+            captured_connected: self.connected,
+        })
+    }
+
+    pub fn mark_delivered(&mut self, delivery: ConnectionDelivery) {
+        if let Some(disconnect_generation) = delivery.disconnect_generation {
+            if self.disconnect_pending && self.disconnect_generation == disconnect_generation {
+                self.disconnect_pending = false;
+            }
+            if !delivery.captured_connected {
+                self.acknowledged_generation = delivery.generation;
+            }
+        } else {
+            self.acknowledged_generation = delivery.generation;
+        }
+    }
+
+    pub fn take_snapshot_request(&mut self) -> bool {
+        if !self.connected || !self.snapshot_pending {
+            return false;
+        }
+        self.snapshot_pending = false;
+        true
+    }
 }
 
 #[cfg(test)]
@@ -568,4 +700,83 @@ mod tests {
         assert_eq!(dirty.event, up);
         assert_eq!(dirty.sequence, 2);
     }
+
+    #[test]
+    fn reconnect_cannot_erase_an_undelivered_disconnect_edge() {
+        let mut held = HeldStateReconciler::new();
+        let mut connection = ConnectionReconciler::new();
+
+        connection.set_connected(true, &mut held, 0);
+        let first = connection.pending_delivery().unwrap();
+        assert_eq!(first.state, ConnectionState::Connected);
+        connection.mark_delivered(first);
+
+        connection.set_connected(false, &mut held, 1);
+        connection.set_connected(true, &mut held, 2);
+
+        let disconnect = connection.pending_delivery().unwrap();
+        assert_eq!(disconnect.state, ConnectionState::Disconnected);
+        connection.mark_delivered(disconnect);
+
+        let reconnect = connection.pending_delivery().unwrap();
+        assert_eq!(reconnect.state, ConnectionState::Connected);
+        connection.mark_delivered(reconnect);
+        assert_eq!(connection.pending_delivery(), None);
+    }
+
+    #[test]
+    fn newer_disconnect_survives_delivery_of_an_older_connected_generation() {
+        let mut held = HeldStateReconciler::new();
+        let mut connection = ConnectionReconciler::new();
+
+        connection.set_connected(true, &mut held, 0);
+        let connected = connection.pending_delivery().unwrap();
+
+        connection.set_connected(false, &mut held, 1);
+        connection.mark_delivered(connected);
+
+        let disconnect = connection.pending_delivery().unwrap();
+        assert_eq!(disconnect.state, ConnectionState::Disconnected);
+        connection.mark_delivered(disconnect);
+        assert_eq!(connection.pending_delivery(), None);
+        assert!(!connection.connected());
+    }
+
+    #[test]
+    fn reconnect_invalidates_held_schedule_and_requests_one_snapshot() {
+        let mut held = HeldStateReconciler::new();
+        let down = pressed(DeckId::One, SemanticControl::JogTouch, true);
+        let key = held.observe(down, 7).unwrap();
+        assert!(held.mark_scheduled(key, down.value));
+
+        let mut cursor = 0;
+        assert_eq!(held.next_dirty(&mut cursor), None);
+
+        let mut connection = ConnectionReconciler::new();
+        connection.set_connected(true, &mut held, 0);
+
+        let mut cursor = 0;
+        assert_eq!(held.next_dirty(&mut cursor).unwrap().event, down);
+        assert!(connection.take_snapshot_request());
+        assert!(!connection.take_snapshot_request());
+    }
+
+    #[test]
+    fn disconnect_releases_held_state_and_cancels_pending_snapshot() {
+        let mut held = HeldStateReconciler::new();
+        let down = pressed(DeckId::Two, SemanticControl::Shift, true);
+        let key = held.observe(down, 1).unwrap();
+        assert!(held.mark_scheduled(key, down.value));
+
+        let mut connection = ConnectionReconciler::new();
+        connection.set_connected(true, &mut held, 0);
+        connection.set_connected(false, &mut held, 44);
+
+        assert!(!connection.take_snapshot_request());
+        let mut cursor = 0;
+        let dirty = held.next_dirty(&mut cursor).unwrap();
+        assert_eq!(dirty.sequence, 44);
+        assert_eq!(dirty.event.value, ControlValue::Pressed(false));
+    }
+
 }
