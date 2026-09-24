@@ -3,7 +3,7 @@
 
 mod semantic;
 
-pub use semantic::{adapt_profile_event, SemanticAdapterError};
+pub use semantic::{SemanticAdapterError, adapt_profile_event};
 
 #[cfg(test)]
 extern crate std;

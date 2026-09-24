@@ -28,8 +28,18 @@ pub fn adapt_profile_event(event: ProfileEvent) -> Result<ControlEvent, Semantic
     }
 
     match event.semantic_id {
-        0x50 => pitch(event, Some(DeckId::One), SemanticControl::ChannelVolume, 0x3fff),
-        0x51 => pitch(event, Some(DeckId::Two), SemanticControl::ChannelVolume, 0x3fff),
+        0x50 => pitch(
+            event,
+            Some(DeckId::One),
+            SemanticControl::ChannelVolume,
+            0x3fff,
+        ),
+        0x51 => pitch(
+            event,
+            Some(DeckId::Two),
+            SemanticControl::ChannelVolume,
+            0x3fff,
+        ),
         0x52 => pitch(event, None, SemanticControl::Crossfader, 0x3fff),
         0x53 => button(event, Some(DeckId::One), SemanticControl::Pfl),
         0x54 => button(event, Some(DeckId::Two), SemanticControl::Pfl),
