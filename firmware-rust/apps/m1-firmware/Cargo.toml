@@ -8,6 +8,7 @@ publish = false
 [dependencies]
 esp-hal = { version = "=1.2.2", features = ["esp32p4", "unstable"] }
 pajoniiir-audio-dsp = { path = "../../crates/pajoniiir-audio-dsp" }
+pajoniiir-audio-runtime = { path = "../../crates/pajoniiir-audio-runtime" }
 pajoniiir-controller-session = { path = "../../crates/pajoniiir-controller-session" }
 pajoniiir-deck = { path = "../../crates/pajoniiir-deck" }
 pajoniiir-hot-cues = { path = "../../crates/pajoniiir-hot-cues" }
