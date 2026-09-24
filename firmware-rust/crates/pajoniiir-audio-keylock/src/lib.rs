@@ -207,12 +207,11 @@ impl KeylockState {
                 reference_count,
                 candidate,
                 best_error,
-            ) {
-                if error < best_error {
-                    best_error = error;
-                    best = candidate;
-                    center = delta;
-                }
+            ) && error < best_error
+            {
+                best_error = error;
+                best = candidate;
+                center = delta;
             }
         }
 
@@ -231,11 +230,10 @@ impl KeylockState {
                 reference_count,
                 candidate,
                 best_error,
-            ) {
-                if error < best_error {
-                    best_error = error;
-                    best = candidate;
-                }
+            ) && error < best_error
+            {
+                best_error = error;
+                best = candidate;
             }
         }
 
