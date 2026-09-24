@@ -8,7 +8,6 @@ pub struct Beat {
     pub bpm_x100: u32,
 }
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum AnalysisProvider {
     RekordboxImport,
@@ -105,8 +104,7 @@ pub fn phase_align_target_ms(
     let reference_index = reference.nearest_index(reference_position_ms)?;
     let reference_beat = reference.beats()[reference_index];
     let target_phase = reference_beat.phase;
-    let reference_offset_ms =
-        reference_position_ms as i64 - reference_beat.time_ms as i64;
+    let reference_offset_ms = reference_position_ms as i64 - reference_beat.time_ms as i64;
 
     let mut best = None;
     let mut min_diff = u32::MAX;
