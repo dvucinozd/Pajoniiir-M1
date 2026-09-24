@@ -285,36 +285,19 @@ mod tests {
 
     #[test]
     fn center_eq_keeps_signal_level_near_unity() {
-        let dry = rms_of_sine_after_eq(
-            1_000.0,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-        );
-        let centered = rms_of_sine_after_eq(
-            1_000.0,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-        );
+        let dry = rms_of_sine_after_eq(1_000.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
+        let centered = rms_of_sine_after_eq(1_000.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
         assert!(centered > dry * 0.98);
         assert!(centered < dry * 1.02);
     }
 
     #[test]
     fn low_kill_reduces_bass_more_than_treble() {
-        let killed_bass =
-            rms_of_sine_after_eq(100.0, EQ_RAW_MIN, EQ_RAW_CENTER, EQ_RAW_CENTER);
-        let normal_bass =
-            rms_of_sine_after_eq(100.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
-        let killed_treble =
-            rms_of_sine_after_eq(8_000.0, EQ_RAW_MIN, EQ_RAW_CENTER, EQ_RAW_CENTER);
-        let normal_treble = rms_of_sine_after_eq(
-            8_000.0,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-        );
+        let killed_bass = rms_of_sine_after_eq(100.0, EQ_RAW_MIN, EQ_RAW_CENTER, EQ_RAW_CENTER);
+        let normal_bass = rms_of_sine_after_eq(100.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
+        let killed_treble = rms_of_sine_after_eq(8_000.0, EQ_RAW_MIN, EQ_RAW_CENTER, EQ_RAW_CENTER);
+        let normal_treble =
+            rms_of_sine_after_eq(8_000.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
 
         assert!(killed_bass < normal_bass * 0.35);
         assert!(killed_treble > normal_treble * 0.80);
@@ -322,18 +305,11 @@ mod tests {
 
     #[test]
     fn high_kill_reduces_treble_more_than_bass() {
-        let killed_treble =
-            rms_of_sine_after_eq(8_000.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_MIN);
-        let normal_treble = rms_of_sine_after_eq(
-            8_000.0,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-        );
-        let killed_bass =
-            rms_of_sine_after_eq(100.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_MIN);
-        let normal_bass =
-            rms_of_sine_after_eq(100.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
+        let killed_treble = rms_of_sine_after_eq(8_000.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_MIN);
+        let normal_treble =
+            rms_of_sine_after_eq(8_000.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
+        let killed_bass = rms_of_sine_after_eq(100.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_MIN);
+        let normal_bass = rms_of_sine_after_eq(100.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
 
         assert!(killed_treble < normal_treble * 0.35);
         assert!(killed_bass > normal_bass * 0.80);
@@ -341,14 +317,8 @@ mod tests {
 
     #[test]
     fn mid_boost_increases_level_and_pcm_conversion_clamps() {
-        let normal_mid = rms_of_sine_after_eq(
-            1_000.0,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-            EQ_RAW_CENTER,
-        );
-        let boosted_mid =
-            rms_of_sine_after_eq(1_000.0, EQ_RAW_CENTER, EQ_RAW_MAX, EQ_RAW_CENTER);
+        let normal_mid = rms_of_sine_after_eq(1_000.0, EQ_RAW_CENTER, EQ_RAW_CENTER, EQ_RAW_CENTER);
+        let boosted_mid = rms_of_sine_after_eq(1_000.0, EQ_RAW_CENTER, EQ_RAW_MAX, EQ_RAW_CENTER);
         assert!(boosted_mid > normal_mid * 1.35);
 
         let mut eq = EqState::new(SAMPLE_RATE);
