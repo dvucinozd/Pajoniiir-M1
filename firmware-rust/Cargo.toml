@@ -5,6 +5,7 @@ members = [
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",
     "crates/pajoniiir-control-scheduler",
+    "crates/pajoniiir-deck",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
 ]
@@ -14,6 +15,7 @@ default-members = [
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",
     "crates/pajoniiir-control-scheduler",
+    "crates/pajoniiir-deck",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
 ]
@@ -34,5 +36,6 @@ pajoniiir-core = { path = "crates/pajoniiir-core" }
 pajoniiir-controller-core = { path = "crates/pajoniiir-controller-core" }
 pajoniiir-controller-profile = { path = "crates/pajoniiir-controller-profile" }
 pajoniiir-control-scheduler = { path = "crates/pajoniiir-control-scheduler" }
+pajoniiir-deck = { path = "crates/pajoniiir-deck" }
 pajoniiir-ui-model = { path = "crates/pajoniiir-ui-model" }
 pajoniiir-waveform = { path = "crates/pajoniiir-waveform" }
