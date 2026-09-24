@@ -116,7 +116,7 @@ impl MixerState {
     }
 
     pub fn set_master_trim_gain(&mut self, gain: f32) {
-        self.master_trim_gain = if !(gain >= 0.0) {
+        self.master_trim_gain = if gain.is_nan() || gain < 0.0 {
             0.0
         } else if gain > 1.0 {
             1.0
