@@ -161,6 +161,187 @@ impl EqState {
     }
 }
 
+
+pub const FILTER_RAW_MIN: u16 = 0;
+pub const FILTER_RAW_CENTER: u16 = MIXER_CONTROL_CENTER;
+pub const FILTER_RAW_MAX: u16 = MIXER_CONTROL_MAX;
+
+const FILTER_LP_MAX_HZ: f32 = 18_000.0;
+const FILTER_HP_MIN_HZ: f32 = 20.0;
+const FILTER_RES_K: f32 = 0.8;
+const FILTER_CENTER_DEAD_RAW: u16 = 96;
+const FILTER_SMOOTH_BLOCK: u32 = 32;
+const FILTER_SMOOTH_COEF: f32 = 0.2;
+const FILTER_SMOOTH_SNAP_RAW: f32 = 0.5;
+const FILTER_LP_LOG_RATIO: f32 = -5.703_782_6;
+const FILTER_HP_LOG_RATIO: f32 = 5.991_464_6;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct FilterState {
+    raw: u16,
+    sample_rate_hz: u32,
+    smoothed_raw: f32,
+    block_frames_left: u32,
+    coefficients_dirty: bool,
+    bypassed: bool,
+    hp_mode: bool,
+    k: f32,
+    a1: f32,
+    a2: f32,
+    a3: f32,
+    ic1eq: [f32; 2],
+    ic2eq: [f32; 2],
+}
+
+impl FilterState {
+    pub fn new(sample_rate_hz: u32) -> Self {
+        let mut state = Self {
+            raw: FILTER_RAW_CENTER,
+            sample_rate_hz: 44_100,
+            smoothed_raw: FILTER_RAW_CENTER as f32,
+            block_frames_left: 0,
+            coefficients_dirty: true,
+            bypassed: true,
+            hp_mode: false,
+            k: FILTER_RES_K,
+            a1: 0.0,
+            a2: 0.0,
+            a3: 0.0,
+            ic1eq: [0.0; 2],
+            ic2eq: [0.0; 2],
+        };
+        state.set_sample_rate(sample_rate_hz);
+        state.reset();
+        state
+    }
+
+    pub fn reset(&mut self) {
+        self.ic1eq = [0.0; 2];
+        self.ic2eq = [0.0; 2];
+        self.smoothed_raw = self.raw as f32;
+        self.block_frames_left = 0;
+        self.coefficients_dirty = true;
+        self.bypassed = true;
+    }
+
+    pub fn set_sample_rate(&mut self, sample_rate_hz: u32) {
+        let next = if sample_rate_hz == 0 {
+            44_100
+        } else {
+            sample_rate_hz
+        };
+        if next != self.sample_rate_hz {
+            self.sample_rate_hz = next;
+            self.coefficients_dirty = true;
+            self.block_frames_left = 0;
+        }
+    }
+
+    pub fn set_raw(&mut self, raw: u16) {
+        self.raw = raw.min(FILTER_RAW_MAX);
+    }
+
+    pub const fn raw(&self) -> u16 {
+        self.raw
+    }
+
+    pub fn process_frame(&mut self, enabled: bool, input: DspFrame) -> DspFrame {
+        if !enabled {
+            return input;
+        }
+
+        if self.block_frames_left == 0 {
+            self.block_frames_left = FILTER_SMOOTH_BLOCK;
+            self.update_coefficients();
+        }
+        self.block_frames_left -= 1;
+
+        if self.bypassed {
+            return input;
+        }
+
+        DspFrame {
+            left: self.svf_process(input.left, 0),
+            right: self.svf_process(input.right, 1),
+        }
+    }
+
+    pub fn process_pcm_frame(&mut self, enabled: bool, input: PcmFrame) -> PcmFrame {
+        self.process_frame(enabled, input.into()).into()
+    }
+
+    fn update_coefficients(&mut self) {
+        let target_raw = self.raw;
+        let target = target_raw as f32;
+        let movement = target - self.smoothed_raw;
+        let mut position_changed = false;
+
+        if movement.abs() <= FILTER_SMOOTH_SNAP_RAW {
+            if self.smoothed_raw != target {
+                self.smoothed_raw = target;
+                position_changed = true;
+            }
+        } else {
+            self.smoothed_raw += movement * FILTER_SMOOTH_COEF;
+            position_changed = true;
+        }
+
+        let delta = self.smoothed_raw - FILTER_RAW_CENTER as f32;
+        let mag = delta.abs();
+        let raw_dist = target_raw.abs_diff(FILTER_RAW_CENTER);
+        if raw_dist <= FILTER_CENTER_DEAD_RAW && mag <= FILTER_CENTER_DEAD_RAW as f32 {
+            self.bypassed = true;
+            return;
+        }
+
+        let was_bypassed = self.bypassed;
+        let next_hp_mode = delta >= 0.0;
+        self.bypassed = false;
+
+        if !position_changed
+            && !self.coefficients_dirty
+            && !was_bypassed
+            && self.hp_mode == next_hp_mode
+        {
+            return;
+        }
+
+        let intensity = (mag / FILTER_RAW_CENTER as f32).min(1.0);
+        let cutoff = if delta < 0.0 {
+            self.hp_mode = false;
+            FILTER_LP_MAX_HZ * libm::expf(FILTER_LP_LOG_RATIO * intensity)
+        } else {
+            self.hp_mode = true;
+            FILTER_HP_MIN_HZ * libm::expf(FILTER_HP_LOG_RATIO * intensity)
+        };
+
+        let fs = self.sample_rate_hz as f32;
+        let cutoff = cutoff.min(0.45 * fs);
+        let g = libm::tanf(core::f32::consts::PI * cutoff / fs);
+
+        self.k = FILTER_RES_K;
+        self.a1 = 1.0 / (1.0 + g * (g + self.k));
+        self.a2 = g * self.a1;
+        self.a3 = g * self.a2;
+        self.coefficients_dirty = false;
+    }
+
+    fn svf_process(&mut self, sample: f32, channel: usize) -> f32 {
+        let v3 = sample - self.ic2eq[channel];
+        let v1 = self.a1 * self.ic1eq[channel] + self.a2 * v3;
+        let v2 = self.ic2eq[channel] + self.a2 * self.ic1eq[channel] + self.a3 * v3;
+
+        self.ic1eq[channel] = 2.0 * v1 - self.ic1eq[channel];
+        self.ic2eq[channel] = 2.0 * v2 - self.ic2eq[channel];
+
+        if self.hp_mode {
+            sample - self.k * v1 - v2
+        } else {
+            v2
+        }
+    }
+}
+
 pub fn eq_raw_to_gain(raw: u16) -> f32 {
     let raw = raw.min(EQ_RAW_MAX);
     if raw <= EQ_RAW_CENTER {
@@ -237,6 +418,174 @@ mod tests {
             peak = peak.max(out.left.abs());
         }
         peak
+    }
+
+
+    fn rms_after_filter(freq_hz: f32, raw: u16, enabled: bool) -> f32 {
+        let mut filter = FilterState::new(SAMPLE_RATE);
+        filter.set_raw(raw);
+
+        let mut sum_sq = 0.0f64;
+        for i in 0..TEST_FRAMES {
+            let phase = 2.0 * PI * freq_hz * i as f32 / SAMPLE_RATE as f32;
+            let sample = (libm::sinf(phase) * 12_000.0) as i16;
+            let out = filter.process_pcm_frame(
+                enabled,
+                PcmFrame {
+                    left: sample,
+                    right: sample,
+                },
+            );
+            let normalized = out.left as f32 / 32_768.0;
+            sum_sq += (normalized as f64) * (normalized as f64);
+        }
+
+        libm::sqrt(sum_sq / TEST_FRAMES as f64) as f32
+    }
+
+    fn settle_filter(filter: &mut FilterState, raw: u16) {
+        filter.set_raw(raw);
+        for _ in 0..SAMPLE_RATE {
+            filter.process_frame(true, DspFrame::default());
+        }
+    }
+
+    fn programmed_cutoff_hz(filter: &FilterState) -> f32 {
+        let g = filter.a2 / filter.a1;
+        libm::atanf(g) * SAMPLE_RATE as f32 / PI
+    }
+
+    #[test]
+    fn disabled_filter_is_bypass_even_at_extreme_raw() {
+        let dry = rms_after_filter(8_000.0, FILTER_RAW_CENTER, false);
+        let disabled = rms_after_filter(8_000.0, FILTER_RAW_MIN, false);
+        assert!(disabled > dry * 0.98);
+        assert!(disabled < dry * 1.02);
+    }
+
+    #[test]
+    fn center_filter_is_bypass_when_enabled() {
+        let dry = rms_after_filter(1_000.0, FILTER_RAW_CENTER, false);
+        let center = rms_after_filter(1_000.0, FILTER_RAW_CENTER, true);
+        assert!(center > dry * 0.98);
+        assert!(center < dry * 1.02);
+    }
+
+    #[test]
+    fn half_low_pass_keeps_bass_and_kills_treble() {
+        let half_lp = FILTER_RAW_CENTER / 2;
+        let bass = rms_after_filter(100.0, half_lp, true);
+        let normal_bass = rms_after_filter(100.0, FILTER_RAW_CENTER, true);
+        let treble = rms_after_filter(8_000.0, half_lp, true);
+        let normal_treble = rms_after_filter(8_000.0, FILTER_RAW_CENTER, true);
+
+        assert!(bass > normal_bass * 0.85);
+        assert!(treble < normal_treble * 0.15);
+    }
+
+    #[test]
+    fn full_low_pass_kills_mids_and_most_bass() {
+        let mids = rms_after_filter(1_000.0, FILTER_RAW_MIN, true);
+        let normal_mids = rms_after_filter(1_000.0, FILTER_RAW_CENTER, true);
+        let bass = rms_after_filter(100.0, FILTER_RAW_MIN, true);
+        let normal_bass = rms_after_filter(100.0, FILTER_RAW_CENTER, true);
+
+        assert!(mids < normal_mids * 0.10);
+        assert!(bass < normal_bass * 0.75);
+    }
+
+    #[test]
+    fn low_pass_treble_cut_deepens_monotonically() {
+        let normal = rms_after_filter(8_000.0, FILTER_RAW_CENTER, true);
+        let quarter = rms_after_filter(
+            8_000.0,
+            FILTER_RAW_CENTER - FILTER_RAW_CENTER / 4,
+            true,
+        );
+        let half = rms_after_filter(8_000.0, FILTER_RAW_CENTER / 2, true);
+        let full = rms_after_filter(8_000.0, FILTER_RAW_MIN, true);
+
+        assert!(quarter < normal * 0.75);
+        assert!(half < quarter * 0.5);
+        assert!(full < half * 0.5);
+    }
+
+    #[test]
+    fn half_high_pass_kills_bass_and_keeps_treble() {
+        let half_hp =
+            FILTER_RAW_CENTER + (FILTER_RAW_MAX - FILTER_RAW_CENTER) / 2;
+        let bass = rms_after_filter(100.0, half_hp, true);
+        let normal_bass = rms_after_filter(100.0, FILTER_RAW_CENTER, true);
+        let treble = rms_after_filter(8_000.0, half_hp, true);
+        let normal_treble = rms_after_filter(8_000.0, FILTER_RAW_CENTER, true);
+
+        assert!(bass < normal_bass * 0.20);
+        assert!(treble > normal_treble * 0.85);
+    }
+
+    #[test]
+    fn full_high_pass_kills_mids_and_keeps_some_treble() {
+        let mids = rms_after_filter(1_000.0, FILTER_RAW_MAX, true);
+        let normal_mids = rms_after_filter(1_000.0, FILTER_RAW_CENTER, true);
+        let treble = rms_after_filter(8_000.0, FILTER_RAW_MAX, true);
+        let normal_treble = rms_after_filter(8_000.0, FILTER_RAW_CENTER, true);
+
+        assert!(mids < normal_mids * 0.15);
+        assert!(treble > normal_treble * 0.70);
+    }
+
+    #[test]
+    fn resonant_bump_lifts_tone_at_cutoff() {
+        let raw = FILTER_RAW_CENTER
+            - (0.142 * FILTER_RAW_CENTER as f32) as u16;
+        let at_cutoff = rms_after_filter(8_000.0, raw, true);
+        let dry = rms_after_filter(8_000.0, FILTER_RAW_CENTER, true);
+
+        assert!(at_cutoff > dry * 1.05);
+        assert!(at_cutoff < dry * 1.60);
+    }
+
+    #[test]
+    fn knob_sweep_follows_released_exponential_curve() {
+        for intensity in [0.25f32, 0.5, 0.75, 1.0] {
+            let travel = (intensity * FILTER_RAW_CENTER as f32) as u16;
+
+            let mut lp = FilterState::new(SAMPLE_RATE);
+            settle_filter(&mut lp, FILTER_RAW_CENTER - travel);
+            assert!(!lp.hp_mode);
+            let lp_expected =
+                FILTER_LP_MAX_HZ * libm::powf(60.0 / FILTER_LP_MAX_HZ, intensity);
+            let lp_actual = programmed_cutoff_hz(&lp);
+            assert!(libm::fabsf(lp_actual - lp_expected) < lp_expected * 0.02);
+
+            let mut hp = FilterState::new(SAMPLE_RATE);
+            settle_filter(&mut hp, FILTER_RAW_CENTER + travel);
+            assert!(hp.hp_mode);
+            let hp_expected =
+                FILTER_HP_MIN_HZ * libm::powf(8_000.0 / FILTER_HP_MIN_HZ, intensity);
+            let hp_actual = programmed_cutoff_hz(&hp);
+            assert!(libm::fabsf(hp_actual - hp_expected) < hp_expected * 0.02);
+        }
+    }
+
+    #[test]
+    fn stable_knob_skips_coefficient_recomputation() {
+        let mut filter = FilterState::new(SAMPLE_RATE);
+        settle_filter(&mut filter, FILTER_RAW_MIN);
+        assert!(!filter.bypassed);
+
+        let poison = -12_345.0;
+        filter.a1 = poison;
+        for _ in 0..4_096 {
+            filter.process_frame(true, DspFrame::default());
+        }
+        assert_eq!(filter.a1, poison);
+
+        filter.set_raw(FILTER_RAW_MAX);
+        for _ in 0..4_096 {
+            filter.process_frame(true, DspFrame::default());
+        }
+        assert_ne!(filter.a1, poison);
     }
 
     #[test]
