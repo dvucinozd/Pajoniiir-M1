@@ -1,0 +1,46 @@
+name: Rust ESP32-P4 compile gate
+
+on:
+  pull_request:
+    paths:
+      - "firmware-rust/apps/m1-firmware/**"
+      - "firmware-rust/crates/**"
+      - "firmware-rust/rust-toolchain.toml"
+      - ".github/workflows/rust-esp32p4.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  p4:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.95.0 --profile minimal
+          rustup target add --toolchain 1.95.0 riscv32imafc-unknown-none-elf
+
+      - name: Generate firmware dependency lock
+        run: |
+          cargo +1.95.0 generate-lockfile             --manifest-path firmware-rust/apps/m1-firmware/Cargo.toml
+
+      - name: Capture firmware dependency lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: m1-esp32p4-cargo-lock
+          path: firmware-rust/apps/m1-firmware/Cargo.lock
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: ESP32-P4 cross compile
+        run: |
+          cargo +1.95.0 check             --manifest-path firmware-rust/apps/m1-firmware/Cargo.toml             --target riscv32imafc-unknown-none-elf
+
+      - name: ESP32-P4 link gate
+        run: |
+          cargo +1.95.0 build             --manifest-path firmware-rust/apps/m1-firmware/Cargo.toml             --target riscv32imafc-unknown-none-elf             --release
