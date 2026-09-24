@@ -29,11 +29,8 @@ pub const MAIN_SIGNAL_PATH: [MixerStage; 8] = [
     MixerStage::MainLimiter,
 ];
 
-pub const PFL_SIGNAL_PATH: [MixerStage; 3] = [
-    MixerStage::Trim,
-    MixerStage::ChannelDsp,
-    MixerStage::PflTap,
-];
+pub const PFL_SIGNAL_PATH: [MixerStage; 3] =
+    [MixerStage::Trim, MixerStage::ChannelDsp, MixerStage::PflTap];
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct MixerDeckState {
@@ -195,10 +192,7 @@ impl MixerState {
     pub fn stage_gains(&self) -> MixerStageGains {
         let (xf_one, xf_two) = crossfader_gains(self.crossfader);
         MixerStageGains {
-            pre: [
-                trim_gain(self.decks[0].trim),
-                trim_gain(self.decks[1].trim),
-            ],
+            pre: [trim_gain(self.decks[0].trim), trim_gain(self.decks[1].trim)],
             post: [
                 fader_gain(self.decks[0].channel_volume) * xf_one,
                 fader_gain(self.decks[1].channel_volume) * xf_two,
@@ -243,8 +237,8 @@ pub fn trim_gain(raw: u16) -> f32 {
         let t = raw as f32 / MIXER_CONTROL_CENTER as f32;
         0.25 + (0.75 * t)
     } else {
-        let t = (raw - MIXER_CONTROL_CENTER) as f32
-            / (MIXER_CONTROL_MAX - MIXER_CONTROL_CENTER) as f32;
+        let t =
+            (raw - MIXER_CONTROL_CENTER) as f32 / (MIXER_CONTROL_MAX - MIXER_CONTROL_CENTER) as f32;
         1.0 + t
     }
 }
@@ -255,8 +249,7 @@ pub fn crossfader_gains(raw: u16) -> (f32, f32) {
         (1.0, raw as f32 / MIXER_CONTROL_CENTER as f32)
     } else {
         (
-            (MIXER_CONTROL_MAX - raw) as f32
-                / (MIXER_CONTROL_MAX - MIXER_CONTROL_CENTER) as f32,
+            (MIXER_CONTROL_MAX - raw) as f32 / (MIXER_CONTROL_MAX - MIXER_CONTROL_CENTER) as f32,
             1.0,
         )
     }
@@ -293,7 +286,11 @@ pub fn limit_main_sample(mixed: f32, stats: &mut LimiterStats) -> i16 {
         };
         limit_negative_sample(wide)
     } else {
-        (if mixed >= 0.0 { mixed + 0.5 } else { mixed - 0.5 }) as i16
+        (if mixed >= 0.0 {
+            mixed + 0.5
+        } else {
+            mixed - 0.5
+        }) as i16
     }
 }
 
@@ -305,8 +302,7 @@ fn normalized_absolute(value: ControlValue) -> Option<u16> {
         return None;
     }
     let bounded = value.min(max) as u32;
-    let scaled =
-        ((bounded * MIXER_CONTROL_MAX as u32) + (max as u32 / 2)) / max as u32;
+    let scaled = ((bounded * MIXER_CONTROL_MAX as u32) + (max as u32 / 2)) / max as u32;
     Some(scaled.min(MIXER_CONTROL_MAX as u32) as u16)
 }
 
@@ -404,24 +400,14 @@ mod tests {
         let expected = ((64u32 * MIXER_CONTROL_MAX as u32) + 63) / 127;
         assert_eq!(state.deck(DeckId::One).channel_volume, expected as u16);
 
-        assert!(state.handle_control(absolute(
-            None,
-            SemanticControl::Crossfader,
-            127,
-            127,
-        )));
+        assert!(state.handle_control(absolute(None, SemanticControl::Crossfader, 127, 127,)));
         assert_eq!(state.crossfader(), MIXER_CONTROL_MAX);
     }
 
     #[test]
     fn deck_absolute_controls_require_deck_identity() {
         let mut state = MixerState::new();
-        assert!(!state.handle_control(absolute(
-            None,
-            SemanticControl::Trim,
-            0,
-            127,
-        )));
+        assert!(!state.handle_control(absolute(None, SemanticControl::Trim, 0, 127,)));
         assert_eq!(state.deck(DeckId::One).trim, MIXER_CONTROL_CENTER);
     }
 
@@ -429,17 +415,9 @@ mod tests {
     fn pfl_and_master_cue_toggle_only_on_press_edge() {
         let mut state = MixerState::new();
 
-        assert!(state.handle_control(pressed(
-            Some(DeckId::Two),
-            SemanticControl::Pfl,
-            true,
-        )));
+        assert!(state.handle_control(pressed(Some(DeckId::Two), SemanticControl::Pfl, true,)));
         assert!(state.deck(DeckId::Two).pfl_enabled);
-        assert!(!state.handle_control(pressed(
-            Some(DeckId::Two),
-            SemanticControl::Pfl,
-            false,
-        )));
+        assert!(!state.handle_control(pressed(Some(DeckId::Two), SemanticControl::Pfl, false,)));
         assert!(state.deck(DeckId::Two).pfl_enabled);
 
         assert!(state.handle_control(pressed(None, SemanticControl::MasterCue, true)));
@@ -466,11 +444,7 @@ mod tests {
     fn pfl_path_ends_before_fader_crossfader_master_and_limiter() {
         assert_eq!(
             PFL_SIGNAL_PATH,
-            [
-                MixerStage::Trim,
-                MixerStage::ChannelDsp,
-                MixerStage::PflTap,
-            ]
+            [MixerStage::Trim, MixerStage::ChannelDsp, MixerStage::PflTap,]
         );
         assert_eq!(MAIN_SIGNAL_PATH[2], MixerStage::PflTap);
         assert_eq!(MAIN_SIGNAL_PATH[3], MixerStage::ChannelFader);
