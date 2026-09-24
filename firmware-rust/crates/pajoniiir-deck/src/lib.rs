@@ -15,7 +15,6 @@ pub const PITCH_MAX: u16 = 16383;
 pub const DEFAULT_TEMPO_RANGE_PERCENT: u16 = 10;
 pub const BEAT_SYNC_MAX_PERCENT: i16 = 20;
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum BeatFxEffect {
     Filter,
@@ -481,7 +480,6 @@ impl DeckProductState {
             _ => DeckEffects::NONE,
         }
     }
-
 
     fn handle_beat_fx_control(&mut self, event: ControlEvent) -> DeckEffects {
         let changed = match event.control {
@@ -1261,7 +1259,6 @@ fn resize_loop_region(region: LoopRegion, double: bool) -> Option<LoopRegion> {
     LoopRegion::new(region.start_ms, end_ms)
 }
 
-
 fn is_beat_fx_control(control: SemanticControl) -> bool {
     matches!(
         control,
@@ -1342,7 +1339,9 @@ fn beat_fx_unclamped_time_ms(state: BeatFxState, decks: &[DeckState; 2]) -> u32 
     let bpm_x100 = beat_fx_target_bpm_x100(state, decks) as u64;
     let divisor = bpm_x100 * denominator as u64;
     let scaled = 6_000_000u64 * numerator as u64;
-    ((scaled + divisor / 2) / divisor).max(1).min(u32::MAX as u64) as u32
+    ((scaled + divisor / 2) / divisor)
+        .max(1)
+        .min(u32::MAX as u64) as u32
 }
 
 fn beat_fx_delay_ms(state: BeatFxState, decks: &[DeckState; 2]) -> u32 {
@@ -1438,12 +1437,9 @@ const fn other_deck(deck: DeckId) -> DeckId {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use pajoniiir_controller_core::{
-        BeatFxTarget, DeckExtActionValue, PadAction, SemanticControl,
-    };
+    use pajoniiir_controller_core::{BeatFxTarget, DeckExtActionValue, PadAction, SemanticControl};
     use pajoniiir_hot_cues::HotCueSlot;
     use pajoniiir_track_analysis::{AnalysisProvider, Beat, BeatGrid};
-
 
     fn system_pressed(control: SemanticControl, down: bool) -> ControlEvent {
         ControlEvent {
@@ -1530,7 +1526,6 @@ mod tests {
         }
     }
 
-
     #[test]
     fn beat_fx_defaults_match_released_product_state() {
         let state = DeckProductState::new();
@@ -1610,13 +1605,14 @@ mod tests {
         assert_eq!(beat_fx, BeatFxState::new());
     }
 
-
     #[test]
     fn beat_fx_target_depth_and_clear_reemit_for_state_replay() {
         let mut state = DeckProductState::new();
 
         assert!(matches!(
-            state.handle_control(beat_fx_target(BeatFxTarget::Both)).items[0],
+            state
+                .handle_control(beat_fx_target(BeatFxTarget::Both))
+                .items[0],
             Some(DeckEffect::ApplyBeatFx { .. })
         ));
         assert!(matches!(
@@ -1645,11 +1641,7 @@ mod tests {
         assert_eq!(flanger_ms, 545);
 
         state.set_base_bpm_x100(DeckId::Two, 4_000);
-        state.handle_control(absolute(
-            DeckId::Two,
-            SemanticControl::Tempo,
-            PITCH_CENTER,
-        ));
+        state.handle_control(absolute(DeckId::Two, SemanticControl::Tempo, PITCH_CENTER));
         state.handle_control(system_pressed(SemanticControl::BeatFxBeatIncShift, true));
         state.handle_control(system_pressed(SemanticControl::BeatFxBeatInc, true));
         let effects = state.handle_control(system_pressed(SemanticControl::BeatFxSelectNext, true));
