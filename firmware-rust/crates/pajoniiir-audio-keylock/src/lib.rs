@@ -413,7 +413,14 @@ mod tests {
 
         assert!((4_504..=4_507).contains(&consumed_total));
         let crossings = count_positive_crossings(&output[512..]);
-        assert!((60..=68).contains(&crossings));
+        assert!(
+            (60..=68).contains(&crossings),
+            "crossings={crossings} consumed={consumed_total} grain_a={} grain_b={} origin={} logical={}",
+            state.grain_a,
+            state.grain_b,
+            state.origin_seq,
+            state.logical_seq,
+        );
     }
 
     #[test]
