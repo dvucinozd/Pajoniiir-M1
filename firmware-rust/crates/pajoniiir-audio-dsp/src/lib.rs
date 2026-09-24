@@ -341,7 +341,6 @@ impl FilterState {
     }
 }
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum DelayMode {
     Echo,
@@ -472,8 +471,7 @@ impl<'a> DelayFx<'a> {
         } else {
             self.sample_rate
         };
-        self.damp_alpha_q15 =
-            ((32_768u32 * DELAY_DAMP_OMEGA) / (DELAY_DAMP_OMEGA + fs)) as u16;
+        self.damp_alpha_q15 = ((32_768u32 * DELAY_DAMP_OMEGA) / (DELAY_DAMP_OMEGA + fs)) as u16;
     }
 
     pub const fn config(&self) -> DelayConfig {
@@ -526,8 +524,14 @@ impl<'a> DelayFx<'a> {
         let out_l = input.left + q15_mul_float(delayed_l, self.wet_cur_q15);
         let out_r = input.right + q15_mul_float(delayed_r, self.wet_cur_q15);
 
-        let fb_l = q15_mul_float(self.damp_feedback_sample(delayed_l, 0), self.feedback_cur_q15);
-        let fb_r = q15_mul_float(self.damp_feedback_sample(delayed_r, 1), self.feedback_cur_q15);
+        let fb_l = q15_mul_float(
+            self.damp_feedback_sample(delayed_l, 0),
+            self.feedback_cur_q15,
+        );
+        let fb_r = q15_mul_float(
+            self.damp_feedback_sample(delayed_r, 1),
+            self.feedback_cur_q15,
+        );
 
         self.left[self.write_index] = if active { input.left + fb_l } else { fb_l };
         self.right[self.write_index] = if active { input.right + fb_r } else { fb_r };
@@ -832,7 +836,6 @@ mod tests {
         assert_ne!(filter.a1, poison);
     }
 
-
     fn delay_config(
         enabled: bool,
         mode: DelayMode,
@@ -883,7 +886,10 @@ mod tests {
         );
 
         for _ in 0..3 {
-            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert_eq!(
+                fx.process_pcm_frame(PcmFrame::default()),
+                PcmFrame::default()
+            );
         }
 
         let delayed = fx.process_pcm_frame(PcmFrame::default());
@@ -891,7 +897,10 @@ mod tests {
         assert!(delayed.right > 4_500 && delayed.right < 5_500);
 
         for _ in 0..4 {
-            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert_eq!(
+                fx.process_pcm_frame(PcmFrame::default()),
+                PcmFrame::default()
+            );
         }
     }
 
@@ -916,7 +925,10 @@ mod tests {
 
         fx.reset();
         for _ in 0..8 {
-            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert_eq!(
+                fx.process_pcm_frame(PcmFrame::default()),
+                PcmFrame::default()
+            );
         }
     }
 
@@ -979,7 +991,10 @@ mod tests {
         fx.configure(active);
         assert!(!fx.is_ringing());
         for _ in 0..8 {
-            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert_eq!(
+                fx.process_pcm_frame(PcmFrame::default()),
+                PcmFrame::default()
+            );
         }
     }
 
@@ -1002,7 +1017,10 @@ mod tests {
         assert_eq!(fx.tail_frames_remaining(), 4);
 
         for _ in 0..3 {
-            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert_eq!(
+                fx.process_pcm_frame(PcmFrame::default()),
+                PcmFrame::default()
+            );
             assert!(fx.is_ringing());
         }
 
@@ -1031,7 +1049,10 @@ mod tests {
         assert_eq!(fx.delay_frames(), 4);
         assert_eq!(fx.tail_frames_remaining(), 4);
 
-        assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+        assert_eq!(
+            fx.process_pcm_frame(PcmFrame::default()),
+            PcmFrame::default()
+        );
         fx.configure(delay_config(false, DelayMode::Echo, 8, 16_384, 20_000));
         assert_eq!(fx.config().delay_ms, 4);
         assert_eq!(fx.tail_frames_remaining(), 3);
@@ -1058,7 +1079,10 @@ mod tests {
         fx.configure(delay);
         assert_eq!(fx.config().feedback_q15, 0);
         for _ in 0..8 {
-            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert_eq!(
+                fx.process_pcm_frame(PcmFrame::default()),
+                PcmFrame::default()
+            );
         }
 
         fx.process_pcm_frame(PcmFrame {
@@ -1071,7 +1095,10 @@ mod tests {
 
         fx.configure(echo);
         for _ in 0..12 {
-            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert_eq!(
+                fx.process_pcm_frame(PcmFrame::default()),
+                PcmFrame::default()
+            );
         }
     }
 
