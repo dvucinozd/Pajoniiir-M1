@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "apps/desktop-simulator",
+    "crates/pajoniiir-audio-dsp",
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",
@@ -15,6 +16,7 @@ members = [
 ]
 default-members = [
     "apps/desktop-simulator",
+    "crates/pajoniiir-audio-dsp",
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",
@@ -40,6 +42,7 @@ embedded-graphics = { version = "=0.8.2", default-features = false }
 slint = { version = "=1.18.1", default-features = false, features = ["std", "backend-winit-x11", "renderer-software", "compat-1-18"] }
 slint-build = { version = "=1.18.1" }
 
+pajoniiir-audio-dsp = { path = "crates/pajoniiir-audio-dsp" }
 pajoniiir-core = { path = "crates/pajoniiir-core" }
 pajoniiir-controller-core = { path = "crates/pajoniiir-controller-core" }
 pajoniiir-controller-profile = { path = "crates/pajoniiir-controller-profile" }
