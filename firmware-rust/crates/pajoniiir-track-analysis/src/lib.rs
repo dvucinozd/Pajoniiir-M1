@@ -8,6 +8,54 @@ pub struct Beat {
     pub bpm_x100: u32,
 }
 
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum AnalysisProvider {
+    RekordboxImport,
+    AptaCache,
+    AptaNative,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct TrackAnalysis<'a> {
+    provider: AnalysisProvider,
+    generation: u32,
+    bpm_x100: u32,
+    beat_grid: Option<BeatGrid<'a>>,
+}
+
+impl<'a> TrackAnalysis<'a> {
+    pub const fn new(
+        provider: AnalysisProvider,
+        generation: u32,
+        bpm_x100: u32,
+        beat_grid: Option<BeatGrid<'a>>,
+    ) -> Self {
+        Self {
+            provider,
+            generation,
+            bpm_x100,
+            beat_grid,
+        }
+    }
+
+    pub const fn provider(&self) -> AnalysisProvider {
+        self.provider
+    }
+
+    pub const fn generation(&self) -> u32 {
+        self.generation
+    }
+
+    pub const fn bpm_x100(&self) -> u32 {
+        self.bpm_x100
+    }
+
+    pub const fn beat_grid(&self) -> Option<BeatGrid<'a>> {
+        self.beat_grid
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct BeatGrid<'a> {
     beats: &'a [Beat],
@@ -84,6 +132,26 @@ pub fn phase_align_target_ms(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn neutral_track_analysis_keeps_provider_and_generation_explicit() {
+        let beats = [Beat {
+            time_ms: 1000,
+            phase: 0,
+            bpm_x100: 12_000,
+        }];
+        let analysis = TrackAnalysis::new(
+            AnalysisProvider::RekordboxImport,
+            7,
+            12_000,
+            Some(BeatGrid::new(&beats)),
+        );
+
+        assert_eq!(analysis.provider(), AnalysisProvider::RekordboxImport);
+        assert_eq!(analysis.generation(), 7);
+        assert_eq!(analysis.bpm_x100(), 12_000);
+        assert_eq!(analysis.beat_grid().unwrap().beats(), &beats);
+    }
 
     #[test]
     fn nearest_beat_prefers_first_entry_on_equal_distance() {
