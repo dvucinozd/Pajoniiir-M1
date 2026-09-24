@@ -27,6 +27,49 @@ pub enum LoopAdjustMode {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct LoopRegion {
+    pub start_ms: u32,
+    pub end_ms: u32,
+}
+
+impl LoopRegion {
+    pub const fn new(start_ms: u32, end_ms: u32) -> Option<Self> {
+        if end_ms > start_ms {
+            Some(Self { start_ms, end_ms })
+        } else {
+            None
+        }
+    }
+
+    pub const fn duration_ms(self) -> u32 {
+        self.end_ms - self.start_ms
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct LoopState {
+    pub active: Option<LoopRegion>,
+    pub pending_in_ms: Option<u32>,
+    pub last: Option<LoopRegion>,
+}
+
+impl LoopState {
+    pub const fn new() -> Self {
+        Self {
+            active: None,
+            pending_in_ms: None,
+            last: None,
+        }
+    }
+}
+
+impl Default for LoopState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum BeatJumpPage {
     Fractional,
     Default,
@@ -84,6 +127,7 @@ pub struct DeckState {
     pub sync_master: bool,
     pub quantize_enabled: bool,
     pub loop_adjust_mode: LoopAdjustMode,
+    pub loop_state: LoopState,
     pub censor_active: bool,
     pub master_tempo: bool,
     pub controller_connected: bool,
@@ -109,6 +153,7 @@ impl DeckState {
             sync_master: false,
             quantize_enabled: false,
             loop_adjust_mode: LoopAdjustMode::None,
+            loop_state: LoopState::new(),
             censor_active: false,
             master_tempo: false,
             controller_connected: false,
@@ -144,6 +189,14 @@ pub enum DeckEffect {
     SetPitchCentipercent {
         deck: DeckId,
         value: i16,
+    },
+    SetLoop {
+        deck: DeckId,
+        start_ms: u32,
+        end_ms: u32,
+    },
+    ClearLoop {
+        deck: DeckId,
     },
 }
 
@@ -243,6 +296,12 @@ impl DeckProductState {
             SemanticControl::BeatJumpForward => {
                 self.handle_beat_jump(deck, event.value, 1, 1, analysis)
             }
+            SemanticControl::LoopIn => self.handle_loop_in(deck, event.value, analysis),
+            SemanticControl::LoopOut => self.handle_loop_out(deck, event.value, analysis),
+            SemanticControl::ReloopExit => self.handle_reloop_exit(deck, event.value),
+            SemanticControl::LoopHalve => self.handle_loop_resize(deck, event.value, false),
+            SemanticControl::LoopDouble => self.handle_loop_resize(deck, event.value, true),
+            SemanticControl::LoopSize => self.handle_loop_size(deck, event.value),
             SemanticControl::PadAction => self.handle_pad_action(deck, event.value, analysis),
             SemanticControl::Shift => {
                 if let ControlValue::Pressed(pressed) = event.value {
@@ -294,10 +353,7 @@ impl DeckProductState {
             SemanticControl::PadModeKeyboard
             | SemanticControl::PadModeKeyShift
             | SemanticControl::PadModeSampler => DeckEffects::NONE,
-            SemanticControl::DeckExtAction => {
-                self.handle_deck_ext_action(deck, event.value);
-                DeckEffects::NONE
-            }
+            SemanticControl::DeckExtAction => self.handle_deck_ext_action(deck, event.value),
             _ => DeckEffects::NONE,
         }
     }
@@ -493,6 +549,162 @@ impl DeckProductState {
         }
     }
 
+
+    fn handle_loop_in(
+        &mut self,
+        deck: DeckId,
+        value: ControlValue,
+        analysis: [Option<TrackAnalysis<'_>>; 2],
+    ) -> DeckEffects {
+        if value != ControlValue::Pressed(true) {
+            return DeckEffects::NONE;
+        }
+
+        let position_ms = self.quantized_position_ms(deck, analysis);
+        self.decks[deck_index(deck)].loop_state.pending_in_ms = Some(position_ms);
+        DeckEffects::NONE
+    }
+
+    fn handle_loop_out(
+        &mut self,
+        deck: DeckId,
+        value: ControlValue,
+        analysis: [Option<TrackAnalysis<'_>>; 2],
+    ) -> DeckEffects {
+        if value != ControlValue::Pressed(true) {
+            return DeckEffects::NONE;
+        }
+
+        let position_ms = self.quantized_position_ms(deck, analysis);
+        let index = deck_index(deck);
+        let Some(start_ms) = self.decks[index].loop_state.pending_in_ms else {
+            return DeckEffects::NONE;
+        };
+        let Some(region) = LoopRegion::new(start_ms, position_ms) else {
+            return DeckEffects::NONE;
+        };
+
+        self.decks[index].loop_state.pending_in_ms = None;
+        self.decks[index].loop_state.active = Some(region);
+        self.decks[index].loop_state.last = Some(region);
+
+        DeckEffects::one(DeckEffect::SetLoop {
+            deck,
+            start_ms: region.start_ms,
+            end_ms: region.end_ms,
+        })
+    }
+
+    fn handle_reloop_exit(&mut self, deck: DeckId, value: ControlValue) -> DeckEffects {
+        if value != ControlValue::Pressed(true) {
+            return DeckEffects::NONE;
+        }
+
+        let state = &mut self.decks[deck_index(deck)];
+        if let Some(active) = state.loop_state.active.take() {
+            state.loop_state.last = Some(active);
+            state.loop_adjust_mode = LoopAdjustMode::None;
+            return DeckEffects::one(DeckEffect::ClearLoop { deck });
+        }
+
+        let Some(last) = state.loop_state.last else {
+            return DeckEffects::NONE;
+        };
+        state.loop_state.active = Some(last);
+
+        DeckEffects::one(DeckEffect::SetLoop {
+            deck,
+            start_ms: last.start_ms,
+            end_ms: last.end_ms,
+        })
+    }
+
+    fn handle_loop_resize(
+        &mut self,
+        deck: DeckId,
+        value: ControlValue,
+        double: bool,
+    ) -> DeckEffects {
+        if value != ControlValue::Pressed(true) {
+            return DeckEffects::NONE;
+        }
+
+        let index = deck_index(deck);
+        let Some(active) = self.decks[index].loop_state.active else {
+            return DeckEffects::NONE;
+        };
+        let Some(next) = resize_loop_region(active, double) else {
+            return DeckEffects::NONE;
+        };
+
+        self.decks[index].loop_state.active = Some(next);
+        self.decks[index].loop_state.last = Some(next);
+
+        DeckEffects::one(DeckEffect::SetLoop {
+            deck,
+            start_ms: next.start_ms,
+            end_ms: next.end_ms,
+        })
+    }
+
+    fn handle_loop_size(&mut self, deck: DeckId, value: ControlValue) -> DeckEffects {
+        let ControlValue::Relative(delta) = value else {
+            return DeckEffects::NONE;
+        };
+        if delta == 0 {
+            return DeckEffects::NONE;
+        }
+
+        let index = deck_index(deck);
+        let Some(mut region) = self.decks[index].loop_state.active else {
+            return DeckEffects::NONE;
+        };
+        let steps = (delta as i32).unsigned_abs().min(32);
+        let double = delta > 0;
+        let mut changed = false;
+
+        for _ in 0..steps {
+            let Some(next) = resize_loop_region(region, double) else {
+                break;
+            };
+            region = next;
+            changed = true;
+        }
+
+        if !changed {
+            return DeckEffects::NONE;
+        }
+
+        self.decks[index].loop_state.active = Some(region);
+        self.decks[index].loop_state.last = Some(region);
+
+        DeckEffects::one(DeckEffect::SetLoop {
+            deck,
+            start_ms: region.start_ms,
+            end_ms: region.end_ms,
+        })
+    }
+
+    fn quantized_position_ms(
+        &self,
+        deck: DeckId,
+        analysis: [Option<TrackAnalysis<'_>>; 2],
+    ) -> u32 {
+        let index = deck_index(deck);
+        let position_ms = self.decks[index].position_ms;
+        if !self.decks[index].quantize_enabled {
+            return position_ms;
+        }
+
+        let Some(grid) = analysis[index].and_then(|item| item.beat_grid()) else {
+            return position_ms;
+        };
+        let Some(beat_index) = grid.nearest_index(position_ms) else {
+            return position_ms;
+        };
+        grid.beats()[beat_index].time_ms
+    }
+
     fn handle_beat_jump(
         &mut self,
         deck: DeckId,
@@ -608,9 +820,9 @@ impl DeckProductState {
         }
     }
 
-    fn handle_deck_ext_action(&mut self, deck: DeckId, value: ControlValue) {
+    fn handle_deck_ext_action(&mut self, deck: DeckId, value: ControlValue) -> DeckEffects {
         let ControlValue::DeckExtAction(action) = value else {
-            return;
+            return DeckEffects::NONE;
         };
 
         match action.action {
@@ -628,17 +840,37 @@ impl DeckProductState {
             DeckExtAction::SyncOff if action.pressed => {
                 self.decks[deck_index(deck)].sync_enabled = false;
             }
+            DeckExtAction::ReloopStop if action.pressed => {
+                let state = &mut self.decks[deck_index(deck)];
+                state.loop_state = LoopState::new();
+                state.loop_adjust_mode = LoopAdjustMode::None;
+                return DeckEffects::one(DeckEffect::ClearLoop { deck });
+            }
             DeckExtAction::Censor
-            | DeckExtAction::ReloopStop
             | DeckExtAction::LoopAdjustIn
             | DeckExtAction::LoopAdjustOut => {
-                // These actions depend on qualified audio/loop state and are
-                // intentionally left for the next reducer slice rather than
-                // approximated here.
+                // Audio-dependent behavior is ported in a later reducer slice.
             }
             _ => {}
         }
+
+        DeckEffects::NONE
     }
+}
+
+
+fn resize_loop_region(region: LoopRegion, double: bool) -> Option<LoopRegion> {
+    let duration = region.duration_ms();
+    let next_duration = if double {
+        duration.checked_mul(2)?
+    } else {
+        if duration < 2 {
+            return None;
+        }
+        duration / 2
+    };
+    let end_ms = region.start_ms.checked_add(next_duration)?;
+    LoopRegion::new(region.start_ms, end_ms)
 }
 
 pub const fn tempo_centipercent_from_raw(raw: u16, range_percent: u16) -> i16 {
@@ -714,6 +946,19 @@ mod tests {
             control,
             value: ControlValue::Pressed(value),
         }
+    }
+
+
+    fn relative(deck: DeckId, control: SemanticControl, value: i16) -> ControlEvent {
+        ControlEvent {
+            deck: Some(deck),
+            control,
+            value: ControlValue::Relative(value),
+        }
+    }
+
+    fn loop_region(start_ms: u32, end_ms: u32) -> LoopRegion {
+        LoopRegion::new(start_ms, end_ms).unwrap()
     }
 
     fn absolute(deck: DeckId, control: SemanticControl, value: u16) -> ControlEvent {
@@ -1133,6 +1378,205 @@ mod tests {
         state.handle_control(absolute(DeckId::One, SemanticControl::Tempo, PITCH_CENTER));
         assert!(!state.deck(DeckId::One).sync_enabled);
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 0);
+    }
+
+
+    #[test]
+    fn loop_in_out_sets_requested_deck_loop_from_product_position() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::Two, 1000);
+
+        assert_eq!(
+            state.handle_control(pressed(DeckId::Two, SemanticControl::LoopIn, true)),
+            DeckEffects::NONE
+        );
+        assert_eq!(state.deck(DeckId::Two).loop_state.pending_in_ms, Some(1000));
+        assert_eq!(state.deck(DeckId::Two).loop_state.active, None);
+
+        state.set_position_ms(DeckId::Two, 2600);
+        let effects = state.handle_control(pressed(
+            DeckId::Two,
+            SemanticControl::LoopOut,
+            true,
+        ));
+
+        assert_eq!(state.deck(DeckId::One).loop_state.active, None);
+        assert_eq!(
+            state.deck(DeckId::Two).loop_state.active,
+            Some(loop_region(1000, 2600))
+        );
+        assert_eq!(
+            effects.items[0],
+            Some(DeckEffect::SetLoop {
+                deck: DeckId::Two,
+                start_ms: 1000,
+                end_ms: 2600,
+            })
+        );
+    }
+
+    #[test]
+    fn quantized_loop_in_out_snaps_to_nearest_neutral_beat() {
+        let mut state = DeckProductState::new();
+        let beats = [
+            Beat {
+                time_ms: 1000,
+                phase: 0,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 2000,
+                phase: 1,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 3000,
+                phase: 2,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 4000,
+                phase: 3,
+                bpm_x100: 12_000,
+            },
+        ];
+        let analysis = beat_jump_analysis(&beats, 12_000);
+
+        state.handle_control(ext(DeckId::One, DeckExtAction::Quantize, true));
+        state.set_position_ms(DeckId::One, 1850);
+        state.handle_control_with_analysis(
+            pressed(DeckId::One, SemanticControl::LoopIn, true),
+            [Some(analysis), None],
+        );
+        state.set_position_ms(DeckId::One, 4230);
+        state.handle_control_with_analysis(
+            pressed(DeckId::One, SemanticControl::LoopOut, true),
+            [Some(analysis), None],
+        );
+
+        assert_eq!(
+            state.deck(DeckId::One).loop_state.active,
+            Some(loop_region(2000, 4000))
+        );
+    }
+
+    #[test]
+    fn reloop_exit_clears_and_restores_last_loop() {
+        let mut state = DeckProductState::new();
+        state.decks[deck_index(DeckId::One)].loop_state.active =
+            Some(loop_region(500, 2500));
+        state.decks[deck_index(DeckId::One)].loop_state.last =
+            Some(loop_region(500, 2500));
+
+        let clear =
+            state.handle_control(pressed(DeckId::One, SemanticControl::ReloopExit, true));
+        assert_eq!(
+            clear.items[0],
+            Some(DeckEffect::ClearLoop { deck: DeckId::One })
+        );
+        assert_eq!(state.deck(DeckId::One).loop_state.active, None);
+
+        let restore =
+            state.handle_control(pressed(DeckId::One, SemanticControl::ReloopExit, true));
+        assert_eq!(
+            restore.items[0],
+            Some(DeckEffect::SetLoop {
+                deck: DeckId::One,
+                start_ms: 500,
+                end_ms: 2500,
+            })
+        );
+        assert_eq!(
+            state.deck(DeckId::One).loop_state.active,
+            Some(loop_region(500, 2500))
+        );
+    }
+
+    #[test]
+    fn loop_halve_double_and_relative_size_match_released_final_state() {
+        let mut state = DeckProductState::new();
+        state.decks[deck_index(DeckId::Two)].loop_state.active =
+            Some(loop_region(1000, 5000));
+        state.decks[deck_index(DeckId::Two)].loop_state.last =
+            Some(loop_region(1000, 5000));
+
+        state.handle_control(pressed(
+            DeckId::Two,
+            SemanticControl::LoopHalve,
+            true,
+        ));
+        assert_eq!(
+            state.deck(DeckId::Two).loop_state.active,
+            Some(loop_region(1000, 3000))
+        );
+
+        state.handle_control(pressed(
+            DeckId::Two,
+            SemanticControl::LoopDouble,
+            true,
+        ));
+        assert_eq!(
+            state.deck(DeckId::Two).loop_state.active,
+            Some(loop_region(1000, 5000))
+        );
+
+        state.decks[deck_index(DeckId::One)].loop_state.active =
+            Some(loop_region(1000, 5000));
+        state.decks[deck_index(DeckId::One)].loop_state.last =
+            Some(loop_region(1000, 5000));
+        state.handle_control(relative(DeckId::One, SemanticControl::LoopSize, -1));
+        assert_eq!(
+            state.deck(DeckId::One).loop_state.active,
+            Some(loop_region(1000, 3000))
+        );
+        state.handle_control(relative(DeckId::One, SemanticControl::LoopSize, 2));
+        assert_eq!(
+            state.deck(DeckId::One).loop_state.active,
+            Some(loop_region(1000, 9000))
+        );
+    }
+
+    #[test]
+    fn loop_release_edges_do_not_mutate_state() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 1000);
+
+        assert_eq!(
+            state.handle_control(pressed(DeckId::One, SemanticControl::LoopIn, false)),
+            DeckEffects::NONE
+        );
+        assert_eq!(
+            state.handle_control(pressed(DeckId::One, SemanticControl::LoopOut, false)),
+            DeckEffects::NONE
+        );
+        assert_eq!(state.deck(DeckId::One).loop_state, LoopState::new());
+    }
+
+    #[test]
+    fn reloop_stop_clears_active_and_remembered_loop() {
+        let mut state = DeckProductState::new();
+        state.decks[deck_index(DeckId::One)].loop_state.active =
+            Some(loop_region(1000, 4000));
+        state.decks[deck_index(DeckId::One)].loop_state.last =
+            Some(loop_region(1000, 4000));
+        state.decks[deck_index(DeckId::One)].loop_state.pending_in_ms = Some(7000);
+
+        let effects =
+            state.handle_control(ext(DeckId::One, DeckExtAction::ReloopStop, true));
+        assert_eq!(
+            effects.items[0],
+            Some(DeckEffect::ClearLoop { deck: DeckId::One })
+        );
+        assert_eq!(state.deck(DeckId::One).loop_state, LoopState::new());
+
+        assert_eq!(
+            state.handle_control(pressed(
+                DeckId::One,
+                SemanticControl::ReloopExit,
+                true,
+            )),
+            DeckEffects::NONE
+        );
     }
 
     fn beat_jump_analysis<'a>(beats: &'a [Beat], bpm_x100: u32) -> TrackAnalysis<'a> {
