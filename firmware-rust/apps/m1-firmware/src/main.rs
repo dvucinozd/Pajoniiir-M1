@@ -19,6 +19,7 @@ fn main() -> ! {
     let _ = core::mem::size_of::<pajoniiir_controller_session::ControllerSession>();
     let _ = core::mem::size_of::<pajoniiir_deck::DeckProductState>();
     let _ = core::mem::size_of::<pajoniiir_hot_cues::HotCueBank>();
+    let _ = core::mem::size_of::<pajoniiir_mixer::MixerState>();
     let _ = core::mem::size_of::<pajoniiir_ui_model::UiSnapshot>();
     let _ = core::mem::size_of::<pajoniiir_waveform::WaveformColumn>();
 

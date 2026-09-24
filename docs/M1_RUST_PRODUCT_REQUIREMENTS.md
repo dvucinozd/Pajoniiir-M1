@@ -24,11 +24,11 @@ Initial dependency/target assumptions as of 2026-09-24:
 
 - ESP32-P4NRW32X, M1 production target silicon v3.2 or newer approved revision.
 - Rust target: `riscv32imafc-unknown-none-elf`.
-- `esp-hal 1.2.0`, with ESP32-P4 support for chip revision >= v3.x.
+- `esp-hal 1.2.2`, with ESP32-P4 support for chip revision >= v3.x.
 - `esp-hal` P4 USB, MIPI DSI, I2S, SDMMC and PSRAM APIs are treated as unstable integration surfaces.
 - Slint `1.18.1`.
 - embedded-graphics `0.8.2`.
-- Rust toolchain baseline `1.95.0`, matching the current esp-hal 1.2.0 minimum Rust version.
+- Rust toolchain baseline `1.95.0`, matching the current esp-hal 1.2.2 minimum Rust version.
 - ESP-IDF application runtime / FreeRTOS / esp-idf-sys are not the permanent M1 application architecture.
 
 All exact dependency versions and `Cargo.lock` shall be committed before an executable firmware baseline is accepted. Any esp-hal minor upgrade is a qualified platform change because M1 relies on unstable P4 peripheral APIs.

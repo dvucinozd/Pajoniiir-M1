@@ -12,7 +12,7 @@ It is intentionally excluded from the host workspace dependency graph so
 - Target: `riscv32imafc-unknown-none-elf`
 - HAL: `esp-hal = 1.2.2`
 - Chip feature: `esp32p4`
-- Supported silicon baseline: ESP32-P4 revision v3.x or newer
+- Supported silicon baseline: ESP32-P4 revision v3.2 or newer (`ESP_HAL_CONFIG_MIN_CHIP_REVISION=302`)
 - `esp-hal/unstable` is enabled only by this final firmware target.
 - USB OTG host and MIPI-DSI stay behind the M1 platform/BSP boundary.
 

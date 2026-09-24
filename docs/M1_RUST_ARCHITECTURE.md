@@ -29,7 +29,7 @@ Current starting platform:
 ```text
 ESP32-P4NRW32X v3.2+
         |
-    esp-hal 1.2.0
+    esp-hal 1.2.2
         |
    platform / M1 BSP
         |

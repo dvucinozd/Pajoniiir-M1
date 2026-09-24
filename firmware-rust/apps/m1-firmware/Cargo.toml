@@ -10,6 +10,7 @@ esp-hal = { version = "=1.2.2", features = ["esp32p4", "unstable"] }
 pajoniiir-controller-session = { path = "../../crates/pajoniiir-controller-session" }
 pajoniiir-deck = { path = "../../crates/pajoniiir-deck" }
 pajoniiir-hot-cues = { path = "../../crates/pajoniiir-hot-cues" }
+pajoniiir-mixer = { path = "../../crates/pajoniiir-mixer" }
 pajoniiir-ui-model = { path = "../../crates/pajoniiir-ui-model" }
 pajoniiir-waveform = { path = "../../crates/pajoniiir-waveform" }
 
