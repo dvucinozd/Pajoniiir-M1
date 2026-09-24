@@ -19,6 +19,8 @@ members = [
 default-members = [
     "apps/desktop-simulator",
     "crates/pajoniiir-audio-dsp",
+    "crates/pajoniiir-audio-keylock",
+    "crates/pajoniiir-audio-runtime",
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",

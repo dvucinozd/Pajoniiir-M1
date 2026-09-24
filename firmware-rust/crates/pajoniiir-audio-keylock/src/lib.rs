@@ -12,7 +12,7 @@ const COARSE_POINTS: i32 = 8;
 const REFINE_RADIUS: i32 = 3;
 const REBASE_THRESHOLD: f32 = 16_384.0;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct KeylockOutput {
     pub frame: PcmFrame,
     pub consumed: u32,
