@@ -551,11 +551,7 @@ mod tests {
     fn held_release_remains_durable_when_fifo_is_full() {
         let mut scheduler = EventScheduler::new();
         for _ in 0..DISCRETE_FIFO_CAPACITY {
-            assert!(scheduler.enqueue_discrete(pressed(
-                DeckId::One,
-                SemanticControl::Cue,
-                true
-            )));
+            assert!(scheduler.enqueue_discrete(pressed(DeckId::One, SemanticControl::Cue, true)));
         }
 
         let mut held = HeldStateReconciler::new();
