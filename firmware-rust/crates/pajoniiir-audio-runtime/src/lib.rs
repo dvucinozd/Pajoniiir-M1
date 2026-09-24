@@ -22,13 +22,8 @@ pub struct BeatFxDeckConfig {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum AudioEffectCommand {
-    BeatFx {
-        decks: [BeatFxDeckConfig; 2],
-    },
-    PadFx {
-        deck: DeckId,
-        config: PadFxConfig,
-    },
+    BeatFx { decks: [BeatFxDeckConfig; 2] },
+    PadFx { deck: DeckId, config: PadFxConfig },
 }
 
 pub fn map_deck_effect(effect: DeckEffect) -> Option<AudioEffectCommand> {
@@ -103,8 +98,7 @@ fn beat_fx_deck_config(
     let included = target_includes(state.target, deck_index);
     let active = state.enabled && state.depth > 0 && included;
     let filter_enabled = active && state.effect == BeatFxEffect::Filter;
-    let time_enabled =
-        active && matches!(state.effect, BeatFxEffect::Echo | BeatFxEffect::Delay);
+    let time_enabled = active && matches!(state.effect, BeatFxEffect::Echo | BeatFxEffect::Delay);
     let flanger_enabled = active && state.effect == BeatFxEffect::Flanger;
     let delay_mode = if state.effect == BeatFxEffect::Delay {
         DelayMode::Delay
@@ -198,12 +192,7 @@ mod tests {
     #[test]
     fn filter_target_is_per_deck_and_does_not_touch_time_or_flanger() {
         let configs = map_beat_fx(
-            state(
-                BeatFxEffect::Filter,
-                BeatFxTarget::ChannelOne,
-                127,
-                true,
-            ),
+            state(BeatFxEffect::Filter, BeatFxTarget::ChannelOne, 127, true),
             500,
             500,
         );
@@ -244,12 +233,7 @@ mod tests {
     #[test]
     fn delay_is_one_shot_and_preserves_zero_feedback_contract() {
         let configs = map_beat_fx(
-            state(
-                BeatFxEffect::Delay,
-                BeatFxTarget::ChannelTwo,
-                127,
-                true,
-            ),
+            state(BeatFxEffect::Delay, BeatFxTarget::ChannelTwo, 127, true),
             0,
             500,
         );
