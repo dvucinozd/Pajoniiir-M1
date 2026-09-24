@@ -1,6 +1,7 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+use pajoniiir_audio_dsp::smart_cfx_curve_raw;
 use pajoniiir_controller_core::{ControlEvent, ControlValue, DeckId, SemanticControl};
 
 pub const MIXER_CONTROL_MAX: u16 = 16_383;
@@ -72,6 +73,8 @@ pub struct MixerState {
     headphone_mix: u16,
     headphone_level: u16,
     master_cue_enabled: bool,
+    smart_cfx_enabled: bool,
+    smart_fader_enabled: bool,
 }
 
 impl MixerState {
@@ -84,6 +87,8 @@ impl MixerState {
             headphone_mix: MIXER_CONTROL_MAX,
             headphone_level: MIXER_CONTROL_MAX,
             master_cue_enabled: true,
+            smart_cfx_enabled: false,
+            smart_fader_enabled: false,
         }
     }
 
@@ -113,6 +118,23 @@ impl MixerState {
 
     pub const fn master_cue_enabled(&self) -> bool {
         self.master_cue_enabled
+    }
+
+    pub const fn smart_cfx_enabled(&self) -> bool {
+        self.smart_cfx_enabled
+    }
+
+    pub const fn smart_fader_enabled(&self) -> bool {
+        self.smart_fader_enabled
+    }
+
+    pub fn effective_filter_raw(&self, deck: DeckId) -> u16 {
+        let raw = self.decks[deck_index(deck)].filter;
+        if self.smart_cfx_enabled {
+            smart_cfx_curve_raw(raw)
+        } else {
+            raw
+        }
     }
 
     pub fn set_master_trim_gain(&mut self, gain: f32) {
@@ -145,6 +167,21 @@ impl MixerState {
                 self.master_cue_enabled = !self.master_cue_enabled;
                 true
             }
+            SemanticControl::SmartCfx => {
+                if event.value != ControlValue::Pressed(true) {
+                    return false;
+                }
+                self.smart_cfx_enabled = !self.smart_cfx_enabled;
+                true
+            }
+            SemanticControl::SmartFader => {
+                if event.value != ControlValue::Pressed(true) {
+                    return false;
+                }
+                self.smart_fader_enabled = !self.smart_fader_enabled;
+                true
+            }
+            SemanticControl::SmartCfxShift | SemanticControl::SmartFaderShift => false,
             SemanticControl::ChannelVolume
             | SemanticControl::Trim
             | SemanticControl::EqHigh
@@ -190,7 +227,14 @@ impl MixerState {
     }
 
     pub fn stage_gains(&self) -> MixerStageGains {
-        let (xf_one, xf_two) = crossfader_gains(self.crossfader);
+        let (mut xf_one, mut xf_two) = crossfader_gains(self.crossfader);
+        if self.smart_fader_enabled {
+            if self.crossfader < MIXER_CONTROL_CENTER {
+                xf_two *= xf_two;
+            } else if self.crossfader > MIXER_CONTROL_CENTER {
+                xf_one *= xf_one;
+            }
+        }
         MixerStageGains {
             pre: [trim_gain(self.decks[0].trim), trim_gain(self.decks[1].trim)],
             post: [
@@ -386,6 +430,8 @@ mod tests {
         assert_eq!(state.headphone_mix(), MIXER_CONTROL_MAX);
         assert_eq!(state.headphone_level(), MIXER_CONTROL_MAX);
         assert!(state.master_cue_enabled());
+        assert!(!state.smart_cfx_enabled());
+        assert!(!state.smart_fader_enabled());
     }
 
     #[test]
@@ -424,6 +470,87 @@ mod tests {
         assert!(!state.master_cue_enabled());
         assert!(!state.handle_control(pressed(None, SemanticControl::MasterCue, false)));
         assert!(!state.master_cue_enabled());
+    }
+
+
+    #[test]
+    fn smart_buttons_toggle_only_on_press_and_shift_variants_are_noops() {
+        let mut state = MixerState::new();
+
+        assert!(state.handle_control(pressed(None, SemanticControl::SmartCfx, true)));
+        assert!(state.smart_cfx_enabled());
+        assert!(!state.handle_control(pressed(None, SemanticControl::SmartCfx, false)));
+        assert!(state.smart_cfx_enabled());
+
+        assert!(state.handle_control(pressed(None, SemanticControl::SmartFader, true)));
+        assert!(state.smart_fader_enabled());
+        assert!(!state.handle_control(pressed(None, SemanticControl::SmartFader, false)));
+        assert!(state.smart_fader_enabled());
+
+        assert!(!state.handle_control(pressed(
+            None,
+            SemanticControl::SmartCfxShift,
+            true,
+        )));
+        assert!(!state.handle_control(pressed(
+            None,
+            SemanticControl::SmartFaderShift,
+            true,
+        )));
+        assert!(state.smart_cfx_enabled());
+        assert!(state.smart_fader_enabled());
+    }
+
+    #[test]
+    fn smart_cfx_only_changes_effective_filter_mapping() {
+        let mut state = MixerState::new();
+        state.handle_control(absolute(
+            Some(DeckId::One),
+            SemanticControl::Filter,
+            MIXER_CONTROL_CENTER - 512,
+            MIXER_CONTROL_MAX,
+        ));
+        let raw = state.deck(DeckId::One).filter;
+        assert_eq!(state.effective_filter_raw(DeckId::One), raw);
+
+        state.handle_control(pressed(None, SemanticControl::SmartCfx, true));
+        let effective = state.effective_filter_raw(DeckId::One);
+        assert!(effective < MIXER_CONTROL_CENTER);
+        assert!(effective > raw);
+        assert_eq!(state.deck(DeckId::One).filter, raw);
+    }
+
+    #[test]
+    fn smart_fader_squares_only_the_fading_out_crossfader_side() {
+        let mut state = MixerState::new();
+        state.handle_control(absolute(
+            None,
+            SemanticControl::Crossfader,
+            MIXER_CONTROL_CENTER / 2,
+            MIXER_CONTROL_MAX,
+        ));
+        let normal_left = state.stage_gains();
+        assert_eq!(normal_left.post[0], 1.0);
+        assert!(normal_left.post[1] > 0.0);
+
+        state.handle_control(pressed(None, SemanticControl::SmartFader, true));
+        let smart_left = state.stage_gains();
+        assert_eq!(smart_left.post[0], normal_left.post[0]);
+        assert_eq!(
+            smart_left.post[1],
+            normal_left.post[1] * normal_left.post[1]
+        );
+
+        state.handle_control(absolute(
+            None,
+            SemanticControl::Crossfader,
+            MIXER_CONTROL_CENTER + (MIXER_CONTROL_MAX - MIXER_CONTROL_CENTER) / 2,
+            MIXER_CONTROL_MAX,
+        ));
+        let smart_right = state.stage_gains();
+        let (xf_one, xf_two) = crossfader_gains(state.crossfader());
+        assert_eq!(smart_right.post[0], xf_one * xf_one);
+        assert_eq!(smart_right.post[1], xf_two);
     }
 
     #[test]
