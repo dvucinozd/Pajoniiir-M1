@@ -6,6 +6,7 @@ members = [
     "crates/pajoniiir-controller-profile",
     "crates/pajoniiir-control-scheduler",
     "crates/pajoniiir-deck",
+    "crates/pajoniiir-hot-cues",
     "crates/pajoniiir-track-analysis",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
@@ -17,6 +18,7 @@ default-members = [
     "crates/pajoniiir-controller-profile",
     "crates/pajoniiir-control-scheduler",
     "crates/pajoniiir-deck",
+    "crates/pajoniiir-hot-cues",
     "crates/pajoniiir-track-analysis",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
@@ -39,6 +41,7 @@ pajoniiir-controller-core = { path = "crates/pajoniiir-controller-core" }
 pajoniiir-controller-profile = { path = "crates/pajoniiir-controller-profile" }
 pajoniiir-control-scheduler = { path = "crates/pajoniiir-control-scheduler" }
 pajoniiir-deck = { path = "crates/pajoniiir-deck" }
+pajoniiir-hot-cues = { path = "crates/pajoniiir-hot-cues" }
 pajoniiir-track-analysis = { path = "crates/pajoniiir-track-analysis" }
 pajoniiir-ui-model = { path = "crates/pajoniiir-ui-model" }
 pajoniiir-waveform = { path = "crates/pajoniiir-waveform" }
