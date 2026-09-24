@@ -121,4 +121,51 @@ mod tests {
 
         assert!(pixels.contains(&0xffff));
     }
+
+    #[test]
+    fn rgb565_golden_fixture_is_deterministic() {
+        const WAVE: u16 = 0x07e0;
+        const PLAYHEAD: u16 = 0xf800;
+
+        let columns = [
+            WaveformColumn {
+                peak: 0,
+                color_rgb565: WAVE,
+            },
+            WaveformColumn {
+                peak: 16_384,
+                color_rgb565: WAVE,
+            },
+            WaveformColumn {
+                peak: 32_768,
+                color_rgb565: WAVE,
+            },
+            WaveformColumn {
+                peak: 49_152,
+                color_rgb565: WAVE,
+            },
+            WaveformColumn {
+                peak: u16::MAX,
+                color_rgb565: WAVE,
+            },
+        ];
+
+        let mut pixels = [0u16; 25];
+        {
+            let mut surface = Rgb565Surface::new(&mut pixels, 5, 5).unwrap();
+            surface.clear(0);
+            surface.draw_centered_waveform(0, 0, 5, 5, WaveformView { columns: &columns });
+            surface.draw_playhead(2, 0, 5, PLAYHEAD);
+        }
+
+        let expected = [
+            0, 0, PLAYHEAD, 0, WAVE,
+            0, 0, PLAYHEAD, WAVE, WAVE,
+            WAVE, WAVE, PLAYHEAD, WAVE, WAVE,
+            0, 0, PLAYHEAD, WAVE, WAVE,
+            0, 0, PLAYHEAD, 0, WAVE,
+        ];
+
+        assert_eq!(pixels, expected);
+    }
 }

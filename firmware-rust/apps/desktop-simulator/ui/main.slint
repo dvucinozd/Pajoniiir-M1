@@ -4,6 +4,14 @@ export component MainWindow inherits Window {
     title: "Pajoniiir M1 Rust Simulator";
     background: #0d1016;
 
+    in property <string> deck-one-bpm-text: "--.-- BPM";
+    in property <string> deck-one-time-text: "00:00.000";
+    in property <string> deck-one-status-text: "PAUSE   SYNC OFF   MT OFF";
+    in property <string> deck-two-bpm-text: "--.-- BPM";
+    in property <string> deck-two-time-text: "00:00.000";
+    in property <string> deck-two-status-text: "PAUSE   SYNC OFF   MT OFF";
+    in property <string> simulator-status-text: "HOST PENDING";
+
     Rectangle {
         x: 0px;
         y: 0px;
@@ -47,9 +55,9 @@ export component MainWindow inherits Window {
         }
 
         Text {
-            x: 264px;
+            x: 250px;
             y: 10px;
-            text: "128.00 BPM";
+            text: root.deck-one-bpm-text;
             color: #f3f6fa;
             font-size: 17px;
         }
@@ -63,27 +71,27 @@ export component MainWindow inherits Window {
             border-radius: 4px;
 
             Text {
-                x: 104px;
+                x: 96px;
                 y: 50px;
-                text: "WAVEFORM D1";
+                text: "WAVEFORM D1 / RGB565";
                 color: #526276;
-                font-size: 16px;
+                font-size: 14px;
             }
         }
 
         Text {
             x: 14px;
             y: 194px;
-            text: "00:00.000";
+            text: root.deck-one-time-text;
             color: #f3f6fa;
             font-size: 28px;
             font-weight: 700;
         }
 
         Text {
-            x: 228px;
+            x: 188px;
             y: 202px;
-            text: "SYNC OFF   MT ON";
+            text: root.deck-one-status-text;
             color: #8797aa;
             font-size: 13px;
         }
@@ -107,9 +115,9 @@ export component MainWindow inherits Window {
         }
 
         Text {
-            x: 264px;
+            x: 250px;
             y: 10px;
-            text: "124.00 BPM";
+            text: root.deck-two-bpm-text;
             color: #f3f6fa;
             font-size: 17px;
         }
@@ -123,27 +131,27 @@ export component MainWindow inherits Window {
             border-radius: 4px;
 
             Text {
-                x: 104px;
+                x: 96px;
                 y: 50px;
-                text: "WAVEFORM D2";
+                text: "WAVEFORM D2 / RGB565";
                 color: #526276;
-                font-size: 16px;
+                font-size: 14px;
             }
         }
 
         Text {
             x: 14px;
             y: 194px;
-            text: "00:00.000";
+            text: root.deck-two-time-text;
             color: #f3f6fa;
             font-size: 28px;
             font-weight: 700;
         }
 
         Text {
-            x: 228px;
+            x: 188px;
             y: 202px;
-            text: "SYNC OFF   MT ON";
+            text: root.deck-two-status-text;
             color: #8797aa;
             font-size: 13px;
         }
@@ -191,9 +199,9 @@ export component MainWindow inherits Window {
         }
 
         Text {
-            x: 600px;
+            x: 574px;
             y: 12px;
-            text: "M1 HOST VERIFIED";
+            text: root.simulator-status-text;
             color: #66d49f;
             font-size: 13px;
         }
@@ -209,7 +217,7 @@ export component MainWindow inherits Window {
         Text {
             x: 18px;
             y: 62px;
-            text: "UI foundation: Slint 1.18.1 / waveform compositor boundary reserved";
+            text: "Slint state binding active / waveform renderer remains toolkit-independent";
             color: #718196;
             font-size: 12px;
         }
