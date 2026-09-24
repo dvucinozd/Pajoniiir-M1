@@ -9,7 +9,6 @@ pub const EQ_RAW_MAX: u16 = MIXER_CONTROL_MAX;
 
 const EQ_LOW_CUTOFF_HZ: f32 = 800.0;
 const EQ_HIGH_CUTOFF_HZ: f32 = 4_000.0;
-const PI: f32 = 3.141_592_7;
 const EQ_GAIN_BLOCK: u32 = 32;
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
@@ -191,7 +190,7 @@ fn one_pole_alpha(cutoff_hz: f32, sample_rate_hz: u32) -> f32 {
     } else {
         sample_rate_hz
     };
-    let omega = 2.0 * PI * cutoff_hz;
+    let omega = 2.0 * core::f32::consts::PI * cutoff_hz;
     omega / (omega + sample_rate_hz as f32)
 }
 
@@ -327,8 +326,8 @@ mod tests {
             left: 30_000,
             right: -30_000,
         });
-        assert!(out.left <= i16::MAX);
-        assert!(out.right >= i16::MIN);
+        assert_eq!(out.left, i16::MAX);
+        assert_eq!(out.right, i16::MIN);
     }
 
     #[test]
