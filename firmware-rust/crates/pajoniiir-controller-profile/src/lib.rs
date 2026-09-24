@@ -1,6 +1,10 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+mod semantic;
+
+pub use semantic::{adapt_profile_event, SemanticAdapterError};
+
 #[cfg(test)]
 extern crate std;
 
