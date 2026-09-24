@@ -150,7 +150,7 @@ impl DeckProductState {
         }
     }
 
-    pub const fn deck(&self, deck: DeckId) -> &DeckState {
+    pub fn deck(&self, deck: DeckId) -> &DeckState {
         &self.decks[deck_index(deck)]
     }
 
@@ -275,7 +275,11 @@ impl DeckProductState {
         let state = &mut self.decks[deck_index(deck)];
         state.playback_generation = state.playback_generation.wrapping_add(1);
         let request_id = state.playback_generation;
-        let playing = !state.playing;
+        let desired_now = state
+            .pending_playback
+            .map(|pending| pending.playing)
+            .unwrap_or(state.playing);
+        let playing = !desired_now;
         state.pending_playback = Some(PendingPlayback {
             request_id,
             playing,
@@ -418,21 +422,12 @@ impl DeckProductState {
         };
 
         match action.action {
-            DeckExtAction::Censor => {
-                self.decks[deck_index(deck)].censor_active = action.pressed;
-            }
             DeckExtAction::SyncMaster if action.pressed => {
                 self.sync_master = Some(deck);
                 for candidate in [DeckId::One, DeckId::Two] {
                     self.decks[deck_index(candidate)].sync_master = candidate == deck;
                 }
                 self.decks[deck_index(deck)].sync_enabled = false;
-            }
-            DeckExtAction::LoopAdjustIn if action.pressed => {
-                self.decks[deck_index(deck)].loop_adjust_mode = LoopAdjustMode::In;
-            }
-            DeckExtAction::LoopAdjustOut if action.pressed => {
-                self.decks[deck_index(deck)].loop_adjust_mode = LoopAdjustMode::Out;
             }
             DeckExtAction::Quantize if action.pressed => {
                 let state = &mut self.decks[deck_index(deck)];
@@ -441,8 +436,13 @@ impl DeckProductState {
             DeckExtAction::SyncOff if action.pressed => {
                 self.decks[deck_index(deck)].sync_enabled = false;
             }
-            DeckExtAction::ReloopStop if action.pressed => {
-                self.decks[deck_index(deck)].loop_adjust_mode = LoopAdjustMode::None;
+            DeckExtAction::Censor
+            | DeckExtAction::ReloopStop
+            | DeckExtAction::LoopAdjustIn
+            | DeckExtAction::LoopAdjustOut => {
+                // These actions depend on qualified audio/loop state and are
+                // intentionally left for the next reducer slice rather than
+                // approximated here.
             }
             _ => {}
         }
@@ -605,13 +605,14 @@ mod tests {
         let mut state = DeckProductState::new();
         let (_, _, first) =
             playback_request(state.handle_control(pressed(DeckId::One, SemanticControl::Play, true)));
-        let (_, _, second) =
+        let (_, second_target, second) =
             playback_request(state.handle_control(pressed(DeckId::One, SemanticControl::Play, true)));
 
+        assert!(!second_target);
         assert!(!state.resolve_playback_request(DeckId::One, first, true));
         assert!(!state.deck(DeckId::One).playing);
         assert!(state.resolve_playback_request(DeckId::One, second, true));
-        assert!(state.deck(DeckId::One).playing);
+        assert!(!state.deck(DeckId::One).playing);
     }
 
     #[test]
