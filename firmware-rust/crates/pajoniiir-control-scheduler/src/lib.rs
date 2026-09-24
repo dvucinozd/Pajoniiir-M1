@@ -348,7 +348,6 @@ fn release_event(event: ControlEvent) -> ControlEvent {
     ControlEvent { value, ..event }
 }
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ConnectionState {
     Connected,
@@ -778,5 +777,4 @@ mod tests {
         assert_eq!(dirty.sequence, 44);
         assert_eq!(dirty.event.value, ControlValue::Pressed(false));
     }
-
 }
