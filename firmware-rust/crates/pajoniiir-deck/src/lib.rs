@@ -4,7 +4,9 @@
 use pajoniiir_controller_core::{
     ControlEvent, ControlValue, DeckExtAction, DeckId, PadMode, SemanticControl,
 };
-use pajoniiir_track_analysis::{TrackAnalysis, beat_jump_target_ms, phase_align_target_ms};
+use pajoniiir_track_analysis::{
+    TrackAnalysis, beat_jump_target_ms, beat_loop_duration_ms, phase_align_target_ms,
+};
 
 pub const PITCH_CENTER: u16 = 8192;
 pub const PITCH_MAX: u16 = 16383;
@@ -107,10 +109,36 @@ const BEAT_JUMP_LARGE: [(i32, u16); 8] = [
     (128, 1),
 ];
 
+const BEAT_LOOP_LENGTHS: [(u16, u16); 8] = [
+    (1, 32),
+    (1, 16),
+    (1, 8),
+    (1, 4),
+    (1, 2),
+    (1, 1),
+    (2, 1),
+    (4, 1),
+];
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct PendingPlayback {
     request_id: u32,
     playing: bool,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct ShiftedLoopRoll {
+    active: bool,
+    previous: Option<LoopRegion>,
+}
+
+impl ShiftedLoopRoll {
+    const fn new() -> Self {
+        Self {
+            active: false,
+            previous: None,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -227,6 +255,7 @@ pub struct DeckProductState {
     decks: [DeckState; 2],
     sync_master: Option<DeckId>,
     beat_jump_page: BeatJumpPage,
+    shifted_loop_roll: [ShiftedLoopRoll; 2],
 }
 
 impl Default for DeckProductState {
@@ -241,6 +270,7 @@ impl DeckProductState {
             decks: [DeckState::new(), DeckState::new()],
             sync_master: None,
             beat_jump_page: BeatJumpPage::Default,
+            shifted_loop_roll: [ShiftedLoopRoll::new(), ShiftedLoopRoll::new()],
         }
     }
 
@@ -728,23 +758,125 @@ impl DeckProductState {
         let ControlValue::PadAction(action) = value else {
             return DeckEffects::NONE;
         };
-        if action.mode != PadMode::BeatJump || !action.pressed {
-            return DeckEffects::NONE;
-        }
 
-        if action.shifted {
-            match action.pad {
-                6 => self.change_beat_jump_page(-1),
-                7 => self.change_beat_jump_page(1),
-                _ => {}
+        match action.mode {
+            PadMode::BeatJump => {
+                if !action.pressed {
+                    return DeckEffects::NONE;
+                }
+
+                if action.shifted {
+                    match action.pad {
+                        6 => self.change_beat_jump_page(-1),
+                        7 => self.change_beat_jump_page(1),
+                        _ => {}
+                    }
+                    return DeckEffects::NONE;
+                }
+
+                let Some((numerator, denominator)) = self.beat_jump_size_for_pad(action.pad)
+                else {
+                    return DeckEffects::NONE;
+                };
+                self.apply_beat_jump(deck, numerator, denominator, analysis)
             }
-            return DeckEffects::NONE;
+            PadMode::BeatLoop => {
+                if action.shifted {
+                    if action.pressed {
+                        self.handle_shifted_beat_loop_press(deck, action.pad, analysis)
+                    } else {
+                        self.handle_shifted_beat_loop_release(deck)
+                    }
+                } else if action.pressed {
+                    self.handle_beat_loop_pad_action(deck, action.pad, analysis)
+                } else {
+                    DeckEffects::NONE
+                }
+            }
+            _ => DeckEffects::NONE,
         }
+    }
 
-        let Some((numerator, denominator)) = self.beat_jump_size_for_pad(action.pad) else {
+    fn handle_beat_loop_pad_action(
+        &mut self,
+        deck: DeckId,
+        pad: u8,
+        analysis: [Option<TrackAnalysis<'_>>; 2],
+    ) -> DeckEffects {
+        let Some((numerator, denominator)) = BEAT_LOOP_LENGTHS.get(pad as usize).copied() else {
             return DeckEffects::NONE;
         };
-        self.apply_beat_jump(deck, numerator, denominator, analysis)
+
+        let index = deck_index(deck);
+        let state = self.decks[index];
+        let track_analysis = analysis[index];
+        let bpm_x100 = track_analysis
+            .map(|item| item.bpm_x100())
+            .filter(|value| *value > 0)
+            .unwrap_or(state.base_bpm_x100);
+        let beat_grid = track_analysis.and_then(|item| item.beat_grid());
+        let duration_ms = beat_loop_duration_ms(
+            state.position_ms,
+            bpm_x100,
+            numerator,
+            denominator,
+            beat_grid,
+        );
+        let Some(end_ms) = state.position_ms.checked_add(duration_ms) else {
+            return DeckEffects::NONE;
+        };
+        let Some(region) = LoopRegion::new(state.position_ms, end_ms) else {
+            return DeckEffects::NONE;
+        };
+
+        self.decks[index].loop_state.active = Some(region);
+        self.decks[index].loop_state.last = Some(region);
+
+        DeckEffects::one(DeckEffect::SetLoop {
+            deck,
+            start_ms: region.start_ms,
+            end_ms: region.end_ms,
+        })
+    }
+
+    fn handle_shifted_beat_loop_press(
+        &mut self,
+        deck: DeckId,
+        pad: u8,
+        analysis: [Option<TrackAnalysis<'_>>; 2],
+    ) -> DeckEffects {
+        let index = deck_index(deck);
+        if !self.shifted_loop_roll[index].active {
+            self.shifted_loop_roll[index] = ShiftedLoopRoll {
+                active: true,
+                previous: self.decks[index].loop_state.active,
+            };
+        }
+
+        self.handle_beat_loop_pad_action(deck, pad, analysis)
+    }
+
+    fn handle_shifted_beat_loop_release(&mut self, deck: DeckId) -> DeckEffects {
+        let index = deck_index(deck);
+        let roll = self.shifted_loop_roll[index];
+        if !roll.active {
+            return DeckEffects::NONE;
+        }
+        self.shifted_loop_roll[index] = ShiftedLoopRoll::new();
+
+        if let Some(previous) = roll.previous {
+            self.decks[index].loop_state.active = Some(previous);
+            self.decks[index].loop_state.last = Some(previous);
+            return DeckEffects::one(DeckEffect::SetLoop {
+                deck,
+                start_ms: previous.start_ms,
+                end_ms: previous.end_ms,
+            });
+        }
+
+        self.decks[index].loop_state.active = None;
+        self.decks[index].loop_adjust_mode = LoopAdjustMode::None;
+        DeckEffects::one(DeckEffect::ClearLoop { deck })
     }
 
     fn apply_beat_jump(
@@ -1597,6 +1729,19 @@ mod tests {
         }
     }
 
+    fn beat_loop_pad(deck: DeckId, pad: u8, shifted: bool, pressed: bool) -> ControlEvent {
+        ControlEvent {
+            deck: Some(deck),
+            control: SemanticControl::PadAction,
+            value: ControlValue::PadAction(PadAction {
+                pad,
+                mode: PadMode::BeatLoop,
+                shifted,
+                pressed,
+            }),
+        }
+    }
+
     #[test]
     fn beat_jump_buttons_use_grid_and_preserve_playing_state() {
         let mut state = DeckProductState::new();
@@ -1717,6 +1862,146 @@ mod tests {
         );
         assert_eq!(state.deck(DeckId::One).position_ms, 20_000);
         assert_eq!(state.beat_jump_page(), BeatJumpPage::Default);
+    }
+
+    #[test]
+    fn beat_loop_pads_match_released_lengths() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 1_000);
+
+        let one_beat = state.handle_control(beat_loop_pad(DeckId::One, 5, false, true));
+        assert_eq!(
+            one_beat.items[0],
+            Some(DeckEffect::SetLoop {
+                deck: DeckId::One,
+                start_ms: 1_000,
+                end_ms: 1_500,
+            })
+        );
+        assert_eq!(
+            state.deck(DeckId::One).loop_state.active,
+            Some(loop_region(1_000, 1_500))
+        );
+
+        state.set_position_ms(DeckId::Two, 2_000);
+        let four_beats = state.handle_control(beat_loop_pad(DeckId::Two, 7, false, true));
+        assert_eq!(
+            four_beats.items[0],
+            Some(DeckEffect::SetLoop {
+                deck: DeckId::Two,
+                start_ms: 2_000,
+                end_ms: 4_000,
+            })
+        );
+    }
+
+    #[test]
+    fn beat_loop_uses_local_neutral_grid_spacing() {
+        let beats = [
+            Beat {
+                time_ms: 1_000,
+                phase: 0,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 1_501,
+                phase: 1,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 2_000,
+                phase: 2,
+                bpm_x100: 12_000,
+            },
+        ];
+        let analysis = beat_jump_analysis(&beats, 12_000);
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 1_010);
+
+        let effects = state.handle_control_with_analysis(
+            beat_loop_pad(DeckId::One, 5, false, true),
+            [Some(analysis), None],
+        );
+
+        assert_eq!(
+            effects.items[0],
+            Some(DeckEffect::SetLoop {
+                deck: DeckId::One,
+                start_ms: 1_010,
+                end_ms: 1_511,
+            })
+        );
+    }
+
+    #[test]
+    fn shifted_beat_loop_restores_previous_loop_on_release() {
+        let mut state = DeckProductState::new();
+        state.decks[deck_index(DeckId::One)].loop_state.active =
+            Some(loop_region(5_000, 9_000));
+        state.decks[deck_index(DeckId::One)].loop_state.last =
+            Some(loop_region(5_000, 9_000));
+        state.set_position_ms(DeckId::One, 12_000);
+
+        let pressed = state.handle_control(beat_loop_pad(DeckId::One, 5, true, true));
+        assert_eq!(
+            pressed.items[0],
+            Some(DeckEffect::SetLoop {
+                deck: DeckId::One,
+                start_ms: 12_000,
+                end_ms: 12_500,
+            })
+        );
+
+        let released = state.handle_control(beat_loop_pad(DeckId::One, 5, true, false));
+        assert_eq!(
+            released.items[0],
+            Some(DeckEffect::SetLoop {
+                deck: DeckId::One,
+                start_ms: 5_000,
+                end_ms: 9_000,
+            })
+        );
+        assert_eq!(
+            state.deck(DeckId::One).loop_state.active,
+            Some(loop_region(5_000, 9_000))
+        );
+    }
+
+    #[test]
+    fn shifted_beat_loop_without_previous_loop_clears_on_release() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::Two, 2_000);
+
+        state.handle_control(beat_loop_pad(DeckId::Two, 4, true, true));
+        assert_eq!(
+            state.deck(DeckId::Two).loop_state.active,
+            Some(loop_region(2_000, 2_250))
+        );
+
+        let released = state.handle_control(beat_loop_pad(DeckId::Two, 4, true, false));
+        assert_eq!(
+            released.items[0],
+            Some(DeckEffect::ClearLoop { deck: DeckId::Two })
+        );
+        assert_eq!(state.deck(DeckId::Two).loop_state.active, None);
+        assert_eq!(
+            state.deck(DeckId::Two).loop_state.last,
+            Some(loop_region(2_000, 2_250))
+        );
+    }
+
+    #[test]
+    fn unshifted_beat_loop_release_is_inert() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 3_000);
+        state.handle_control(beat_loop_pad(DeckId::One, 5, false, true));
+        let before = state.deck(DeckId::One).loop_state;
+
+        assert_eq!(
+            state.handle_control(beat_loop_pad(DeckId::One, 5, false, false)),
+            DeckEffects::NONE
+        );
+        assert_eq!(state.deck(DeckId::One).loop_state, before);
     }
 
     #[test]
