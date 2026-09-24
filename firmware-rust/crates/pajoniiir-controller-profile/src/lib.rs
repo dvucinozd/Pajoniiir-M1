@@ -386,12 +386,7 @@ impl ProfileRuntime {
                     }
                 }
                 RawType::NoteValue => {
-                    entry.base_value
-                        | if pressed {
-                            entry.press_mask as i16
-                        } else {
-                            0
-                        }
+                    entry.base_value | if pressed { entry.press_mask as i16 } else { 0 }
                 }
                 RawType::CcRel64 => {
                     let delta = data2 as i16 - 64;
@@ -596,10 +591,7 @@ mod tests {
         bytes[4..6].copy_from_slice(&1u16.to_le_bytes());
         let checksum = crc32(&bytes[16..]);
         bytes[12..16].copy_from_slice(&checksum.to_le_bytes());
-        assert!(matches!(
-            Profile::parse(&bytes),
-            Err(ParseError::Version)
-        ));
+        assert!(matches!(Profile::parse(&bytes), Err(ParseError::Version)));
     }
 
     #[test]
