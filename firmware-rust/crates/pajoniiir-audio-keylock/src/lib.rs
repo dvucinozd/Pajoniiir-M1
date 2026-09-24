@@ -367,7 +367,6 @@ where
 mod tests {
     use super::*;
 
-    const SAMPLE_RATE: u32 = 48_000;
     const SOURCE_FRAMES: usize = 8_192;
 
     const ONE_KHZ_PERIOD: [i16; 48] = [
