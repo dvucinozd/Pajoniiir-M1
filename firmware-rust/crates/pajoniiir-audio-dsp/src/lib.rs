@@ -624,8 +624,7 @@ pub struct FlangerFx<'a> {
 impl<'a> FlangerFx<'a> {
     pub fn new(left: &'a mut [f32], right: &'a mut [f32], sample_rate: u32) -> Self {
         let capacity_frames = left.len().min(right.len());
-        let allocated =
-            sample_rate > 0 && capacity_frames >= flanger_required_frames(sample_rate);
+        let allocated = sample_rate > 0 && capacity_frames >= flanger_required_frames(sample_rate);
 
         let mut state = Self {
             left,
@@ -669,8 +668,7 @@ impl<'a> FlangerFx<'a> {
 
         if next.enabled && !was_enabled {
             self.reset();
-            self.wet_cur_q15 =
-                ((next.depth_q15 as u32 * FLANGER_WET_MAX_Q15 as u32) >> 15) as u16;
+            self.wet_cur_q15 = ((next.depth_q15 as u32 * FLANGER_WET_MAX_Q15 as u32) >> 15) as u16;
             self.feedback_cur_q15 =
                 ((next.depth_q15 as u32 * FLANGER_FB_MAX_Q15 as u32) >> 15) as u16;
         }
@@ -704,8 +702,7 @@ impl<'a> FlangerFx<'a> {
             return input;
         }
 
-        let wet_target =
-            ((self.config.depth_q15 as u32 * FLANGER_WET_MAX_Q15 as u32) >> 15) as u16;
+        let wet_target = ((self.config.depth_q15 as u32 * FLANGER_WET_MAX_Q15 as u32) >> 15) as u16;
         let feedback_target =
             ((self.config.depth_q15 as u32 * FLANGER_FB_MAX_Q15 as u32) >> 15) as u16;
         self.wet_cur_q15 = smooth_q15(self.wet_cur_q15, wet_target);
@@ -719,8 +716,8 @@ impl<'a> FlangerFx<'a> {
             (u32::MAX - phase) >> 15
         };
 
-        let delay_q16 = self.min_delay_q16
-            + (((self.span_delay_q16 as u64 * tri_q16 as u64) >> 16) as u32);
+        let delay_q16 =
+            self.min_delay_q16 + (((self.span_delay_q16 as u64 * tri_q16 as u64) >> 16) as u32);
         let delay_int = (delay_q16 >> 16) as usize;
         let frac_q16 = delay_q16 & 0xffff;
 
@@ -1294,8 +1291,8 @@ mod tests {
         } else {
             (u32::MAX - phase) >> 15
         };
-        let delay_q16 = fx.min_delay_q16
-            + (((fx.span_delay_q16 as u64 * tri_q16 as u64) >> 16) as u32);
+        let delay_q16 =
+            fx.min_delay_q16 + (((fx.span_delay_q16 as u64 * tri_q16 as u64) >> 16) as u32);
         let delay_int = (delay_q16 >> 16) as usize;
         let frac_q16 = delay_q16 & 0xffff;
         let idx0 = if fx.write_index >= delay_int {
