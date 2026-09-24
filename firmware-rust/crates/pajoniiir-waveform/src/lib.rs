@@ -159,11 +159,8 @@ mod tests {
         }
 
         let expected = [
-            0, 0, PLAYHEAD, 0, WAVE,
-            0, 0, PLAYHEAD, WAVE, WAVE,
-            WAVE, WAVE, PLAYHEAD, WAVE, WAVE,
-            0, 0, PLAYHEAD, WAVE, WAVE,
-            0, 0, PLAYHEAD, 0, WAVE,
+            0, 0, PLAYHEAD, 0, WAVE, 0, 0, PLAYHEAD, WAVE, WAVE, WAVE, WAVE, PLAYHEAD, WAVE, WAVE,
+            0, 0, PLAYHEAD, WAVE, WAVE, 0, 0, PLAYHEAD, 0, WAVE,
         ];
 
         assert_eq!(pixels, expected);
