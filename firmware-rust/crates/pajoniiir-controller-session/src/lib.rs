@@ -124,7 +124,8 @@ impl ControllerSession {
         data2: u8,
     ) -> Result<IngestOutcome, SemanticAdapterError> {
         self.stats.midi_messages = self.stats.midi_messages.saturating_add(1);
-        let Some(profile_event) = self.profile_runtime.process(profile, status, data1, data2) else {
+        let Some(profile_event) = self.profile_runtime.process(profile, status, data1, data2)
+        else {
             return Ok(IngestOutcome::NoMapping);
         };
         self.stats.mapped_messages = self.stats.mapped_messages.saturating_add(1);
@@ -237,8 +238,7 @@ impl ControllerSession {
             InFlight::Buffered(event) => {
                 if !succeeded {
                     self.retry = Some(event);
-                    self.stats.downstream_retries =
-                        self.stats.downstream_retries.saturating_add(1);
+                    self.stats.downstream_retries = self.stats.downstream_retries.saturating_add(1);
                 }
             }
         }
