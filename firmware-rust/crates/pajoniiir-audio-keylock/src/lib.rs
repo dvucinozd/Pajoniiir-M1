@@ -370,11 +370,18 @@ mod tests {
     const SAMPLE_RATE: u32 = 48_000;
     const SOURCE_FRAMES: usize = 8_192;
 
+    const ONE_KHZ_PERIOD: [i16; 48] = [
+        0, 1566, 3105, 4592, 5999, 7305, 8485, 9520, 10392, 11086, 11591, 11897,
+        12000, 11897, 11591, 11086, 10392, 9520, 8485, 7305, 5999, 4592, 3105, 1566,
+        0, -1566, -3105, -4592, -5999, -7305, -8485, -9520, -10392, -11086, -11591,
+        -11897, -12000, -11897, -11591, -11086, -10392, -9520, -8485, -7305, -6000,
+        -4592, -3105, -1566,
+    ];
+
     fn sine_fixture() -> [PcmFrame; SOURCE_FRAMES] {
         let mut source = [PcmFrame { left: 0, right: 0 }; SOURCE_FRAMES];
         for (i, frame) in source.iter_mut().enumerate() {
-            let phase = 2.0 * core::f32::consts::PI * 1_000.0 * i as f32 / SAMPLE_RATE as f32;
-            let value = (libm::sinf(phase) * 12_000.0) as i16;
+            let value = ONE_KHZ_PERIOD[i % ONE_KHZ_PERIOD.len()];
             *frame = PcmFrame {
                 left: value,
                 right: value,
