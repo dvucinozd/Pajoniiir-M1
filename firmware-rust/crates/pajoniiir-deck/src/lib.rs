@@ -549,7 +549,6 @@ impl DeckProductState {
         }
     }
 
-
     fn handle_loop_in(
         &mut self,
         deck: DeckId,
@@ -858,7 +857,6 @@ impl DeckProductState {
     }
 }
 
-
 fn resize_loop_region(region: LoopRegion, double: bool) -> Option<LoopRegion> {
     let duration = region.duration_ms();
     let next_duration = if double {
@@ -947,7 +945,6 @@ mod tests {
             value: ControlValue::Pressed(value),
         }
     }
-
 
     fn relative(deck: DeckId, control: SemanticControl, value: i16) -> ControlEvent {
         ControlEvent {
@@ -1379,7 +1376,6 @@ mod tests {
         assert!(!state.deck(DeckId::One).sync_enabled);
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 0);
     }
-
 
     #[test]
     fn loop_in_out_sets_requested_deck_loop_from_product_position() {
