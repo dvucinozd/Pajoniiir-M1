@@ -4,7 +4,7 @@
 use pajoniiir_controller_core::{
     ControlEvent, ControlValue, DeckExtAction, DeckId, PadMode, SemanticControl,
 };
-use pajoniiir_track_analysis::{TrackAnalysis, phase_align_target_ms};
+use pajoniiir_track_analysis::{TrackAnalysis, beat_jump_target_ms, phase_align_target_ms};
 
 pub const PITCH_CENTER: u16 = 8192;
 pub const PITCH_MAX: u16 = 16383;
@@ -25,6 +25,44 @@ pub enum LoopAdjustMode {
     In,
     Out,
 }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum BeatJumpPage {
+    Fractional,
+    Default,
+    Large,
+}
+
+const BEAT_JUMP_FRACTIONAL: [(i32, u16); 8] = [
+    (-1, 16),
+    (1, 16),
+    (-1, 8),
+    (1, 8),
+    (-1, 4),
+    (1, 4),
+    (-1, 2),
+    (1, 2),
+];
+const BEAT_JUMP_DEFAULT: [(i32, u16); 8] = [
+    (-1, 1),
+    (1, 1),
+    (-2, 1),
+    (2, 1),
+    (-4, 1),
+    (4, 1),
+    (-8, 1),
+    (8, 1),
+];
+const BEAT_JUMP_LARGE: [(i32, u16); 8] = [
+    (-16, 1),
+    (16, 1),
+    (-32, 1),
+    (32, 1),
+    (-64, 1),
+    (64, 1),
+    (-128, 1),
+    (128, 1),
+];
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct PendingPlayback {
@@ -135,6 +173,7 @@ impl DeckEffects {
 pub struct DeckProductState {
     decks: [DeckState; 2],
     sync_master: Option<DeckId>,
+    beat_jump_page: BeatJumpPage,
 }
 
 impl Default for DeckProductState {
@@ -148,11 +187,16 @@ impl DeckProductState {
         Self {
             decks: [DeckState::new(), DeckState::new()],
             sync_master: None,
+            beat_jump_page: BeatJumpPage::Default,
         }
     }
 
     pub fn deck(&self, deck: DeckId) -> &DeckState {
         &self.decks[deck_index(deck)]
+    }
+
+    pub const fn beat_jump_page(&self) -> BeatJumpPage {
+        self.beat_jump_page
     }
 
     pub fn set_base_bpm_x100(&mut self, deck: DeckId, bpm_x100: u32) {
@@ -193,6 +237,13 @@ impl DeckProductState {
             SemanticControl::Tempo => self.handle_tempo(deck, event.value),
             SemanticControl::TempoRange => self.handle_tempo_range(deck, event.value),
             SemanticControl::Sync => self.handle_sync(deck, event.value, analysis),
+            SemanticControl::BeatJumpBack => {
+                self.handle_beat_jump(deck, event.value, -1, 1, analysis)
+            }
+            SemanticControl::BeatJumpForward => {
+                self.handle_beat_jump(deck, event.value, 1, 1, analysis)
+            }
+            SemanticControl::PadAction => self.handle_pad_action(deck, event.value, analysis),
             SemanticControl::Shift => {
                 if let ControlValue::Pressed(pressed) = event.value {
                     self.decks[deck_index(deck)].shift_held = pressed;
@@ -442,6 +493,105 @@ impl DeckProductState {
         }
     }
 
+
+    fn handle_beat_jump(
+        &mut self,
+        deck: DeckId,
+        value: ControlValue,
+        beat_numerator: i32,
+        beat_denominator: u16,
+        analysis: [Option<TrackAnalysis<'_>>; 2],
+    ) -> DeckEffects {
+        if value != ControlValue::Pressed(true) || beat_numerator == 0 {
+            return DeckEffects::NONE;
+        }
+
+        self.apply_beat_jump(deck, beat_numerator, beat_denominator, analysis)
+    }
+
+    fn handle_pad_action(
+        &mut self,
+        deck: DeckId,
+        value: ControlValue,
+        analysis: [Option<TrackAnalysis<'_>>; 2],
+    ) -> DeckEffects {
+        let ControlValue::PadAction(action) = value else {
+            return DeckEffects::NONE;
+        };
+        if action.mode != PadMode::BeatJump || !action.pressed {
+            return DeckEffects::NONE;
+        }
+
+        if action.shifted {
+            match action.pad {
+                6 => self.change_beat_jump_page(-1),
+                7 => self.change_beat_jump_page(1),
+                _ => {}
+            }
+            return DeckEffects::NONE;
+        }
+
+        let Some((numerator, denominator)) = self.beat_jump_size_for_pad(action.pad) else {
+            return DeckEffects::NONE;
+        };
+        self.apply_beat_jump(deck, numerator, denominator, analysis)
+    }
+
+    fn apply_beat_jump(
+        &mut self,
+        deck: DeckId,
+        beat_numerator: i32,
+        beat_denominator: u16,
+        analysis: [Option<TrackAnalysis<'_>>; 2],
+    ) -> DeckEffects {
+        let index = deck_index(deck);
+        let state = self.decks[index];
+        let track_analysis = analysis[index];
+        let bpm_x100 = track_analysis
+            .map(|item| item.bpm_x100())
+            .filter(|value| *value > 0)
+            .unwrap_or(state.base_bpm_x100);
+        let beat_grid = track_analysis.and_then(|item| item.beat_grid());
+        let target_ms = beat_jump_target_ms(
+            state.position_ms,
+            bpm_x100,
+            beat_numerator,
+            beat_denominator,
+            beat_grid,
+        );
+
+        self.decks[index].position_ms = target_ms;
+        DeckEffects::one(DeckEffect::Seek {
+            deck,
+            position_ms: target_ms,
+        })
+    }
+
+    fn beat_jump_size_for_pad(&self, pad: u8) -> Option<(i32, u16)> {
+        if pad >= 8 {
+            return None;
+        }
+
+        let sizes = match self.beat_jump_page {
+            BeatJumpPage::Fractional => &BEAT_JUMP_FRACTIONAL,
+            BeatJumpPage::Default => &BEAT_JUMP_DEFAULT,
+            BeatJumpPage::Large => &BEAT_JUMP_LARGE,
+        };
+        Some(sizes[pad as usize])
+    }
+
+    fn change_beat_jump_page(&mut self, delta: i8) {
+        self.beat_jump_page = match (self.beat_jump_page, delta.cmp(&0)) {
+            (BeatJumpPage::Fractional, core::cmp::Ordering::Greater) => BeatJumpPage::Default,
+            (BeatJumpPage::Default, core::cmp::Ordering::Greater) => BeatJumpPage::Large,
+            (BeatJumpPage::Large, core::cmp::Ordering::Greater) => BeatJumpPage::Large,
+            (BeatJumpPage::Large, core::cmp::Ordering::Less) => BeatJumpPage::Default,
+            (BeatJumpPage::Default, core::cmp::Ordering::Less) => BeatJumpPage::Fractional,
+            (BeatJumpPage::Fractional, core::cmp::Ordering::Less) => BeatJumpPage::Fractional,
+            (page, core::cmp::Ordering::Equal) => page,
+        };
+    }
+
     fn set_pad_mode_if_pressed(
         &mut self,
         deck: DeckId,
@@ -556,7 +706,8 @@ const fn other_deck(deck: DeckId) -> DeckId {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use pajoniiir_controller_core::{DeckExtActionValue, SemanticControl};
+    use pajoniiir_controller_core::{DeckExtActionValue, PadAction, SemanticControl};
+    use pajoniiir_track_analysis::{AnalysisProvider, Beat, BeatGrid};
 
     fn pressed(deck: DeckId, control: SemanticControl, value: bool) -> ControlEvent {
         ControlEvent {
@@ -983,6 +1134,156 @@ mod tests {
         state.handle_control(absolute(DeckId::One, SemanticControl::Tempo, PITCH_CENTER));
         assert!(!state.deck(DeckId::One).sync_enabled);
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 0);
+    }
+
+
+    fn beat_jump_analysis<'a>(beats: &'a [Beat], bpm_x100: u32) -> TrackAnalysis<'a> {
+        TrackAnalysis::new(
+            AnalysisProvider::RekordboxImport,
+            1,
+            bpm_x100,
+            Some(BeatGrid::new(beats)),
+        )
+    }
+
+    fn beat_jump_pad(
+        deck: DeckId,
+        pad: u8,
+        shifted: bool,
+        pressed: bool,
+    ) -> ControlEvent {
+        ControlEvent {
+            deck: Some(deck),
+            control: SemanticControl::PadAction,
+            value: ControlValue::PadAction(PadAction {
+                pad,
+                mode: PadMode::BeatJump,
+                shifted,
+                pressed,
+            }),
+        }
+    }
+
+    #[test]
+    fn beat_jump_buttons_use_grid_and_preserve_playing_state() {
+        let mut state = DeckProductState::new();
+        let beats = [
+            Beat {
+                time_ms: 1000,
+                phase: 0,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 2000,
+                phase: 1,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 3000,
+                phase: 2,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 4000,
+                phase: 3,
+                bpm_x100: 12_000,
+            },
+        ];
+        let analysis = beat_jump_analysis(&beats, 12_000);
+        state.decks[deck_index(DeckId::Two)].position_ms = 4200;
+        state.decks[deck_index(DeckId::Two)].playing = true;
+
+        let back = state.handle_control_with_analysis(
+            pressed(DeckId::Two, SemanticControl::BeatJumpBack, true),
+            [None, Some(analysis)],
+        );
+        assert_eq!(
+            back.items[0],
+            Some(DeckEffect::Seek {
+                deck: DeckId::Two,
+                position_ms: 3000,
+            })
+        );
+        assert_eq!(state.deck(DeckId::Two).position_ms, 3000);
+        assert!(state.deck(DeckId::Two).playing);
+
+        let forward = state.handle_control_with_analysis(
+            pressed(DeckId::Two, SemanticControl::BeatJumpForward, true),
+            [None, Some(analysis)],
+        );
+        assert_eq!(
+            forward.items[0],
+            Some(DeckEffect::Seek {
+                deck: DeckId::Two,
+                position_ms: 4000,
+            })
+        );
+        assert!(state.deck(DeckId::Two).playing);
+    }
+
+    #[test]
+    fn beat_jump_pad_default_page_matches_released_sizes() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 20_000);
+
+        let pad4 = state.handle_control(beat_jump_pad(DeckId::One, 3, false, true));
+        assert_eq!(
+            pad4.items[0],
+            Some(DeckEffect::Seek {
+                deck: DeckId::One,
+                position_ms: 21_000,
+            })
+        );
+
+        let pad5 = state.handle_control(beat_jump_pad(DeckId::One, 4, false, true));
+        assert_eq!(
+            pad5.items[0],
+            Some(DeckEffect::Seek {
+                deck: DeckId::One,
+                position_ms: 19_000,
+            })
+        );
+    }
+
+    #[test]
+    fn shifted_beat_jump_changes_global_size_page() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 10_000);
+        state.set_position_ms(DeckId::Two, 20_000);
+
+        state.handle_control(beat_jump_pad(DeckId::One, 1, false, true));
+        assert_eq!(state.deck(DeckId::One).position_ms, 10_500);
+
+        state.handle_control(beat_jump_pad(DeckId::One, 7, true, true));
+        state.handle_control(beat_jump_pad(DeckId::One, 7, true, true));
+        assert_eq!(state.beat_jump_page(), BeatJumpPage::Large);
+
+        state.handle_control(beat_jump_pad(DeckId::Two, 1, false, true));
+        assert_eq!(state.deck(DeckId::Two).position_ms, 28_000);
+
+        state.handle_control(beat_jump_pad(DeckId::Two, 6, true, true));
+        state.handle_control(beat_jump_pad(DeckId::Two, 6, true, true));
+        assert_eq!(state.beat_jump_page(), BeatJumpPage::Fractional);
+
+        state.handle_control(beat_jump_pad(DeckId::One, 1, false, true));
+        assert_eq!(state.deck(DeckId::One).position_ms, 10_532);
+    }
+
+    #[test]
+    fn beat_jump_release_events_do_not_seek_or_change_page() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 20_000);
+
+        assert_eq!(
+            state.handle_control(beat_jump_pad(DeckId::One, 4, false, false)),
+            DeckEffects::NONE
+        );
+        assert_eq!(
+            state.handle_control(beat_jump_pad(DeckId::One, 7, true, false)),
+            DeckEffects::NONE
+        );
+        assert_eq!(state.deck(DeckId::One).position_ms, 20_000);
+        assert_eq!(state.beat_jump_page(), BeatJumpPage::Default);
     }
 
     #[test]
