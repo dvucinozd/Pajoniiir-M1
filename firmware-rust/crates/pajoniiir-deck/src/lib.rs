@@ -764,11 +764,7 @@ mod tests {
         let mut state = DeckProductState::new();
         state.set_base_bpm_x100(DeckId::One, 10_000);
         state.set_base_bpm_x100(DeckId::Two, 12_500);
-        state.handle_control(ext(
-            DeckId::One,
-            DeckExtAction::SyncMaster,
-            true,
-        ));
+        state.handle_control(ext(DeckId::One, DeckExtAction::SyncMaster, true));
 
         state.handle_control(pressed(DeckId::Two, SemanticControl::Sync, true));
         assert!(state.deck(DeckId::Two).sync_enabled);
