@@ -155,11 +155,7 @@ impl DeckProductState {
     }
 
     pub fn set_base_bpm_x100(&mut self, deck: DeckId, bpm_x100: u32) {
-        self.decks[deck_index(deck)].base_bpm_x100 = if bpm_x100 == 0 {
-            12_000
-        } else {
-            bpm_x100
-        };
+        self.decks[deck_index(deck)].base_bpm_x100 = if bpm_x100 == 0 { 12_000 } else { bpm_x100 };
     }
 
     pub fn set_position_ms(&mut self, deck: DeckId, position_ms: u32) {
@@ -343,8 +339,7 @@ impl DeckProductState {
         let state = &mut self.decks[deck_index(deck)];
         state.sync_enabled = false;
         state.pitch_raw = raw;
-        state.pitch_centipercent =
-            tempo_centipercent_from_raw(raw, state.tempo_range_percent);
+        state.pitch_centipercent = tempo_centipercent_from_raw(raw, state.tempo_range_percent);
 
         DeckEffects::one(DeckEffect::SetPitchCentipercent {
             deck,
@@ -386,8 +381,7 @@ impl DeckProductState {
         };
         let target_bpm_x100 = self.decks[deck_idx].base_bpm_x100;
         let reference_state = self.decks[deck_index(reference)];
-        let target_centipercent =
-            centipercent_for_bpm_match(target_bpm_x100, reference_state);
+        let target_centipercent = centipercent_for_bpm_match(target_bpm_x100, reference_state);
 
         let state = &mut self.decks[deck_idx];
         state.sync_enabled = true;
@@ -538,10 +532,7 @@ mod tests {
         ControlEvent {
             deck: Some(deck),
             control: SemanticControl::DeckExtAction,
-            value: ControlValue::DeckExtAction(DeckExtActionValue {
-                action,
-                pressed,
-            }),
+            value: ControlValue::DeckExtAction(DeckExtActionValue { action, pressed }),
         }
     }
 
@@ -571,15 +562,21 @@ mod tests {
     fn decks_track_transport_independently() {
         let mut state = DeckProductState::new();
 
-        let (_, target, request) =
-            playback_request(state.handle_control(pressed(DeckId::One, SemanticControl::Play, true)));
+        let (_, target, request) = playback_request(state.handle_control(pressed(
+            DeckId::One,
+            SemanticControl::Play,
+            true,
+        )));
         assert!(target);
         assert!(state.resolve_playback_request(DeckId::One, request, true));
         assert!(state.deck(DeckId::One).playing);
         assert!(!state.deck(DeckId::Two).playing);
 
-        let (_, target, request) =
-            playback_request(state.handle_control(pressed(DeckId::Two, SemanticControl::Play, true)));
+        let (_, target, request) = playback_request(state.handle_control(pressed(
+            DeckId::Two,
+            SemanticControl::Play,
+            true,
+        )));
         assert!(target);
         assert!(state.resolve_playback_request(DeckId::Two, request, true));
         assert!(state.deck(DeckId::One).playing);
@@ -593,8 +590,11 @@ mod tests {
     #[test]
     fn failed_playback_request_does_not_mark_deck_playing() {
         let mut state = DeckProductState::new();
-        let (_, _, request) =
-            playback_request(state.handle_control(pressed(DeckId::Two, SemanticControl::Play, true)));
+        let (_, _, request) = playback_request(state.handle_control(pressed(
+            DeckId::Two,
+            SemanticControl::Play,
+            true,
+        )));
 
         assert!(state.resolve_playback_request(DeckId::Two, request, false));
         assert!(!state.deck(DeckId::Two).playing);
@@ -603,10 +603,16 @@ mod tests {
     #[test]
     fn stale_playback_completion_cannot_overwrite_newer_request() {
         let mut state = DeckProductState::new();
-        let (_, _, first) =
-            playback_request(state.handle_control(pressed(DeckId::One, SemanticControl::Play, true)));
-        let (_, second_target, second) =
-            playback_request(state.handle_control(pressed(DeckId::One, SemanticControl::Play, true)));
+        let (_, _, first) = playback_request(state.handle_control(pressed(
+            DeckId::One,
+            SemanticControl::Play,
+            true,
+        )));
+        let (_, second_target, second) = playback_request(state.handle_control(pressed(
+            DeckId::One,
+            SemanticControl::Play,
+            true,
+        )));
 
         assert!(!second_target);
         assert!(!state.resolve_playback_request(DeckId::One, first, true));
@@ -648,11 +654,7 @@ mod tests {
     #[test]
     fn tempo_range_release_does_not_cycle() {
         let mut state = DeckProductState::new();
-        state.handle_control(pressed(
-            DeckId::One,
-            SemanticControl::TempoRange,
-            false,
-        ));
+        state.handle_control(pressed(DeckId::One, SemanticControl::TempoRange, false));
         assert_eq!(state.deck(DeckId::One).tempo_range_percent, 10);
     }
 
@@ -661,20 +663,12 @@ mod tests {
         let mut state = DeckProductState::new();
 
         state.handle_control(absolute(DeckId::One, SemanticControl::Tempo, 0));
-        state.handle_control(absolute(
-            DeckId::Two,
-            SemanticControl::Tempo,
-            PITCH_MAX,
-        ));
+        state.handle_control(absolute(DeckId::Two, SemanticControl::Tempo, PITCH_MAX));
 
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 1000);
         assert_eq!(state.deck(DeckId::Two).pitch_centipercent, -999);
 
-        state.handle_control(pressed(
-            DeckId::One,
-            SemanticControl::TempoRange,
-            true,
-        ));
+        state.handle_control(pressed(DeckId::One, SemanticControl::TempoRange, true));
         assert_eq!(state.deck(DeckId::One).tempo_range_percent, 16);
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 1600);
     }
@@ -686,11 +680,7 @@ mod tests {
         state.handle_control(absolute(DeckId::One, SemanticControl::Tempo, 4096));
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 500);
 
-        let effects = state.handle_control(pressed(
-            DeckId::One,
-            SemanticControl::TempoRange,
-            true,
-        ));
+        let effects = state.handle_control(pressed(DeckId::One, SemanticControl::TempoRange, true));
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 800);
         assert_eq!(
             effects.items[0],
@@ -723,11 +713,7 @@ mod tests {
     #[test]
     fn sync_master_marks_requested_deck_as_reference() {
         let mut state = DeckProductState::new();
-        state.handle_control(ext(
-            DeckId::One,
-            DeckExtAction::SyncMaster,
-            true,
-        ));
+        state.handle_control(ext(DeckId::One, DeckExtAction::SyncMaster, true));
 
         assert!(state.deck(DeckId::One).sync_master);
         assert!(!state.deck(DeckId::Two).sync_master);
@@ -814,11 +800,7 @@ mod tests {
         state.handle_control(pressed(DeckId::One, SemanticControl::Sync, true));
         assert!(state.deck(DeckId::One).sync_enabled);
 
-        state.handle_control(absolute(
-            DeckId::One,
-            SemanticControl::Tempo,
-            PITCH_CENTER,
-        ));
+        state.handle_control(absolute(DeckId::One, SemanticControl::Tempo, PITCH_CENTER));
         assert!(!state.deck(DeckId::One).sync_enabled);
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 0);
     }
@@ -827,41 +809,17 @@ mod tests {
     fn pad_mode_behavior_matches_released_scope() {
         let mut state = DeckProductState::new();
 
-        state.handle_control(pressed(
-            DeckId::One,
-            SemanticControl::PadModeBeatLoop,
-            true,
-        ));
-        state.handle_control(pressed(
-            DeckId::Two,
-            SemanticControl::PadModeBeatJump,
-            true,
-        ));
+        state.handle_control(pressed(DeckId::One, SemanticControl::PadModeBeatLoop, true));
+        state.handle_control(pressed(DeckId::Two, SemanticControl::PadModeBeatJump, true));
         assert_eq!(state.deck(DeckId::One).perf_mode, PerformanceMode::LoopRoll);
         assert_eq!(state.deck(DeckId::Two).perf_mode, PerformanceMode::BeatJump);
         assert_eq!(state.deck(DeckId::One).pad_mode, PadMode::BeatLoop);
         assert_eq!(state.deck(DeckId::Two).pad_mode, PadMode::BeatJump);
 
-        state.handle_control(pressed(
-            DeckId::One,
-            SemanticControl::PadModePadFx1,
-            true,
-        ));
-        state.handle_control(pressed(
-            DeckId::Two,
-            SemanticControl::PadModeSampler,
-            true,
-        ));
-        state.handle_control(pressed(
-            DeckId::One,
-            SemanticControl::PadModeKeyboard,
-            true,
-        ));
-        state.handle_control(pressed(
-            DeckId::Two,
-            SemanticControl::PadModeKeyShift,
-            true,
-        ));
+        state.handle_control(pressed(DeckId::One, SemanticControl::PadModePadFx1, true));
+        state.handle_control(pressed(DeckId::Two, SemanticControl::PadModeSampler, true));
+        state.handle_control(pressed(DeckId::One, SemanticControl::PadModeKeyboard, true));
+        state.handle_control(pressed(DeckId::Two, SemanticControl::PadModeKeyShift, true));
 
         assert_eq!(state.deck(DeckId::One).pad_mode, PadMode::PadFx1);
         assert_eq!(state.deck(DeckId::One).perf_mode, PerformanceMode::LoopRoll);
@@ -880,7 +838,10 @@ mod tests {
 
         assert!(state.deck(DeckId::One).playing);
         assert!(!state.deck(DeckId::One).jog_touched);
-        assert_eq!(state.deck(DeckId::One).loop_adjust_mode, LoopAdjustMode::None);
+        assert_eq!(
+            state.deck(DeckId::One).loop_adjust_mode,
+            LoopAdjustMode::None
+        );
         assert!(!state.deck(DeckId::One).controller_connected);
         assert!(!state.deck(DeckId::Two).controller_connected);
     }
