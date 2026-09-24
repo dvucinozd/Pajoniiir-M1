@@ -533,7 +533,8 @@ mod tests {
         bytes[0..4].copy_from_slice(S3CP_MAGIC);
         bytes[4..6].copy_from_slice(&S3CP_VERSION.to_le_bytes());
         bytes[6..8].copy_from_slice(&(HEADER_SIZE as u16).to_le_bytes());
-        bytes[8..12].copy_from_slice(&(bytes.len() as u32).to_le_bytes());
+        let profile_size = bytes.len() as u32;
+        bytes[8..12].copy_from_slice(&profile_size.to_le_bytes());
         bytes[16..18].copy_from_slice(&0x1234u16.to_le_bytes());
         bytes[18..20].copy_from_slice(&0x5678u16.to_le_bytes());
         bytes[24..26].copy_from_slice(&1u16.to_le_bytes());
@@ -595,13 +596,16 @@ mod tests {
         bytes[4..6].copy_from_slice(&1u16.to_le_bytes());
         let checksum = crc32(&bytes[16..]);
         bytes[12..16].copy_from_slice(&checksum.to_le_bytes());
-        assert_eq!(Profile::parse(&bytes), Err(ParseError::Version));
+        assert!(matches!(
+            Profile::parse(&bytes),
+            Err(ParseError::Version)
+        ));
     }
 
     #[test]
     fn rejects_crc_mismatch() {
         let mut bytes = minimal_profile();
         bytes[20] ^= 0x01;
-        assert_eq!(Profile::parse(&bytes), Err(ParseError::Crc));
+        assert!(matches!(Profile::parse(&bytes), Err(ParseError::Crc)));
     }
 }
