@@ -341,7 +341,6 @@ impl FilterState {
     }
 }
 
-
 pub fn smart_cfx_curve_raw(raw: u16) -> u16 {
     let raw = raw.min(FILTER_RAW_MAX);
     if raw == FILTER_RAW_CENTER || raw == FILTER_RAW_MIN || raw == FILTER_RAW_MAX {
@@ -603,7 +602,6 @@ mod tests {
         assert_ne!(filter.a1, poison);
     }
 
-
     #[test]
     fn smart_cfx_center_and_extremes_are_identity() {
         assert_eq!(smart_cfx_curve_raw(FILTER_RAW_CENTER), FILTER_RAW_CENTER);
@@ -627,8 +625,7 @@ mod tests {
         assert!(curved_low >= half_low - 8);
         assert!(curved_low <= half_low + 8);
 
-        let half_high =
-            FILTER_RAW_CENTER + (FILTER_RAW_MAX - FILTER_RAW_CENTER) / 2;
+        let half_high = FILTER_RAW_CENTER + (FILTER_RAW_MAX - FILTER_RAW_CENTER) / 2;
         let curved_high = smart_cfx_curve_raw(half_high);
         assert!(curved_high >= half_high - 8);
         assert!(curved_high <= half_high + 8);
