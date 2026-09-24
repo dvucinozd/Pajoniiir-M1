@@ -69,13 +69,9 @@ impl<'a> Rgb565Surface<'a> {
         let half = drawable_height / 2;
 
         for screen_x in 0..drawable_width {
-            let source_index = screen_x
-                .saturating_mul(view.columns.len())
-                / drawable_width;
+            let source_index = screen_x.saturating_mul(view.columns.len()) / drawable_width;
             let column = view.columns[source_index.min(view.columns.len() - 1)];
-            let amplitude = half
-                .saturating_mul(column.peak as usize)
-                / u16::MAX as usize;
+            let amplitude = half.saturating_mul(column.peak as usize) / u16::MAX as usize;
 
             let start_y = center.saturating_sub(amplitude);
             let end_y = (center + amplitude).min(y0 + drawable_height - 1);
@@ -83,13 +79,7 @@ impl<'a> Rgb565Surface<'a> {
         }
     }
 
-    pub fn draw_playhead(
-        &mut self,
-        x: usize,
-        y0: usize,
-        height: usize,
-        color_rgb565: u16,
-    ) {
+    pub fn draw_playhead(&mut self, x: usize, y0: usize, height: usize, color_rgb565: u16) {
         if x >= self.width || y0 >= self.height || height == 0 {
             return;
         }
@@ -122,21 +112,12 @@ mod tests {
     fn renders_bounded_columns() {
         let mut pixels = [0u16; 8 * 8];
         let mut surface = Rgb565Surface::new(&mut pixels, 8, 8).unwrap();
-        let columns = [
-            WaveformColumn {
-                peak: u16::MAX,
-                color_rgb565: 0xffff,
-            };
-            8
-        ];
+        let columns = [WaveformColumn {
+            peak: u16::MAX,
+            color_rgb565: 0xffff,
+        }; 8];
 
-        surface.draw_centered_waveform(
-            0,
-            0,
-            8,
-            8,
-            WaveformView { columns: &columns },
-        );
+        surface.draw_centered_waveform(0, 0, 8, 8, WaveformView { columns: &columns });
 
         assert!(pixels.iter().any(|pixel| *pixel == 0xffff));
     }
