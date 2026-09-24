@@ -161,7 +161,6 @@ impl EqState {
     }
 }
 
-
 pub const FILTER_RAW_MIN: u16 = 0;
 pub const FILTER_RAW_CENTER: u16 = MIXER_CONTROL_CENTER;
 pub const FILTER_RAW_MAX: u16 = MIXER_CONTROL_MAX;
@@ -420,7 +419,6 @@ mod tests {
         peak
     }
 
-
     fn rms_after_filter(freq_hz: f32, raw: u16, enabled: bool) -> f32 {
         let mut filter = FilterState::new(SAMPLE_RATE);
         filter.set_raw(raw);
@@ -497,11 +495,7 @@ mod tests {
     #[test]
     fn low_pass_treble_cut_deepens_monotonically() {
         let normal = rms_after_filter(8_000.0, FILTER_RAW_CENTER, true);
-        let quarter = rms_after_filter(
-            8_000.0,
-            FILTER_RAW_CENTER - FILTER_RAW_CENTER / 4,
-            true,
-        );
+        let quarter = rms_after_filter(8_000.0, FILTER_RAW_CENTER - FILTER_RAW_CENTER / 4, true);
         let half = rms_after_filter(8_000.0, FILTER_RAW_CENTER / 2, true);
         let full = rms_after_filter(8_000.0, FILTER_RAW_MIN, true);
 
@@ -512,8 +506,7 @@ mod tests {
 
     #[test]
     fn half_high_pass_kills_bass_and_keeps_treble() {
-        let half_hp =
-            FILTER_RAW_CENTER + (FILTER_RAW_MAX - FILTER_RAW_CENTER) / 2;
+        let half_hp = FILTER_RAW_CENTER + (FILTER_RAW_MAX - FILTER_RAW_CENTER) / 2;
         let bass = rms_after_filter(100.0, half_hp, true);
         let normal_bass = rms_after_filter(100.0, FILTER_RAW_CENTER, true);
         let treble = rms_after_filter(8_000.0, half_hp, true);
@@ -536,8 +529,7 @@ mod tests {
 
     #[test]
     fn resonant_bump_lifts_tone_at_cutoff() {
-        let raw = FILTER_RAW_CENTER
-            - (0.142 * FILTER_RAW_CENTER as f32) as u16;
+        let raw = FILTER_RAW_CENTER - (0.142 * FILTER_RAW_CENTER as f32) as u16;
         let at_cutoff = rms_after_filter(8_000.0, raw, true);
         let dry = rms_after_filter(8_000.0, FILTER_RAW_CENTER, true);
 
@@ -553,16 +545,14 @@ mod tests {
             let mut lp = FilterState::new(SAMPLE_RATE);
             settle_filter(&mut lp, FILTER_RAW_CENTER - travel);
             assert!(!lp.hp_mode);
-            let lp_expected =
-                FILTER_LP_MAX_HZ * libm::powf(60.0 / FILTER_LP_MAX_HZ, intensity);
+            let lp_expected = FILTER_LP_MAX_HZ * libm::powf(60.0 / FILTER_LP_MAX_HZ, intensity);
             let lp_actual = programmed_cutoff_hz(&lp);
             assert!(libm::fabsf(lp_actual - lp_expected) < lp_expected * 0.02);
 
             let mut hp = FilterState::new(SAMPLE_RATE);
             settle_filter(&mut hp, FILTER_RAW_CENTER + travel);
             assert!(hp.hp_mode);
-            let hp_expected =
-                FILTER_HP_MIN_HZ * libm::powf(8_000.0 / FILTER_HP_MIN_HZ, intensity);
+            let hp_expected = FILTER_HP_MIN_HZ * libm::powf(8_000.0 / FILTER_HP_MIN_HZ, intensity);
             let hp_actual = programmed_cutoff_hz(&hp);
             assert!(libm::fabsf(hp_actual - hp_expected) < hp_expected * 0.02);
         }
