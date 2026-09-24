@@ -4,6 +4,8 @@
 use pajoniiir_controller_core::{
     ControlEvent, ControlValue, DeckExtAction, DeckId, PadMode, SemanticControl,
 };
+use pajoniiir_core::MediaTrackId;
+use pajoniiir_hot_cues::{HotCueBank, HotCueSlot};
 use pajoniiir_track_analysis::{
     TrackAnalysis, beat_jump_target_ms, beat_loop_duration_ms, phase_align_target_ms,
 };
@@ -226,6 +228,10 @@ pub enum DeckEffect {
     ClearLoop {
         deck: DeckId,
     },
+    PersistHotCues {
+        deck: DeckId,
+        bank: HotCueBank,
+    },
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -256,6 +262,7 @@ pub struct DeckProductState {
     sync_master: Option<DeckId>,
     beat_jump_page: BeatJumpPage,
     shifted_loop_roll: [ShiftedLoopRoll; 2],
+    hot_cues: [Option<HotCueBank>; 2],
 }
 
 impl Default for DeckProductState {
@@ -271,6 +278,7 @@ impl DeckProductState {
             sync_master: None,
             beat_jump_page: BeatJumpPage::Default,
             shifted_loop_roll: [ShiftedLoopRoll::new(), ShiftedLoopRoll::new()],
+            hot_cues: [None, None],
         }
     }
 
@@ -280,6 +288,29 @@ impl DeckProductState {
 
     pub const fn beat_jump_page(&self) -> BeatJumpPage {
         self.beat_jump_page
+    }
+
+    pub fn load_hot_cues(
+        &mut self,
+        deck: DeckId,
+        track_id: MediaTrackId,
+        persisted: Option<HotCueBank>,
+    ) -> bool {
+        let bank = match persisted {
+            Some(bank) if bank.track_id() != track_id => return false,
+            Some(bank) => bank,
+            None => HotCueBank::empty(track_id),
+        };
+        self.hot_cues[deck_index(deck)] = Some(bank);
+        true
+    }
+
+    pub fn clear_loaded_track(&mut self, deck: DeckId) {
+        self.hot_cues[deck_index(deck)] = None;
+    }
+
+    pub fn hot_cues(&self, deck: DeckId) -> Option<HotCueBank> {
+        self.hot_cues[deck_index(deck)]
     }
 
     pub fn set_base_bpm_x100(&mut self, deck: DeckId, bpm_x100: u32) {
@@ -760,6 +791,13 @@ impl DeckProductState {
         };
 
         match action.mode {
+            PadMode::HotCue => {
+                if action.pressed {
+                    self.handle_hot_cue_pad_action(deck, action.pad, action.shifted)
+                } else {
+                    DeckEffects::NONE
+                }
+            }
             PadMode::BeatJump => {
                 if !action.pressed {
                     return DeckEffects::NONE;
@@ -795,6 +833,41 @@ impl DeckProductState {
             }
             _ => DeckEffects::NONE,
         }
+    }
+
+    fn handle_hot_cue_pad_action(
+        &mut self,
+        deck: DeckId,
+        pad: u8,
+        shifted: bool,
+    ) -> DeckEffects {
+        let index = deck_index(deck);
+        let Some(mut bank) = self.hot_cues[index] else {
+            return DeckEffects::NONE;
+        };
+
+        if shifted {
+            if !bank.clear(pad) {
+                return DeckEffects::NONE;
+            }
+            self.hot_cues[index] = Some(bank);
+            return DeckEffects::one(DeckEffect::PersistHotCues { deck, bank });
+        }
+
+        if let Some(cue) = bank.slot(pad) {
+            self.decks[index].position_ms = cue.pos_ms;
+            return DeckEffects::one(DeckEffect::Seek {
+                deck,
+                position_ms: cue.pos_ms,
+            });
+        }
+
+        let position_ms = self.decks[index].position_ms;
+        if !bank.set_single(pad, position_ms) {
+            return DeckEffects::NONE;
+        }
+        self.hot_cues[index] = Some(bank);
+        DeckEffects::one(DeckEffect::PersistHotCues { deck, bank })
     }
 
     fn handle_beat_loop_pad_action(
@@ -1742,6 +1815,23 @@ mod tests {
         }
     }
 
+    fn hot_cue_pad(deck: DeckId, pad: u8, shifted: bool, pressed: bool) -> ControlEvent {
+        ControlEvent {
+            deck: Some(deck),
+            control: SemanticControl::PadAction,
+            value: ControlValue::PadAction(PadAction {
+                pad,
+                mode: PadMode::HotCue,
+                shifted,
+                pressed,
+            }),
+        }
+    }
+
+    fn media_id(seed: u8) -> MediaTrackId {
+        MediaTrackId([seed; 16])
+    }
+
     #[test]
     fn beat_jump_buttons_use_grid_and_preserve_playing_state() {
         let mut state = DeckProductState::new();
@@ -1862,6 +1952,116 @@ mod tests {
         );
         assert_eq!(state.deck(DeckId::One).position_ms, 20_000);
         assert_eq!(state.beat_jump_page(), BeatJumpPage::Default);
+    }
+
+    #[test]
+    fn hot_cue_requires_loaded_track_identity() {
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 4_000);
+
+        assert_eq!(
+            state.handle_control(hot_cue_pad(DeckId::One, 0, false, true)),
+            DeckEffects::NONE
+        );
+        assert_eq!(state.hot_cues(DeckId::One), None);
+    }
+
+    #[test]
+    fn hot_cue_sets_persists_and_recalls_by_media_track_id() {
+        let mut state = DeckProductState::new();
+        let track_id = media_id(0x21);
+        assert!(state.load_hot_cues(DeckId::One, track_id, None));
+        state.set_position_ms(DeckId::One, 4_250);
+
+        let set = state.handle_control(hot_cue_pad(DeckId::One, 2, false, true));
+        let bank = state.hot_cues(DeckId::One).unwrap();
+        assert_eq!(bank.track_id(), track_id);
+        assert_eq!(bank.slot(2), Some(HotCueSlot::single(4_250)));
+        assert_eq!(
+            set.items[0],
+            Some(DeckEffect::PersistHotCues {
+                deck: DeckId::One,
+                bank,
+            })
+        );
+
+        state.set_position_ms(DeckId::One, 9_000);
+        let recall = state.handle_control(hot_cue_pad(DeckId::One, 2, false, true));
+        assert_eq!(
+            recall.items[0],
+            Some(DeckEffect::Seek {
+                deck: DeckId::One,
+                position_ms: 4_250,
+            })
+        );
+        assert_eq!(state.deck(DeckId::One).position_ms, 4_250);
+    }
+
+    #[test]
+    fn shifted_hot_cue_clears_slot_and_persists_bank() {
+        let mut bank = HotCueBank::empty(media_id(0x44));
+        assert!(bank.set_single(6, 12_000));
+
+        let mut state = DeckProductState::new();
+        assert!(state.load_hot_cues(DeckId::Two, media_id(0x44), Some(bank)));
+
+        let cleared = state.handle_control(hot_cue_pad(DeckId::Two, 6, true, true));
+        let updated = state.hot_cues(DeckId::Two).unwrap();
+        assert_eq!(updated.slot(6), None);
+        assert_eq!(
+            cleared.items[0],
+            Some(DeckEffect::PersistHotCues {
+                deck: DeckId::Two,
+                bank: updated,
+            })
+        );
+        assert_eq!(
+            state.handle_control(hot_cue_pad(DeckId::Two, 6, true, true)),
+            DeckEffects::NONE
+        );
+    }
+
+    #[test]
+    fn hot_cue_bank_rejects_wrong_track_identity() {
+        let mut state = DeckProductState::new();
+        let persisted = HotCueBank::empty(media_id(1));
+
+        assert!(!state.load_hot_cues(DeckId::One, media_id(2), Some(persisted)));
+        assert_eq!(state.hot_cues(DeckId::One), None);
+    }
+
+    #[test]
+    fn persisted_loop_hot_cue_recalls_its_start_position() {
+        let track_id = media_id(0x55);
+        let mut bank = HotCueBank::empty(track_id);
+        assert!(bank.set_loop(3, 10_000, 12_000));
+
+        let mut state = DeckProductState::new();
+        assert!(state.load_hot_cues(DeckId::One, track_id, Some(bank)));
+        state.set_position_ms(DeckId::One, 30_000);
+
+        let recall = state.handle_control(hot_cue_pad(DeckId::One, 3, false, true));
+        assert_eq!(
+            recall.items[0],
+            Some(DeckEffect::Seek {
+                deck: DeckId::One,
+                position_ms: 10_000,
+            })
+        );
+    }
+
+    #[test]
+    fn hot_cue_release_edges_are_inert() {
+        let mut state = DeckProductState::new();
+        let track_id = media_id(0x77);
+        assert!(state.load_hot_cues(DeckId::One, track_id, None));
+        state.set_position_ms(DeckId::One, 2_000);
+
+        assert_eq!(
+            state.handle_control(hot_cue_pad(DeckId::One, 0, false, false)),
+            DeckEffects::NONE
+        );
+        assert_eq!(state.hot_cues(DeckId::One).unwrap().exists_mask(), 0);
     }
 
     #[test]
