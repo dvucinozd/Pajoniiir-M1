@@ -2,6 +2,7 @@
 members = [
     "apps/desktop-simulator",
     "crates/pajoniiir-audio-dsp",
+    "crates/pajoniiir-audio-keylock",
     "crates/pajoniiir-audio-runtime",
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
@@ -45,6 +46,7 @@ slint = { version = "=1.18.1", default-features = false, features = ["std", "bac
 slint-build = { version = "=1.18.1" }
 
 pajoniiir-audio-dsp = { path = "crates/pajoniiir-audio-dsp" }
+pajoniiir-audio-keylock = { path = "crates/pajoniiir-audio-keylock" }
 pajoniiir-audio-runtime = { path = "crates/pajoniiir-audio-runtime" }
 pajoniiir-core = { path = "crates/pajoniiir-core" }
 pajoniiir-controller-core = { path = "crates/pajoniiir-controller-core" }
