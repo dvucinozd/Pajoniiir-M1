@@ -15,6 +15,9 @@ permissions:
 jobs:
   p4:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: firmware-rust/apps/m1-firmware
 
     steps:
       - name: Checkout
@@ -26,8 +29,7 @@ jobs:
           rustup target add --toolchain 1.95.0 riscv32imafc-unknown-none-elf
 
       - name: Generate firmware dependency lock
-        run: |
-          cargo +1.95.0 generate-lockfile             --manifest-path firmware-rust/apps/m1-firmware/Cargo.toml
+        run: cargo +1.95.0 generate-lockfile
 
       - name: Capture firmware dependency lock
         uses: actions/upload-artifact@v4
@@ -38,9 +40,7 @@ jobs:
           retention-days: 1
 
       - name: ESP32-P4 cross compile
-        run: |
-          cargo +1.95.0 check             --manifest-path firmware-rust/apps/m1-firmware/Cargo.toml             --target riscv32imafc-unknown-none-elf
+        run: cargo +1.95.0 check
 
       - name: ESP32-P4 link gate
-        run: |
-          cargo +1.95.0 build             --manifest-path firmware-rust/apps/m1-firmware/Cargo.toml             --target riscv32imafc-unknown-none-elf             --release
+        run: cargo +1.95.0 build --release
