@@ -436,13 +436,7 @@ impl DeckProductState {
 
         if let Some(position_ms) = aligned_ms {
             state.position_ms = position_ms;
-            DeckEffects::two(
-                pitch_effect,
-                DeckEffect::Seek {
-                    deck,
-                    position_ms,
-                },
-            )
+            DeckEffects::two(pitch_effect, DeckEffect::Seek { deck, position_ms })
         } else {
             DeckEffects::one(pitch_effect)
         }
@@ -915,12 +909,7 @@ mod tests {
             12_000,
             Some(BeatGrid::new(&target_beats)),
         );
-        let reference = TrackAnalysis::new(
-            AnalysisProvider::AptaCache,
-            2,
-            12_800,
-            None,
-        );
+        let reference = TrackAnalysis::new(AnalysisProvider::AptaCache, 2, 12_800, None);
 
         let mut state = DeckProductState::new();
         state.set_position_ms(DeckId::One, 2600);
