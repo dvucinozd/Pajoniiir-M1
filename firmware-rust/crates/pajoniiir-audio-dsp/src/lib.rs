@@ -575,7 +575,6 @@ fn smooth_q15(current: u16, target: u16) -> u16 {
     (current as i32 + step) as u16
 }
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct FlangerConfig {
     pub enabled: bool,
@@ -625,8 +624,8 @@ pub struct FlangerFx<'a> {
 impl<'a> FlangerFx<'a> {
     pub fn new(left: &'a mut [f32], right: &'a mut [f32], sample_rate: u32) -> Self {
         let capacity_frames = left.len().min(right.len());
-        let allocated = sample_rate > 0
-            && capacity_frames >= flanger_required_frames(sample_rate);
+        let allocated =
+            sample_rate > 0 && capacity_frames >= flanger_required_frames(sample_rate);
 
         let mut state = Self {
             left,
@@ -670,7 +669,8 @@ impl<'a> FlangerFx<'a> {
 
         if next.enabled && !was_enabled {
             self.reset();
-            self.wet_cur_q15 = ((next.depth_q15 as u32 * FLANGER_WET_MAX_Q15 as u32) >> 15) as u16;
+            self.wet_cur_q15 =
+                ((next.depth_q15 as u32 * FLANGER_WET_MAX_Q15 as u32) >> 15) as u16;
             self.feedback_cur_q15 =
                 ((next.depth_q15 as u32 * FLANGER_FB_MAX_Q15 as u32) >> 15) as u16;
         }
@@ -685,10 +685,8 @@ impl<'a> FlangerFx<'a> {
         let period_frames = ((fs as u64 * self.config.period_ms as u64) / 1_000).max(1);
         self.lfo_step_q32 = ((1u64 << 32) / period_frames) as u32;
 
-        let min_q16 =
-            ((fs as u64 * FLANGER_MIN_DELAY_US as u64) << 16) / 1_000_000;
-        let max_q16 =
-            ((fs as u64 * FLANGER_MAX_DELAY_US as u64) << 16) / 1_000_000;
+        let min_q16 = ((fs as u64 * FLANGER_MIN_DELAY_US as u64) << 16) / 1_000_000;
+        let max_q16 = ((fs as u64 * FLANGER_MAX_DELAY_US as u64) << 16) / 1_000_000;
         self.min_delay_q16 = min_q16 as u32;
         self.span_delay_q16 = (max_q16 - min_q16) as u32;
     }
@@ -737,8 +735,8 @@ impl<'a> FlangerFx<'a> {
             idx0 - 1
         };
 
-        let delayed_l = read_delayed(self.left, idx0, idx1, frac_q16);
-        let delayed_r = read_delayed(self.right, idx0, idx1, frac_q16);
+        let delayed_l = read_delayed(&*self.left, idx0, idx1, frac_q16);
+        let delayed_r = read_delayed(&*self.right, idx0, idx1, frac_q16);
 
         let wet_gain = self.wet_cur_q15 as f32 / 32_768.0;
         let feedback_gain = self.feedback_cur_q15 as f32 / 32_768.0;
@@ -1031,7 +1029,6 @@ mod tests {
         assert_ne!(filter.a1, poison);
     }
 
-
     #[test]
     fn flanger_required_frames_cover_released_max_delay() {
         let frames = flanger_required_frames(48_000);
@@ -1263,7 +1260,10 @@ mod tests {
         fx.configure(config);
 
         for _ in 0..400 {
-            assert_eq!(fx.process_pcm_frame(PcmFrame::default()), PcmFrame::default());
+            assert_eq!(
+                fx.process_pcm_frame(PcmFrame::default()),
+                PcmFrame::default()
+            );
         }
     }
 
@@ -1308,7 +1308,7 @@ mod tests {
         } else {
             idx0 - 1
         };
-        let delayed = read_delayed(fx.left, idx0, idx1, frac_q16);
+        let delayed = read_delayed(&*fx.left, idx0, idx1, frac_q16);
         let expected = delayed * (fx.wet_cur_q15 as f32 / 32_768.0);
 
         let out = fx.process_frame(DspFrame::default());
