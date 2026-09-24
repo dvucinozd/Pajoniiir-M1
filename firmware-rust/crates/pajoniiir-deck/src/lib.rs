@@ -4,6 +4,7 @@
 use pajoniiir_controller_core::{
     ControlEvent, ControlValue, DeckExtAction, DeckId, PadMode, SemanticControl,
 };
+use pajoniiir_track_analysis::{TrackAnalysis, phase_align_target_ms};
 
 pub const PITCH_CENTER: u16 = 8192;
 pub const PITCH_MAX: u16 = 16383;
@@ -173,6 +174,14 @@ impl DeckProductState {
     }
 
     pub fn handle_control(&mut self, event: ControlEvent) -> DeckEffects {
+        self.handle_control_with_analysis(event, [None, None])
+    }
+
+    pub fn handle_control_with_analysis<'a>(
+        &mut self,
+        event: ControlEvent,
+        analysis: [Option<TrackAnalysis<'a>>; 2],
+    ) -> DeckEffects {
         let Some(deck) = event.deck else {
             return DeckEffects::NONE;
         };
@@ -183,7 +192,7 @@ impl DeckProductState {
             SemanticControl::ToStart => self.handle_to_start(deck, event.value),
             SemanticControl::Tempo => self.handle_tempo(deck, event.value),
             SemanticControl::TempoRange => self.handle_tempo_range(deck, event.value),
-            SemanticControl::Sync => self.handle_sync(deck, event.value),
+            SemanticControl::Sync => self.handle_sync(deck, event.value, analysis),
             SemanticControl::Shift => {
                 if let ControlValue::Pressed(pressed) = event.value {
                     self.decks[deck_index(deck)].shift_held = pressed;
@@ -364,7 +373,12 @@ impl DeckProductState {
         })
     }
 
-    fn handle_sync(&mut self, deck: DeckId, value: ControlValue) -> DeckEffects {
+    fn handle_sync<'a>(
+        &mut self,
+        deck: DeckId,
+        value: ControlValue,
+        analysis: [Option<TrackAnalysis<'a>>; 2],
+    ) -> DeckEffects {
         if value != ControlValue::Pressed(true) {
             return DeckEffects::NONE;
         }
@@ -379,18 +393,57 @@ impl DeckProductState {
             Some(master) if master != deck => master,
             _ => other_deck(deck),
         };
-        let target_bpm_x100 = self.decks[deck_idx].base_bpm_x100;
-        let reference_state = self.decks[deck_index(reference)];
+        let reference_idx = deck_index(reference);
+        let target_bpm_x100 = analysis[deck_idx]
+            .map(|item| item.bpm_x100())
+            .filter(|bpm| *bpm > 0)
+            .unwrap_or(self.decks[deck_idx].base_bpm_x100);
+        let mut reference_state = self.decks[reference_idx];
+        if let Some(reference_analysis) = analysis[reference_idx] {
+            if reference_analysis.bpm_x100() > 0 {
+                reference_state.base_bpm_x100 = reference_analysis.bpm_x100();
+            }
+        }
         let target_centipercent = centipercent_for_bpm_match(target_bpm_x100, reference_state);
+
+        let pitch_effect = DeckEffect::SetPitchCentipercent {
+            deck,
+            value: target_centipercent,
+        };
+
+        let target_position_ms = self.decks[deck_idx].position_ms;
+        let reference_position_ms = self.decks[reference_idx].position_ms;
+        let aligned_ms = match (analysis[deck_idx], analysis[reference_idx]) {
+            (Some(target_analysis), Some(reference_analysis)) => {
+                match (target_analysis.beat_grid(), reference_analysis.beat_grid()) {
+                    (Some(target_grid), Some(reference_grid)) => phase_align_target_ms(
+                        target_position_ms,
+                        target_grid,
+                        reference_position_ms,
+                        reference_grid,
+                    ),
+                    _ => None,
+                }
+            }
+            _ => None,
+        };
 
         let state = &mut self.decks[deck_idx];
         state.sync_enabled = true;
         state.pitch_centipercent = target_centipercent;
 
-        DeckEffects::one(DeckEffect::SetPitchCentipercent {
-            deck,
-            value: target_centipercent,
-        })
+        if let Some(position_ms) = aligned_ms {
+            state.position_ms = position_ms;
+            DeckEffects::two(
+                pitch_effect,
+                DeckEffect::Seek {
+                    deck,
+                    position_ms,
+                },
+            )
+        } else {
+            DeckEffects::one(pitch_effect)
+        }
     }
 
     fn set_pad_mode_if_pressed(
@@ -745,6 +798,146 @@ mod tests {
 
         state.handle_control(pressed(DeckId::One, SemanticControl::Sync, true));
         assert_eq!(state.deck(DeckId::One).pitch_centipercent, 2000);
+    }
+
+    #[test]
+    fn sync_phase_aligns_with_provider_neutral_beatgrids() {
+        use pajoniiir_track_analysis::{AnalysisProvider, Beat, BeatGrid};
+
+        let target_beats = [
+            Beat {
+                time_ms: 1000,
+                phase: 0,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 1500,
+                phase: 1,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 2000,
+                phase: 2,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 2500,
+                phase: 3,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 3000,
+                phase: 0,
+                bpm_x100: 12_000,
+            },
+            Beat {
+                time_ms: 3500,
+                phase: 1,
+                bpm_x100: 12_000,
+            },
+        ];
+        let reference_beats = [
+            Beat {
+                time_ms: 8000,
+                phase: 0,
+                bpm_x100: 12_800,
+            },
+            Beat {
+                time_ms: 8469,
+                phase: 1,
+                bpm_x100: 12_800,
+            },
+            Beat {
+                time_ms: 8938,
+                phase: 2,
+                bpm_x100: 12_800,
+            },
+            Beat {
+                time_ms: 9407,
+                phase: 3,
+                bpm_x100: 12_800,
+            },
+        ];
+
+        let target = TrackAnalysis::new(
+            AnalysisProvider::RekordboxImport,
+            1,
+            12_000,
+            Some(BeatGrid::new(&target_beats)),
+        );
+        let reference = TrackAnalysis::new(
+            AnalysisProvider::AptaNative,
+            4,
+            12_800,
+            Some(BeatGrid::new(&reference_beats)),
+        );
+
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 2600);
+        state.set_position_ms(DeckId::Two, 8900);
+
+        let effects = state.handle_control_with_analysis(
+            pressed(DeckId::One, SemanticControl::Sync, true),
+            [Some(target), Some(reference)],
+        );
+
+        assert_eq!(state.deck(DeckId::One).pitch_centipercent, 667);
+        assert_eq!(state.deck(DeckId::One).position_ms, 1962);
+        assert_eq!(
+            effects,
+            DeckEffects::two(
+                DeckEffect::SetPitchCentipercent {
+                    deck: DeckId::One,
+                    value: 667,
+                },
+                DeckEffect::Seek {
+                    deck: DeckId::One,
+                    position_ms: 1962,
+                },
+            )
+        );
+    }
+
+    #[test]
+    fn sync_without_both_beatgrids_keeps_phase_position_unchanged() {
+        use pajoniiir_track_analysis::{AnalysisProvider, Beat, BeatGrid};
+
+        let target_beats = [Beat {
+            time_ms: 1000,
+            phase: 0,
+            bpm_x100: 12_000,
+        }];
+        let target = TrackAnalysis::new(
+            AnalysisProvider::RekordboxImport,
+            1,
+            12_000,
+            Some(BeatGrid::new(&target_beats)),
+        );
+        let reference = TrackAnalysis::new(
+            AnalysisProvider::AptaCache,
+            2,
+            12_800,
+            None,
+        );
+
+        let mut state = DeckProductState::new();
+        state.set_position_ms(DeckId::One, 2600);
+        state.set_position_ms(DeckId::Two, 8900);
+
+        let effects = state.handle_control_with_analysis(
+            pressed(DeckId::One, SemanticControl::Sync, true),
+            [Some(target), Some(reference)],
+        );
+
+        assert_eq!(state.deck(DeckId::One).position_ms, 2600);
+        assert_eq!(
+            effects.items[0],
+            Some(DeckEffect::SetPitchCentipercent {
+                deck: DeckId::One,
+                value: 667,
+            })
+        );
+        assert_eq!(effects.items[1], None);
     }
 
     #[test]
