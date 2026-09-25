@@ -1,0 +1,10 @@
+[package]
+name = "pajoniiir-media-exfat"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+exfat-embedded.workspace = true
+pajoniiir-media-block.workspace = true
