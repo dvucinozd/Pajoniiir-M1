@@ -176,6 +176,14 @@ mod tests {
         Invalid,
     }
 
+    impl core::fmt::Display for TestError {
+        fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+            formatter.write_str("invalid test block transfer")
+        }
+    }
+
+    impl core::error::Error for TestError {}
+
     struct MemoryDevice {
         geometry: BlockGeometry,
         bytes: [u8; 2_048],
