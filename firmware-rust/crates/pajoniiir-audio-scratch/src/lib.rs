@@ -292,15 +292,42 @@ mod tests {
     use super::*;
 
     const WINDOW: [PcmFrame; 10] = [
-        PcmFrame { left: 900, right: -900 },
-        PcmFrame { left: 800, right: -800 },
-        PcmFrame { left: 700, right: -700 },
-        PcmFrame { left: 600, right: -600 },
-        PcmFrame { left: 500, right: -500 },
-        PcmFrame { left: 400, right: -400 },
-        PcmFrame { left: 300, right: -300 },
-        PcmFrame { left: 200, right: -200 },
-        PcmFrame { left: 100, right: -100 },
+        PcmFrame {
+            left: 900,
+            right: -900,
+        },
+        PcmFrame {
+            left: 800,
+            right: -800,
+        },
+        PcmFrame {
+            left: 700,
+            right: -700,
+        },
+        PcmFrame {
+            left: 600,
+            right: -600,
+        },
+        PcmFrame {
+            left: 500,
+            right: -500,
+        },
+        PcmFrame {
+            left: 400,
+            right: -400,
+        },
+        PcmFrame {
+            left: 300,
+            right: -300,
+        },
+        PcmFrame {
+            left: 200,
+            right: -200,
+        },
+        PcmFrame {
+            left: 100,
+            right: -100,
+        },
         PcmFrame { left: 0, right: 0 },
     ];
 
