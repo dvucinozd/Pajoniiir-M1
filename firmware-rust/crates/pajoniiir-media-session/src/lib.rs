@@ -225,23 +225,7 @@ impl Default for MediaSession {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct BlockGeometry {
-    pub block_size: u32,
-    pub block_count: u64,
-}
-
-pub trait BlockDevice {
-    type Error;
-
-    fn geometry(&self) -> BlockGeometry;
-    fn read_blocks(
-        &mut self,
-        first_block: u64,
-        block_count: u32,
-        output: &mut [u8],
-    ) -> Result<(), Self::Error>;
-}
+pub use pajoniiir_media_block::{BlockDevice, BlockGeometry};
 
 pub trait MediaReader {
     type Error;
