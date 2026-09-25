@@ -87,11 +87,7 @@ pub struct BlockRange {
 }
 
 impl BlockRange {
-    pub fn new(
-        first_block: u64,
-        block_count: NonZeroU64,
-        geometry: BlockGeometry,
-    ) -> Option<Self> {
+    pub fn new(first_block: u64, block_count: NonZeroU64, geometry: BlockGeometry) -> Option<Self> {
         if !geometry.is_valid() {
             return None;
         }
@@ -360,12 +356,7 @@ mod tests {
     #[test]
     fn partition_device_translates_reads_and_blocks_escape_attempts() {
         let inner = MemoryDevice::new();
-        let range = BlockRange::new(
-            2,
-            NonZeroU64::new(4).unwrap(),
-            inner.geometry(),
-        )
-        .unwrap();
+        let range = BlockRange::new(2, NonZeroU64::new(4).unwrap(), inner.geometry()).unwrap();
         let mut partition = PartitionDevice::new(inner, range);
         let mut block = [0u8; 512];
 
@@ -383,12 +374,7 @@ mod tests {
     #[test]
     fn partition_device_translates_writes_and_flush() {
         let inner = MemoryDevice::new();
-        let range = BlockRange::new(
-            1,
-            NonZeroU64::new(2).unwrap(),
-            inner.geometry(),
-        )
-        .unwrap();
+        let range = BlockRange::new(1, NonZeroU64::new(2).unwrap(), inner.geometry()).unwrap();
         let mut partition = PartitionDevice::new(inner, range);
         let data = [0x5au8; 512];
 
