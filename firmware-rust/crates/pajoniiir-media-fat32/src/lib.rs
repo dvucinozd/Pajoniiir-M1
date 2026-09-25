@@ -168,7 +168,6 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use embedded_sdmmc::BlockDevice as _;
     use pajoniiir_media_block::BlockDevice;
 
     #[derive(Clone, Copy, Debug, Eq, PartialEq)]
