@@ -505,10 +505,7 @@ mod tests {
         let mut storage = [0u8; FS_NAME_MAX];
         let mut visitor = CountVisitor { count: 0 };
 
-        assert_eq!(
-            fs.visit_directory("/", &mut storage, &mut visitor),
-            Ok(())
-        );
+        assert_eq!(fs.visit_directory("/", &mut storage, &mut visitor), Ok(()));
         assert_eq!(visitor.count, 0);
     }
 
