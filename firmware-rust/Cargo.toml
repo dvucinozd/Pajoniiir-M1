@@ -4,6 +4,7 @@ members = [
     "crates/pajoniiir-audio-dsp",
     "crates/pajoniiir-audio-keylock",
     "crates/pajoniiir-audio-runtime",
+    "crates/pajoniiir-audio-scratch",
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",
@@ -21,6 +22,7 @@ default-members = [
     "crates/pajoniiir-audio-dsp",
     "crates/pajoniiir-audio-keylock",
     "crates/pajoniiir-audio-runtime",
+    "crates/pajoniiir-audio-scratch",
     "crates/pajoniiir-core",
     "crates/pajoniiir-controller-core",
     "crates/pajoniiir-controller-profile",
@@ -50,6 +52,7 @@ slint-build = { version = "=1.18.1" }
 pajoniiir-audio-dsp = { path = "crates/pajoniiir-audio-dsp" }
 pajoniiir-audio-keylock = { path = "crates/pajoniiir-audio-keylock" }
 pajoniiir-audio-runtime = { path = "crates/pajoniiir-audio-runtime" }
+pajoniiir-audio-scratch = { path = "crates/pajoniiir-audio-scratch" }
 pajoniiir-core = { path = "crates/pajoniiir-core" }
 pajoniiir-controller-core = { path = "crates/pajoniiir-controller-core" }
 pajoniiir-controller-profile = { path = "crates/pajoniiir-controller-profile" }
