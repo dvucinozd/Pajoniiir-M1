@@ -2,10 +2,10 @@
 #![forbid(unsafe_code)]
 
 use core::cell::RefCell;
-use core::fmt::Debug;
+use core::fmt;
 
 use embedded_sdmmc::{Block, BlockCount, BlockDevice as SdmmcBlockDevice, BlockIdx};
-use pajoniiir_media_block::{BlockDevice, BlockGeometry, WritableBlockDevice};
+use pajoniiir_media_block::{BlockGeometry, WritableBlockDevice};
 
 pub const FAT_BLOCK_SIZE: u32 = 512;
 
@@ -16,6 +16,28 @@ pub enum Fat32BlockError<E> {
     BorrowConflict,
     AddressOverflow,
     Backend(E),
+}
+
+impl<E: fmt::Display> fmt::Display for Fat32BlockError<E> {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::UnsupportedBlockSize(size) => {
+                write!(formatter, "unsupported FAT block size: {size}")
+            }
+            Self::TooManyBlocks(count) => {
+                write!(formatter, "FAT block count exceeds u32 range: {count}")
+            }
+            Self::BorrowConflict => formatter.write_str("FAT block adapter borrow conflict"),
+            Self::AddressOverflow => formatter.write_str("FAT block address overflow"),
+            Self::Backend(error) => write!(formatter, "FAT block backend error: {error}"),
+        }
+    }
+}
+
+impl<E> core::error::Error for Fat32BlockError<E>
+where
+    E: core::error::Error + 'static,
+{
 }
 
 pub struct Fat32BlockAdapter<D> {
@@ -53,9 +75,7 @@ where
             .map_err(|_| Fat32BlockError::BorrowConflict)?;
         let geometry = inner.geometry();
         if geometry.block_size != FAT_BLOCK_SIZE {
-            return Err(Fat32BlockError::UnsupportedBlockSize(
-                geometry.block_size,
-            ));
+            return Err(Fat32BlockError::UnsupportedBlockSize(geometry.block_size));
         }
         if geometry.block_count > u32::MAX as u64 {
             return Err(Fat32BlockError::TooManyBlocks(geometry.block_count));
@@ -75,7 +95,7 @@ where
 impl<D> SdmmcBlockDevice for Fat32BlockAdapter<D>
 where
     D: WritableBlockDevice,
-    D::Error: Debug,
+    D::Error: core::error::Error + 'static,
 {
     type Error = Fat32BlockError<D::Error>;
 
@@ -153,6 +173,7 @@ where
 mod tests {
     use super::*;
     use embedded_sdmmc::BlockDevice as _;
+    use pajoniiir_media_block::BlockDevice;
 
     #[derive(Clone, Copy, Debug, Eq, PartialEq)]
     enum TestError {
@@ -248,10 +269,7 @@ mod tests {
 
     #[test]
     fn bridge_rejects_capacity_beyond_embedded_sdmmc_limit() {
-        let adapter = Fat32BlockAdapter::new(MemoryDevice::new(
-            512,
-            u32::MAX as u64 + 1,
-        ));
+        let adapter = Fat32BlockAdapter::new(MemoryDevice::new(512, u32::MAX as u64 + 1));
         assert_eq!(
             adapter.num_blocks(),
             Err(Fat32BlockError::TooManyBlocks(u32::MAX as u64 + 1))
@@ -278,10 +296,7 @@ mod tests {
         let adapter = Fat32BlockAdapter::new(MemoryDevice::new(512, 4));
         adapter.flush_inner().unwrap();
 
-        assert_eq!(
-            adapter.with_inner(|inner| inner.flushes).unwrap(),
-            1
-        );
+        assert_eq!(adapter.with_inner(|inner| inner.flushes).unwrap(), 1);
     }
 
     #[test]
