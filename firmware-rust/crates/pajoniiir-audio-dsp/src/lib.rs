@@ -257,6 +257,241 @@ fn phase_fraction_float(phase_q32: u32) -> f32 {
     f32::from_bits(0x3f80_0000 | (phase_q32 >> 9)) - 1.0
 }
 
+pub const CENSOR_EDGE_FADE_FRAMES: u32 = 64;
+const CENSOR_Q32_SCALE: f32 = 4_294_967_296.0;
+const CENSOR_MAX_STEP: f32 = 8.0;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct CensorRender {
+    pub frame: PcmFrame,
+    pub reverse_gain: f32,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct CensorState {
+    active: bool,
+    releasing: bool,
+    exhausted: bool,
+    origin_seq: u64,
+    distance_q32: u64,
+    step_q32: u64,
+    release_frames: u32,
+    release_remaining: u32,
+    edge_fade_remaining: u32,
+    edge_hits: u32,
+    last_reverse: PcmFrame,
+}
+
+impl CensorState {
+    pub const fn new() -> Self {
+        Self {
+            active: false,
+            releasing: false,
+            exhausted: false,
+            origin_seq: 0,
+            distance_q32: 0,
+            step_q32: 0,
+            release_frames: 0,
+            release_remaining: 0,
+            edge_fade_remaining: 0,
+            edge_hits: 0,
+            last_reverse: PcmFrame { left: 0, right: 0 },
+        }
+    }
+
+    pub fn reset(&mut self) {
+        *self = Self::new();
+    }
+
+    pub fn begin(
+        &mut self,
+        origin_seq: u64,
+        source_sample_rate: u32,
+        output_sample_rate: u32,
+        speed_factor: f32,
+        release_frames: u32,
+    ) -> bool {
+        if release_frames == 0 {
+            return false;
+        }
+        let step_q32 = censor_step_q32(source_sample_rate, output_sample_rate, speed_factor);
+        if step_q32 == 0 {
+            return false;
+        }
+
+        *self = Self::new();
+        self.active = true;
+        self.origin_seq = origin_seq;
+        self.step_q32 = step_q32;
+        self.release_frames = release_frames;
+        true
+    }
+
+    pub fn set_rate(
+        &mut self,
+        source_sample_rate: u32,
+        output_sample_rate: u32,
+        speed_factor: f32,
+    ) {
+        if !self.active {
+            return;
+        }
+        let step_q32 = censor_step_q32(source_sample_rate, output_sample_rate, speed_factor);
+        if step_q32 != 0 {
+            self.step_q32 = step_q32;
+        }
+    }
+
+    pub fn release(&mut self) {
+        if !self.active || self.releasing {
+            return;
+        }
+        self.releasing = true;
+        self.release_remaining = self.release_frames;
+    }
+
+    pub const fn is_active(&self) -> bool {
+        self.active
+    }
+
+    pub const fn exhausted(&self) -> bool {
+        self.exhausted
+    }
+
+    pub const fn edge_hits(&self) -> u32 {
+        self.edge_hits
+    }
+
+    pub fn render<F>(&mut self, mut read_frame: F) -> Option<CensorRender>
+    where
+        F: FnMut(u64) -> Option<PcmFrame>,
+    {
+        if !self.active {
+            return None;
+        }
+
+        let gain = if self.releasing {
+            if self.release_remaining == 0 {
+                self.active = false;
+                self.releasing = false;
+                return None;
+            }
+            self.release_remaining as f32 / self.release_frames as f32
+        } else {
+            1.0
+        };
+
+        let mut frame = PcmFrame::default();
+        if !self.exhausted {
+            if let Some(reverse) = self.read_reverse(&mut read_frame) {
+                frame = reverse;
+                self.last_reverse = reverse;
+            } else {
+                self.exhausted = true;
+                self.edge_hits = self.edge_hits.saturating_add(1);
+                self.edge_fade_remaining = CENSOR_EDGE_FADE_FRAMES;
+            }
+        }
+
+        if self.exhausted && frame == PcmFrame::default() && self.edge_fade_remaining > 0 {
+            frame = PcmFrame {
+                left: scale_sample(
+                    self.last_reverse.left,
+                    self.edge_fade_remaining,
+                    CENSOR_EDGE_FADE_FRAMES,
+                ),
+                right: scale_sample(
+                    self.last_reverse.right,
+                    self.edge_fade_remaining,
+                    CENSOR_EDGE_FADE_FRAMES,
+                ),
+            };
+            self.edge_fade_remaining -= 1;
+        }
+
+        self.distance_q32 = self.distance_q32.wrapping_add(self.step_q32);
+
+        if self.releasing && self.release_remaining > 0 {
+            self.release_remaining -= 1;
+            if self.release_remaining == 0 {
+                self.active = false;
+                self.releasing = false;
+            }
+        }
+
+        Some(CensorRender {
+            frame,
+            reverse_gain: gain,
+        })
+    }
+
+    fn read_reverse<F>(&self, read_frame: &mut F) -> Option<PcmFrame>
+    where
+        F: FnMut(u64) -> Option<PcmFrame>,
+    {
+        let whole = self.distance_q32 >> 32;
+        let frac = self.distance_q32 as u32;
+        if whole > self.origin_seq {
+            return None;
+        }
+
+        let newer_seq = self.origin_seq - whole;
+        let newer = read_frame(newer_seq)?;
+        if frac == 0 || newer_seq == 0 {
+            return Some(newer);
+        }
+
+        let Some(older) = read_frame(newer_seq - 1) else {
+            return Some(newer);
+        };
+        Some(PcmFrame {
+            left: interpolate_censor_sample(newer.left, older.left, frac),
+            right: interpolate_censor_sample(newer.right, older.right, frac),
+        })
+    }
+}
+
+impl Default for CensorState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+fn censor_step_q32(
+    source_sample_rate: u32,
+    output_sample_rate: u32,
+    speed_factor: f32,
+) -> u64 {
+    if source_sample_rate == 0 || output_sample_rate == 0 {
+        return 0;
+    }
+
+    let speed_factor = if speed_factor > 0.0 {
+        speed_factor
+    } else {
+        1.0
+    };
+    let step = (source_sample_rate as f32 / output_sample_rate as f32) * speed_factor;
+    let step = step.min(CENSOR_MAX_STEP);
+    if !(step > 0.0) {
+        return 0;
+    }
+    (step * CENSOR_Q32_SCALE + 0.5) as u64
+}
+
+fn interpolate_censor_sample(newer: i16, older: i16, frac: u32) -> i16 {
+    let delta = older as i64 - newer as i64;
+    let value = newer as i64 + (delta * frac as i64) / 0x1_0000_0000i64;
+    value.clamp(i16::MIN as i64, i16::MAX as i64) as i16
+}
+
+fn scale_sample(sample: i16, numerator: u32, denominator: u32) -> i16 {
+    if denominator == 0 || numerator == 0 {
+        return 0;
+    }
+    ((sample as i32 * numerator as i32) / denominator as i32) as i16
+}
+
 pub const FILTER_RAW_MIN: u16 = 0;
 pub const FILTER_RAW_CENTER: u16 = MIXER_CONTROL_CENTER;
 pub const FILTER_RAW_MAX: u16 = MIXER_CONTROL_MAX;
@@ -1228,6 +1463,123 @@ mod tests {
     fn programmed_cutoff_hz(filter: &FilterState) -> f32 {
         let g = filter.a2 / filter.a1;
         libm::atanf(g) * SAMPLE_RATE as f32 / PI
+    }
+
+    #[test]
+    fn censor_reverse_walks_backward_at_unity_rate() {
+        let frames = [
+            PcmFrame { left: 100, right: -100 },
+            PcmFrame { left: 200, right: -200 },
+            PcmFrame { left: 300, right: -300 },
+            PcmFrame { left: 400, right: -400 },
+            PcmFrame { left: 500, right: -500 },
+        ];
+        let mut censor = CensorState::new();
+        assert!(censor.begin(14, 48_000, 48_000, 1.0, 4));
+        let mut read = |seq: u64| {
+            let index = seq.checked_sub(10)? as usize;
+            frames.get(index).copied()
+        };
+
+        for expected in [500, 400, 300] {
+            let out = censor.render(&mut read).unwrap();
+            assert_eq!(out.frame.left, expected);
+            assert_eq!(out.frame.right, -expected);
+            assert!((out.reverse_gain - 1.0).abs() < 0.0001);
+        }
+    }
+
+    #[test]
+    fn censor_mixed_rate_interpolates_fractional_reverse_head() {
+        let frames = [
+            PcmFrame { left: 100, right: 100 },
+            PcmFrame { left: 200, right: 200 },
+            PcmFrame { left: 300, right: 300 },
+            PcmFrame { left: 400, right: 400 },
+            PcmFrame { left: 500, right: 500 },
+        ];
+        let mut censor = CensorState::new();
+        assert!(censor.begin(24, 24_000, 48_000, 1.0, 4));
+        let mut read = |seq: u64| {
+            let index = seq.checked_sub(20)? as usize;
+            frames.get(index).copied()
+        };
+
+        for expected in [500, 450, 400] {
+            assert_eq!(censor.render(&mut read).unwrap().frame.left, expected);
+        }
+    }
+
+    #[test]
+    fn censor_release_fades_without_seeking_forward_timeline() {
+        let frames = [
+            PcmFrame { left: 100, right: 100 },
+            PcmFrame { left: 200, right: 200 },
+            PcmFrame { left: 300, right: 300 },
+            PcmFrame { left: 400, right: 400 },
+            PcmFrame { left: 500, right: 500 },
+        ];
+        let mut censor = CensorState::new();
+        assert!(censor.begin(34, 48_000, 48_000, 1.0, 4));
+        censor.release();
+        let mut read = |seq: u64| {
+            let index = seq.checked_sub(30)? as usize;
+            frames.get(index).copied()
+        };
+
+        for expected in [1.0, 0.75, 0.5, 0.25] {
+            let out = censor.render(&mut read).unwrap();
+            assert!((out.reverse_gain - expected).abs() < 0.0001);
+        }
+        assert!(!censor.is_active());
+    }
+
+    #[test]
+    fn censor_bounded_history_edge_fades_once_to_silence() {
+        let frames = [
+            PcmFrame { left: 6_400, right: -6_400 },
+            PcmFrame { left: 3_200, right: -3_200 },
+        ];
+        let mut censor = CensorState::new();
+        assert!(censor.begin(1, 48_000, 48_000, 1.0, 4));
+        let mut read = |seq: u64| frames.get(seq as usize).copied();
+
+        assert_eq!(censor.render(&mut read).unwrap().frame.left, 3_200);
+        assert_eq!(censor.render(&mut read).unwrap().frame.left, 6_400);
+        assert_eq!(censor.render(&mut read).unwrap().frame.left, 6_400);
+        assert_eq!(censor.edge_hits(), 1);
+        assert!(censor.exhausted());
+
+        assert_eq!(censor.render(&mut read).unwrap().frame.left, 6_300);
+        let mut last = PcmFrame::default();
+        for _ in 0..CENSOR_EDGE_FADE_FRAMES {
+            last = censor.render(&mut read).unwrap().frame;
+        }
+        assert_eq!(last, PcmFrame::default());
+        assert_eq!(censor.edge_hits(), 1);
+    }
+
+    #[test]
+    fn censor_invalid_configuration_is_rejected() {
+        let mut censor = CensorState::new();
+        assert!(!censor.begin(0, 0, 48_000, 1.0, 4));
+        assert!(!censor.begin(0, 48_000, 0, 1.0, 4));
+        assert!(!censor.begin(0, 48_000, 48_000, 1.0, 0));
+        assert!(!censor.is_active());
+    }
+
+    #[test]
+    fn censor_rate_update_is_bounded_and_nonpositive_speed_defaults_to_unity() {
+        let mut censor = CensorState::new();
+        assert!(censor.begin(100, 48_000, 48_000, -1.0, 4));
+        assert_eq!(censor.step_q32, 1u64 << 32);
+
+        censor.set_rate(48_000, 48_000, 100.0);
+        assert_eq!(censor.step_q32, 8u64 << 32);
+
+        let before = censor.step_q32;
+        censor.set_rate(0, 48_000, 1.0);
+        assert_eq!(censor.step_q32, before);
     }
 
     #[test]
