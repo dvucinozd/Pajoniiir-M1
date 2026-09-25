@@ -97,9 +97,14 @@ impl MediaSession {
     }
 
     pub fn on_connect(&mut self, source: MediaSourceId) -> ConnectResult {
-        if self.connected {
-            let current = self.lease().expect("connected session has source");
-            if self.source == Some(source) {
+        if self.connected
+            && let Some(current_source) = self.source
+        {
+            let current = MediaLease {
+                generation: self.generation,
+                source: current_source,
+            };
+            if current_source == source {
                 return ConnectResult::Duplicate(current);
             }
             if self.handle.is_some() || self.mounted {
@@ -108,7 +113,10 @@ impl MediaSession {
 
             self.source = Some(source);
             self.generation = self.generation.next();
-            return ConnectResult::Accepted(self.lease().unwrap());
+            return ConnectResult::Accepted(MediaLease {
+                generation: self.generation,
+                source,
+            });
         }
 
         self.connected = true;
@@ -116,17 +124,20 @@ impl MediaSession {
         self.source = Some(source);
         self.handle = None;
         self.generation = self.generation.next();
-        ConnectResult::Accepted(self.lease().unwrap())
+        ConnectResult::Accepted(MediaLease {
+            generation: self.generation,
+            source,
+        })
     }
 
     pub fn bind_handle(&mut self, lease: MediaLease, handle: MediaHandle) -> bool {
         if !self.validate(lease) {
             return false;
         }
-        if let Some(current) = self.handle {
-            if current != handle {
-                return false;
-            }
+        if let Some(current) = self.handle
+            && current != handle
+        {
+            return false;
         }
         self.handle = Some(handle);
         true
@@ -142,10 +153,10 @@ impl MediaSession {
         if !self.connected {
             return DisconnectResult::AlreadyInactive;
         }
-        if let Some(owner) = self.handle {
-            if handle != Some(owner) {
-                return DisconnectResult::IgnoredForeign;
-            }
+        if let Some(owner) = self.handle
+            && handle != Some(owner)
+        {
+            return DisconnectResult::IgnoredForeign;
         }
 
         self.connected = false;
