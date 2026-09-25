@@ -13,6 +13,7 @@ members = [
     "crates/pajoniiir-deck",
     "crates/pajoniiir-hot-cues",
     "crates/pajoniiir-mixer",
+    "crates/pajoniiir-media-identity",
     "crates/pajoniiir-track-analysis",
     "crates/pajoniiir-ui-model",
     "crates/pajoniiir-waveform",
@@ -61,6 +62,7 @@ pajoniiir-control-scheduler = { path = "crates/pajoniiir-control-scheduler" }
 pajoniiir-deck = { path = "crates/pajoniiir-deck" }
 pajoniiir-hot-cues = { path = "crates/pajoniiir-hot-cues" }
 pajoniiir-mixer = { path = "crates/pajoniiir-mixer" }
+pajoniiir-media-identity = { path = "crates/pajoniiir-media-identity" }
 pajoniiir-track-analysis = { path = "crates/pajoniiir-track-analysis" }
 pajoniiir-ui-model = { path = "crates/pajoniiir-ui-model" }
 pajoniiir-waveform = { path = "crates/pajoniiir-waveform" }

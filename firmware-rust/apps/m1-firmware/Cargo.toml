@@ -14,6 +14,7 @@ pajoniiir-controller-session = { path = "../../crates/pajoniiir-controller-sessi
 pajoniiir-deck = { path = "../../crates/pajoniiir-deck" }
 pajoniiir-hot-cues = { path = "../../crates/pajoniiir-hot-cues" }
 pajoniiir-mixer = { path = "../../crates/pajoniiir-mixer" }
+pajoniiir-media-identity = { path = "../../crates/pajoniiir-media-identity" }
 pajoniiir-ui-model = { path = "../../crates/pajoniiir-ui-model" }
 pajoniiir-waveform = { path = "../../crates/pajoniiir-waveform" }
 
