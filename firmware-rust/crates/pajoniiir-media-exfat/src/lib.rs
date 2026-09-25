@@ -86,7 +86,12 @@ where
         workspace: &'a mut exfat_embedded::Workspace,
     ) -> Result<Self, ExFatFsError<D::Error>> {
         let adapter = ExFatBlockAdapter::new(device);
-        let sector_size = adapter.validate_geometry()?.block_size as usize;
+        let sector_size = adapter
+            .validate_geometry()
+            .map_err(|error| {
+                ExFatFsError::Backend(exfat_embedded::Error::Device(error))
+            })?
+            .block_size as usize;
         if scratch_storage.len() < sector_size {
             return Err(ExFatFsError::Backend(
                 exfat_embedded::Error::InvalidSectorSize,
