@@ -39,8 +39,7 @@ where
 {
     pub fn validate_geometry(&self) -> Result<BlockGeometry, ExFatBlockError<D::Error>> {
         let geometry = self.inner.geometry();
-        if geometry.block_count == 0
-            || !matches!(geometry.block_size, 512 | 1_024 | 2_048 | 4_096)
+        if geometry.block_count == 0 || !matches!(geometry.block_size, 512 | 1_024 | 2_048 | 4_096)
         {
             return Err(ExFatBlockError::InvalidGeometry(geometry));
         }
