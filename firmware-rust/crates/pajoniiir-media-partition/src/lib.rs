@@ -431,10 +431,7 @@ mod tests {
             PartitionScanResult::Ok
         );
         assert_eq!(layout.candidates()[0].first_lba, first);
-        assert_eq!(
-            layout.candidates()[0].sector_count,
-            NonZeroU64::new(65_536)
-        );
+        assert_eq!(layout.candidates()[0].sector_count, NonZeroU64::new(65_536));
     }
 
     #[test]
