@@ -104,7 +104,6 @@ impl HotCueBank {
     }
 }
 
-
 pub const HOT_CUE_RECORD_V3_SIZE: usize = 128;
 pub const HOT_CUE_RECORD_V2_SIZE: usize = 144;
 
@@ -115,8 +114,7 @@ const HOT_CUE_RECORD_V2_VERSION: u16 = 2;
 const HOT_CUE_RECORD_SLOT_SIZE: usize = 12;
 const HOT_CUE_RECORD_V3_HEADER_SIZE: usize = 28;
 const HOT_CUE_RECORD_V2_HEADER_SIZE: usize = 44;
-const HOT_CUE_RECORD_PAYLOAD_LEN: u16 =
-    (4 + HOT_CUE_SLOT_COUNT * HOT_CUE_RECORD_SLOT_SIZE) as u16;
+const HOT_CUE_RECORD_PAYLOAD_LEN: u16 = (4 + HOT_CUE_SLOT_COUNT * HOT_CUE_RECORD_SLOT_SIZE) as u16;
 const HOT_CUE_RECORD_V3_CRC_OFFSET: usize =
     HOT_CUE_RECORD_V3_HEADER_SIZE + HOT_CUE_SLOT_COUNT * HOT_CUE_RECORD_SLOT_SIZE;
 const HOT_CUE_RECORD_V2_CRC_OFFSET: usize =
@@ -181,9 +179,7 @@ pub fn decode_record_v3(
     if record[8..24] != expected_track.0 {
         return Err(HotCueRecordError::TrackMismatch);
     }
-    let expected_crc = get_u32(
-        &record[HOT_CUE_RECORD_V3_CRC_OFFSET..HOT_CUE_RECORD_V3_SIZE],
-    );
+    let expected_crc = get_u32(&record[HOT_CUE_RECORD_V3_CRC_OFFSET..HOT_CUE_RECORD_V3_SIZE]);
     if expected_crc != crc32_iso(&record[..HOT_CUE_RECORD_V3_CRC_OFFSET]) {
         return Err(HotCueRecordError::InvalidCrc);
     }
@@ -216,9 +212,7 @@ pub fn decode_legacy_record_v2(
     if record[8..40] != expected_legacy_id.0 {
         return Err(HotCueRecordError::TrackMismatch);
     }
-    let expected_crc = get_u32(
-        &record[HOT_CUE_RECORD_V2_CRC_OFFSET..HOT_CUE_RECORD_V2_SIZE],
-    );
+    let expected_crc = get_u32(&record[HOT_CUE_RECORD_V2_CRC_OFFSET..HOT_CUE_RECORD_V2_SIZE]);
     if expected_crc != crc32_iso(&record[..HOT_CUE_RECORD_V2_CRC_OFFSET]) {
         return Err(HotCueRecordError::InvalidCrc);
     }
@@ -328,7 +322,6 @@ mod tests {
         derived_id(seed, "Music/test.wav")
     }
 
-
     fn derived_id(seed: u8, path: &str) -> MediaTrackId {
         pajoniiir_media_identity::derive_track_id(
             pajoniiir_media_identity::VolumeIdentity([seed; 32]),
@@ -337,10 +330,7 @@ mod tests {
         .unwrap()
     }
 
-    fn legacy_record(
-        id: PersistentMediaId,
-        bank: &HotCueBank,
-    ) -> [u8; HOT_CUE_RECORD_V2_SIZE] {
+    fn legacy_record(id: PersistentMediaId, bank: &HotCueBank) -> [u8; HOT_CUE_RECORD_V2_SIZE] {
         let mut record = [0u8; HOT_CUE_RECORD_V2_SIZE];
         put_u32(&mut record[0..4], HOT_CUE_RECORD_V2_MAGIC);
         put_u16(&mut record[4..6], HOT_CUE_RECORD_V2_VERSION);
@@ -436,8 +426,7 @@ mod tests {
         assert!(legacy_bank.set_loop(6, 12_000, 16_000));
 
         let record = legacy_record(legacy_id, &legacy_bank);
-        let migrated =
-            decode_legacy_record_v2(legacy_id, migrated_id, &record).unwrap();
+        let migrated = decode_legacy_record_v2(legacy_id, migrated_id, &record).unwrap();
 
         assert_eq!(migrated, legacy_bank);
     }
