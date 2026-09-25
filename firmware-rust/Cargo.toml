@@ -14,6 +14,7 @@ members = [
     "crates/pajoniiir-hot-cues",
     "crates/pajoniiir-mixer",
     "crates/pajoniiir-media-block",
+    "crates/pajoniiir-media-fat32",
     "crates/pajoniiir-media-fs",
     "crates/pajoniiir-media-identity",
     "crates/pajoniiir-media-partition",
@@ -54,6 +55,7 @@ publish = false
 
 [workspace.dependencies]
 embedded-graphics = { version = "=0.8.2", default-features = false }
+embedded-sdmmc = { version = "=0.10.0", default-features = false }
 libm = "=0.2.16"
 slint = { version = "=1.18.1", default-features = false, features = ["std", "backend-winit-x11", "renderer-software", "compat-1-18"] }
 slint-build = { version = "=1.18.1" }
@@ -71,6 +73,7 @@ pajoniiir-deck = { path = "crates/pajoniiir-deck" }
 pajoniiir-hot-cues = { path = "crates/pajoniiir-hot-cues" }
 pajoniiir-mixer = { path = "crates/pajoniiir-mixer" }
 pajoniiir-media-block = { path = "crates/pajoniiir-media-block" }
+pajoniiir-media-fat32 = { path = "crates/pajoniiir-media-fat32" }
 pajoniiir-media-fs = { path = "crates/pajoniiir-media-fs" }
 pajoniiir-media-identity = { path = "crates/pajoniiir-media-identity" }
 pajoniiir-media-partition = { path = "crates/pajoniiir-media-partition" }
