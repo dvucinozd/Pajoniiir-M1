@@ -232,6 +232,14 @@ where
     }
 
     fn stat(&mut self, path: &str) -> Result<pajoniiir_media_fs::FileStat, Self::Error> {
+        if path.trim_matches('/').is_empty() {
+            return Ok(pajoniiir_media_fs::FileStat {
+                kind: pajoniiir_media_fs::EntryKind::Directory,
+                len: 0,
+                modified_unix_seconds: None,
+            });
+        }
+
         let Self {
             backend,
             scratch_storage,
