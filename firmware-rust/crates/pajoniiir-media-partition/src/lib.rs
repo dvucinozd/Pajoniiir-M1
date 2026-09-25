@@ -7,8 +7,7 @@ pub const MAX_PARTITION_CANDIDATES: usize = 8;
 pub const MIN_SECTOR_SIZE: usize = 512;
 
 const MICROSOFT_BASIC_DATA_GUID: [u8; 16] = [
-    0xa2, 0xa0, 0xd0, 0xeb, 0xe5, 0xb9, 0x33, 0x44, 0x87, 0xc0, 0x68, 0xb6, 0xb7, 0x26, 0x99,
-    0xc7,
+    0xa2, 0xa0, 0xd0, 0xeb, 0xe5, 0xb9, 0x33, 0x44, 0x87, 0xc0, 0x68, 0xb6, 0xb7, 0x26, 0x99, 0xc7,
 ];
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -130,10 +129,7 @@ pub fn classify_boot_sector(sector: &[u8]) -> VolumeKind {
     VolumeKind::Unknown
 }
 
-pub fn scan_mbr_or_superfloppy(
-    sector: &[u8],
-    layout: &mut PartitionLayout,
-) -> PartitionScanResult {
+pub fn scan_mbr_or_superfloppy(sector: &[u8], layout: &mut PartitionLayout) -> PartitionScanResult {
     layout.clear();
     if !has_boot_signature(sector) {
         return PartitionScanResult::Invalid;
@@ -195,7 +191,8 @@ pub fn scan_gpt(
     layout: &mut PartitionLayout,
 ) -> PartitionScanResult {
     layout.clear();
-    if header_sector.len() < MIN_SECTOR_SIZE || header_sector.get(..8) != Some(b"EFI PART".as_slice())
+    if header_sector.len() < MIN_SECTOR_SIZE
+        || header_sector.get(..8) != Some(b"EFI PART".as_slice())
     {
         return PartitionScanResult::Invalid;
     }
@@ -370,10 +367,7 @@ mod tests {
             PartitionScanResult::Ok
         );
         assert_eq!(layout.candidates()[0].first_lba, 2_048);
-        assert_eq!(
-            layout.candidates()[0].sector_count,
-            NonZeroU64::new(65_536)
-        );
+        assert_eq!(layout.candidates()[0].sector_count, NonZeroU64::new(65_536));
         assert_eq!(layout.candidates()[0].kind, VolumeKind::Fat);
 
         assert_eq!(
@@ -459,16 +453,8 @@ mod tests {
     #[test]
     fn duplicate_candidate_upgrades_kind_without_consuming_slot() {
         let mut layout = PartitionLayout::new();
-        assert!(layout.append_candidate(
-            8_192,
-            NonZeroU64::new(262_144),
-            VolumeKind::Unknown
-        ));
-        assert!(layout.append_candidate(
-            8_192,
-            NonZeroU64::new(262_144),
-            VolumeKind::ExFat
-        ));
+        assert!(layout.append_candidate(8_192, NonZeroU64::new(262_144), VolumeKind::Unknown));
+        assert!(layout.append_candidate(8_192, NonZeroU64::new(262_144), VolumeKind::ExFat));
         assert_eq!(layout.count(), 1);
         assert_eq!(layout.candidates()[0].kind, VolumeKind::ExFat);
     }
