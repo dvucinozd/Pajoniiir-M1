@@ -34,11 +34,7 @@ impl<E: fmt::Display> fmt::Display for Fat32BlockError<E> {
     }
 }
 
-impl<E> core::error::Error for Fat32BlockError<E>
-where
-    E: core::error::Error + 'static,
-{
-}
+impl<E> core::error::Error for Fat32BlockError<E> where E: core::error::Error + 'static {}
 
 pub struct Fat32BlockAdapter<D> {
     inner: RefCell<D>,
