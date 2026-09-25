@@ -53,7 +53,7 @@ pub struct DirEntry {
 }
 
 impl DirEntry {
-    pub const fn name<'a>(&self, storage: &'a [u8]) -> Option<&'a [u8]> {
+    pub fn name<'a>(&self, storage: &'a [u8]) -> Option<&'a [u8]> {
         let len = self.name_len as usize;
         if len <= storage.len() {
             Some(&storage[..len])
@@ -106,17 +106,9 @@ pub trait FileSystem: LeaseBound {
 
     fn close_file(&mut self, file: Self::File) -> Result<(), Self::Error>;
 
-    fn read(
-        &mut self,
-        file: &mut Self::File,
-        output: &mut [u8],
-    ) -> Result<usize, Self::Error>;
+    fn read(&mut self, file: &mut Self::File, output: &mut [u8]) -> Result<usize, Self::Error>;
 
-    fn seek_absolute(
-        &mut self,
-        file: &mut Self::File,
-        position: u64,
-    ) -> Result<(), Self::Error>;
+    fn seek_absolute(&mut self, file: &mut Self::File, position: u64) -> Result<(), Self::Error>;
 
     fn open_directory(&mut self, path: &str) -> Result<Self::Directory, Self::Error>;
 
@@ -134,9 +126,7 @@ pub trait FileSystem: LeaseBound {
         mut output: &mut [u8],
     ) -> Result<(), IoContractError<Self::Error>> {
         while !output.is_empty() {
-            let read = self
-                .read(file, output)
-                .map_err(IoContractError::Inner)?;
+            let read = self.read(file, output).map_err(IoContractError::Inner)?;
             if read == 0 {
                 return Err(IoContractError::UnexpectedEof);
             }
@@ -164,17 +154,9 @@ pub trait FileSystem: LeaseBound {
 }
 
 pub trait WritableFileSystem: FileSystem {
-    fn open_write(
-        &mut self,
-        path: &str,
-        truncate: bool,
-    ) -> Result<Self::File, Self::Error>;
+    fn open_write(&mut self, path: &str, truncate: bool) -> Result<Self::File, Self::Error>;
 
-    fn write(
-        &mut self,
-        file: &mut Self::File,
-        input: &[u8],
-    ) -> Result<usize, Self::Error>;
+    fn write(&mut self, file: &mut Self::File, input: &[u8]) -> Result<usize, Self::Error>;
 
     fn flush_file(&mut self, file: &mut Self::File) -> Result<(), Self::Error>;
 
@@ -188,9 +170,7 @@ pub trait WritableFileSystem: FileSystem {
         mut input: &[u8],
     ) -> Result<(), IoContractError<Self::Error>> {
         while !input.is_empty() {
-            let written = self
-                .write(file, input)
-                .map_err(IoContractError::Inner)?;
+            let written = self.write(file, input).map_err(IoContractError::Inner)?;
             if written == 0 {
                 return Err(IoContractError::WriteZero);
             }
@@ -324,11 +304,7 @@ mod tests {
             Ok(())
         }
 
-        fn read(
-            &mut self,
-            file: &mut Self::File,
-            output: &mut [u8],
-        ) -> Result<usize, Self::Error> {
+        fn read(&mut self, file: &mut Self::File, output: &mut [u8]) -> Result<usize, Self::Error> {
             if file.lease != self.lease {
                 return Err(TestError::InvalidHandle);
             }
