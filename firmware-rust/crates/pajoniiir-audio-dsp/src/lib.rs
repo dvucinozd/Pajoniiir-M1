@@ -161,7 +161,6 @@ impl EqState {
     }
 }
 
-
 const RESAMPLER_MIN_FACTOR: f32 = 0.01;
 const RESAMPLER_MAX_FACTOR: f32 = 16.0;
 
@@ -1231,7 +1230,6 @@ mod tests {
         libm::atanf(g) * SAMPLE_RATE as f32 / PI
     }
 
-
     #[test]
     fn resampler_reset_outputs_silence_without_source() {
         let mut state = ResamplerState::new();
@@ -1362,16 +1360,12 @@ mod tests {
         let mut total = 0u32;
 
         for _ in 0..10 {
-            total += state
-                .next(0.5, || Some(PcmFrame::default()))
-                .1;
+            total += state.next(0.5, || Some(PcmFrame::default())).1;
         }
         let half_step = state.step_q32();
 
         for _ in 0..10 {
-            total += state
-                .next(1.5, || Some(PcmFrame::default()))
-                .1;
+            total += state.next(1.5, || Some(PcmFrame::default())).1;
         }
 
         assert_eq!(total, 20);
