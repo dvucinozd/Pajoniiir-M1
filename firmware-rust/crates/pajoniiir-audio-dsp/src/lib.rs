@@ -457,11 +457,7 @@ impl Default for CensorState {
     }
 }
 
-fn censor_step_q32(
-    source_sample_rate: u32,
-    output_sample_rate: u32,
-    speed_factor: f32,
-) -> u64 {
+fn censor_step_q32(source_sample_rate: u32, output_sample_rate: u32, speed_factor: f32) -> u64 {
     if source_sample_rate == 0 || output_sample_rate == 0 {
         return 0;
     }
@@ -1468,11 +1464,26 @@ mod tests {
     #[test]
     fn censor_reverse_walks_backward_at_unity_rate() {
         let frames = [
-            PcmFrame { left: 100, right: -100 },
-            PcmFrame { left: 200, right: -200 },
-            PcmFrame { left: 300, right: -300 },
-            PcmFrame { left: 400, right: -400 },
-            PcmFrame { left: 500, right: -500 },
+            PcmFrame {
+                left: 100,
+                right: -100,
+            },
+            PcmFrame {
+                left: 200,
+                right: -200,
+            },
+            PcmFrame {
+                left: 300,
+                right: -300,
+            },
+            PcmFrame {
+                left: 400,
+                right: -400,
+            },
+            PcmFrame {
+                left: 500,
+                right: -500,
+            },
         ];
         let mut censor = CensorState::new();
         assert!(censor.begin(14, 48_000, 48_000, 1.0, 4));
@@ -1492,11 +1503,26 @@ mod tests {
     #[test]
     fn censor_mixed_rate_interpolates_fractional_reverse_head() {
         let frames = [
-            PcmFrame { left: 100, right: 100 },
-            PcmFrame { left: 200, right: 200 },
-            PcmFrame { left: 300, right: 300 },
-            PcmFrame { left: 400, right: 400 },
-            PcmFrame { left: 500, right: 500 },
+            PcmFrame {
+                left: 100,
+                right: 100,
+            },
+            PcmFrame {
+                left: 200,
+                right: 200,
+            },
+            PcmFrame {
+                left: 300,
+                right: 300,
+            },
+            PcmFrame {
+                left: 400,
+                right: 400,
+            },
+            PcmFrame {
+                left: 500,
+                right: 500,
+            },
         ];
         let mut censor = CensorState::new();
         assert!(censor.begin(24, 24_000, 48_000, 1.0, 4));
@@ -1513,11 +1539,26 @@ mod tests {
     #[test]
     fn censor_release_fades_without_seeking_forward_timeline() {
         let frames = [
-            PcmFrame { left: 100, right: 100 },
-            PcmFrame { left: 200, right: 200 },
-            PcmFrame { left: 300, right: 300 },
-            PcmFrame { left: 400, right: 400 },
-            PcmFrame { left: 500, right: 500 },
+            PcmFrame {
+                left: 100,
+                right: 100,
+            },
+            PcmFrame {
+                left: 200,
+                right: 200,
+            },
+            PcmFrame {
+                left: 300,
+                right: 300,
+            },
+            PcmFrame {
+                left: 400,
+                right: 400,
+            },
+            PcmFrame {
+                left: 500,
+                right: 500,
+            },
         ];
         let mut censor = CensorState::new();
         assert!(censor.begin(34, 48_000, 48_000, 1.0, 4));
@@ -1537,8 +1578,14 @@ mod tests {
     #[test]
     fn censor_bounded_history_edge_fades_once_to_silence() {
         let frames = [
-            PcmFrame { left: 6_400, right: -6_400 },
-            PcmFrame { left: 3_200, right: -3_200 },
+            PcmFrame {
+                left: 6_400,
+                right: -6_400,
+            },
+            PcmFrame {
+                left: 3_200,
+                right: -3_200,
+            },
         ];
         let mut censor = CensorState::new();
         assert!(censor.begin(1, 48_000, 48_000, 1.0, 4));
