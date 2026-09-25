@@ -469,7 +469,7 @@ fn censor_step_q32(source_sample_rate: u32, output_sample_rate: u32, speed_facto
     };
     let step = (source_sample_rate as f32 / output_sample_rate as f32) * speed_factor;
     let step = step.min(CENSOR_MAX_STEP);
-    if !(step > 0.0) {
+    if step <= 0.0 {
         return 0;
     }
     (step * CENSOR_Q32_SCALE + 0.5) as u64
