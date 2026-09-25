@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 
 use pajoniiir_core::MediaTrackId;
+use pajoniiir_media_identity::PersistentMediaId;
 
 pub const HOT_CUE_SLOT_COUNT: usize = 8;
 
@@ -103,6 +104,209 @@ impl HotCueBank {
     }
 }
 
+
+pub const HOT_CUE_RECORD_V3_SIZE: usize = 128;
+pub const HOT_CUE_RECORD_V2_SIZE: usize = 144;
+
+const HOT_CUE_RECORD_V3_MAGIC: u32 = 0x3343_5648;
+const HOT_CUE_RECORD_V2_MAGIC: u32 = 0x3243_5648;
+const HOT_CUE_RECORD_V3_VERSION: u16 = 3;
+const HOT_CUE_RECORD_V2_VERSION: u16 = 2;
+const HOT_CUE_RECORD_SLOT_SIZE: usize = 12;
+const HOT_CUE_RECORD_V3_HEADER_SIZE: usize = 28;
+const HOT_CUE_RECORD_V2_HEADER_SIZE: usize = 44;
+const HOT_CUE_RECORD_PAYLOAD_LEN: u16 =
+    (4 + HOT_CUE_SLOT_COUNT * HOT_CUE_RECORD_SLOT_SIZE) as u16;
+const HOT_CUE_RECORD_V3_CRC_OFFSET: usize =
+    HOT_CUE_RECORD_V3_HEADER_SIZE + HOT_CUE_SLOT_COUNT * HOT_CUE_RECORD_SLOT_SIZE;
+const HOT_CUE_RECORD_V2_CRC_OFFSET: usize =
+    HOT_CUE_RECORD_V2_HEADER_SIZE + HOT_CUE_SLOT_COUNT * HOT_CUE_RECORD_SLOT_SIZE;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum HotCueRecordError {
+    InvalidLength,
+    InvalidMagic,
+    UnsupportedVersion,
+    InvalidPayloadLength,
+    TrackMismatch,
+    InvalidCrc,
+    InvalidMask,
+    InvalidSlot,
+}
+
+pub fn encode_record_v3(bank: &HotCueBank) -> [u8; HOT_CUE_RECORD_V3_SIZE] {
+    let mut record = [0u8; HOT_CUE_RECORD_V3_SIZE];
+    put_u32(&mut record[0..4], HOT_CUE_RECORD_V3_MAGIC);
+    put_u16(&mut record[4..6], HOT_CUE_RECORD_V3_VERSION);
+    put_u16(&mut record[6..8], HOT_CUE_RECORD_PAYLOAD_LEN);
+    record[8..24].copy_from_slice(&bank.track_id().0);
+    put_u32(&mut record[24..28], bank.exists_mask() as u32);
+
+    for index in 0..HOT_CUE_SLOT_COUNT {
+        let offset = HOT_CUE_RECORD_V3_HEADER_SIZE + index * HOT_CUE_RECORD_SLOT_SIZE;
+        if let Some(slot) = bank.slot(index as u8) {
+            put_u32(&mut record[offset..offset + 4], slot.pos_ms);
+            put_u32(&mut record[offset + 4..offset + 8], slot.end_ms);
+            record[offset + 8] = match slot.kind {
+                HotCueKind::Single => 1,
+                HotCueKind::Loop => 2,
+            };
+        }
+    }
+
+    let crc = crc32_iso(&record[..HOT_CUE_RECORD_V3_CRC_OFFSET]);
+    put_u32(
+        &mut record[HOT_CUE_RECORD_V3_CRC_OFFSET..HOT_CUE_RECORD_V3_SIZE],
+        crc,
+    );
+    record
+}
+
+pub fn decode_record_v3(
+    expected_track: MediaTrackId,
+    record: &[u8],
+) -> Result<HotCueBank, HotCueRecordError> {
+    if record.len() != HOT_CUE_RECORD_V3_SIZE {
+        return Err(HotCueRecordError::InvalidLength);
+    }
+    if get_u32(&record[0..4]) != HOT_CUE_RECORD_V3_MAGIC {
+        return Err(HotCueRecordError::InvalidMagic);
+    }
+    if get_u16(&record[4..6]) != HOT_CUE_RECORD_V3_VERSION {
+        return Err(HotCueRecordError::UnsupportedVersion);
+    }
+    if get_u16(&record[6..8]) != HOT_CUE_RECORD_PAYLOAD_LEN {
+        return Err(HotCueRecordError::InvalidPayloadLength);
+    }
+    if record[8..24] != expected_track.0 {
+        return Err(HotCueRecordError::TrackMismatch);
+    }
+    let expected_crc = get_u32(
+        &record[HOT_CUE_RECORD_V3_CRC_OFFSET..HOT_CUE_RECORD_V3_SIZE],
+    );
+    if expected_crc != crc32_iso(&record[..HOT_CUE_RECORD_V3_CRC_OFFSET]) {
+        return Err(HotCueRecordError::InvalidCrc);
+    }
+
+    decode_slots(
+        expected_track,
+        get_u32(&record[24..28]),
+        &record[HOT_CUE_RECORD_V3_HEADER_SIZE..HOT_CUE_RECORD_V3_CRC_OFFSET],
+        true,
+    )
+}
+
+pub fn decode_legacy_record_v2(
+    expected_legacy_id: PersistentMediaId,
+    migrated_track_id: MediaTrackId,
+    record: &[u8],
+) -> Result<HotCueBank, HotCueRecordError> {
+    if record.len() != HOT_CUE_RECORD_V2_SIZE {
+        return Err(HotCueRecordError::InvalidLength);
+    }
+    if get_u32(&record[0..4]) != HOT_CUE_RECORD_V2_MAGIC {
+        return Err(HotCueRecordError::InvalidMagic);
+    }
+    if get_u16(&record[4..6]) != HOT_CUE_RECORD_V2_VERSION {
+        return Err(HotCueRecordError::UnsupportedVersion);
+    }
+    if get_u16(&record[6..8]) != HOT_CUE_RECORD_PAYLOAD_LEN {
+        return Err(HotCueRecordError::InvalidPayloadLength);
+    }
+    if record[8..40] != expected_legacy_id.0 {
+        return Err(HotCueRecordError::TrackMismatch);
+    }
+    let expected_crc = get_u32(
+        &record[HOT_CUE_RECORD_V2_CRC_OFFSET..HOT_CUE_RECORD_V2_SIZE],
+    );
+    if expected_crc != crc32_iso(&record[..HOT_CUE_RECORD_V2_CRC_OFFSET]) {
+        return Err(HotCueRecordError::InvalidCrc);
+    }
+
+    decode_slots(
+        migrated_track_id,
+        get_u32(&record[40..44]),
+        &record[HOT_CUE_RECORD_V2_HEADER_SIZE..HOT_CUE_RECORD_V2_CRC_OFFSET],
+        false,
+    )
+}
+
+fn decode_slots(
+    track_id: MediaTrackId,
+    valid_mask: u32,
+    slots: &[u8],
+    strict_reserved: bool,
+) -> Result<HotCueBank, HotCueRecordError> {
+    if valid_mask & !0xff != 0 {
+        return Err(HotCueRecordError::InvalidMask);
+    }
+
+    let mut bank = HotCueBank::empty(track_id);
+    for index in 0..HOT_CUE_SLOT_COUNT {
+        let offset = index * HOT_CUE_RECORD_SLOT_SIZE;
+        let raw = &slots[offset..offset + HOT_CUE_RECORD_SLOT_SIZE];
+        let pos_ms = get_u32(&raw[0..4]);
+        let end_ms = get_u32(&raw[4..8]);
+        let kind = raw[8];
+        let reserved_clean = raw[9..12] == [0, 0, 0];
+        let valid = valid_mask & (1u32 << index) != 0;
+
+        if strict_reserved && !reserved_clean {
+            return Err(HotCueRecordError::InvalidSlot);
+        }
+
+        if !valid {
+            if pos_ms != 0 || end_ms != 0 || kind != 0 {
+                return Err(HotCueRecordError::InvalidSlot);
+            }
+            continue;
+        }
+
+        match kind {
+            1 if end_ms == 0 => {
+                if !bank.set_single(index as u8, pos_ms) {
+                    return Err(HotCueRecordError::InvalidSlot);
+                }
+            }
+            2 if end_ms > pos_ms => {
+                if !bank.set_loop(index as u8, pos_ms, end_ms) {
+                    return Err(HotCueRecordError::InvalidSlot);
+                }
+            }
+            _ => return Err(HotCueRecordError::InvalidSlot),
+        }
+    }
+
+    Ok(bank)
+}
+
+fn put_u16(output: &mut [u8], value: u16) {
+    output.copy_from_slice(&value.to_le_bytes());
+}
+
+fn put_u32(output: &mut [u8], value: u32) {
+    output.copy_from_slice(&value.to_le_bytes());
+}
+
+fn get_u16(input: &[u8]) -> u16 {
+    u16::from_le_bytes([input[0], input[1]])
+}
+
+fn get_u32(input: &[u8]) -> u32 {
+    u32::from_le_bytes([input[0], input[1], input[2], input[3]])
+}
+
+fn crc32_iso(data: &[u8]) -> u32 {
+    let mut crc = u32::MAX;
+    for byte in data {
+        crc ^= *byte as u32;
+        for _ in 0..8 {
+            crc = (crc >> 1) ^ (0xedb8_8320 & 0u32.wrapping_sub(crc & 1));
+        }
+    }
+    !crc
+}
+
 /// Storage boundary for the platform adapter.
 ///
 /// The product model owns cue semantics. ESP32-P4 firmware can implement this
@@ -121,7 +325,121 @@ mod tests {
     use super::*;
 
     fn id(seed: u8) -> MediaTrackId {
-        MediaTrackId([seed; 16])
+        derived_id(seed, "Music/test.wav")
+    }
+
+
+    fn derived_id(seed: u8, path: &str) -> MediaTrackId {
+        pajoniiir_media_identity::derive_track_id(
+            pajoniiir_media_identity::VolumeIdentity([seed; 32]),
+            path,
+        )
+        .unwrap()
+    }
+
+    fn legacy_record(
+        id: PersistentMediaId,
+        bank: &HotCueBank,
+    ) -> [u8; HOT_CUE_RECORD_V2_SIZE] {
+        let mut record = [0u8; HOT_CUE_RECORD_V2_SIZE];
+        put_u32(&mut record[0..4], HOT_CUE_RECORD_V2_MAGIC);
+        put_u16(&mut record[4..6], HOT_CUE_RECORD_V2_VERSION);
+        put_u16(&mut record[6..8], HOT_CUE_RECORD_PAYLOAD_LEN);
+        record[8..40].copy_from_slice(&id.0);
+        put_u32(&mut record[40..44], bank.exists_mask() as u32);
+
+        for index in 0..HOT_CUE_SLOT_COUNT {
+            let offset = HOT_CUE_RECORD_V2_HEADER_SIZE + index * HOT_CUE_RECORD_SLOT_SIZE;
+            if let Some(slot) = bank.slot(index as u8) {
+                put_u32(&mut record[offset..offset + 4], slot.pos_ms);
+                put_u32(&mut record[offset + 4..offset + 8], slot.end_ms);
+                record[offset + 8] = match slot.kind {
+                    HotCueKind::Single => 1,
+                    HotCueKind::Loop => 2,
+                };
+            }
+        }
+
+        let crc = crc32_iso(&record[..HOT_CUE_RECORD_V2_CRC_OFFSET]);
+        put_u32(
+            &mut record[HOT_CUE_RECORD_V2_CRC_OFFSET..HOT_CUE_RECORD_V2_SIZE],
+            crc,
+        );
+        record
+    }
+
+    #[test]
+    fn crc32_matches_iso_hdlc_reference_vector() {
+        assert_eq!(crc32_iso(b"123456789"), 0xcbf4_3926);
+    }
+
+    #[test]
+    fn v3_record_roundtrip_preserves_track_and_slots() {
+        let id = derived_id(0x21, "Music/roundtrip.flac");
+        let mut bank = HotCueBank::empty(id);
+        assert!(bank.set_single(0, 1_000));
+        assert!(bank.set_loop(2, 2_000, 4_000));
+
+        let record = encode_record_v3(&bank);
+        assert_eq!(record.len(), HOT_CUE_RECORD_V3_SIZE);
+        let decoded = decode_record_v3(id, &record).unwrap();
+        assert_eq!(decoded, bank);
+    }
+
+    #[test]
+    fn v3_record_rejects_wrong_track_crc_and_invalid_slot() {
+        let id = derived_id(0x31, "Music/a.wav");
+        let other = derived_id(0x31, "Music/b.wav");
+        let mut bank = HotCueBank::empty(id);
+        assert!(bank.set_single(0, 500));
+        let record = encode_record_v3(&bank);
+
+        assert_eq!(
+            decode_record_v3(other, &record),
+            Err(HotCueRecordError::TrackMismatch)
+        );
+
+        let mut corrupt_crc = record;
+        corrupt_crc[32] ^= 0x80;
+        assert_eq!(
+            decode_record_v3(id, &corrupt_crc),
+            Err(HotCueRecordError::InvalidCrc)
+        );
+
+        let mut invalid_slot = record;
+        let slot_offset = HOT_CUE_RECORD_V3_HEADER_SIZE;
+        invalid_slot[slot_offset + 4] = 1;
+        let crc = crc32_iso(&invalid_slot[..HOT_CUE_RECORD_V3_CRC_OFFSET]);
+        put_u32(
+            &mut invalid_slot[HOT_CUE_RECORD_V3_CRC_OFFSET..HOT_CUE_RECORD_V3_SIZE],
+            crc,
+        );
+        assert_eq!(
+            decode_record_v3(id, &invalid_slot),
+            Err(HotCueRecordError::InvalidSlot)
+        );
+    }
+
+    #[test]
+    fn legacy_v2_record_migrates_into_new_track_id() {
+        let export_digest = pajoniiir_media_identity::sha256(b"legacy export");
+        let legacy_id = pajoniiir_media_identity::derive_legacy_hotcue_v2(
+            export_digest,
+            "/Contents/song.wav",
+            1_234,
+            5_678,
+        )
+        .unwrap();
+        let migrated_id = derived_id(0x44, "Contents/song.wav");
+        let mut legacy_bank = HotCueBank::empty(migrated_id);
+        assert!(legacy_bank.set_single(1, 9_000));
+        assert!(legacy_bank.set_loop(6, 12_000, 16_000));
+
+        let record = legacy_record(legacy_id, &legacy_bank);
+        let migrated =
+            decode_legacy_record_v2(legacy_id, migrated_id, &record).unwrap();
+
+        assert_eq!(migrated, legacy_bank);
     }
 
     #[test]
