@@ -14,6 +14,7 @@ members = [
     "crates/pajoniiir-hot-cues",
     "crates/pajoniiir-mixer",
     "crates/pajoniiir-media-block",
+    "crates/pajoniiir-media-fs",
     "crates/pajoniiir-media-identity",
     "crates/pajoniiir-media-partition",
     "crates/pajoniiir-media-session",
@@ -70,6 +71,7 @@ pajoniiir-deck = { path = "crates/pajoniiir-deck" }
 pajoniiir-hot-cues = { path = "crates/pajoniiir-hot-cues" }
 pajoniiir-mixer = { path = "crates/pajoniiir-mixer" }
 pajoniiir-media-block = { path = "crates/pajoniiir-media-block" }
+pajoniiir-media-fs = { path = "crates/pajoniiir-media-fs" }
 pajoniiir-media-identity = { path = "crates/pajoniiir-media-identity" }
 pajoniiir-media-partition = { path = "crates/pajoniiir-media-partition" }
 pajoniiir-media-session = { path = "crates/pajoniiir-media-session" }
