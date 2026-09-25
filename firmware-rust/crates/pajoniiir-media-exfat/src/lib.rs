@@ -364,7 +364,9 @@ mod tests {
         assert_eq!(reopened.position(), 0);
 
         let mut output = [0u8; 30];
-        let read = filesystem.read(&mut reopened, &mut output, &mut scratch).unwrap();
+        let read = filesystem
+            .read(&mut reopened, &mut output, &mut scratch)
+            .unwrap();
         assert_eq!(read, payload.len());
         assert_eq!(&output[..read], payload);
     }
