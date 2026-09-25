@@ -247,7 +247,7 @@ fn has_boot_signature(sector: &[u8]) -> bool {
 }
 
 fn has_valid_boot_jump(sector: &[u8]) -> bool {
-    matches!(sector.first(), Some(0xeb | 0xe9))
+    matches!(sector.first().copied(), Some(0xeb | 0xe9))
 }
 
 fn is_mbr_fat_type(partition_type: u8) -> bool {
