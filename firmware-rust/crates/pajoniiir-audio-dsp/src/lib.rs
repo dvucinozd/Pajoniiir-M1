@@ -161,6 +161,103 @@ impl EqState {
     }
 }
 
+
+const RESAMPLER_MIN_FACTOR: f32 = 0.01;
+const RESAMPLER_MAX_FACTOR: f32 = 16.0;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ResamplerState {
+    previous: PcmFrame,
+    current: PcmFrame,
+    phase_q32: u32,
+    pitch_factor_bits: u32,
+    step_q32: u64,
+}
+
+impl ResamplerState {
+    pub const fn new() -> Self {
+        Self {
+            previous: PcmFrame { left: 0, right: 0 },
+            current: PcmFrame { left: 0, right: 0 },
+            phase_q32: 0,
+            pitch_factor_bits: u32::MAX,
+            step_q32: 0,
+        }
+    }
+
+    pub fn reset(&mut self) {
+        *self = Self::new();
+    }
+
+    pub fn next<F>(&mut self, pitch_factor: f32, mut pop_source: F) -> (PcmFrame, u32)
+    where
+        F: FnMut() -> Option<PcmFrame>,
+    {
+        let factor = sanitize_pitch_factor(pitch_factor);
+        let factor_bits = factor.to_bits();
+        if factor_bits != self.pitch_factor_bits {
+            self.pitch_factor_bits = factor_bits;
+            self.step_q32 = pitch_step_q32(factor_bits);
+        }
+
+        let phase = self.phase_q32 as u64 + self.step_q32;
+        let mut source_frames = (phase >> 32) as u32;
+        self.phase_q32 = phase as u32;
+        let mut consumed = 0u32;
+
+        while source_frames > 0 {
+            source_frames -= 1;
+            self.previous = self.current;
+            if let Some(next) = pop_source() {
+                self.current = next;
+                consumed = consumed.saturating_add(1);
+            }
+        }
+
+        let t = phase_fraction_float(self.phase_q32);
+        let inv = 1.0 - t;
+        (
+            PcmFrame {
+                left: (inv * self.previous.left as f32 + t * self.current.left as f32) as i16,
+                right: (inv * self.previous.right as f32 + t * self.current.right as f32) as i16,
+            },
+            consumed,
+        )
+    }
+
+    pub const fn phase_q32(&self) -> u32 {
+        self.phase_q32
+    }
+
+    pub const fn step_q32(&self) -> u64 {
+        self.step_q32
+    }
+}
+
+impl Default for ResamplerState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+fn sanitize_pitch_factor(factor: f32) -> f32 {
+    if !factor.is_finite() {
+        1.0
+    } else {
+        factor.clamp(RESAMPLER_MIN_FACTOR, RESAMPLER_MAX_FACTOR)
+    }
+}
+
+fn pitch_step_q32(bits: u32) -> u64 {
+    let mantissa = (1u32 << 23) | (bits & 0x7f_ff_ff);
+    let exponent = ((bits >> 23) & 0xff) as i32 - 127;
+    (mantissa as u64) << (exponent + 9) as u32
+}
+
+fn phase_fraction_float(phase_q32: u32) -> f32 {
+    f32::from_bits(0x3f80_0000 | (phase_q32 >> 9)) - 1.0
+}
+
 pub const FILTER_RAW_MIN: u16 = 0;
 pub const FILTER_RAW_CENTER: u16 = MIXER_CONTROL_CENTER;
 pub const FILTER_RAW_MAX: u16 = MIXER_CONTROL_MAX;
@@ -1132,6 +1229,153 @@ mod tests {
     fn programmed_cutoff_hz(filter: &FilterState) -> f32 {
         let g = filter.a2 / filter.a1;
         libm::atanf(g) * SAMPLE_RATE as f32 / PI
+    }
+
+
+    #[test]
+    fn resampler_reset_outputs_silence_without_source() {
+        let mut state = ResamplerState::new();
+        let (out, consumed) = state.next(1.0, || None);
+        assert_eq!(out, PcmFrame::default());
+        assert_eq!(consumed, 0);
+    }
+
+    #[test]
+    fn unity_pitch_preserves_released_one_frame_latency() {
+        let frames = [
+            PcmFrame {
+                left: 100,
+                right: -100,
+            },
+            PcmFrame {
+                left: 200,
+                right: -200,
+            },
+        ];
+        let mut index = 0usize;
+        let mut state = ResamplerState::new();
+
+        let (first, consumed) = state.next(1.0, || {
+            let frame = frames.get(index).copied();
+            if frame.is_some() {
+                index += 1;
+            }
+            frame
+        });
+        assert_eq!(first, PcmFrame::default());
+        assert_eq!(consumed, 1);
+
+        let (second, consumed) = state.next(1.0, || {
+            let frame = frames.get(index).copied();
+            if frame.is_some() {
+                index += 1;
+            }
+            frame
+        });
+        assert_eq!(second, frames[0]);
+        assert_eq!(consumed, 1);
+    }
+
+    #[test]
+    fn fractional_pitch_interpolates_between_source_frames() {
+        let mut available = Some(PcmFrame {
+            left: 100,
+            right: -100,
+        });
+        let mut state = ResamplerState::new();
+
+        let (first, consumed) = state.next(0.5, || available.take());
+        assert_eq!(first, PcmFrame::default());
+        assert_eq!(consumed, 0);
+
+        let (second, consumed) = state.next(0.5, || available.take());
+        assert_eq!(second, PcmFrame::default());
+        assert_eq!(consumed, 1);
+
+        let (third, consumed) = state.next(0.5, || available.take());
+        assert_eq!(
+            third,
+            PcmFrame {
+                left: 50,
+                right: -50,
+            }
+        );
+        assert_eq!(consumed, 0);
+    }
+
+    #[test]
+    fn underrun_holds_last_frame_instead_of_clicking_to_zero() {
+        let mut available = Some(PcmFrame {
+            left: 1_000,
+            right: -1_000,
+        });
+        let mut state = ResamplerState::new();
+
+        let (_, consumed) = state.next(1.0, || available.take());
+        assert_eq!(consumed, 1);
+
+        for _ in 0..2 {
+            let (out, consumed) = state.next(1.0, || available.take());
+            assert_eq!(
+                out,
+                PcmFrame {
+                    left: 1_000,
+                    right: -1_000,
+                }
+            );
+            assert_eq!(consumed, 0);
+        }
+    }
+
+    #[test]
+    fn non_finite_pitch_is_sanitized_to_unity() {
+        let mut state = ResamplerState::new();
+        let (_, consumed) = state.next(f32::NAN, || {
+            Some(PcmFrame {
+                left: 123,
+                right: -123,
+            })
+        });
+        assert_eq!(consumed, 1);
+        assert_eq!(state.step_q32(), 1u64 << 32);
+    }
+
+    #[test]
+    fn q32_step_proves_released_five_minute_zero_drift_contract() {
+        const OUTPUT_FRAMES: u64 = 5 * 60 * 48_000;
+
+        for factor in [44_100.0f32 / 48_000.0, 1.1] {
+            let sanitized = sanitize_pitch_factor(factor);
+            let step = pitch_step_q32(sanitized.to_bits());
+            let consumed = OUTPUT_FRAMES
+                .checked_mul(step)
+                .expect("five-minute Q32 product fits u64")
+                >> 32;
+            let expected = (OUTPUT_FRAMES as f64 * factor as f64) as u64;
+            assert_eq!(consumed, expected);
+        }
+    }
+
+    #[test]
+    fn pitch_change_refreshes_cached_q32_step_and_consumption() {
+        let mut state = ResamplerState::new();
+        let mut total = 0u32;
+
+        for _ in 0..10 {
+            total += state
+                .next(0.5, || Some(PcmFrame::default()))
+                .1;
+        }
+        let half_step = state.step_q32();
+
+        for _ in 0..10 {
+            total += state
+                .next(1.5, || Some(PcmFrame::default()))
+                .1;
+        }
+
+        assert_eq!(total, 20);
+        assert_ne!(state.step_q32(), half_step);
     }
 
     #[test]
