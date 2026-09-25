@@ -1,6 +1,9 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+#[cfg(test)]
+extern crate std;
+
 use exfat_embedded::BlockDevice as ExFatBlockDevice;
 use pajoniiir_media_block::{BlockGeometry, WritableBlockDevice};
 
@@ -252,6 +255,118 @@ mod tests {
         );
         assert_eq!(adapter.inner().reads, 0);
         assert_eq!(adapter.inner().writes, 0);
+    }
+
+    struct HeapDevice {
+        geometry: BlockGeometry,
+        bytes: std::vec::Vec<u8>,
+    }
+
+    impl HeapDevice {
+        fn new(block_size: u32, block_count: u64) -> Self {
+            let byte_len = usize::try_from(block_size as u64 * block_count).unwrap();
+            Self {
+                geometry: BlockGeometry {
+                    block_size,
+                    block_count,
+                },
+                bytes: std::vec![0; byte_len],
+            }
+        }
+    }
+
+    impl BlockDevice for HeapDevice {
+        type Error = TestError;
+
+        fn geometry(&self) -> BlockGeometry {
+            self.geometry
+        }
+
+        fn read_blocks(
+            &mut self,
+            first_block: u64,
+            block_count: u32,
+            output: &mut [u8],
+        ) -> Result<(), Self::Error> {
+            self.geometry
+                .validate_transfer(first_block, block_count, output.len())
+                .map_err(TestError::Transfer)?;
+            let start = usize::try_from(first_block)
+                .ok()
+                .and_then(|value| value.checked_mul(self.geometry.block_size as usize))
+                .ok_or(TestError::Transfer(TransferError::OutOfRange))?;
+            let end = start
+                .checked_add(output.len())
+                .ok_or(TestError::Transfer(TransferError::OutOfRange))?;
+            output.copy_from_slice(
+                self.bytes
+                    .get(start..end)
+                    .ok_or(TestError::Transfer(TransferError::OutOfRange))?,
+            );
+            Ok(())
+        }
+    }
+
+    impl WritableBlockDevice for HeapDevice {
+        fn write_blocks(
+            &mut self,
+            first_block: u64,
+            block_count: u32,
+            input: &[u8],
+        ) -> Result<(), Self::Error> {
+            self.geometry
+                .validate_transfer(first_block, block_count, input.len())
+                .map_err(TestError::Transfer)?;
+            let start = usize::try_from(first_block)
+                .ok()
+                .and_then(|value| value.checked_mul(self.geometry.block_size as usize))
+                .ok_or(TestError::Transfer(TransferError::OutOfRange))?;
+            let end = start
+                .checked_add(input.len())
+                .ok_or(TestError::Transfer(TransferError::OutOfRange))?;
+            self.bytes
+                .get_mut(start..end)
+                .ok_or(TestError::Transfer(TransferError::OutOfRange))?
+                .copy_from_slice(input);
+            Ok(())
+        }
+
+        fn flush(&mut self) -> Result<(), Self::Error> {
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn format_mount_append_reopen_and_read_round_trip() {
+        use exfat_embedded::{FileSystem, Scratch, format_exfat};
+
+        const BLOCK_SIZE: u32 = 512;
+        const BLOCK_COUNT: u64 = 16_384;
+
+        let device = HeapDevice::new(BLOCK_SIZE, BLOCK_COUNT);
+        let mut adapter = ExFatBlockAdapter::new(device);
+        let mut scratch_bytes = [0u8; BLOCK_SIZE as usize];
+        let mut scratch = Scratch::new(&mut scratch_bytes);
+
+        format_exfat(&mut adapter, &mut scratch).unwrap();
+
+        let mut filesystem = FileSystem::mount(adapter, &mut scratch).unwrap();
+        let mut created = filesystem.create("TRACK.BIN", &mut scratch).unwrap();
+        let payload = b"Pajoniiir-M1 exFAT round-trip";
+        assert_eq!(
+            filesystem.append(&mut created, payload, &mut scratch),
+            Ok(payload.len())
+        );
+        filesystem.flush(&mut scratch).unwrap();
+
+        let mut reopened = filesystem.open("TRACK.BIN", &mut scratch).unwrap();
+        assert_eq!(reopened.len(), payload.len() as u64);
+        assert_eq!(reopened.position(), 0);
+
+        let mut output = [0u8; 30];
+        let read = filesystem.read(&mut reopened, &mut output, &mut scratch).unwrap();
+        assert_eq!(read, payload.len());
+        assert_eq!(&output[..read], payload);
     }
 
     #[test]
