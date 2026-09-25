@@ -3,7 +3,11 @@
 
 use pajoniiir_media_session::MediaLease;
 
-pub const FS_NAME_MAX: usize = 255;
+/// Maximum UTF-8 bytes required to losslessly expose an exFAT filename.
+///
+/// exFAT allows 255 UTF-16 code units; a valid Unicode scalar may occupy up to
+/// four UTF-8 bytes. Callers own this buffer so directory scans never allocate.
+pub const FS_NAME_MAX: usize = 255 * 4;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum FileSystemKind {
@@ -18,6 +22,10 @@ pub struct FileSystemCapabilities {
     pub directories: bool,
     pub long_names: bool,
     pub flush: bool,
+    /// True only when seek cost is independent of the target byte offset.
+    pub random_seek: bool,
+    /// True when a complete directory can be visited in one backend scan.
+    pub streaming_directory_visit: bool,
 }
 
 impl FileSystemCapabilities {
@@ -27,6 +35,8 @@ impl FileSystemCapabilities {
         directories: true,
         long_names: true,
         flush: false,
+        random_seek: false,
+        streaming_directory_visit: false,
     };
 }
 
@@ -83,6 +93,15 @@ pub trait FileHandle: LeaseBound {
 
 pub trait DirectoryHandle: LeaseBound {}
 
+/// Allocation-free visitor used for large library scans.
+///
+/// Implementations receive a name slice backed by caller-owned `name_storage`
+/// and must not retain it after `visit` returns.
+pub trait DirectoryVisitor {
+    /// Return `true` to continue scanning, `false` to stop successfully.
+    fn visit(&mut self, entry: DirEntry, name: &[u8]) -> bool;
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub enum IoContractError<E> {
     Inner(E),
@@ -119,6 +138,30 @@ pub trait FileSystem: LeaseBound {
     ) -> Result<Option<DirEntry>, Self::Error>;
 
     fn close_directory(&mut self, directory: Self::Directory) -> Result<(), Self::Error>;
+
+    /// Visit a directory without requiring a retained iterator or allocation.
+    ///
+    /// The default implementation is expressed through `next_entry` for
+    /// compatibility. Backends with native streaming directory scans should
+    /// override this method so large libraries remain O(n).
+    fn visit_directory<V: DirectoryVisitor>(
+        &mut self,
+        path: &str,
+        name_storage: &mut [u8; FS_NAME_MAX],
+        visitor: &mut V,
+    ) -> Result<(), Self::Error> {
+        let mut directory = self.open_directory(path)?;
+        loop {
+            let Some(entry) = self.next_entry(&mut directory, name_storage)? else {
+                break;
+            };
+            let name = entry.name(name_storage).unwrap_or(&[]);
+            if !visitor.visit(entry, name) {
+                break;
+            }
+        }
+        self.close_directory(directory)
+    }
 
     fn read_exact(
         &mut self,
@@ -445,6 +488,35 @@ mod tests {
         assert_eq!(invalid.name(b"short"), None);
     }
 
+    struct CountVisitor {
+        count: usize,
+    }
+
+    impl DirectoryVisitor for CountVisitor {
+        fn visit(&mut self, _entry: DirEntry, _name: &[u8]) -> bool {
+            self.count += 1;
+            true
+        }
+    }
+
+    #[test]
+    fn default_directory_visit_is_allocation_free_and_compatible() {
+        let mut fs = TestFs::new();
+        let mut storage = [0u8; FS_NAME_MAX];
+        let mut visitor = CountVisitor { count: 0 };
+
+        assert_eq!(
+            fs.visit_directory("/", &mut storage, &mut visitor),
+            Ok(())
+        );
+        assert_eq!(visitor.count, 0);
+    }
+
+    #[test]
+    fn utf8_name_storage_covers_worst_case_exfat_name_width() {
+        assert_eq!(FS_NAME_MAX, 1_020);
+    }
+
     #[test]
     fn capabilities_keep_write_support_explicit() {
         assert_eq!(
@@ -455,6 +527,8 @@ mod tests {
                 directories: true,
                 long_names: true,
                 flush: false,
+                random_seek: false,
+                streaming_directory_visit: false,
             }
         );
     }
