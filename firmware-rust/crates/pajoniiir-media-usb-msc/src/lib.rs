@@ -223,7 +223,6 @@ impl Default for UsbMscSessionBridge {
     }
 }
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct UsbMscMountAttempt {
     pub lease: MediaLease,
