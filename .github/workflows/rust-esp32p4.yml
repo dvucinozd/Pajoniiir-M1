@@ -30,8 +30,14 @@ jobs:
           rustup toolchain install 1.95.0 --profile minimal
           rustup target add --toolchain 1.95.0 riscv32imafc-unknown-none-elf
 
-      - name: ESP32-P4 cross compile
+      - name: ESP32-P4 default cross compile
         run: cargo +1.95.0 check --locked
 
-      - name: ESP32-P4 link gate
+      - name: ESP32-P4 default link gate
         run: cargo +1.95.0 build --locked --release
+
+      - name: ESP32-P4 USB0 bring-up cross compile
+        run: cargo +1.95.0 check --locked --features usb0-hardware-bringup
+
+      - name: ESP32-P4 USB0 bring-up link gate
+        run: cargo +1.95.0 build --locked --release --features usb0-hardware-bringup
