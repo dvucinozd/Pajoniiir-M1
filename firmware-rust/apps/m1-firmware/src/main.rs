@@ -14,6 +14,12 @@ async fn usb0_owner_task(usb_hs: esp_hal::peripherals::USB_HS<'static>) {
     usb0_msc::run_root_msc_owner(usb_hs).await
 }
 
+#[cfg(feature = "usb0-hardware-bringup")]
+#[embassy_executor::task]
+async fn usb0_media_task() {
+    usb0_msc::run_usb0_media_worker().await
+}
+
 #[panic_handler]
 fn panic(_: &core::panic::PanicInfo) -> ! {
     esp_hal::system::software_reset()
@@ -43,6 +49,9 @@ async fn main(spawner: Spawner) -> ! {
     spawner.spawn(
         usb0_owner_task(peripherals.USB_HS)
             .expect("USB0 owner task slot must be available"),
+    );
+    spawner.spawn(
+        usb0_media_task().expect("USB0 media task slot must be available"),
     );
 
     #[cfg(not(feature = "usb0-hardware-bringup"))]

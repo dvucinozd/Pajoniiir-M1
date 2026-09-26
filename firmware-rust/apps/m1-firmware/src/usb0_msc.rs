@@ -18,6 +18,7 @@ use pajoniiir_media_usb_msc::{
     UsbMscMountSelection, UsbMscMountedMedia, UsbMscRequestKind, UsbMscRequestTicket,
     UsbMscSessionBridge, UsbMscSessionError, usb_address_source,
 };
+use static_cell::StaticCell;
 
 pub(crate) const USB0_MSC_QUEUE_DEPTH: usize = 4;
 const USB0_ENUM_CONFIG_BYTES: usize = 512;
@@ -44,6 +45,43 @@ pub(crate) static USB0_MSC_OWNER_EVENTS: Channel<
 
 static USB0_MSC_LIFECYCLE: CriticalSectionMutex<RefCell<Usb0MscLifecycle>> =
     CriticalSectionMutex::new(RefCell::new(Usb0MscLifecycle::new()));
+
+static USB0_MSC_MEDIA_STATE: CriticalSectionMutex<RefCell<Usb0MscMediaState>> =
+    CriticalSectionMutex::new(RefCell::new(Usb0MscMediaState::Idle));
+
+static USB0_MSC_SCRATCH_512: StaticCell<[u8; 512]> = StaticCell::new();
+static USB0_MSC_SCRATCH_1024: StaticCell<[u8; 1_024]> = StaticCell::new();
+static USB0_MSC_SCRATCH_2048: StaticCell<[u8; 2_048]> = StaticCell::new();
+static USB0_MSC_SCRATCH_4096: StaticCell<[u8; 4_096]> = StaticCell::new();
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum Usb0MscMediaWorkerError {
+    Mount(UsbMscMountError),
+    Discovery(Usb0MscDiscoveryClientError),
+    UnsupportedBlockSize(u32),
+    ScratchUnavailable(u32),
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum Usb0MscMediaState {
+    Idle,
+    Discovering {
+        binding: Usb0MscBinding,
+    },
+    Mounted {
+        binding: Usb0MscBinding,
+        media: UsbMscMountedMedia,
+    },
+    Failed {
+        binding: Usb0MscBinding,
+        error: Usb0MscMediaWorkerError,
+    },
+    Detached {
+        binding: Usb0MscBinding,
+        reason: Usb0MscDetachReason,
+        result: DisconnectResult,
+    },
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum Usb0MscDetachReason {
@@ -149,6 +187,16 @@ fn with_lifecycle<R>(f: impl FnOnce(&Usb0MscLifecycle) -> R) -> R {
         let lifecycle = cell.borrow();
         f(&lifecycle)
     })
+}
+
+fn set_media_state(state: Usb0MscMediaState) {
+    USB0_MSC_MEDIA_STATE.lock(|cell| {
+        *cell.borrow_mut() = state;
+    });
+}
+
+pub(crate) fn media_state() -> Usb0MscMediaState {
+    USB0_MSC_MEDIA_STATE.lock(|cell| *cell.borrow())
 }
 
 pub(crate) fn issue_current_request(
@@ -846,6 +894,164 @@ pub(crate) fn detach_mount(
     binding: Usb0MscBinding,
 ) -> bool {
     coordinator.on_detached(binding.handle)
+}
+
+struct Usb0MscScratchPool {
+    sector_512: Option<&'static mut [u8]>,
+    sector_1024: Option<&'static mut [u8]>,
+    sector_2048: Option<&'static mut [u8]>,
+    sector_4096: Option<&'static mut [u8]>,
+}
+
+impl Usb0MscScratchPool {
+    fn new() -> Self {
+        Self {
+            sector_512: Some(&mut USB0_MSC_SCRATCH_512.init([0; 512])[..]),
+            sector_1024: Some(&mut USB0_MSC_SCRATCH_1024.init([0; 1_024])[..]),
+            sector_2048: Some(&mut USB0_MSC_SCRATCH_2048.init([0; 2_048])[..]),
+            sector_4096: Some(&mut USB0_MSC_SCRATCH_4096.init([0; 4_096])[..]),
+        }
+    }
+
+    fn take(
+        &mut self,
+        block_size: u32,
+    ) -> Result<&'static mut [u8], Usb0MscMediaWorkerError> {
+        let slot = match block_size {
+            512 => &mut self.sector_512,
+            1_024 => &mut self.sector_1024,
+            2_048 => &mut self.sector_2048,
+            4_096 => &mut self.sector_4096,
+            other => return Err(Usb0MscMediaWorkerError::UnsupportedBlockSize(other)),
+        };
+        slot.take()
+            .ok_or(Usb0MscMediaWorkerError::ScratchUnavailable(block_size))
+    }
+
+    fn restore(
+        &mut self,
+        scratch: &'static mut [u8],
+    ) -> Result<(), Usb0MscMediaWorkerError> {
+        let block_size = scratch.len() as u32;
+        let slot = match block_size {
+            512 => &mut self.sector_512,
+            1_024 => &mut self.sector_1024,
+            2_048 => &mut self.sector_2048,
+            4_096 => &mut self.sector_4096,
+            other => return Err(Usb0MscMediaWorkerError::UnsupportedBlockSize(other)),
+        };
+        if slot.is_some() {
+            return Err(Usb0MscMediaWorkerError::ScratchUnavailable(block_size));
+        }
+        *slot = Some(scratch);
+        Ok(())
+    }
+}
+
+/// Persistent USB0 media worker.
+///
+/// This task consumes owner lifecycle events, performs partition discovery only
+/// through the bounded request/completion queue, and commits a generation-safe
+/// mount descriptor. It intentionally stops at the filesystem boundary: FAT32
+/// and exFAT are synchronous APIs today, so no executor thread is blocked by a
+/// hidden block_on bridge.
+pub(crate) async fn run_usb0_media_worker() -> ! {
+    let mut coordinator = UsbMscMountCoordinator::new();
+    let mut scratch_pool = Usb0MscScratchPool::new();
+
+    loop {
+        match USB0_MSC_OWNER_EVENTS.receive().await {
+            Usb0MscOwnerEvent::Ready { binding, probe } => {
+                set_media_state(Usb0MscMediaState::Discovering { binding });
+
+                let attempt = match begin_current_mount(
+                    &mut coordinator,
+                    binding,
+                    0,
+                    probe.capacity,
+                ) {
+                    Ok(attempt) => attempt,
+                    Err(error) => {
+                        set_media_state(Usb0MscMediaState::Failed {
+                            binding,
+                            error: Usb0MscMediaWorkerError::Mount(error),
+                        });
+                        continue;
+                    }
+                };
+
+                let scratch = match scratch_pool.take(attempt.geometry.block_size) {
+                    Ok(scratch) => scratch,
+                    Err(error) => {
+                        let _ = coordinator.abort(attempt);
+                        set_media_state(Usb0MscMediaState::Failed { binding, error });
+                        continue;
+                    }
+                };
+
+                let mut discovery = match Usb0MscDiscoveryWorker::new(attempt, scratch) {
+                    Ok(discovery) => discovery,
+                    Err((error, scratch)) => {
+                        if scratch_pool.restore(scratch).is_err() {
+                            esp_hal::system::software_reset();
+                        }
+                        let _ = coordinator.abort(attempt);
+                        set_media_state(Usb0MscMediaState::Failed {
+                            binding,
+                            error: Usb0MscMediaWorkerError::Discovery(error),
+                        });
+                        continue;
+                    }
+                };
+
+                let selection = discovery.run_to_selection(&coordinator).await;
+                let Some(scratch) = discovery.into_scratch() else {
+                    esp_hal::system::software_reset();
+                };
+                if scratch_pool.restore(scratch).is_err() {
+                    esp_hal::system::software_reset();
+                }
+
+                match selection {
+                    Ok(selection) => match commit_current_mount(
+                        &mut coordinator,
+                        attempt,
+                        selection,
+                    ) {
+                        Ok(media) => {
+                            set_media_state(Usb0MscMediaState::Mounted { binding, media });
+                        }
+                        Err(error) => {
+                            let _ = coordinator.abort(attempt);
+                            set_media_state(Usb0MscMediaState::Failed {
+                                binding,
+                                error: Usb0MscMediaWorkerError::Mount(error),
+                            });
+                        }
+                    },
+                    Err(error) => {
+                        let _ = coordinator.abort(attempt);
+                        set_media_state(Usb0MscMediaState::Failed {
+                            binding,
+                            error: Usb0MscMediaWorkerError::Discovery(error),
+                        });
+                    }
+                }
+            }
+            Usb0MscOwnerEvent::Detached {
+                binding,
+                reason,
+                result,
+            } => {
+                let _ = detach_mount(&mut coordinator, binding);
+                set_media_state(Usb0MscMediaState::Detached {
+                    binding,
+                    reason,
+                    result,
+                });
+            }
+        }
+    }
 }
 
 impl Usb0MscCompletion {

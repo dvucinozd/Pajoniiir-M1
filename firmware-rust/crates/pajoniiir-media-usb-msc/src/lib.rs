@@ -371,6 +371,14 @@ impl UsbMscMountCoordinator {
         Ok(mounted)
     }
 
+    pub fn abort(&mut self, attempt: UsbMscMountAttempt) -> bool {
+        if self.active != Some(attempt) {
+            return false;
+        }
+        self.active = None;
+        true
+    }
+
     pub fn on_detached(&mut self, handle: MediaHandle) -> bool {
         let owns_active = self.active.is_some_and(|attempt| attempt.handle == handle);
         let owns_mounted = self
@@ -1198,6 +1206,23 @@ mod tests {
             Err(UsbMscMountError::StaleLease)
         );
         assert!(!session.is_mounted());
+    }
+
+    #[test]
+    fn abort_clears_only_the_matching_active_mount_attempt() {
+        let (session, lease, handle) = mount_session(31, 310);
+        let capacity = UsbMscCapacity::from_block_count(512, 4_096).unwrap();
+        let mut coordinator = UsbMscMountCoordinator::new();
+        let attempt = coordinator
+            .begin(&session, lease, handle, 0, capacity)
+            .unwrap();
+        let foreign = UsbMscMountAttempt { lun: 1, ..attempt };
+
+        assert!(!coordinator.abort(foreign));
+        assert_eq!(coordinator.active(), Some(attempt));
+        assert!(coordinator.abort(attempt));
+        assert_eq!(coordinator.active(), None);
+        assert_eq!(coordinator.mounted(), None);
     }
 
     #[test]

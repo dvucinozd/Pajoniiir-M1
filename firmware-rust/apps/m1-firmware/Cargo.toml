@@ -19,6 +19,7 @@ embassy-usb-host = { version = "=0.1.0", default-features = false }
 embassy-sync = { version = "=0.8.0", default-features = false }
 esp-hal = { version = "=1.2.2", features = ["esp32p4", "unstable"] }
 esp-rtos = { version = "=0.4.0", default-features = false, features = ["embassy", "esp32p4"] }
+static_cell = { version = "=2.1.1", default-features = false }
 pajoniiir-audio-dsp = { path = "../../crates/pajoniiir-audio-dsp" }
 pajoniiir-audio-keylock = { path = "../../crates/pajoniiir-audio-keylock" }
 pajoniiir-audio-runtime = { path = "../../crates/pajoniiir-audio-runtime" }
