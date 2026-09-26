@@ -46,6 +46,11 @@ impl pajoniiir_media_fs::FileHandle for ExFatFileHandle {
     }
 }
 
+// `exfat_embedded::Directory` is intentionally stored inline: this crate is
+// no_std/no_alloc and the directory handle must remain detached + Copy. The
+// size asymmetry is therefore a deliberate memory tradeoff, not an accidental
+// candidate for heap indirection.
+#[allow(clippy::large_enum_variant)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum ExFatDirectoryKind {
     Root,
