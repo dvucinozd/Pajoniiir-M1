@@ -1,5 +1,7 @@
 name: Rust host foundation
 
+# Cargo.lock is committed; dependency resolution is intentionally --locked.
+
 on:
   pull_request:
     paths:

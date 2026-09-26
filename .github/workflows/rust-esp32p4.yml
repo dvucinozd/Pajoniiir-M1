@@ -1,5 +1,7 @@
 name: Rust ESP32-P4 compile gate
 
+# Firmware Cargo.lock is committed; dependency resolution is intentionally --locked.
+
 on:
   pull_request:
     paths:
