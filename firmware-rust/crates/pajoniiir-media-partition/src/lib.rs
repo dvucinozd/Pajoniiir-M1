@@ -111,6 +111,82 @@ pub enum PartitionScanResult {
     NoCandidate,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct GptTableInfo {
+    pub entries_lba: u64,
+    pub entry_count: u32,
+    pub entry_size: u32,
+}
+
+pub fn parse_gpt_header(header_sector: &[u8]) -> Option<GptTableInfo> {
+    if header_sector.len() < MIN_SECTOR_SIZE
+        || header_sector.get(..8) != Some(b"EFI PART".as_slice())
+    {
+        return None;
+    }
+
+    let header_size = read_u32_le(&header_sector[12..16]) as usize;
+    let entries_lba = read_u64_le(&header_sector[72..80]);
+    let entry_count = read_u32_le(&header_sector[80..84]);
+    let entry_size = read_u32_le(&header_sector[84..88]);
+    if !(92..=MIN_SECTOR_SIZE).contains(&header_size)
+        || entries_lba == 0
+        || entry_count == 0
+        || !(128..=512).contains(&(entry_size as usize))
+    {
+        return None;
+    }
+
+    Some(GptTableInfo {
+        entries_lba,
+        entry_count,
+        entry_size,
+    })
+}
+
+pub fn append_gpt_entries(
+    entries: &[u8],
+    entry_size: u32,
+    max_entries: u32,
+    layout: &mut PartitionLayout,
+) -> u32 {
+    let entry_size = entry_size as usize;
+    if !(128..=512).contains(&entry_size) || max_entries == 0 {
+        return 0;
+    }
+
+    let complete_entries = entries.len() / entry_size;
+    let entries_to_scan = complete_entries.min(max_entries as usize);
+    let mut scanned = 0u32;
+
+    for index in 0..entries_to_scan {
+        let entry = &entries[index * entry_size..(index + 1) * entry_size];
+        scanned += 1;
+        if entry.get(..16) != Some(MICROSOFT_BASIC_DATA_GUID.as_slice()) {
+            continue;
+        }
+
+        let first_lba = read_u64_le(&entry[32..40]);
+        let last_lba = read_u64_le(&entry[40..48]);
+        if first_lba == 0 || last_lba < first_lba {
+            continue;
+        }
+        let Some(sector_count) = last_lba
+            .checked_sub(first_lba)
+            .and_then(|distance| distance.checked_add(1))
+            .and_then(NonZeroU64::new)
+        else {
+            continue;
+        };
+
+        if !layout.append_candidate(first_lba, Some(sector_count), VolumeKind::Unknown) {
+            break;
+        }
+    }
+
+    scanned
+}
+
 pub fn classify_boot_sector(sector: &[u8]) -> VolumeKind {
     if !has_boot_signature(sector) || !has_valid_boot_jump(sector) {
         return VolumeKind::Unknown;
@@ -191,47 +267,11 @@ pub fn scan_gpt(
     layout: &mut PartitionLayout,
 ) -> PartitionScanResult {
     layout.clear();
-    if header_sector.len() < MIN_SECTOR_SIZE
-        || header_sector.get(..8) != Some(b"EFI PART".as_slice())
-    {
+    let Some(info) = parse_gpt_header(header_sector) else {
         return PartitionScanResult::Invalid;
-    }
+    };
 
-    let header_size = read_u32_le(&header_sector[12..16]) as usize;
-    let entry_count = read_u32_le(&header_sector[80..84]) as usize;
-    let entry_size = read_u32_le(&header_sector[84..88]) as usize;
-    if !(92..=MIN_SECTOR_SIZE).contains(&header_size)
-        || entry_count == 0
-        || !(128..=512).contains(&entry_size)
-    {
-        return PartitionScanResult::Invalid;
-    }
-
-    let available_entries = entries.len() / entry_size;
-    let entries_to_scan = available_entries.min(entry_count);
-
-    for index in 0..entries_to_scan {
-        let entry = &entries[index * entry_size..(index + 1) * entry_size];
-        if entry.get(..16) != Some(MICROSOFT_BASIC_DATA_GUID.as_slice()) {
-            continue;
-        }
-
-        let first_lba = read_u64_le(&entry[32..40]);
-        let last_lba = read_u64_le(&entry[40..48]);
-        if first_lba == 0 || last_lba < first_lba {
-            continue;
-        }
-        let Some(sector_count) = last_lba
-            .checked_sub(first_lba)
-            .and_then(|distance| distance.checked_add(1))
-            .and_then(NonZeroU64::new)
-        else {
-            continue;
-        };
-
-        let _ = layout.append_candidate(first_lba, Some(sector_count), VolumeKind::Unknown);
-    }
-
+    let _ = append_gpt_entries(entries, info.entry_size, info.entry_count, layout);
     if layout.count != 0 {
         PartitionScanResult::Ok
     } else {
@@ -416,6 +456,55 @@ mod tests {
                 kind: VolumeKind::Unknown,
             }
         );
+    }
+
+    #[test]
+    fn gpt_header_exposes_bounded_entry_table_geometry() {
+        let header = gpt_header(128, 128);
+        assert_eq!(
+            parse_gpt_header(&header),
+            Some(GptTableInfo {
+                entries_lba: 2,
+                entry_count: 128,
+                entry_size: 128,
+            })
+        );
+
+        let mut invalid = header;
+        put_u64_le(&mut invalid[72..80], 0);
+        assert_eq!(parse_gpt_header(&invalid), None);
+    }
+
+    #[test]
+    fn gpt_entries_can_be_accumulated_across_bounded_chunks() {
+        let mut first_chunk = [0u8; 256];
+        let mut second_chunk = [0u8; 256];
+        write_basic_data_entry(&mut first_chunk[128..256], 32_768, 98_303);
+        write_basic_data_entry(&mut second_chunk[..128], 131_072, 196_607);
+
+        let mut layout = PartitionLayout::new();
+        assert_eq!(
+            append_gpt_entries(&first_chunk, 128, 2, &mut layout),
+            2
+        );
+        assert_eq!(layout.count(), 1);
+
+        assert_eq!(
+            append_gpt_entries(&second_chunk, 128, 2, &mut layout),
+            2
+        );
+        assert_eq!(layout.count(), 2);
+        assert_eq!(layout.candidates()[0].first_lba, 32_768);
+        assert_eq!(layout.candidates()[1].first_lba, 131_072);
+    }
+
+    #[test]
+    fn gpt_chunk_scanner_ignores_partial_or_invalid_entry_sizes() {
+        let mut layout = PartitionLayout::new();
+        let entries = [0u8; 127];
+        assert_eq!(append_gpt_entries(&entries, 128, 1, &mut layout), 0);
+        assert_eq!(append_gpt_entries(&[0u8; 512], 64, 8, &mut layout), 0);
+        assert_eq!(layout.count(), 0);
     }
 
     #[test]
