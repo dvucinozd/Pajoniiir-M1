@@ -106,7 +106,6 @@ impl UsbMscCompletionGate {
     }
 }
 
-
 pub const fn usb_address_source(device_address: u8) -> Option<MediaSourceId> {
     MediaSourceId::new(device_address as u32)
 }
@@ -534,7 +533,6 @@ mod tests {
         assert!(matches!(ticket.kind, UsbMscRequestKind::Write { .. }));
     }
 
-
     #[test]
     fn usb_device_address_is_session_local_source_and_zero_is_rejected() {
         assert_eq!(usb_address_source(0), None);
@@ -659,6 +657,32 @@ mod tests {
         let ticket = bridge.issue(0, UsbMscRequestKind::Flush).unwrap();
         assert_eq!(ticket.lease, primary);
         assert!(bridge.accepts_completion(ticket));
+    }
+
+    #[test]
+    fn delayed_old_handle_disconnect_cannot_drop_fresh_generation() {
+        let mut bridge = UsbMscSessionBridge::new();
+        let old_handle = media_handle(11);
+        let fresh_handle = media_handle(12);
+
+        bridge
+            .on_enumerated(media_source(4), old_handle)
+            .unwrap();
+        assert_eq!(
+            bridge.on_disconnect(old_handle),
+            pajoniiir_media_session::DisconnectResult::Accepted
+        );
+        let fresh_lease = bridge
+            .on_enumerated(media_source(4), fresh_handle)
+            .unwrap();
+        let fresh_ticket = bridge.issue(0, UsbMscRequestKind::Flush).unwrap();
+
+        assert_eq!(
+            bridge.on_disconnect(old_handle),
+            pajoniiir_media_session::DisconnectResult::IgnoredForeign
+        );
+        assert_eq!(bridge.lease(), Some(fresh_lease));
+        assert!(bridge.accepts_completion(fresh_ticket));
     }
 
     #[test]

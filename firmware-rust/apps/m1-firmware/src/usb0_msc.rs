@@ -7,7 +7,7 @@ use embassy_usb_host::{
     class::msc::{BlockCapacity, MscError, MscLun},
     handler::EnumerationInfo,
 };
-use pajoniiir_media_session::{DisconnectResult, MediaLease, MediaSession};
+use pajoniiir_media_session::{DisconnectResult, MediaHandle, MediaLease, MediaSession};
 use pajoniiir_media_usb_msc::{
     UsbMscCapacity, UsbMscCompletionGate, UsbMscHandleSequencer, UsbMscRequestKind,
     UsbMscRequestTicket, UsbMscSessionBridge, UsbMscSessionError, usb_address_source,
@@ -27,7 +27,6 @@ pub(crate) static USB0_MSC_COMPLETIONS: Channel<
     USB0_MSC_QUEUE_DEPTH,
 > = Channel::new();
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum Usb0MscLifecycleError {
     InvalidDeviceAddress,
@@ -38,6 +37,13 @@ impl From<UsbMscSessionError> for Usb0MscLifecycleError {
     fn from(error: UsbMscSessionError) -> Self {
         Self::Session(error)
     }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct Usb0MscBinding {
+    pub(crate) lease: MediaLease,
+    pub(crate) handle: MediaHandle,
+    pub(crate) device_address: u8,
 }
 
 pub(crate) struct Usb0MscLifecycle {
@@ -56,24 +62,26 @@ impl Usb0MscLifecycle {
     pub(crate) fn on_enumerated(
         &mut self,
         info: &EnumerationInfo,
-    ) -> Result<MediaLease, Usb0MscLifecycleError> {
-        let source =
-            usb_address_source(info.device_address).ok_or(Usb0MscLifecycleError::InvalidDeviceAddress)?;
+    ) -> Result<Usb0MscBinding, Usb0MscLifecycleError> {
+        let source = usb_address_source(info.device_address)
+            .ok_or(Usb0MscLifecycleError::InvalidDeviceAddress)?;
         let handle = self.handles.issue();
-        self.bridge.on_enumerated(source, handle).map_err(Into::into)
+        let lease = self.bridge.on_enumerated(source, handle)?;
+
+        Ok(Usb0MscBinding {
+            lease,
+            handle,
+            device_address: info.device_address,
+        })
     }
 
-    pub(crate) fn on_disconnected_address(&mut self, device_address: u8) -> DisconnectResult {
-        let Some(lease) = self.bridge.lease() else {
-            return DisconnectResult::AlreadyInactive;
-        };
-        if lease.source.get() != device_address as u32 {
-            return DisconnectResult::IgnoredForeign;
-        }
-        let Some(handle) = self.bridge.session().handle() else {
-            return DisconnectResult::AlreadyInactive;
-        };
-        self.bridge.on_disconnect(handle)
+    /// Process HandlerEvent::HandlerDisconnected for the handler that owns
+    /// this binding. Old bindings fail closed after a newer enumeration.
+    pub(crate) fn on_handler_disconnected(
+        &mut self,
+        binding: Usb0MscBinding,
+    ) -> DisconnectResult {
+        self.bridge.on_disconnect(binding.handle)
     }
 
     pub(crate) fn session(&self) -> &MediaSession {
