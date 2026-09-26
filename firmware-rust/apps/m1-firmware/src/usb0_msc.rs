@@ -13,8 +13,10 @@ use embassy_usb_host::{
 };
 use pajoniiir_media_session::{DisconnectResult, MediaHandle, MediaLease, MediaSession};
 use pajoniiir_media_usb_msc::{
-    UsbMscCapacity, UsbMscCompletionGate, UsbMscHandleSequencer, UsbMscRequestKind,
-    UsbMscRequestTicket, UsbMscSessionBridge, UsbMscSessionError, usb_address_source,
+    UsbMscCapacity, UsbMscCompletionGate, UsbMscDiscoveryPlan, UsbMscDiscoveryPlanError,
+    UsbMscHandleSequencer, UsbMscMountAttempt, UsbMscMountCoordinator, UsbMscMountError,
+    UsbMscMountSelection, UsbMscMountedMedia, UsbMscRequestKind, UsbMscRequestTicket,
+    UsbMscSessionBridge, UsbMscSessionError, usb_address_source,
 };
 
 pub(crate) const USB0_MSC_QUEUE_DEPTH: usize = 4;
@@ -620,6 +622,233 @@ impl Default for Usb0MscClient {
     fn default() -> Self {
         Self::new()
     }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum Usb0MscDiscoveryClientError {
+    ScratchSize { expected: usize, actual: usize },
+    MissingScratch,
+    MissingPendingLba,
+    Plan(UsbMscDiscoveryPlanError),
+    Session(UsbMscSessionError),
+    QueueFull,
+    PendingCompletion,
+    UnexpectedCompletion,
+    WrongCompletionKind,
+    Completion(Usb0MscCompletionStatus),
+    StaleCompletion,
+}
+
+impl From<UsbMscDiscoveryPlanError> for Usb0MscDiscoveryClientError {
+    fn from(error: UsbMscDiscoveryPlanError) -> Self {
+        Self::Plan(error)
+    }
+}
+
+/// Resumable async partition-discovery client.
+///
+/// The worker owns exactly one logical-block scratch buffer. While a read is in
+/// flight the buffer is owned by the USB0 owner task and `scratch` is None.
+/// If this future is cancelled, `client.pending` and `pending_lba` remain in
+/// the worker; the next step resumes by receiving that completion instead of
+/// issuing a duplicate SCSI read.
+pub(crate) struct Usb0MscDiscoveryWorker {
+    client: Usb0MscClient,
+    plan: UsbMscDiscoveryPlan,
+    scratch: Option<&'static mut [u8]>,
+    pending_lba: Option<u64>,
+}
+
+impl Usb0MscDiscoveryWorker {
+    pub(crate) fn new(
+        attempt: UsbMscMountAttempt,
+        scratch: &'static mut [u8],
+    ) -> Result<Self, (Usb0MscDiscoveryClientError, &'static mut [u8])> {
+        let expected = attempt.geometry.block_size as usize;
+        if scratch.len() != expected {
+            let actual = scratch.len();
+            return Err((
+                Usb0MscDiscoveryClientError::ScratchSize { expected, actual },
+                scratch,
+            ));
+        }
+
+        let plan = match UsbMscDiscoveryPlan::new(attempt) {
+            Ok(plan) => plan,
+            Err(error) => {
+                return Err((Usb0MscDiscoveryClientError::Plan(error), scratch));
+            }
+        };
+
+        Ok(Self {
+            client: Usb0MscClient::new(),
+            plan,
+            scratch: Some(scratch),
+            pending_lba: None,
+        })
+    }
+
+    pub(crate) const fn has_pending(&self) -> bool {
+        self.client.has_pending()
+    }
+
+    pub(crate) const fn pending_lba(&self) -> Option<u64> {
+        self.pending_lba
+    }
+
+    pub(crate) fn scratch(&self) -> Option<&[u8]> {
+        self.scratch.as_deref()
+    }
+
+    pub(crate) fn into_scratch(self) -> Option<&'static mut [u8]> {
+        self.scratch
+    }
+
+    pub(crate) async fn step(
+        &mut self,
+        coordinator: &UsbMscMountCoordinator,
+    ) -> Result<Option<UsbMscMountSelection>, Usb0MscDiscoveryClientError> {
+        let result = if self.client.has_pending() {
+            self.client
+                .receive_pending_completion()
+                .await
+                .ok_or(Usb0MscDiscoveryClientError::MissingPendingLba)?
+        } else {
+            let Some(lba) = self.plan.next_lba()? else {
+                return Ok(self.plan.selection());
+            };
+            let scratch = self
+                .scratch
+                .take()
+                .ok_or(Usb0MscDiscoveryClientError::MissingScratch)?;
+            let request = match prepare_read_request(self.plan.attempt().lun, lba, 1, scratch) {
+                Ok(request) => request,
+                Err((error, scratch)) => {
+                    self.scratch = Some(scratch);
+                    return Err(Usb0MscDiscoveryClientError::Session(error));
+                }
+            };
+            self.pending_lba = Some(lba);
+            self.client.submit(request).await
+        };
+
+        self.handle_submit_result(coordinator, result)
+    }
+
+    pub(crate) async fn run_to_selection(
+        &mut self,
+        coordinator: &UsbMscMountCoordinator,
+    ) -> Result<UsbMscMountSelection, Usb0MscDiscoveryClientError> {
+        loop {
+            if let Some(selection) = self.step(coordinator).await? {
+                return Ok(selection);
+            }
+        }
+    }
+
+    fn handle_submit_result(
+        &mut self,
+        coordinator: &UsbMscMountCoordinator,
+        result: Usb0MscSubmitResult,
+    ) -> Result<Option<UsbMscMountSelection>, Usb0MscDiscoveryClientError> {
+        match result {
+            Usb0MscSubmitResult::Completed(Usb0MscCompletion::Read {
+                ticket,
+                buffer,
+                status,
+            }) => {
+                let lba = self
+                    .pending_lba
+                    .take()
+                    .ok_or(Usb0MscDiscoveryClientError::MissingPendingLba)?;
+                self.scratch = Some(buffer);
+
+                if status != Usb0MscCompletionStatus::Success {
+                    return Err(Usb0MscDiscoveryClientError::Completion(status));
+                }
+                if !with_lifecycle(|lifecycle| {
+                    UsbMscCompletionGate::accepts(lifecycle.session(), ticket)
+                }) {
+                    return Err(Usb0MscDiscoveryClientError::StaleCompletion);
+                }
+
+                let block = self
+                    .scratch
+                    .as_deref()
+                    .ok_or(Usb0MscDiscoveryClientError::MissingScratch)?;
+                self.plan
+                    .ingest_block(coordinator, lba, block)
+                    .map_err(Usb0MscDiscoveryClientError::Plan)
+            }
+            Usb0MscSubmitResult::Completed(_) => {
+                self.pending_lba = None;
+                Err(Usb0MscDiscoveryClientError::WrongCompletionKind)
+            }
+            Usb0MscSubmitResult::QueueFull(request) => {
+                self.pending_lba = None;
+                self.restore_unsent_read(request)?;
+                Err(Usb0MscDiscoveryClientError::QueueFull)
+            }
+            Usb0MscSubmitResult::PendingCompletion(request) => {
+                self.restore_unsent_read(request)?;
+                Err(Usb0MscDiscoveryClientError::PendingCompletion)
+            }
+            Usb0MscSubmitResult::UnexpectedCompletion { .. } => {
+                Err(Usb0MscDiscoveryClientError::UnexpectedCompletion)
+            }
+        }
+    }
+
+    fn restore_unsent_read(
+        &mut self,
+        request: Usb0MscRequest,
+    ) -> Result<(), Usb0MscDiscoveryClientError> {
+        match request {
+            Usb0MscRequest::Read { buffer, .. } => {
+                self.scratch = Some(buffer);
+                Ok(())
+            }
+            _ => Err(Usb0MscDiscoveryClientError::WrongCompletionKind),
+        }
+    }
+}
+
+pub(crate) fn begin_current_mount(
+    coordinator: &mut UsbMscMountCoordinator,
+    binding: Usb0MscBinding,
+    lun: u8,
+    capacity: UsbMscCapacity,
+) -> Result<UsbMscMountAttempt, UsbMscMountError> {
+    with_lifecycle(|lifecycle| {
+        coordinator.begin(
+            lifecycle.session(),
+            binding.lease,
+            binding.handle,
+            lun,
+            capacity,
+        )
+    })
+}
+
+pub(crate) fn commit_current_mount(
+    coordinator: &mut UsbMscMountCoordinator,
+    attempt: UsbMscMountAttempt,
+    selection: UsbMscMountSelection,
+) -> Result<UsbMscMountedMedia, UsbMscMountError> {
+    with_lifecycle_mut(|lifecycle| {
+        coordinator.commit(
+            lifecycle.bridge_mut().session_mut(),
+            attempt,
+            selection,
+        )
+    })
+}
+
+pub(crate) fn detach_mount(
+    coordinator: &mut UsbMscMountCoordinator,
+    binding: Usb0MscBinding,
+) -> bool {
+    coordinator.on_detached(binding.handle)
 }
 
 impl Usb0MscCompletion {
