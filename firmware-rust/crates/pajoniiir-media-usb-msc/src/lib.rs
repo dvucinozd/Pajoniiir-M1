@@ -5,7 +5,7 @@ use core::fmt;
 use core::num::NonZeroU32;
 
 use pajoniiir_media_block::{BlockDevice, BlockGeometry, TransferError, WritableBlockDevice};
-use pajoniiir_media_session::{MediaLease, MediaSession};
+use pajoniiir_media_session::{MediaHandle, MediaLease, MediaSession, MediaSourceId};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct UsbMscRequestId(NonZeroU32);
@@ -103,6 +103,37 @@ pub struct UsbMscCompletionGate;
 impl UsbMscCompletionGate {
     pub const fn accepts(session: &MediaSession, ticket: UsbMscRequestTicket) -> bool {
         session.validate(ticket.lease)
+    }
+}
+
+
+pub const fn usb_address_source(device_address: u8) -> Option<MediaSourceId> {
+    MediaSourceId::new(device_address as u32)
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct UsbMscHandleSequencer {
+    next: u64,
+}
+
+impl UsbMscHandleSequencer {
+    pub const fn new() -> Self {
+        Self { next: 1 }
+    }
+
+    pub fn issue(&mut self) -> MediaHandle {
+        let handle = MediaHandle::new(self.next).expect("handle sequence never emits zero");
+        self.next = self.next.wrapping_add(1);
+        if self.next == 0 {
+            self.next = 1;
+        }
+        handle
+    }
+}
+
+impl Default for UsbMscHandleSequencer {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -501,6 +532,27 @@ mod tests {
         assert_eq!(ticket.first_block(), Some(lba));
         assert_eq!(ticket.block_count(), Some(8));
         assert!(matches!(ticket.kind, UsbMscRequestKind::Write { .. }));
+    }
+
+
+    #[test]
+    fn usb_device_address_is_session_local_source_and_zero_is_rejected() {
+        assert_eq!(usb_address_source(0), None);
+        assert_eq!(usb_address_source(1).unwrap().get(), 1);
+        assert_eq!(usb_address_source(127).unwrap().get(), 127);
+    }
+
+    #[test]
+    fn media_handle_sequence_skips_zero_and_does_not_reuse_usb_address() {
+        let mut handles = UsbMscHandleSequencer { next: u64::MAX };
+        let last = handles.issue();
+        let wrapped = handles.issue();
+
+        assert_eq!(last.get(), u64::MAX);
+        assert_eq!(wrapped.get(), 1);
+
+        let source = usb_address_source(5).unwrap();
+        assert_ne!(last.get(), source.get() as u64);
     }
 
     fn media_source(value: u32) -> pajoniiir_media_session::MediaSourceId {

@@ -3,10 +3,14 @@ use embassy_sync::{
     channel::Channel,
 };
 use embassy_usb_driver::host::UsbHostAllocator;
-use embassy_usb_host::class::msc::{BlockCapacity, MscError, MscLun};
-use pajoniiir_media_session::{MediaLease, MediaSession};
+use embassy_usb_host::{
+    class::msc::{BlockCapacity, MscError, MscLun},
+    handler::EnumerationInfo,
+};
+use pajoniiir_media_session::{DisconnectResult, MediaLease, MediaSession};
 use pajoniiir_media_usb_msc::{
-    UsbMscCapacity, UsbMscCompletionGate, UsbMscRequestKind, UsbMscRequestTicket,
+    UsbMscCapacity, UsbMscCompletionGate, UsbMscHandleSequencer, UsbMscRequestKind,
+    UsbMscRequestTicket, UsbMscSessionBridge, UsbMscSessionError, usb_address_source,
 };
 
 pub(crate) const USB0_MSC_QUEUE_DEPTH: usize = 4;
@@ -22,6 +26,70 @@ pub(crate) static USB0_MSC_COMPLETIONS: Channel<
     Usb0MscCompletion,
     USB0_MSC_QUEUE_DEPTH,
 > = Channel::new();
+
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum Usb0MscLifecycleError {
+    InvalidDeviceAddress,
+    Session(UsbMscSessionError),
+}
+
+impl From<UsbMscSessionError> for Usb0MscLifecycleError {
+    fn from(error: UsbMscSessionError) -> Self {
+        Self::Session(error)
+    }
+}
+
+pub(crate) struct Usb0MscLifecycle {
+    bridge: UsbMscSessionBridge,
+    handles: UsbMscHandleSequencer,
+}
+
+impl Usb0MscLifecycle {
+    pub(crate) const fn new() -> Self {
+        Self {
+            bridge: UsbMscSessionBridge::new(),
+            handles: UsbMscHandleSequencer::new(),
+        }
+    }
+
+    pub(crate) fn on_enumerated(
+        &mut self,
+        info: &EnumerationInfo,
+    ) -> Result<MediaLease, Usb0MscLifecycleError> {
+        let source =
+            usb_address_source(info.device_address).ok_or(Usb0MscLifecycleError::InvalidDeviceAddress)?;
+        let handle = self.handles.issue();
+        self.bridge.on_enumerated(source, handle).map_err(Into::into)
+    }
+
+    pub(crate) fn on_disconnected_address(&mut self, device_address: u8) -> DisconnectResult {
+        let Some(lease) = self.bridge.lease() else {
+            return DisconnectResult::AlreadyInactive;
+        };
+        if lease.source.get() != device_address as u32 {
+            return DisconnectResult::IgnoredForeign;
+        }
+        let Some(handle) = self.bridge.session().handle() else {
+            return DisconnectResult::AlreadyInactive;
+        };
+        self.bridge.on_disconnect(handle)
+    }
+
+    pub(crate) fn session(&self) -> &MediaSession {
+        self.bridge.session()
+    }
+
+    pub(crate) fn bridge_mut(&mut self) -> &mut UsbMscSessionBridge {
+        &mut self.bridge
+    }
+}
+
+impl Default for Usb0MscLifecycle {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 #[derive(Debug)]
 pub(crate) enum Usb0MscError {
