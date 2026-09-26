@@ -400,16 +400,224 @@ impl Default for UsbMscMountCoordinator {
     }
 }
 
-#[derive(Debug, Eq, PartialEq)]
-pub enum UsbMscDiscoveryError<E> {
-    GeometryMismatch,
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum UsbMscDiscoveryPlanError {
     UnsupportedBlockSize(u32),
-    ScratchTooSmall { required: usize, actual: usize },
-    Read(E),
+    BlockTooSmall { required: usize, actual: usize },
+    UnexpectedLba { expected: u64, actual: u64 },
+    AlreadySelected,
     InvalidPartitionTable,
     GptTableOutOfRange,
     NoSupportedFilesystem,
     Mount(UsbMscMountError),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+enum UsbMscDiscoveryStage {
+    Root,
+    GptHeader,
+    GptEntries {
+        stream: GptEntryStream,
+        next_lba: u64,
+    },
+    Candidate {
+        index: usize,
+    },
+    Selected(UsbMscMountSelection),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct UsbMscDiscoveryPlan {
+    attempt: UsbMscMountAttempt,
+    layout: PartitionLayout,
+    stage: UsbMscDiscoveryStage,
+}
+
+impl UsbMscDiscoveryPlan {
+    pub fn new(attempt: UsbMscMountAttempt) -> Result<Self, UsbMscDiscoveryPlanError> {
+        if attempt.geometry.block_size < pajoniiir_media_partition::MIN_SECTOR_SIZE as u32 {
+            return Err(UsbMscDiscoveryPlanError::UnsupportedBlockSize(
+                attempt.geometry.block_size,
+            ));
+        }
+
+        Ok(Self {
+            attempt,
+            layout: PartitionLayout::new(),
+            stage: UsbMscDiscoveryStage::Root,
+        })
+    }
+
+    pub const fn attempt(&self) -> UsbMscMountAttempt {
+        self.attempt
+    }
+
+    pub fn layout(&self) -> &PartitionLayout {
+        &self.layout
+    }
+
+    pub fn selection(&self) -> Option<UsbMscMountSelection> {
+        match self.stage {
+            UsbMscDiscoveryStage::Selected(selection) => Some(selection),
+            _ => None,
+        }
+    }
+
+    pub fn next_lba(&mut self) -> Result<Option<u64>, UsbMscDiscoveryPlanError> {
+        loop {
+            match &self.stage {
+                UsbMscDiscoveryStage::Root => return Ok(Some(0)),
+                UsbMscDiscoveryStage::GptHeader => return Ok(Some(1)),
+                UsbMscDiscoveryStage::GptEntries { next_lba, .. } => {
+                    if *next_lba >= self.attempt.geometry.block_count {
+                        return Err(UsbMscDiscoveryPlanError::GptTableOutOfRange);
+                    }
+                    return Ok(Some(*next_lba));
+                }
+                UsbMscDiscoveryStage::Candidate { index } => {
+                    let index = *index;
+                    let Some(candidate) = self.layout.candidates().get(index).copied() else {
+                        return Err(UsbMscDiscoveryPlanError::NoSupportedFilesystem);
+                    };
+                    if candidate.first_lba >= self.attempt.geometry.block_count {
+                        self.stage = UsbMscDiscoveryStage::Candidate { index: index + 1 };
+                        continue;
+                    }
+                    return Ok(Some(candidate.first_lba));
+                }
+                UsbMscDiscoveryStage::Selected(_) => return Ok(None),
+            }
+        }
+    }
+
+    pub fn ingest_block(
+        &mut self,
+        coordinator: &UsbMscMountCoordinator,
+        lba: u64,
+        block: &[u8],
+    ) -> Result<Option<UsbMscMountSelection>, UsbMscDiscoveryPlanError> {
+        let required = self.attempt.geometry.block_size as usize;
+        if block.len() < required {
+            return Err(UsbMscDiscoveryPlanError::BlockTooSmall {
+                required,
+                actual: block.len(),
+            });
+        }
+        let block = &block[..required];
+
+        let Some(expected) = self.next_lba()? else {
+            return Err(UsbMscDiscoveryPlanError::AlreadySelected);
+        };
+        if lba != expected {
+            return Err(UsbMscDiscoveryPlanError::UnexpectedLba {
+                expected,
+                actual: lba,
+            });
+        }
+
+        match &mut self.stage {
+            UsbMscDiscoveryStage::Root => {
+                match scan_mbr_or_superfloppy(block, &mut self.layout) {
+                    PartitionScanResult::Ok => {
+                        self.stage = UsbMscDiscoveryStage::Candidate { index: 0 };
+                    }
+                    PartitionScanResult::NeedsGpt => {
+                        if self.attempt.geometry.block_count <= 1 {
+                            return Err(UsbMscDiscoveryPlanError::GptTableOutOfRange);
+                        }
+                        self.layout.clear();
+                        self.stage = UsbMscDiscoveryStage::GptHeader;
+                    }
+                    PartitionScanResult::Invalid => {
+                        return Err(UsbMscDiscoveryPlanError::InvalidPartitionTable);
+                    }
+                    PartitionScanResult::NoCandidate => {
+                        return Err(UsbMscDiscoveryPlanError::NoSupportedFilesystem);
+                    }
+                }
+            }
+            UsbMscDiscoveryStage::GptHeader => {
+                let info =
+                    parse_gpt_header(block).ok_or(UsbMscDiscoveryPlanError::InvalidPartitionTable)?;
+                if info.entries_lba >= self.attempt.geometry.block_count {
+                    return Err(UsbMscDiscoveryPlanError::GptTableOutOfRange);
+                }
+                let stream = GptEntryStream::new(info)
+                    .ok_or(UsbMscDiscoveryPlanError::InvalidPartitionTable)?;
+                self.layout.clear();
+                self.stage = UsbMscDiscoveryStage::GptEntries {
+                    stream,
+                    next_lba: info.entries_lba,
+                };
+            }
+            UsbMscDiscoveryStage::GptEntries { .. } => {
+                let complete;
+                {
+                    let UsbMscDiscoveryStage::GptEntries { stream, next_lba } = &mut self.stage
+                    else {
+                        unreachable!();
+                    };
+                    let _ = stream.push(block, &mut self.layout);
+                    complete = stream.is_complete();
+                    if !complete {
+                        *next_lba = next_lba
+                            .checked_add(1)
+                            .ok_or(UsbMscDiscoveryPlanError::GptTableOutOfRange)?;
+                    }
+                }
+                if complete {
+                    self.stage = UsbMscDiscoveryStage::Candidate { index: 0 };
+                }
+            }
+            UsbMscDiscoveryStage::Candidate { index } => {
+                let candidate = self.layout.candidates()[*index];
+                let boot_kind = classify_boot_sector(block);
+                if boot_kind == VolumeKind::Unknown {
+                    *index += 1;
+                    return Ok(None);
+                }
+
+                let verified = PartitionCandidate {
+                    first_lba: candidate.first_lba,
+                    sector_count: candidate.sector_count,
+                    kind: boot_kind,
+                };
+
+                match coordinator.select_partition(self.attempt, verified, block) {
+                    Ok(selection) => {
+                        self.stage = UsbMscDiscoveryStage::Selected(selection);
+                        return Ok(Some(selection));
+                    }
+                    Err(
+                        UsbMscMountError::UnsupportedFilesystem
+                        | UsbMscMountError::PartitionOutOfRange,
+                    ) => {
+                        *index += 1;
+                    }
+                    Err(error) => return Err(UsbMscDiscoveryPlanError::Mount(error)),
+                }
+            }
+            UsbMscDiscoveryStage::Selected(_) => {
+                return Err(UsbMscDiscoveryPlanError::AlreadySelected);
+            }
+        }
+
+        Ok(None)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum UsbMscDiscoveryError<E> {
+    GeometryMismatch,
+    ScratchTooSmall { required: usize, actual: usize },
+    Read(E),
+    Plan(UsbMscDiscoveryPlanError),
+}
+
+impl<E> From<UsbMscDiscoveryPlanError> for UsbMscDiscoveryError<E> {
+    fn from(error: UsbMscDiscoveryPlanError) -> Self {
+        Self::Plan(error)
+    }
 }
 
 pub fn discover_mount_selection<D: BlockDevice>(
@@ -424,11 +632,6 @@ pub fn discover_mount_selection<D: BlockDevice>(
     }
 
     let block_size = geometry.block_size as usize;
-    if block_size < pajoniiir_media_partition::MIN_SECTOR_SIZE {
-        return Err(UsbMscDiscoveryError::UnsupportedBlockSize(
-            geometry.block_size,
-        ));
-    }
     if scratch.len() < block_size {
         return Err(UsbMscDiscoveryError::ScratchTooSmall {
             required: block_size,
@@ -436,79 +639,22 @@ pub fn discover_mount_selection<D: BlockDevice>(
         });
     }
 
+    let mut plan = UsbMscDiscoveryPlan::new(attempt)?;
     let block = &mut scratch[..block_size];
-    device
-        .read_blocks(0, 1, block)
-        .map_err(UsbMscDiscoveryError::Read)?;
 
-    let mut layout = PartitionLayout::new();
-    match scan_mbr_or_superfloppy(block, &mut layout) {
-        PartitionScanResult::Ok => {}
-        PartitionScanResult::NeedsGpt => {
-            if geometry.block_count <= 1 {
-                return Err(UsbMscDiscoveryError::GptTableOutOfRange);
-            }
-
-            device
-                .read_blocks(1, 1, block)
-                .map_err(UsbMscDiscoveryError::Read)?;
-            let info =
-                parse_gpt_header(block).ok_or(UsbMscDiscoveryError::InvalidPartitionTable)?;
-            if info.entries_lba >= geometry.block_count {
-                return Err(UsbMscDiscoveryError::GptTableOutOfRange);
-            }
-
-            let mut stream =
-                GptEntryStream::new(info).ok_or(UsbMscDiscoveryError::InvalidPartitionTable)?;
-            let mut lba = info.entries_lba;
-            while !stream.is_complete() {
-                if lba >= geometry.block_count {
-                    return Err(UsbMscDiscoveryError::GptTableOutOfRange);
-                }
-                device
-                    .read_blocks(lba, 1, block)
-                    .map_err(UsbMscDiscoveryError::Read)?;
-                let _ = stream.push(block, &mut layout);
-                lba += 1;
-            }
-        }
-        PartitionScanResult::Invalid => {
-            return Err(UsbMscDiscoveryError::InvalidPartitionTable);
-        }
-        PartitionScanResult::NoCandidate => {
-            return Err(UsbMscDiscoveryError::NoSupportedFilesystem);
-        }
-    }
-
-    for candidate in layout.candidates().iter().copied() {
-        if candidate.first_lba >= geometry.block_count {
-            continue;
-        }
-        device
-            .read_blocks(candidate.first_lba, 1, block)
-            .map_err(UsbMscDiscoveryError::Read)?;
-
-        let boot_kind = classify_boot_sector(block);
-        if boot_kind == VolumeKind::Unknown {
-            continue;
-        }
-
-        let verified = PartitionCandidate {
-            first_lba: candidate.first_lba,
-            sector_count: candidate.sector_count,
-            kind: boot_kind,
+    loop {
+        let Some(lba) = plan.next_lba()? else {
+            return plan
+                .selection()
+                .ok_or(UsbMscDiscoveryPlanError::NoSupportedFilesystem.into());
         };
-
-        match coordinator.select_partition(attempt, verified, block) {
-            Ok(selection) => return Ok(selection),
-            Err(
-                UsbMscMountError::UnsupportedFilesystem | UsbMscMountError::PartitionOutOfRange,
-            ) => {}
-            Err(error) => return Err(UsbMscDiscoveryError::Mount(error)),
+        device
+            .read_blocks(lba, 1, block)
+            .map_err(UsbMscDiscoveryError::Read)?;
+        if let Some(selection) = plan.ingest_block(coordinator, lba, block)? {
+            return Ok(selection);
         }
     }
-
-    Err(UsbMscDiscoveryError::NoSupportedFilesystem)
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -868,6 +1014,70 @@ mod tests {
         entry[..16].copy_from_slice(&BASIC_DATA_GUID);
         entry[32..40].copy_from_slice(&first_lba.to_le_bytes());
         entry[40..48].copy_from_slice(&last_lba.to_le_bytes());
+    }
+
+    #[test]
+    fn discovery_plan_drives_async_friendly_gpt_read_sequence() {
+        let (session, lease, handle) = mount_session(25, 250);
+        let capacity = UsbMscCapacity::from_block_count(512, 64).unwrap();
+        let mut coordinator = UsbMscMountCoordinator::new();
+        let attempt = coordinator
+            .begin(&session, lease, handle, 0, capacity)
+            .unwrap();
+
+        let mut image = MemoryBlockDevice::new(512, 64);
+        write_protective_mbr(image.block_mut(0));
+        write_gpt_header(image.block_mut(1), 2, 4, 136);
+        let entry_start = 2 * 512 + 3 * 136;
+        write_gpt_basic_data_entry(image.byte_range_mut(entry_start, 136), 20, 31);
+        image.block_mut(20).copy_from_slice(&fat32_boot_sector());
+
+        let mut plan = UsbMscDiscoveryPlan::new(attempt).unwrap();
+        let mut observed = [u64::MAX; 8];
+        let mut observed_len = 0usize;
+        let mut block = [0u8; 512];
+        let selection = loop {
+            let lba = plan.next_lba().unwrap().unwrap();
+            observed[observed_len] = lba;
+            observed_len += 1;
+            block.copy_from_slice(image.block_mut(lba));
+            if let Some(selection) = plan.ingest_block(&coordinator, lba, &block).unwrap() {
+                break selection;
+            }
+        };
+
+        assert_eq!(&observed[..observed_len], &[0, 1, 2, 3, 20]);
+        assert_eq!(selection.filesystem, FileSystemKind::Fat32);
+        assert_eq!(selection.range.first_block(), 20);
+        assert_eq!(selection.range.block_count().get(), 12);
+        assert_eq!(plan.selection(), Some(selection));
+        assert_eq!(plan.next_lba().unwrap(), None);
+    }
+
+    #[test]
+    fn discovery_plan_rejects_out_of_order_and_short_blocks() {
+        let (session, lease, handle) = mount_session(26, 260);
+        let capacity = UsbMscCapacity::from_block_count(512, 64).unwrap();
+        let mut coordinator = UsbMscMountCoordinator::new();
+        let attempt = coordinator
+            .begin(&session, lease, handle, 0, capacity)
+            .unwrap();
+        let mut plan = UsbMscDiscoveryPlan::new(attempt).unwrap();
+
+        assert_eq!(
+            plan.ingest_block(&coordinator, 1, &[0u8; 512]),
+            Err(UsbMscDiscoveryPlanError::UnexpectedLba {
+                expected: 0,
+                actual: 1,
+            })
+        );
+        assert_eq!(
+            plan.ingest_block(&coordinator, 0, &[0u8; 511]),
+            Err(UsbMscDiscoveryPlanError::BlockTooSmall {
+                required: 512,
+                actual: 511,
+            })
+        );
     }
 
     #[test]
