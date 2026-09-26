@@ -40,9 +40,10 @@ async fn main(spawner: Spawner) -> ! {
     let _ = core::mem::size_of::<pajoniiir_waveform::WaveformColumn>();
 
     #[cfg(feature = "usb0-hardware-bringup")]
-    spawner
-        .spawn(usb0_owner_task(peripherals.USB_HS))
-        .expect("USB0 owner task slot must be available");
+    spawner.spawn(
+        usb0_owner_task(peripherals.USB_HS)
+            .expect("USB0 owner task slot must be available"),
+    );
 
     #[cfg(not(feature = "usb0-hardware-bringup"))]
     let _ = spawner;

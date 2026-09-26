@@ -387,8 +387,7 @@ pub(crate) async fn run_root_msc_owner(
             .send(Usb0MscOwnerEvent::Ready { binding, probe })
             .await;
 
-        let mut replacement_speed = None;
-        'attached: loop {
+        let replacement_speed = 'attached: loop {
             match select(
                 USB0_MSC_REQUESTS.receive(),
                 controller.wait_for_device_event(),
@@ -442,8 +441,7 @@ pub(crate) async fn run_root_msc_owner(
                                     result,
                                 })
                                 .await;
-                            replacement_speed = next_speed;
-                            break 'attached;
+                            break 'attached next_speed;
                         }
                     }
                 }
@@ -465,8 +463,7 @@ pub(crate) async fn run_root_msc_owner(
                             result,
                         })
                         .await;
-                    replacement_speed = next_speed;
-                    break 'attached;
+                    break 'attached next_speed;
                 }
             }
         }
