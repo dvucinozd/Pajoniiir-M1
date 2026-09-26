@@ -483,16 +483,10 @@ mod tests {
         write_basic_data_entry(&mut second_chunk[..128], 131_072, 196_607);
 
         let mut layout = PartitionLayout::new();
-        assert_eq!(
-            append_gpt_entries(&first_chunk, 128, 2, &mut layout),
-            2
-        );
+        assert_eq!(append_gpt_entries(&first_chunk, 128, 2, &mut layout), 2);
         assert_eq!(layout.count(), 1);
 
-        assert_eq!(
-            append_gpt_entries(&second_chunk, 128, 2, &mut layout),
-            2
-        );
+        assert_eq!(append_gpt_entries(&second_chunk, 128, 2, &mut layout), 2);
         assert_eq!(layout.count(), 2);
         assert_eq!(layout.candidates()[0].first_lba, 32_768);
         assert_eq!(layout.candidates()[1].first_lba, 131_072);
