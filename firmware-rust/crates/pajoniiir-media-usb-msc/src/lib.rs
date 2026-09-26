@@ -4,7 +4,11 @@
 use core::fmt;
 use core::num::NonZeroU32;
 
-use pajoniiir_media_block::{BlockDevice, BlockGeometry, TransferError, WritableBlockDevice};
+use pajoniiir_media_block::{
+    BlockDevice, BlockGeometry, BlockRange, TransferError, WritableBlockDevice,
+};
+use pajoniiir_media_fs::FileSystemKind;
+use pajoniiir_media_partition::{PartitionCandidate, VolumeKind, classify_boot_sector};
 use pajoniiir_media_session::{MediaHandle, MediaLease, MediaSession, MediaSourceId};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
@@ -214,6 +218,181 @@ impl UsbMscSessionBridge {
 }
 
 impl Default for UsbMscSessionBridge {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct UsbMscMountAttempt {
+    pub lease: MediaLease,
+    pub handle: MediaHandle,
+    pub lun: u8,
+    pub geometry: BlockGeometry,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct UsbMscMountSelection {
+    pub range: BlockRange,
+    pub filesystem: FileSystemKind,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct UsbMscMountedMedia {
+    pub attempt: UsbMscMountAttempt,
+    pub selection: UsbMscMountSelection,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum UsbMscMountError {
+    StaleLease,
+    WrongOwner,
+    InvalidGeometry,
+    NoActiveAttempt,
+    StaleAttempt,
+    UnsupportedFilesystem,
+    PartitionOutOfRange,
+    SessionRejected,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct UsbMscMountCoordinator {
+    active: Option<UsbMscMountAttempt>,
+    mounted: Option<UsbMscMountedMedia>,
+}
+
+impl UsbMscMountCoordinator {
+    pub const fn new() -> Self {
+        Self {
+            active: None,
+            mounted: None,
+        }
+    }
+
+    pub fn begin(
+        &mut self,
+        session: &MediaSession,
+        lease: MediaLease,
+        handle: MediaHandle,
+        lun: u8,
+        capacity: UsbMscCapacity,
+    ) -> Result<UsbMscMountAttempt, UsbMscMountError> {
+        if !session.validate(lease) {
+            return Err(UsbMscMountError::StaleLease);
+        }
+        if session.handle() != Some(handle) {
+            return Err(UsbMscMountError::WrongOwner);
+        }
+
+        let geometry = capacity.geometry();
+        if !geometry.is_valid() {
+            return Err(UsbMscMountError::InvalidGeometry);
+        }
+
+        let attempt = UsbMscMountAttempt {
+            lease,
+            handle,
+            lun,
+            geometry,
+        };
+        self.active = Some(attempt);
+        self.mounted = None;
+        Ok(attempt)
+    }
+
+    pub fn select_partition(
+        &self,
+        attempt: UsbMscMountAttempt,
+        candidate: PartitionCandidate,
+        boot_sector: &[u8],
+    ) -> Result<UsbMscMountSelection, UsbMscMountError> {
+        if self.active != Some(attempt) {
+            return Err(UsbMscMountError::StaleAttempt);
+        }
+
+        let filesystem = match candidate.kind {
+            VolumeKind::Fat => FileSystemKind::Fat32,
+            VolumeKind::ExFat => FileSystemKind::ExFat,
+            VolumeKind::Unknown => match classify_boot_sector(boot_sector) {
+                VolumeKind::Fat => FileSystemKind::Fat32,
+                VolumeKind::ExFat => FileSystemKind::ExFat,
+                VolumeKind::Unknown => return Err(UsbMscMountError::UnsupportedFilesystem),
+            },
+        };
+
+        if candidate.first_lba >= attempt.geometry.block_count {
+            return Err(UsbMscMountError::PartitionOutOfRange);
+        }
+
+        let available = attempt.geometry.block_count - candidate.first_lba;
+        let block_count = candidate
+            .sector_count
+            .map(core::num::NonZeroU64::get)
+            .unwrap_or(available);
+        let Some(nonzero_count) = core::num::NonZeroU64::new(block_count) else {
+            return Err(UsbMscMountError::PartitionOutOfRange);
+        };
+        let Some(range) = BlockRange::new(candidate.first_lba, nonzero_count, attempt.geometry)
+        else {
+            return Err(UsbMscMountError::PartitionOutOfRange);
+        };
+
+        Ok(UsbMscMountSelection { range, filesystem })
+    }
+
+    pub fn commit(
+        &mut self,
+        session: &mut MediaSession,
+        attempt: UsbMscMountAttempt,
+        selection: UsbMscMountSelection,
+    ) -> Result<UsbMscMountedMedia, UsbMscMountError> {
+        let Some(active) = self.active else {
+            return Err(UsbMscMountError::NoActiveAttempt);
+        };
+        if active != attempt {
+            return Err(UsbMscMountError::StaleAttempt);
+        }
+        if !session.validate(attempt.lease) {
+            return Err(UsbMscMountError::StaleLease);
+        }
+        if session.handle() != Some(attempt.handle) {
+            return Err(UsbMscMountError::WrongOwner);
+        }
+        if !session.commit_mounted(attempt.lease) {
+            return Err(UsbMscMountError::SessionRejected);
+        }
+
+        let mounted = UsbMscMountedMedia { attempt, selection };
+        self.active = None;
+        self.mounted = Some(mounted);
+        Ok(mounted)
+    }
+
+    pub fn on_detached(&mut self, handle: MediaHandle) -> bool {
+        let owns_active = self.active.is_some_and(|attempt| attempt.handle == handle);
+        let owns_mounted = self
+            .mounted
+            .is_some_and(|mounted| mounted.attempt.handle == handle);
+        if !owns_active && !owns_mounted {
+            return false;
+        }
+
+        self.active = None;
+        self.mounted = None;
+        true
+    }
+
+    pub const fn active(&self) -> Option<UsbMscMountAttempt> {
+        self.active
+    }
+
+    pub const fn mounted(&self) -> Option<UsbMscMountedMedia> {
+        self.mounted
+    }
+}
+
+impl Default for UsbMscMountCoordinator {
     fn default() -> Self {
         Self::new()
     }
@@ -455,6 +634,182 @@ impl<T: WritableUsbMscTransport> WritableBlockDevice for UsbMscBlockDevice<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn mount_session(
+        source_value: u32,
+        handle_value: u64,
+    ) -> (MediaSession, MediaLease, MediaHandle) {
+        let mut session = MediaSession::new();
+        let source = MediaSourceId::new(source_value).unwrap();
+        let lease = match session.on_connect(source) {
+            pajoniiir_media_session::ConnectResult::Accepted(lease) => lease,
+            other => panic!("unexpected connect result: {other:?}"),
+        };
+        let handle = MediaHandle::new(handle_value).unwrap();
+        assert!(session.bind_handle(lease, handle));
+        (session, lease, handle)
+    }
+
+    fn fat32_boot_sector() -> [u8; 512] {
+        let mut sector = [0u8; 512];
+        sector[0] = 0xeb;
+        sector[82..87].copy_from_slice(b"FAT32");
+        sector[510] = 0x55;
+        sector[511] = 0xaa;
+        sector
+    }
+
+    fn exfat_boot_sector() -> [u8; 512] {
+        let mut sector = [0u8; 512];
+        sector[0] = 0xeb;
+        sector[3..11].copy_from_slice(b"EXFAT   ");
+        sector[510] = 0x55;
+        sector[511] = 0xaa;
+        sector
+    }
+
+    #[test]
+    fn mount_attempt_requires_current_bound_generation() {
+        let (mut session, lease, handle) = mount_session(3, 10);
+        let capacity = UsbMscCapacity::from_block_count(512, 4_096).unwrap();
+        let mut coordinator = UsbMscMountCoordinator::new();
+
+        let attempt = coordinator
+            .begin(&session, lease, handle, 0, capacity)
+            .unwrap();
+        assert_eq!(coordinator.active(), Some(attempt));
+
+        assert_eq!(
+            session.on_disconnect(Some(handle)),
+            pajoniiir_media_session::DisconnectResult::Accepted
+        );
+        let fresh = match session.on_connect(MediaSourceId::new(3).unwrap()) {
+            pajoniiir_media_session::ConnectResult::Accepted(lease) => lease,
+            other => panic!("unexpected reconnect result: {other:?}"),
+        };
+        let fresh_handle = MediaHandle::new(11).unwrap();
+        assert!(session.bind_handle(fresh, fresh_handle));
+
+        assert_eq!(
+            coordinator.commit(
+                &mut session,
+                attempt,
+                UsbMscMountSelection {
+                    range: BlockRange::from_start(0, capacity.geometry()).unwrap(),
+                    filesystem: FileSystemKind::Fat32,
+                },
+            ),
+            Err(UsbMscMountError::StaleLease)
+        );
+        assert!(!session.is_mounted());
+    }
+
+    #[test]
+    fn unknown_gpt_candidate_is_classified_from_partition_boot_sector() {
+        let (session, lease, handle) = mount_session(4, 20);
+        let capacity = UsbMscCapacity::from_block_count(512, 10_000).unwrap();
+        let mut coordinator = UsbMscMountCoordinator::new();
+        let attempt = coordinator
+            .begin(&session, lease, handle, 0, capacity)
+            .unwrap();
+
+        let selection = coordinator
+            .select_partition(
+                attempt,
+                PartitionCandidate {
+                    first_lba: 2_048,
+                    sector_count: core::num::NonZeroU64::new(4_096),
+                    kind: VolumeKind::Unknown,
+                },
+                &fat32_boot_sector(),
+            )
+            .unwrap();
+
+        assert_eq!(selection.filesystem, FileSystemKind::Fat32);
+        assert_eq!(selection.range.first_block(), 2_048);
+        assert_eq!(selection.range.block_count().get(), 4_096);
+    }
+
+    #[test]
+    fn superfloppy_exfat_selection_uses_device_remainder() {
+        let (session, lease, handle) = mount_session(5, 30);
+        let capacity = UsbMscCapacity::from_block_count(4_096, 2_000).unwrap();
+        let mut coordinator = UsbMscMountCoordinator::new();
+        let attempt = coordinator
+            .begin(&session, lease, handle, 0, capacity)
+            .unwrap();
+
+        let selection = coordinator
+            .select_partition(
+                attempt,
+                PartitionCandidate {
+                    first_lba: 0,
+                    sector_count: None,
+                    kind: VolumeKind::Unknown,
+                },
+                &exfat_boot_sector(),
+            )
+            .unwrap();
+
+        assert_eq!(selection.filesystem, FileSystemKind::ExFat);
+        assert_eq!(selection.range.first_block(), 0);
+        assert_eq!(selection.range.block_count().get(), 2_000);
+    }
+
+    #[test]
+    fn selection_rejects_partition_outside_reported_capacity() {
+        let (session, lease, handle) = mount_session(6, 40);
+        let capacity = UsbMscCapacity::from_block_count(512, 1_000).unwrap();
+        let mut coordinator = UsbMscMountCoordinator::new();
+        let attempt = coordinator
+            .begin(&session, lease, handle, 0, capacity)
+            .unwrap();
+
+        assert_eq!(
+            coordinator.select_partition(
+                attempt,
+                PartitionCandidate {
+                    first_lba: 900,
+                    sector_count: core::num::NonZeroU64::new(200),
+                    kind: VolumeKind::Fat,
+                },
+                &fat32_boot_sector(),
+            ),
+            Err(UsbMscMountError::PartitionOutOfRange)
+        );
+    }
+
+    #[test]
+    fn commit_marks_only_current_owner_mounted() {
+        let (mut session, lease, handle) = mount_session(7, 50);
+        let capacity = UsbMscCapacity::from_block_count(512, 8_000).unwrap();
+        let mut coordinator = UsbMscMountCoordinator::new();
+        let attempt = coordinator
+            .begin(&session, lease, handle, 0, capacity)
+            .unwrap();
+        let selection = coordinator
+            .select_partition(
+                attempt,
+                PartitionCandidate {
+                    first_lba: 2_048,
+                    sector_count: core::num::NonZeroU64::new(2_000),
+                    kind: VolumeKind::Fat,
+                },
+                &fat32_boot_sector(),
+            )
+            .unwrap();
+
+        let mounted = coordinator
+            .commit(&mut session, attempt, selection)
+            .unwrap();
+        assert_eq!(coordinator.mounted(), Some(mounted));
+        assert!(session.is_mounted());
+
+        assert!(!coordinator.on_detached(MediaHandle::new(99).unwrap()));
+        assert_eq!(coordinator.mounted(), Some(mounted));
+        assert!(coordinator.on_detached(handle));
+        assert_eq!(coordinator.mounted(), None);
+    }
 
     fn lease(session: &mut MediaSession, source: u32) -> MediaLease {
         let source = pajoniiir_media_session::MediaSourceId::new(source).unwrap();

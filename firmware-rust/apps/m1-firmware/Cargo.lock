@@ -1224,6 +1224,8 @@ name = "pajoniiir-media-usb-msc"
 version = "0.1.0"
 dependencies = [
  "pajoniiir-media-block",
+ "pajoniiir-media-fs",
+ "pajoniiir-media-partition",
  "pajoniiir-media-session",
 ]
 
