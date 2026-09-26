@@ -1499,18 +1499,14 @@ mod tests {
     fn bound_issue_rejects_stale_generation_after_reenumeration() {
         let mut bridge = UsbMscSessionBridge::new();
         let old_handle = media_handle(11);
-        let old_lease = bridge
-            .on_enumerated(media_source(4), old_handle)
-            .unwrap();
+        let old_lease = bridge.on_enumerated(media_source(4), old_handle).unwrap();
 
         assert_eq!(
             bridge.on_disconnect(old_handle),
             pajoniiir_media_session::DisconnectResult::Accepted
         );
         let fresh_handle = media_handle(12);
-        let fresh_lease = bridge
-            .on_enumerated(media_source(4), fresh_handle)
-            .unwrap();
+        let fresh_lease = bridge.on_enumerated(media_source(4), fresh_handle).unwrap();
 
         assert_eq!(
             bridge.issue_for(old_lease, old_handle, 0, UsbMscRequestKind::Flush),

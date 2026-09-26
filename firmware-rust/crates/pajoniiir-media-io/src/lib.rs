@@ -284,12 +284,8 @@ mod tests {
 
     fn partition() -> AsyncPartitionDevice<MemoryOwnedDevice> {
         let inner = MemoryOwnedDevice::new();
-        let range = BlockRange::new(
-            2,
-            core::num::NonZeroU64::new(4).unwrap(),
-            inner.geometry(),
-        )
-        .unwrap();
+        let range =
+            BlockRange::new(2, core::num::NonZeroU64::new(4).unwrap(), inner.geometry()).unwrap();
         AsyncPartitionDevice::new(inner, range)
     }
 
@@ -308,8 +304,7 @@ mod tests {
     fn async_partition_preserves_buffer_on_contract_failure() {
         let mut device = partition();
         let buffer = [0x5au8; 512];
-        let (error, returned) =
-            block_on_ready(device.read_blocks_owned(4, 1, buffer)).unwrap_err();
+        let (error, returned) = block_on_ready(device.read_blocks_owned(4, 1, buffer)).unwrap_err();
 
         assert_eq!(
             error,
@@ -340,8 +335,7 @@ mod tests {
         device.inner_mut().fail = true;
         let buffer = [0x3cu8; 512];
 
-        let (error, returned) =
-            block_on_ready(device.read_blocks_owned(0, 1, buffer)).unwrap_err();
+        let (error, returned) = block_on_ready(device.read_blocks_owned(0, 1, buffer)).unwrap_err();
 
         assert_eq!(error, AsyncPartitionError::Inner(TestError::Failed));
         assert_eq!(returned, [0x3c; 512]);
