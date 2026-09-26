@@ -1,0 +1,41 @@
+name: Rust P4 runtime lock refresh
+
+on:
+  push:
+    branches:
+      - codex/m1-rust-foundation
+    paths:
+      - ".github/workflows/rust-p4-runtime-lock-refresh.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  lockfile:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/m1-rust-foundation
+
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.95.0 --profile minimal
+
+      - name: Refresh ESP32-P4 runtime lock
+        working-directory: firmware-rust/apps/m1-firmware
+        run: cargo +1.95.0 generate-lockfile
+
+      - name: Commit firmware lock
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add firmware-rust/apps/m1-firmware/Cargo.lock
+          if git diff --cached --quiet; then
+            echo "Firmware lockfile is already current."
+            exit 0
+          fi
+          git commit -m "build(rust): lock ESP32-P4 async runtime"
+          git push origin HEAD:codex/m1-rust-foundation
