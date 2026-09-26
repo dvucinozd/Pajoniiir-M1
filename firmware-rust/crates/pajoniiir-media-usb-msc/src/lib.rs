@@ -4,9 +4,7 @@
 use core::fmt;
 use core::num::NonZeroU32;
 
-use pajoniiir_media_block::{
-    BlockDevice, BlockGeometry, TransferError, WritableBlockDevice,
-};
+use pajoniiir_media_block::{BlockDevice, BlockGeometry, TransferError, WritableBlockDevice};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct UsbMscCapacity {
@@ -104,7 +102,9 @@ impl<E: fmt::Display> fmt::Display for UsbMscError<E> {
                     "USB MSC transfer requests {requested} blocks; maximum is {maximum}"
                 )
             }
-            Self::Transfer(error) => write!(formatter, "USB MSC transfer contract error: {error:?}"),
+            Self::Transfer(error) => {
+                write!(formatter, "USB MSC transfer contract error: {error:?}")
+            }
             Self::Backend(error) => write!(formatter, "USB MSC transport error: {error}"),
         }
     }
