@@ -457,8 +457,8 @@ impl UsbMscDiscoveryPlan {
     }
 
     pub fn selection(&self) -> Option<UsbMscMountSelection> {
-        match self.stage {
-            UsbMscDiscoveryStage::Selected(selection) => Some(selection),
+        match &self.stage {
+            UsbMscDiscoveryStage::Selected(selection) => Some(*selection),
             _ => None,
         }
     }
