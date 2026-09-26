@@ -5,6 +5,113 @@ use core::fmt;
 use core::num::NonZeroU32;
 
 use pajoniiir_media_block::{BlockDevice, BlockGeometry, TransferError, WritableBlockDevice};
+use pajoniiir_media_session::{MediaLease, MediaSession};
+
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct UsbMscRequestId(NonZeroU32);
+
+impl UsbMscRequestId {
+    pub const fn new(value: u32) -> Option<Self> {
+        match NonZeroU32::new(value) {
+            Some(value) => Some(Self(value)),
+            None => None,
+        }
+    }
+
+    pub const fn get(self) -> u32 {
+        self.0.get()
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum UsbMscRequestKind {
+    Read {
+        first_block: u64,
+        block_count: u32,
+    },
+    Write {
+        first_block: u64,
+        block_count: u32,
+    },
+    Flush,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct UsbMscRequestTicket {
+    pub id: UsbMscRequestId,
+    pub lease: MediaLease,
+    pub lun: u8,
+    pub kind: UsbMscRequestKind,
+}
+
+impl UsbMscRequestTicket {
+    pub const fn first_block(self) -> Option<u64> {
+        match self.kind {
+            UsbMscRequestKind::Read { first_block, .. }
+            | UsbMscRequestKind::Write { first_block, .. } => Some(first_block),
+            UsbMscRequestKind::Flush => None,
+        }
+    }
+
+    pub const fn block_count(self) -> Option<u32> {
+        match self.kind {
+            UsbMscRequestKind::Read { block_count, .. }
+            | UsbMscRequestKind::Write { block_count, .. } => Some(block_count),
+            UsbMscRequestKind::Flush => None,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct UsbMscRequestSequencer {
+    next: u32,
+}
+
+impl UsbMscRequestSequencer {
+    pub const fn new() -> Self {
+        Self { next: 1 }
+    }
+
+    pub fn issue(
+        &mut self,
+        lease: MediaLease,
+        lun: u8,
+        kind: UsbMscRequestKind,
+    ) -> UsbMscRequestTicket {
+        let id = UsbMscRequestId::new(self.next).expect("request sequence never emits zero");
+        self.next = self.next.wrapping_add(1);
+        if self.next == 0 {
+            self.next = 1;
+        }
+        UsbMscRequestTicket {
+            id,
+            lease,
+            lun,
+            kind,
+        }
+    }
+}
+
+impl Default for UsbMscRequestSequencer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Gate applied after an async USB command completes.
+///
+/// Dispatch-time validation is necessary but insufficient because disconnect
+/// and re-enumeration may advance MediaSession while the owner task is awaiting
+/// the USB command. A completion is publishable only while its original lease
+/// is still the session's current generation/source lease.
+pub struct UsbMscCompletionGate;
+
+impl UsbMscCompletionGate {
+    pub const fn accepts(session: &MediaSession, ticket: UsbMscRequestTicket) -> bool {
+        session.validate(ticket.lease)
+    }
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct UsbMscCapacity {
@@ -242,6 +349,84 @@ impl<T: WritableUsbMscTransport> WritableBlockDevice for UsbMscBlockDevice<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+
+    fn lease(session: &mut MediaSession, source: u32) -> MediaLease {
+        let source = pajoniiir_media_session::MediaSourceId::new(source).unwrap();
+        match session.on_connect(source) {
+            pajoniiir_media_session::ConnectResult::Accepted(lease) => lease,
+            other => panic!("unexpected connect result: {other:?}"),
+        }
+    }
+
+    #[test]
+    fn request_ids_skip_zero_across_wrap() {
+        let mut session = MediaSession::new();
+        let lease = lease(&mut session, 1);
+        let mut ids = UsbMscRequestSequencer { next: u32::MAX };
+
+        let last = ids.issue(lease, 0, UsbMscRequestKind::Flush);
+        let wrapped = ids.issue(lease, 0, UsbMscRequestKind::Flush);
+
+        assert_eq!(last.id.get(), u32::MAX);
+        assert_eq!(wrapped.id.get(), 1);
+    }
+
+    #[test]
+    fn reconnect_same_source_rejects_old_completion_ticket() {
+        let mut session = MediaSession::new();
+        let old_lease = lease(&mut session, 7);
+        let mut ids = UsbMscRequestSequencer::new();
+        let old_ticket = ids.issue(
+            old_lease,
+            0,
+            UsbMscRequestKind::Read {
+                first_block: 42,
+                block_count: 2,
+            },
+        );
+        assert!(UsbMscCompletionGate::accepts(&session, old_ticket));
+
+        assert_eq!(
+            session.on_disconnect(None),
+            pajoniiir_media_session::DisconnectResult::Accepted
+        );
+        let fresh_lease = lease(&mut session, 7);
+        let fresh_ticket = ids.issue(
+            fresh_lease,
+            0,
+            UsbMscRequestKind::Read {
+                first_block: 42,
+                block_count: 2,
+            },
+        );
+
+        assert_ne!(old_lease.generation, fresh_lease.generation);
+        assert!(!UsbMscCompletionGate::accepts(&session, old_ticket));
+        assert!(UsbMscCompletionGate::accepts(&session, fresh_ticket));
+        assert_ne!(old_ticket.id, fresh_ticket.id);
+    }
+
+    #[test]
+    fn ticket_preserves_u64_lba_block_count_lun_and_operation() {
+        let mut session = MediaSession::new();
+        let lease = lease(&mut session, 3);
+        let mut ids = UsbMscRequestSequencer::new();
+        let lba = u32::MAX as u64 + 77;
+        let ticket = ids.issue(
+            lease,
+            4,
+            UsbMscRequestKind::Write {
+                first_block: lba,
+                block_count: 8,
+            },
+        );
+
+        assert_eq!(ticket.lun, 4);
+        assert_eq!(ticket.first_block(), Some(lba));
+        assert_eq!(ticket.block_count(), Some(8));
+        assert!(matches!(ticket.kind, UsbMscRequestKind::Write { .. }));
+    }
 
     #[derive(Clone, Copy, Debug, Eq, PartialEq)]
     enum TestError {

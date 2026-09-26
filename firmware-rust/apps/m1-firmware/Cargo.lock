@@ -1145,6 +1145,7 @@ dependencies = [
 name = "pajoniiir-m1-firmware"
 version = "0.1.0"
 dependencies = [
+ "embassy-sync 0.8.0",
  "embassy-usb-driver",
  "embassy-usb-host",
  "esp-hal",
@@ -1222,6 +1223,7 @@ name = "pajoniiir-media-usb-msc"
 version = "0.1.0"
 dependencies = [
  "pajoniiir-media-block",
+ "pajoniiir-media-session",
 ]
 
 [[package]]
