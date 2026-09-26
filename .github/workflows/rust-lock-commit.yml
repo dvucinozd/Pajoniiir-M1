@@ -1,0 +1,45 @@
+name: Rust lockfile commit
+
+on:
+  push:
+    branches:
+      - codex/m1-rust-foundation
+    paths:
+      - ".github/workflows/rust-lock-commit.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  lockfiles:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/m1-rust-foundation
+
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.95.0 --profile minimal
+
+      - name: Generate host workspace lock
+        working-directory: firmware-rust
+        run: cargo +1.95.0 generate-lockfile
+
+      - name: Generate ESP32-P4 firmware lock
+        working-directory: firmware-rust/apps/m1-firmware
+        run: cargo +1.95.0 generate-lockfile
+
+      - name: Commit lockfiles atomically
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add firmware-rust/Cargo.lock firmware-rust/apps/m1-firmware/Cargo.lock
+          if git diff --cached --quiet; then
+            echo "Lockfiles are already committed."
+            exit 0
+          fi
+          git commit -m "build(rust): lock dependency graphs"
+          git push origin HEAD:codex/m1-rust-foundation
