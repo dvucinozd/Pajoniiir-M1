@@ -3,11 +3,7 @@
 #![deny(clippy::mem_forget)]
 
 use embassy_executor::Spawner;
-use esp_hal::{
-    clock::CpuClock,
-    interrupt::software::SoftwareInterruptControl,
-    timer::timg::TimerGroup,
-};
+use esp_hal::{clock::CpuClock, timer::timg::TimerGroup};
 
 #[allow(dead_code)]
 mod usb0_msc;
@@ -31,8 +27,7 @@ async fn main(spawner: Spawner) -> ! {
     // esp-rtos owns the Embassy scheduler/time driver. Start it before any
     // spawned task or timer is allowed to run.
     let timg0 = TimerGroup::new(peripherals.TIMG0);
-    let sw_interrupts = SoftwareInterruptControl::new(peripherals.SW_INTERRUPT);
-    esp_rtos::start(timg0.timer0, sw_interrupts.software_interrupt0);
+    esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
 
     // Compile-time anchors: the production target must keep the host-tested
     // product crates no_std-compatible on the real ESP32-P4 architecture.
