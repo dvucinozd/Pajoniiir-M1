@@ -6,7 +6,11 @@ use core::fmt;
 use core::ops::ControlFlow;
 
 use embedded_sdmmc::{Block, BlockCount, BlockDevice as SdmmcBlockDevice, BlockIdx};
-use pajoniiir_media_block::{BlockGeometry, WritableBlockDevice};
+use pajoniiir_media_block::{
+    BlockDevice, BlockGeometry, BlockRange, PartitionDevice, PartitionDeviceError,
+    WritableBlockDevice,
+};
+use pajoniiir_media_partition::{PartitionCandidate, VolumeKind};
 
 pub const FAT_BLOCK_SIZE: u32 = 512;
 
@@ -36,6 +40,138 @@ impl<E: fmt::Display> fmt::Display for Fat32BlockError<E> {
 }
 
 impl<E> core::error::Error for Fat32BlockError<E> where E: core::error::Error + 'static {}
+
+const SYNTHETIC_MBR_PARTITION_OFFSET: usize = 446;
+const SYNTHETIC_MBR_SIGNATURE_OFFSET: usize = 510;
+const SYNTHETIC_MBR_PARTITION_LBA: u32 = 1;
+const SYNTHETIC_MBR_FAT32_LBA_TYPE: u8 = 0x0c;
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum Fat32MbrShimError<E> {
+    Transfer(pajoniiir_media_block::TransferError),
+    CapacityTooLarge(u64),
+    SyntheticMbrWrite,
+    Inner(E),
+}
+
+impl<E: fmt::Display> fmt::Display for Fat32MbrShimError<E> {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Transfer(error) => write!(formatter, "synthetic MBR transfer error: {error:?}"),
+            Self::CapacityTooLarge(blocks) => {
+                write!(formatter, "FAT partition exceeds synthetic MBR capacity: {blocks} blocks")
+            }
+            Self::SyntheticMbrWrite => formatter.write_str("synthetic MBR sector is read-only"),
+            Self::Inner(error) => write!(formatter, "synthetic MBR backend error: {error}"),
+        }
+    }
+}
+
+impl<E> core::error::Error for Fat32MbrShimError<E> where E: core::error::Error + 'static {}
+
+/// Presents a bounded FAT partition as a one-partition MBR disk.
+///
+/// embedded-sdmmc 0.10 only opens volumes through an MBR. Pajoniiir performs
+/// partition discovery itself (superfloppy, MBR and GPT), so this adapter adds
+/// one synthetic sector at LBA 0 and maps the real partition to synthetic LBA 1.
+pub struct Fat32MbrShim<D> {
+    inner: D,
+}
+
+impl<D> Fat32MbrShim<D> {
+    pub const fn new(inner: D) -> Self {
+        Self { inner }
+    }
+
+    pub const fn inner(&self) -> &D {
+        &self.inner
+    }
+
+    pub fn inner_mut(&mut self) -> &mut D {
+        &mut self.inner
+    }
+
+    pub fn into_inner(self) -> D {
+        self.inner
+    }
+}
+
+impl<D: BlockDevice> BlockDevice for Fat32MbrShim<D> {
+    type Error = Fat32MbrShimError<D::Error>;
+
+    fn geometry(&self) -> BlockGeometry {
+        let inner = self.inner.geometry();
+        BlockGeometry {
+            block_size: inner.block_size,
+            block_count: inner.block_count.checked_add(1).unwrap_or(u64::MAX),
+        }
+    }
+
+    fn read_blocks(
+        &mut self,
+        first_block: u64,
+        block_count: u32,
+        output: &mut [u8],
+    ) -> Result<(), Self::Error> {
+        self.geometry()
+            .validate_transfer(first_block, block_count, output.len())
+            .map_err(Fat32MbrShimError::Transfer)?;
+
+        if first_block == 0 {
+            let inner_blocks = self.inner.geometry().block_count;
+            let partition_blocks = u32::try_from(inner_blocks)
+                .map_err(|_| Fat32MbrShimError::CapacityTooLarge(inner_blocks))?;
+            write_synthetic_mbr(&mut output[..FAT_BLOCK_SIZE as usize], partition_blocks);
+
+            let remaining = block_count - 1;
+            if remaining != 0 {
+                self.inner
+                    .read_blocks(0, remaining, &mut output[FAT_BLOCK_SIZE as usize..])
+                    .map_err(Fat32MbrShimError::Inner)?;
+            }
+            return Ok(());
+        }
+
+        self.inner
+            .read_blocks(first_block - 1, block_count, output)
+            .map_err(Fat32MbrShimError::Inner)
+    }
+}
+
+impl<D: WritableBlockDevice> WritableBlockDevice for Fat32MbrShim<D> {
+    fn write_blocks(
+        &mut self,
+        first_block: u64,
+        block_count: u32,
+        input: &[u8],
+    ) -> Result<(), Self::Error> {
+        self.geometry()
+            .validate_transfer(first_block, block_count, input.len())
+            .map_err(Fat32MbrShimError::Transfer)?;
+        if first_block == 0 {
+            return Err(Fat32MbrShimError::SyntheticMbrWrite);
+        }
+
+        self.inner
+            .write_blocks(first_block - 1, block_count, input)
+            .map_err(Fat32MbrShimError::Inner)
+    }
+
+    fn flush(&mut self) -> Result<(), Self::Error> {
+        self.inner.flush().map_err(Fat32MbrShimError::Inner)
+    }
+}
+
+fn write_synthetic_mbr(output: &mut [u8], partition_blocks: u32) {
+    output.fill(0);
+    output[SYNTHETIC_MBR_PARTITION_OFFSET + 4] = SYNTHETIC_MBR_FAT32_LBA_TYPE;
+    output[SYNTHETIC_MBR_PARTITION_OFFSET + 8..SYNTHETIC_MBR_PARTITION_OFFSET + 12]
+        .copy_from_slice(&SYNTHETIC_MBR_PARTITION_LBA.to_le_bytes());
+    output[SYNTHETIC_MBR_PARTITION_OFFSET + 12..SYNTHETIC_MBR_PARTITION_OFFSET + 16]
+        .copy_from_slice(&partition_blocks.to_le_bytes());
+    output[SYNTHETIC_MBR_SIGNATURE_OFFSET..SYNTHETIC_MBR_SIGNATURE_OFFSET + 2]
+        .copy_from_slice(&0xaa55u16.to_le_bytes());
+}
 
 pub struct Fat32BlockAdapter<D> {
     inner: RefCell<D>,
@@ -175,6 +311,8 @@ where
 {
     Block(Fat32BlockError<E>),
     Backend(embedded_sdmmc::Error<Fat32BlockError<E>>),
+    UnsupportedVolume(VolumeKind),
+    CandidateOutOfRange,
     StaleLease,
     InvalidPath,
     PositionTooLarge(u64),
@@ -190,6 +328,12 @@ where
         match self {
             Self::Block(error) => write!(formatter, "FAT32 block adapter error: {error}"),
             Self::Backend(error) => write!(formatter, "FAT32 filesystem error: {error:?}"),
+            Self::UnsupportedVolume(kind) => {
+                write!(formatter, "partition is not a FAT candidate: {kind:?}")
+            }
+            Self::CandidateOutOfRange => {
+                formatter.write_str("partition candidate lies outside block-device geometry")
+            }
             Self::StaleLease => formatter.write_str("stale FAT32 media lease"),
             Self::InvalidPath => formatter.write_str("invalid FAT32 path"),
             Self::PositionTooLarge(position) => {
@@ -422,6 +566,46 @@ where
         !entry.attributes.is_volume()
             && entry.name != embedded_sdmmc::ShortFileName::this_dir()
             && entry.name != embedded_sdmmc::ShortFileName::parent_dir()
+    }
+}
+
+impl<D, T, const MAX_DIRS: usize, const MAX_FILES: usize>
+    Fat32FileSystem<Fat32MbrShim<PartitionDevice<D>>, T, MAX_DIRS, MAX_FILES>
+where
+    D: WritableBlockDevice,
+    D::Error: core::error::Error + 'static,
+    T: embedded_sdmmc::TimeSource,
+{
+    /// Mount a partition candidate discovered by pajoniiir-media-partition.
+    ///
+    /// The candidate may originate from superfloppy, MBR or GPT discovery.
+    /// Known exFAT candidates are rejected; unknown GPT Basic Data candidates
+    /// are allowed to reach the FAT parser and fail closed if they are not FAT.
+    pub fn mount_candidate(
+        device: D,
+        time_source: T,
+        candidate: PartitionCandidate,
+        lease: pajoniiir_media_session::MediaLease,
+    ) -> Result<
+        Self,
+        Fat32FsError<Fat32MbrShimError<PartitionDeviceError<D::Error>>>,
+    > {
+        if candidate.kind == VolumeKind::ExFat {
+            return Err(Fat32FsError::UnsupportedVolume(candidate.kind));
+        }
+
+        let geometry = device.geometry();
+        if geometry.block_size != FAT_BLOCK_SIZE {
+            return Err(Fat32FsError::Block(
+                Fat32BlockError::UnsupportedBlockSize(geometry.block_size),
+            ));
+        }
+        let range =
+            candidate_block_range(candidate, geometry).ok_or(Fat32FsError::CandidateOutOfRange)?;
+        let partition = PartitionDevice::new(device, range);
+        let shim = Fat32MbrShim::new(partition);
+
+        Self::mount(shim, time_source, 0, lease)
     }
 }
 
@@ -680,6 +864,16 @@ where
     }
 }
 
+fn candidate_block_range(
+    candidate: PartitionCandidate,
+    geometry: BlockGeometry,
+) -> Option<BlockRange> {
+    match candidate.sector_count {
+        Some(block_count) => BlockRange::new(candidate.first_lba, block_count, geometry),
+        None => BlockRange::from_start(candidate.first_lba, geometry),
+    }
+}
+
 fn copy_utf8(input: &[u8], output: &mut [u8]) -> Option<usize> {
     if input.len() > output.len() {
         return None;
@@ -811,6 +1005,58 @@ mod tests {
             self.flushes += 1;
             Ok(())
         }
+    }
+
+    #[test]
+    fn synthetic_mbr_maps_partition_to_local_lba_one() {
+        let mut inner = MemoryDevice::new(512, 4);
+        inner.bytes[..512].fill(0x5a);
+        let mut shim = Fat32MbrShim::new(inner);
+        let mut mbr = [0u8; 512];
+
+        shim.read_blocks(0, 1, &mut mbr).unwrap();
+
+        assert_eq!(&mbr[510..512], &[0x55, 0xaa]);
+        assert_eq!(mbr[446 + 4], SYNTHETIC_MBR_FAT32_LBA_TYPE);
+        assert_eq!(u32::from_le_bytes(mbr[454..458].try_into().unwrap()), 1);
+        assert_eq!(u32::from_le_bytes(mbr[458..462].try_into().unwrap()), 4);
+
+        let mut first_partition_block = [0u8; 512];
+        shim.read_blocks(1, 1, &mut first_partition_block).unwrap();
+        assert!(first_partition_block.iter().all(|byte| *byte == 0x5a));
+    }
+
+    #[test]
+    fn synthetic_mbr_is_read_only_but_partition_writes_translate() {
+        let mut shim = Fat32MbrShim::new(MemoryDevice::new(512, 4));
+        let block = [0x33u8; 512];
+
+        assert_eq!(
+            shim.write_blocks(0, 1, &block),
+            Err(Fat32MbrShimError::SyntheticMbrWrite)
+        );
+        shim.write_blocks(1, 1, &block).unwrap();
+        assert_eq!(&shim.inner().bytes[..512], &block);
+    }
+
+    #[test]
+    fn candidate_range_keeps_large_gpt_lba_outside_fat_local_address_space() {
+        let geometry = BlockGeometry {
+            block_size: 512,
+            block_count: u32::MAX as u64 + 16_384,
+        };
+        let first_lba = u32::MAX as u64 + 4_096;
+        let candidate = PartitionCandidate {
+            first_lba,
+            sector_count: core::num::NonZeroU64::new(8_192),
+            kind: VolumeKind::Unknown,
+        };
+
+        let range = candidate_block_range(candidate, geometry).unwrap();
+
+        assert_eq!(range.first_block(), first_lba);
+        assert_eq!(range.block_count().get(), 8_192);
+        assert_eq!(range.translate(0, 1), Some(first_lba));
     }
 
     #[test]

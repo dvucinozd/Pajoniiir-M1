@@ -1,6 +1,7 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+use core::fmt;
 use core::num::NonZeroU64;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -141,6 +142,17 @@ pub enum PartitionDeviceError<E> {
     Transfer(TransferError),
     Inner(E),
 }
+
+impl<E: fmt::Display> fmt::Display for PartitionDeviceError<E> {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Transfer(error) => write!(formatter, "partition transfer error: {error:?}"),
+            Self::Inner(error) => write!(formatter, "partition backend error: {error}"),
+        }
+    }
+}
+
+impl<E> core::error::Error for PartitionDeviceError<E> where E: core::error::Error + 'static {}
 
 pub struct PartitionDevice<D> {
     inner: D,
