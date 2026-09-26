@@ -106,7 +106,6 @@ impl UsbMscCompletionGate {
     }
 }
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum UsbMscSessionError {
     NoActiveMedia,
@@ -503,7 +502,6 @@ mod tests {
         assert_eq!(ticket.block_count(), Some(8));
         assert!(matches!(ticket.kind, UsbMscRequestKind::Write { .. }));
     }
-
 
     fn media_source(value: u32) -> pajoniiir_media_session::MediaSourceId {
         pajoniiir_media_session::MediaSourceId::new(value).unwrap()
