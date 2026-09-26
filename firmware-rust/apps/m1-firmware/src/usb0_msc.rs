@@ -156,6 +156,49 @@ pub(crate) fn issue_current_request(
     with_lifecycle_mut(|lifecycle| lifecycle.bridge_mut().issue(lun, kind))
 }
 
+pub(crate) fn prepare_read_request(
+    lun: u8,
+    first_block: u64,
+    block_count: u32,
+    buffer: &'static mut [u8],
+) -> Result<Usb0MscRequest, (UsbMscSessionError, &'static mut [u8])> {
+    match issue_current_request(
+        lun,
+        UsbMscRequestKind::Read {
+            first_block,
+            block_count,
+        },
+    ) {
+        Ok(ticket) => Ok(Usb0MscRequest::Read { ticket, buffer }),
+        Err(error) => Err((error, buffer)),
+    }
+}
+
+pub(crate) fn prepare_write_request(
+    lun: u8,
+    first_block: u64,
+    block_count: u32,
+    buffer: &'static mut [u8],
+) -> Result<Usb0MscRequest, (UsbMscSessionError, &'static mut [u8])> {
+    match issue_current_request(
+        lun,
+        UsbMscRequestKind::Write {
+            first_block,
+            block_count,
+        },
+    ) {
+        Ok(ticket) => Ok(Usb0MscRequest::Write { ticket, buffer }),
+        Err(error) => Err((error, buffer)),
+    }
+}
+
+pub(crate) fn prepare_flush_request(
+    lun: u8,
+) -> Result<Usb0MscRequest, UsbMscSessionError> {
+    issue_current_request(lun, UsbMscRequestKind::Flush)
+        .map(|ticket| Usb0MscRequest::Flush { ticket })
+}
+
 pub(crate) fn completion_is_current(completion: &Usb0MscCompletion) -> bool {
     with_lifecycle(|lifecycle| completion.is_current(lifecycle.session()))
 }
@@ -497,6 +540,86 @@ pub(crate) enum Usb0MscCompletion {
         ticket: UsbMscRequestTicket,
         status: Usb0MscCompletionStatus,
     },
+}
+
+#[derive(Debug)]
+pub(crate) enum Usb0MscSubmitResult {
+    Completed(Usb0MscCompletion),
+    QueueFull(Usb0MscRequest),
+    PendingCompletion(Usb0MscRequest),
+    UnexpectedCompletion {
+        expected: UsbMscRequestTicket,
+        completion: Usb0MscCompletion,
+    },
+}
+
+/// Single-media-worker client for the USB0 owner request/completion channels.
+///
+/// Exactly one long-lived media worker should own this value. submit() uses a
+/// nonblocking channel send so an unsent request is returned with its static
+/// buffer intact. Once accepted by the owner, the ticket stays in pending even
+/// if the receive future is cancelled; the same worker can resume with
+/// receive_pending_completion() before issuing another operation.
+pub(crate) struct Usb0MscClient {
+    pending: Option<UsbMscRequestTicket>,
+}
+
+impl Usb0MscClient {
+    pub(crate) const fn new() -> Self {
+        Self { pending: None }
+    }
+
+    pub(crate) const fn pending_ticket(&self) -> Option<UsbMscRequestTicket> {
+        self.pending
+    }
+
+    pub(crate) const fn has_pending(&self) -> bool {
+        self.pending.is_some()
+    }
+
+    pub(crate) async fn submit(
+        &mut self,
+        request: Usb0MscRequest,
+    ) -> Usb0MscSubmitResult {
+        if self.pending.is_some() {
+            return Usb0MscSubmitResult::PendingCompletion(request);
+        }
+
+        let ticket = request.ticket();
+        match USB0_MSC_REQUESTS.sender().try_send(request) {
+            Ok(()) => self.pending = Some(ticket),
+            Err(embassy_sync::channel::TrySendError::Full(request)) => {
+                return Usb0MscSubmitResult::QueueFull(request);
+            }
+        }
+
+        self.receive_pending_completion()
+            .await
+            .expect("pending ticket is set before awaiting completion")
+    }
+
+    pub(crate) async fn receive_pending_completion(
+        &mut self,
+    ) -> Option<Usb0MscSubmitResult> {
+        let expected = self.pending?;
+        let completion = USB0_MSC_COMPLETIONS.receive().await;
+
+        if completion.ticket() != expected {
+            return Some(Usb0MscSubmitResult::UnexpectedCompletion {
+                expected,
+                completion,
+            });
+        }
+
+        self.pending = None;
+        Some(Usb0MscSubmitResult::Completed(completion))
+    }
+}
+
+impl Default for Usb0MscClient {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl Usb0MscCompletion {
