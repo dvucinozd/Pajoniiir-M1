@@ -4,7 +4,8 @@ use embassy_sync::{
 };
 use embassy_usb_driver::host::UsbHostAllocator;
 use embassy_usb_host::{
-    class::msc::{BlockCapacity, MscError, MscLun},
+    BusRoute, BusState, EnumerationError,
+    class::msc::{BlockCapacity, MscDevice, MscError, MscLun},
     handler::EnumerationInfo,
 };
 use pajoniiir_media_session::{DisconnectResult, MediaHandle, MediaLease, MediaSession};
@@ -14,6 +15,9 @@ use pajoniiir_media_usb_msc::{
 };
 
 pub(crate) const USB0_MSC_QUEUE_DEPTH: usize = 4;
+const USB0_ENUM_CONFIG_BYTES: usize = 512;
+
+static USB0_BUS_STATE: BusState = BusState::new();
 
 pub(crate) static USB0_MSC_REQUESTS: Channel<
     CriticalSectionRawMutex,
@@ -97,6 +101,96 @@ impl Default for Usb0MscLifecycle {
     fn default() -> Self {
         Self::new()
     }
+}
+
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct Usb0MscProbe {
+    pub(crate) device_address: u8,
+    pub(crate) vendor_id: u16,
+    pub(crate) product_id: u16,
+    pub(crate) num_luns: u8,
+    pub(crate) capacity: UsbMscCapacity,
+}
+
+#[derive(Debug)]
+pub(crate) enum Usb0MscProbeError {
+    Enumeration(EnumerationError),
+    Lifecycle(Usb0MscLifecycleError),
+    Class(MscError),
+    Capacity(Usb0MscError),
+}
+
+impl From<EnumerationError> for Usb0MscProbeError {
+    fn from(error: EnumerationError) -> Self {
+        Self::Enumeration(error)
+    }
+}
+
+impl From<Usb0MscLifecycleError> for Usb0MscProbeError {
+    fn from(error: Usb0MscLifecycleError) -> Self {
+        Self::Lifecycle(error)
+    }
+}
+
+impl From<MscError> for Usb0MscProbeError {
+    fn from(error: MscError) -> Self {
+        Self::Class(error)
+    }
+}
+
+impl From<Usb0MscError> for Usb0MscProbeError {
+    fn from(error: Usb0MscError) -> Self {
+        Self::Capacity(error)
+    }
+}
+
+/// One-shot root-port diagnostic proving the full target API chain.
+///
+/// This is not the production owner loop. It intentionally tears the device
+/// down after probing so the compile gate covers address allocation and cleanup
+/// without leaving a stale MediaSession behind.
+pub(crate) async fn probe_root_msc_once(
+    usb_hs: esp_hal::peripherals::USB_HS<'static>,
+    lifecycle: &mut Usb0MscLifecycle,
+) -> Result<Usb0MscProbe, Usb0MscProbeError> {
+    let usb = esp_hal::usb::otg::Usb::new_hs(usb_hs);
+    let driver = esp_hal::usb::otg::embassy_usb_host::Driver::new(usb);
+    let (mut controller, bus) = embassy_usb_host::bus(driver, &USB0_BUS_STATE);
+
+    let speed = controller.wait_for_connection().await;
+    let mut config = [0u8; USB0_ENUM_CONFIG_BYTES];
+    let (info, config_len) = bus
+        .enumerate(BusRoute::Direct(speed), &mut config)
+        .await?;
+
+    let binding = match lifecycle.on_enumerated(&info) {
+        Ok(binding) => binding,
+        Err(error) => {
+            bus.free_address(info.device_address);
+            return Err(error.into());
+        }
+    };
+
+    let result = async {
+        let device = MscDevice::new(&bus, &info, &config[..config_len]).await?;
+        let num_luns = device.num_luns();
+        let mut lun = device.lun(0)?;
+        let capacity = probe_capacity(&mut lun).await?;
+
+        Ok(Usb0MscProbe {
+            device_address: info.device_address,
+            vendor_id: info.device_desc.vendor_id,
+            product_id: info.device_desc.product_id,
+            num_luns,
+            capacity,
+        })
+    }
+    .await;
+
+    let _ = lifecycle.on_handler_disconnected(binding);
+    bus.free_address(info.device_address);
+    result
 }
 
 #[derive(Debug)]
