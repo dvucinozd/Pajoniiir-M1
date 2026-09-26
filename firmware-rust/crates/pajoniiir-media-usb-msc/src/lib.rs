@@ -400,7 +400,6 @@ impl Default for UsbMscMountCoordinator {
     }
 }
 
-
 #[derive(Debug, Eq, PartialEq)]
 pub enum UsbMscDiscoveryError<E> {
     GeometryMismatch,
@@ -502,8 +501,9 @@ pub fn discover_mount_selection<D: BlockDevice>(
 
         match coordinator.select_partition(attempt, verified, block) {
             Ok(selection) => return Ok(selection),
-            Err(UsbMscMountError::UnsupportedFilesystem | UsbMscMountError::PartitionOutOfRange) => {
-            }
+            Err(
+                UsbMscMountError::UnsupportedFilesystem | UsbMscMountError::PartitionOutOfRange,
+            ) => {}
             Err(error) => return Err(UsbMscDiscoveryError::Mount(error)),
         }
     }
@@ -780,7 +780,6 @@ mod tests {
         sector[511] = 0xaa;
         sector
     }
-
 
     struct MemoryBlockDevice {
         bytes: [u8; 512 * 64],
