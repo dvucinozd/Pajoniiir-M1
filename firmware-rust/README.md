@@ -23,7 +23,7 @@ Starting baseline:
 - Rust 1.95.0
 - Slint 1.18.1
 - embedded-graphics 0.8.2
-- esp-hal 1.2.0 for the later ESP32-P4 target integration
+- esp-hal 1.2.2 for the ESP32-P4 target integration
 - target `riscv32imafc-unknown-none-elf`
 
 Before the first executable firmware baseline is accepted, Cargo.lock must be generated, reviewed and committed. Dependency changes after that point are qualified changes.
