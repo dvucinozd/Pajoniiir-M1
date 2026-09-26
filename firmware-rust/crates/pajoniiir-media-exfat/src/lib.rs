@@ -490,9 +490,7 @@ where
             ..
         } = self;
         let mut scratch = exfat_embedded::Scratch::new(scratch_storage);
-        backend
-            .flush(&mut scratch)
-            .map_err(ExFatFsError::Backend)
+        backend.flush(&mut scratch).map_err(ExFatFsError::Backend)
     }
 }
 
