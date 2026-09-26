@@ -466,7 +466,7 @@ pub(crate) async fn run_root_msc_owner(
                     break 'attached next_speed;
                 }
             }
-        }
+        };
 
         drop(lun);
         drop(device);
