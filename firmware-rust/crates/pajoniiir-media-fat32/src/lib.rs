@@ -814,6 +814,26 @@ mod tests {
     }
 
     #[test]
+    fn short_name_encoder_preserves_83_names() {
+        let name = embedded_sdmmc::ShortFileName::create_from_str("TRACK01.WAV").unwrap();
+        let mut output = [0u8; 32];
+
+        let len = encode_short_name(name, &mut output).unwrap();
+
+        assert_eq!(&output[..len], b"TRACK01.WAV");
+    }
+
+    #[test]
+    fn latin1_encoder_emits_utf8_and_checks_capacity() {
+        let mut output = [0u8; 4];
+        let len = encode_latin1(&[b'A', 0xe9], &mut output, 0).unwrap();
+        assert_eq!(&output[..len], &[b'A', 0xc3, 0xa9]);
+
+        let mut short = [0u8; 2];
+        assert_eq!(encode_latin1(&[0xe9, 0xe9], &mut short, 0), None);
+    }
+
+    #[test]
     fn bridge_exposes_exact_512_byte_geometry() {
         let adapter = Fat32BlockAdapter::new(MemoryDevice::new(512, 4));
         assert_eq!(adapter.num_blocks(), Ok(BlockCount(4)));
