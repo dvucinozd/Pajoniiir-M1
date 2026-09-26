@@ -190,7 +190,6 @@ pub fn append_gpt_entries(
     scanned
 }
 
-
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct GptEntryStream {
     entry_size: u16,
@@ -201,7 +200,7 @@ pub struct GptEntryStream {
 
 impl GptEntryStream {
     pub fn new(info: GptTableInfo) -> Option<Self> {
-        let entry_size = usize::try_from(info.entry_size).ok()?;
+        let entry_size = info.entry_size as usize;
         if !(128..=MAX_GPT_ENTRY_SIZE).contains(&entry_size)
             || info.entry_count == 0
             || info.entry_count > MAX_GPT_ENTRY_COUNT
@@ -559,7 +558,6 @@ mod tests {
         put_u64_le(&mut invalid[72..80], 0);
         assert_eq!(parse_gpt_header(&invalid), None);
     }
-
 
     #[test]
     fn gpt_stream_accepts_entry_split_across_arbitrary_chunks() {
