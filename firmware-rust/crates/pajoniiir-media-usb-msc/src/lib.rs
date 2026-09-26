@@ -148,6 +148,8 @@ pub enum UsbMscSessionError {
     NoActiveMedia,
     SecondaryDevice,
     HandleRejected,
+    StaleLease,
+    WrongOwner,
 }
 
 pub struct UsbMscSessionBridge {
@@ -197,8 +199,24 @@ impl UsbMscSessionBridge {
         let Some(lease) = self.session.lease() else {
             return Err(UsbMscSessionError::NoActiveMedia);
         };
-        if self.session.handle().is_none() {
+        let Some(handle) = self.session.handle() else {
             return Err(UsbMscSessionError::NoActiveMedia);
+        };
+        self.issue_for(lease, handle, lun, kind)
+    }
+
+    pub fn issue_for(
+        &mut self,
+        lease: MediaLease,
+        handle: MediaHandle,
+        lun: u8,
+        kind: UsbMscRequestKind,
+    ) -> Result<UsbMscRequestTicket, UsbMscSessionError> {
+        if !self.session.validate(lease) {
+            return Err(UsbMscSessionError::StaleLease);
+        }
+        if self.session.handle() != Some(handle) {
+            return Err(UsbMscSessionError::WrongOwner);
         }
         Ok(self.requests.issue(lease, lun, kind))
     }
@@ -1475,6 +1493,67 @@ mod tests {
             bridge.issue(0, UsbMscRequestKind::Flush),
             Err(UsbMscSessionError::NoActiveMedia)
         );
+    }
+
+    #[test]
+    fn bound_issue_rejects_stale_generation_after_reenumeration() {
+        let mut bridge = UsbMscSessionBridge::new();
+        let old_handle = media_handle(11);
+        let old_lease = bridge
+            .on_enumerated(media_source(4), old_handle)
+            .unwrap();
+
+        assert_eq!(
+            bridge.on_disconnect(old_handle),
+            pajoniiir_media_session::DisconnectResult::Accepted
+        );
+        let fresh_handle = media_handle(12);
+        let fresh_lease = bridge
+            .on_enumerated(media_source(4), fresh_handle)
+            .unwrap();
+
+        assert_eq!(
+            bridge.issue_for(old_lease, old_handle, 0, UsbMscRequestKind::Flush),
+            Err(UsbMscSessionError::StaleLease)
+        );
+        let fresh = bridge
+            .issue_for(fresh_lease, fresh_handle, 0, UsbMscRequestKind::Flush)
+            .unwrap();
+        assert_eq!(fresh.lease, fresh_lease);
+    }
+
+    #[test]
+    fn bound_issue_rejects_wrong_owner_without_issuing_for_current_media() {
+        let mut bridge = UsbMscSessionBridge::new();
+        let owner = media_handle(11);
+        let lease = bridge.on_enumerated(media_source(4), owner).unwrap();
+
+        assert_eq!(
+            bridge.issue_for(
+                lease,
+                media_handle(99),
+                0,
+                UsbMscRequestKind::Read {
+                    first_block: 7,
+                    block_count: 1,
+                },
+            ),
+            Err(UsbMscSessionError::WrongOwner)
+        );
+
+        let ticket = bridge
+            .issue_for(
+                lease,
+                owner,
+                0,
+                UsbMscRequestKind::Read {
+                    first_block: 7,
+                    block_count: 1,
+                },
+            )
+            .unwrap();
+        assert_eq!(ticket.lease, lease);
+        assert_eq!(ticket.first_block(), Some(7));
     }
 
     #[test]

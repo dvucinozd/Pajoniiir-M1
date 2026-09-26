@@ -3011,6 +3011,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "pajoniiir-media-io"
+version = "0.1.0"
+dependencies = [
+ "pajoniiir-media-block",
+]
+
+[[package]]
 name = "pajoniiir-media-partition"
 version = "0.1.0"
 
