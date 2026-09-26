@@ -11,6 +11,8 @@ use embassy_usb_host::{
     class::msc::{BlockCapacity, MscDevice, MscError, MscLun},
     handler::EnumerationInfo,
 };
+use pajoniiir_media_block::{BlockGeometry, TransferError};
+use pajoniiir_media_io::{OwnedBlockDevice, OwnedWritableBlockDevice};
 use pajoniiir_media_session::{DisconnectResult, MediaHandle, MediaLease, MediaSession};
 use pajoniiir_media_usb_msc::{
     UsbMscCapacity, UsbMscCompletionGate, UsbMscDiscoveryPlan, UsbMscDiscoveryPlanError,
@@ -204,6 +206,63 @@ pub(crate) fn issue_current_request(
     kind: UsbMscRequestKind,
 ) -> Result<UsbMscRequestTicket, UsbMscSessionError> {
     with_lifecycle_mut(|lifecycle| lifecycle.bridge_mut().issue(lun, kind))
+}
+
+fn issue_bound_request(
+    attempt: UsbMscMountAttempt,
+    kind: UsbMscRequestKind,
+) -> Result<UsbMscRequestTicket, UsbMscSessionError> {
+    with_lifecycle_mut(|lifecycle| {
+        lifecycle.bridge_mut().issue_for(
+            attempt.lease,
+            attempt.handle,
+            attempt.lun,
+            kind,
+        )
+    })
+}
+
+fn prepare_bound_read_request(
+    attempt: UsbMscMountAttempt,
+    first_block: u64,
+    block_count: u32,
+    buffer: &'static mut [u8],
+) -> Result<Usb0MscRequest, (UsbMscSessionError, &'static mut [u8])> {
+    match issue_bound_request(
+        attempt,
+        UsbMscRequestKind::Read {
+            first_block,
+            block_count,
+        },
+    ) {
+        Ok(ticket) => Ok(Usb0MscRequest::Read { ticket, buffer }),
+        Err(error) => Err((error, buffer)),
+    }
+}
+
+fn prepare_bound_write_request(
+    attempt: UsbMscMountAttempt,
+    first_block: u64,
+    block_count: u32,
+    buffer: &'static mut [u8],
+) -> Result<Usb0MscRequest, (UsbMscSessionError, &'static mut [u8])> {
+    match issue_bound_request(
+        attempt,
+        UsbMscRequestKind::Write {
+            first_block,
+            block_count,
+        },
+    ) {
+        Ok(ticket) => Ok(Usb0MscRequest::Write { ticket, buffer }),
+        Err(error) => Err((error, buffer)),
+    }
+}
+
+fn prepare_bound_flush_request(
+    attempt: UsbMscMountAttempt,
+) -> Result<Usb0MscRequest, UsbMscSessionError> {
+    issue_bound_request(attempt, UsbMscRequestKind::Flush)
+        .map(|ticket| Usb0MscRequest::Flush { ticket })
 }
 
 pub(crate) fn prepare_read_request(
@@ -666,6 +725,182 @@ impl Usb0MscClient {
 impl Default for Usb0MscClient {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum Usb0MscIoError {
+    Transfer(TransferError),
+    Session(UsbMscSessionError),
+    QueueFull,
+    PendingCompletion,
+    Completion(Usb0MscCompletionStatus),
+    StaleCompletion,
+}
+
+pub(crate) struct Usb0MscAsyncBlockDevice {
+    attempt: UsbMscMountAttempt,
+    client: Usb0MscClient,
+}
+
+impl Usb0MscAsyncBlockDevice {
+    pub(crate) const fn new(media: UsbMscMountedMedia) -> Self {
+        Self {
+            attempt: media.attempt,
+            client: Usb0MscClient::new(),
+        }
+    }
+
+    pub(crate) const fn attempt(&self) -> UsbMscMountAttempt {
+        self.attempt
+    }
+
+    fn completion_is_bound_current(&self, ticket: UsbMscRequestTicket) -> bool {
+        ticket.lease == self.attempt.lease
+            && ticket.lun == self.attempt.lun
+            && with_lifecycle(|lifecycle| {
+                lifecycle.session().validate(self.attempt.lease)
+                    && lifecycle.session().handle() == Some(self.attempt.handle)
+                    && UsbMscCompletionGate::accepts(lifecycle.session(), ticket)
+            })
+    }
+
+    fn invariant_reset() -> ! {
+        esp_hal::system::software_reset()
+    }
+}
+
+impl OwnedBlockDevice for Usb0MscAsyncBlockDevice {
+    type Error = Usb0MscIoError;
+    type Buffer = &'static mut [u8];
+
+    fn geometry(&self) -> BlockGeometry {
+        self.attempt.geometry
+    }
+
+    async fn read_blocks_owned(
+        &mut self,
+        first_block: u64,
+        block_count: u32,
+        buffer: Self::Buffer,
+    ) -> Result<Self::Buffer, (Self::Error, Self::Buffer)> {
+        if let Err(error) =
+            self.geometry()
+                .validate_transfer(first_block, block_count, buffer.len())
+        {
+            return Err((Usb0MscIoError::Transfer(error), buffer));
+        }
+
+        let request =
+            match prepare_bound_read_request(self.attempt, first_block, block_count, buffer) {
+                Ok(request) => request,
+                Err((error, buffer)) => {
+                    return Err((Usb0MscIoError::Session(error), buffer));
+                }
+            };
+
+        match self.client.submit(request).await {
+            Usb0MscSubmitResult::Completed(Usb0MscCompletion::Read {
+                ticket,
+                buffer,
+                status,
+            }) => {
+                if status != Usb0MscCompletionStatus::Success {
+                    return Err((Usb0MscIoError::Completion(status), buffer));
+                }
+                if !self.completion_is_bound_current(ticket) {
+                    return Err((Usb0MscIoError::StaleCompletion, buffer));
+                }
+                Ok(buffer)
+            }
+            Usb0MscSubmitResult::QueueFull(Usb0MscRequest::Read { buffer, .. }) => {
+                Err((Usb0MscIoError::QueueFull, buffer))
+            }
+            Usb0MscSubmitResult::PendingCompletion(Usb0MscRequest::Read { buffer, .. }) => {
+                Err((Usb0MscIoError::PendingCompletion, buffer))
+            }
+            Usb0MscSubmitResult::Completed(_)
+            | Usb0MscSubmitResult::QueueFull(_)
+            | Usb0MscSubmitResult::PendingCompletion(_)
+            | Usb0MscSubmitResult::UnexpectedCompletion { .. } => Self::invariant_reset(),
+        }
+    }
+}
+
+impl OwnedWritableBlockDevice for Usb0MscAsyncBlockDevice {
+    async fn write_blocks_owned(
+        &mut self,
+        first_block: u64,
+        block_count: u32,
+        buffer: Self::Buffer,
+    ) -> Result<Self::Buffer, (Self::Error, Self::Buffer)> {
+        if let Err(error) =
+            self.geometry()
+                .validate_transfer(first_block, block_count, buffer.len())
+        {
+            return Err((Usb0MscIoError::Transfer(error), buffer));
+        }
+
+        let request =
+            match prepare_bound_write_request(self.attempt, first_block, block_count, buffer) {
+                Ok(request) => request,
+                Err((error, buffer)) => {
+                    return Err((Usb0MscIoError::Session(error), buffer));
+                }
+            };
+
+        match self.client.submit(request).await {
+            Usb0MscSubmitResult::Completed(Usb0MscCompletion::Write {
+                ticket,
+                buffer,
+                status,
+            }) => {
+                if status != Usb0MscCompletionStatus::Success {
+                    return Err((Usb0MscIoError::Completion(status), buffer));
+                }
+                if !self.completion_is_bound_current(ticket) {
+                    return Err((Usb0MscIoError::StaleCompletion, buffer));
+                }
+                Ok(buffer)
+            }
+            Usb0MscSubmitResult::QueueFull(Usb0MscRequest::Write { buffer, .. }) => {
+                Err((Usb0MscIoError::QueueFull, buffer))
+            }
+            Usb0MscSubmitResult::PendingCompletion(Usb0MscRequest::Write { buffer, .. }) => {
+                Err((Usb0MscIoError::PendingCompletion, buffer))
+            }
+            Usb0MscSubmitResult::Completed(_)
+            | Usb0MscSubmitResult::QueueFull(_)
+            | Usb0MscSubmitResult::PendingCompletion(_)
+            | Usb0MscSubmitResult::UnexpectedCompletion { .. } => Self::invariant_reset(),
+        }
+    }
+
+    async fn flush_owned(&mut self) -> Result<(), Self::Error> {
+        let request =
+            prepare_bound_flush_request(self.attempt).map_err(Usb0MscIoError::Session)?;
+
+        match self.client.submit(request).await {
+            Usb0MscSubmitResult::Completed(Usb0MscCompletion::Flush { ticket, status }) => {
+                if status != Usb0MscCompletionStatus::Success {
+                    return Err(Usb0MscIoError::Completion(status));
+                }
+                if !self.completion_is_bound_current(ticket) {
+                    return Err(Usb0MscIoError::StaleCompletion);
+                }
+                Ok(())
+            }
+            Usb0MscSubmitResult::QueueFull(Usb0MscRequest::Flush { .. }) => {
+                Err(Usb0MscIoError::QueueFull)
+            }
+            Usb0MscSubmitResult::PendingCompletion(Usb0MscRequest::Flush { .. }) => {
+                Err(Usb0MscIoError::PendingCompletion)
+            }
+            Usb0MscSubmitResult::Completed(_)
+            | Usb0MscSubmitResult::QueueFull(_)
+            | Usb0MscSubmitResult::PendingCompletion(_)
+            | Usb0MscSubmitResult::UnexpectedCompletion { .. } => Self::invariant_reset(),
+        }
     }
 }
 
