@@ -5,6 +5,8 @@ use core::num::NonZeroU64;
 
 pub const MAX_PARTITION_CANDIDATES: usize = 8;
 pub const MIN_SECTOR_SIZE: usize = 512;
+pub const MAX_GPT_ENTRY_SIZE: usize = 512;
+pub const MAX_GPT_ENTRY_COUNT: u32 = 1_024;
 
 const MICROSOFT_BASIC_DATA_GUID: [u8; 16] = [
     0xa2, 0xa0, 0xd0, 0xeb, 0xe5, 0xb9, 0x33, 0x44, 0x87, 0xc0, 0x68, 0xb6, 0xb7, 0x26, 0x99, 0xc7,
@@ -132,7 +134,8 @@ pub fn parse_gpt_header(header_sector: &[u8]) -> Option<GptTableInfo> {
     if !(92..=MIN_SECTOR_SIZE).contains(&header_size)
         || entries_lba == 0
         || entry_count == 0
-        || !(128..=512).contains(&(entry_size as usize))
+        || entry_count > MAX_GPT_ENTRY_COUNT
+        || !(128..=MAX_GPT_ENTRY_SIZE).contains(&(entry_size as usize))
     {
         return None;
     }
@@ -185,6 +188,88 @@ pub fn append_gpt_entries(
     }
 
     scanned
+}
+
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GptEntryStream {
+    entry_size: u16,
+    remaining_entries: u32,
+    partial: [u8; MAX_GPT_ENTRY_SIZE],
+    partial_len: u16,
+}
+
+impl GptEntryStream {
+    pub fn new(info: GptTableInfo) -> Option<Self> {
+        let entry_size = usize::try_from(info.entry_size).ok()?;
+        if !(128..=MAX_GPT_ENTRY_SIZE).contains(&entry_size)
+            || info.entry_count == 0
+            || info.entry_count > MAX_GPT_ENTRY_COUNT
+        {
+            return None;
+        }
+
+        Some(Self {
+            entry_size: info.entry_size as u16,
+            remaining_entries: info.entry_count,
+            partial: [0u8; MAX_GPT_ENTRY_SIZE],
+            partial_len: 0,
+        })
+    }
+
+    pub const fn entry_size(&self) -> usize {
+        self.entry_size as usize
+    }
+
+    pub const fn remaining_entries(&self) -> u32 {
+        self.remaining_entries
+    }
+
+    pub const fn pending_bytes(&self) -> usize {
+        self.partial_len as usize
+    }
+
+    pub const fn is_complete(&self) -> bool {
+        self.remaining_entries == 0
+    }
+
+    /// Feed an arbitrary raw GPT entry-table byte chunk.
+    ///
+    /// The chunk does not need to align to GPT entry boundaries. At most one
+    /// partial entry is retained internally; complete entries are forwarded to
+    /// the existing bounded candidate parser immediately.
+    pub fn push(&mut self, mut bytes: &[u8], layout: &mut PartitionLayout) -> u32 {
+        let entry_size = self.entry_size();
+        let mut scanned = 0u32;
+
+        while !bytes.is_empty() && self.remaining_entries != 0 {
+            if self.partial_len == 0 && bytes.len() >= entry_size {
+                let entry = &bytes[..entry_size];
+                let _ = append_gpt_entries(entry, self.entry_size as u32, 1, layout);
+                bytes = &bytes[entry_size..];
+                self.remaining_entries -= 1;
+                scanned += 1;
+                continue;
+            }
+
+            let partial_len = self.partial_len as usize;
+            let needed = entry_size - partial_len;
+            let take = needed.min(bytes.len());
+            self.partial[partial_len..partial_len + take].copy_from_slice(&bytes[..take]);
+            self.partial_len += take as u16;
+            bytes = &bytes[take..];
+
+            if self.partial_len as usize == entry_size {
+                let entry = &self.partial[..entry_size];
+                let _ = append_gpt_entries(entry, self.entry_size as u32, 1, layout);
+                self.partial_len = 0;
+                self.remaining_entries -= 1;
+                scanned += 1;
+            }
+        }
+
+        scanned
+    }
 }
 
 pub fn classify_boot_sector(sector: &[u8]) -> VolumeKind {
@@ -473,6 +558,66 @@ mod tests {
         let mut invalid = header;
         put_u64_le(&mut invalid[72..80], 0);
         assert_eq!(parse_gpt_header(&invalid), None);
+    }
+
+
+    #[test]
+    fn gpt_stream_accepts_entry_split_across_arbitrary_chunks() {
+        let info = GptTableInfo {
+            entries_lba: 2,
+            entry_count: 3,
+            entry_size: 128,
+        };
+        let mut bytes = [0u8; 384];
+        write_basic_data_entry(&mut bytes[128..256], 32_768, 98_303);
+        write_basic_data_entry(&mut bytes[256..384], 131_072, 196_607);
+
+        let mut stream = GptEntryStream::new(info).unwrap();
+        let mut layout = PartitionLayout::new();
+
+        assert_eq!(stream.push(&bytes[..17], &mut layout), 0);
+        assert_eq!(stream.pending_bytes(), 17);
+        assert_eq!(stream.push(&bytes[17..143], &mut layout), 1);
+        assert_eq!(stream.remaining_entries(), 2);
+        assert_eq!(stream.push(&bytes[143..301], &mut layout), 1);
+        assert_eq!(stream.remaining_entries(), 1);
+        assert_eq!(stream.push(&bytes[301..], &mut layout), 1);
+
+        assert!(stream.is_complete());
+        assert_eq!(stream.pending_bytes(), 0);
+        assert_eq!(layout.count(), 2);
+        assert_eq!(layout.candidates()[0].first_lba, 32_768);
+        assert_eq!(layout.candidates()[1].first_lba, 131_072);
+    }
+
+    #[test]
+    fn gpt_stream_ignores_bytes_after_declared_entry_count() {
+        let info = GptTableInfo {
+            entries_lba: 2,
+            entry_count: 1,
+            entry_size: 128,
+        };
+        let mut bytes = [0u8; 256];
+        write_basic_data_entry(&mut bytes[..128], 2_048, 4_095);
+        write_basic_data_entry(&mut bytes[128..], 8_192, 16_383);
+
+        let mut stream = GptEntryStream::new(info).unwrap();
+        let mut layout = PartitionLayout::new();
+        assert_eq!(stream.push(&bytes, &mut layout), 1);
+        assert!(stream.is_complete());
+        assert_eq!(layout.count(), 1);
+        assert_eq!(layout.candidates()[0].first_lba, 2_048);
+    }
+
+    #[test]
+    fn gpt_header_and_stream_reject_unbounded_entry_counts() {
+        let mut header = gpt_header(MAX_GPT_ENTRY_COUNT + 1, 128);
+        assert_eq!(parse_gpt_header(&header), None);
+
+        put_u32_le(&mut header[80..84], MAX_GPT_ENTRY_COUNT);
+        let info = parse_gpt_header(&header).unwrap();
+        assert_eq!(info.entry_count, MAX_GPT_ENTRY_COUNT);
+        assert!(GptEntryStream::new(info).is_some());
     }
 
     #[test]
