@@ -404,8 +404,10 @@ mod tests {
 
     #[test]
     fn backend_errors_are_not_misreported_as_disconnects() {
-        let mut transport = TestTransport::default();
-        transport.fail = true;
+        let transport = TestTransport {
+            fail: true,
+            ..TestTransport::default()
+        };
         let mut device = UsbMscBlockDevice::new(
             transport,
             0,
