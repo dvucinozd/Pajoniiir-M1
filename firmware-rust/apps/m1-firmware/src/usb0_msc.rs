@@ -37,6 +37,8 @@ where
     lun.test_unit_ready().await
 }
 
+// embassy-usb-host selects READ(10) or READ(16) internally, so u64 LBAs
+// remain lossless across this target adapter.
 pub(crate) async fn read_blocks<'dev, 'd, A>(
     lun: &mut MscLun<'dev, 'd, A>,
     lba: u64,
