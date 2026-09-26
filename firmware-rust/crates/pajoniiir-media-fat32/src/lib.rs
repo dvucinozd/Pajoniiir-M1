@@ -59,7 +59,10 @@ impl<E: fmt::Display> fmt::Display for Fat32MbrShimError<E> {
         match self {
             Self::Transfer(error) => write!(formatter, "synthetic MBR transfer error: {error:?}"),
             Self::CapacityTooLarge(blocks) => {
-                write!(formatter, "FAT partition exceeds synthetic MBR capacity: {blocks} blocks")
+                write!(
+                    formatter,
+                    "FAT partition exceeds synthetic MBR capacity: {blocks} blocks"
+                )
             }
             Self::SyntheticMbrWrite => formatter.write_str("synthetic MBR sector is read-only"),
             Self::Inner(error) => write!(formatter, "synthetic MBR backend error: {error}"),
@@ -586,19 +589,16 @@ where
         time_source: T,
         candidate: PartitionCandidate,
         lease: pajoniiir_media_session::MediaLease,
-    ) -> Result<
-        Self,
-        Fat32FsError<Fat32MbrShimError<PartitionDeviceError<D::Error>>>,
-    > {
+    ) -> Result<Self, Fat32FsError<Fat32MbrShimError<PartitionDeviceError<D::Error>>>> {
         if candidate.kind == VolumeKind::ExFat {
             return Err(Fat32FsError::UnsupportedVolume(candidate.kind));
         }
 
         let geometry = device.geometry();
         if geometry.block_size != FAT_BLOCK_SIZE {
-            return Err(Fat32FsError::Block(
-                Fat32BlockError::UnsupportedBlockSize(geometry.block_size),
-            ));
+            return Err(Fat32FsError::Block(Fat32BlockError::UnsupportedBlockSize(
+                geometry.block_size,
+            )));
         }
         let range =
             candidate_block_range(candidate, geometry).ok_or(Fat32FsError::CandidateOutOfRange)?;
