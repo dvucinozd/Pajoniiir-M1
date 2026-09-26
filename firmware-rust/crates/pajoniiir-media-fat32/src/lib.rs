@@ -166,7 +166,6 @@ where
     }
 }
 
-
 const FAT32_ID_OFFSET: u32 = 0x4d31_0000;
 
 #[derive(Debug)]
@@ -194,7 +193,10 @@ where
             Self::StaleLease => formatter.write_str("stale FAT32 media lease"),
             Self::InvalidPath => formatter.write_str("invalid FAT32 path"),
             Self::PositionTooLarge(position) => {
-                write!(formatter, "FAT32 seek position exceeds u32 range: {position}")
+                write!(
+                    formatter,
+                    "FAT32 seek position exceeds u32 range: {position}"
+                )
             }
             Self::UnsupportedLongDirectory => {
                 formatter.write_str("embedded-sdmmc cannot open long-name directories")
@@ -265,18 +267,11 @@ where
     T: embedded_sdmmc::TimeSource,
 {
     lease: pajoniiir_media_session::MediaLease,
-    manager: embedded_sdmmc::VolumeManager<
-        Fat32BlockAdapter<D>,
-        T,
-        MAX_DIRS,
-        MAX_FILES,
-        1,
-    >,
+    manager: embedded_sdmmc::VolumeManager<Fat32BlockAdapter<D>, T, MAX_DIRS, MAX_FILES, 1>,
     volume: embedded_sdmmc::RawVolume,
 }
 
-impl<D, T, const MAX_DIRS: usize, const MAX_FILES: usize>
-    Fat32FileSystem<D, T, MAX_DIRS, MAX_FILES>
+impl<D, T, const MAX_DIRS: usize, const MAX_FILES: usize> Fat32FileSystem<D, T, MAX_DIRS, MAX_FILES>
 where
     D: WritableBlockDevice,
     D::Error: core::error::Error + 'static,
@@ -389,9 +384,10 @@ where
             embedded_sdmmc::Mode::ReadOnly,
         ) {
             Ok(file) => Ok(file),
-            Err(embedded_sdmmc::Error::NotFound) => self
-                .manager
-                .open_file_in_dir(parent, name, embedded_sdmmc::Mode::ReadOnly),
+            Err(embedded_sdmmc::Error::NotFound) => {
+                self.manager
+                    .open_file_in_dir(parent, name, embedded_sdmmc::Mode::ReadOnly)
+            }
             Err(error) => Err(error),
         };
 
