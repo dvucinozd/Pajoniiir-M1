@@ -1,7 +1,6 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
-
 pub type BackendFsError<E> = exfat_embedded::Error<ExFatBlockError<E>>;
 
 #[derive(Debug, Eq, PartialEq)]
@@ -88,9 +87,7 @@ where
         let adapter = ExFatBlockAdapter::new(device);
         let sector_size = adapter
             .validate_geometry()
-            .map_err(|error| {
-                ExFatFsError::Backend(exfat_embedded::Error::Device(error))
-            })?
+            .map_err(|error| ExFatFsError::Backend(exfat_embedded::Error::Device(error)))?
             .block_size as usize;
         if scratch_storage.len() < sector_size {
             return Err(ExFatFsError::Backend(
@@ -307,7 +304,8 @@ where
         name_storage: &mut [u8; pajoniiir_media_fs::FS_NAME_MAX],
     ) -> Result<Option<pajoniiir_media_fs::DirEntry>, Self::Error> {
         self.ensure_lease(directory.lease)?;
-        let Some(entry) = self.backend_directory_entry(directory.kind, directory.next_index)? else {
+        let Some(entry) = self.backend_directory_entry(directory.kind, directory.next_index)?
+        else {
             return Ok(None);
         };
         let name_len =
@@ -450,9 +448,7 @@ where
             ..
         } = self;
         let mut scratch = exfat_embedded::Scratch::new(scratch_storage);
-        backend
-            .flush(&mut scratch)
-            .map_err(ExFatFsError::Backend)
+        backend.flush(&mut scratch).map_err(ExFatFsError::Backend)
     }
 
     fn rename(&mut self, from: &str, to: &str) -> Result<(), Self::Error> {
@@ -618,7 +614,7 @@ mod tests {
     use super::*;
     use pajoniiir_media_block::{BlockDevice, TransferError};
     use pajoniiir_media_fs::{
-        DirectoryVisitor, FileHandle, FileSystem as _, WritableFileSystem as _, FS_NAME_MAX,
+        DirectoryVisitor, FS_NAME_MAX, FileHandle, FileSystem as _, WritableFileSystem as _,
     };
     use pajoniiir_media_session::{MediaGeneration, MediaLease, MediaSourceId};
 
@@ -986,7 +982,10 @@ mod tests {
         let mut file = fs.open_write("stale.bin", true).unwrap();
 
         file.lease = test_lease(2);
-        assert_eq!(fs.read(&mut file, &mut [0u8; 1]), Err(ExFatFsError::StaleLease));
+        assert_eq!(
+            fs.read(&mut file, &mut [0u8; 1]),
+            Err(ExFatFsError::StaleLease)
+        );
         assert_eq!(fs.write(&mut file, b"x"), Err(ExFatFsError::StaleLease));
     }
 
