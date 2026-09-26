@@ -342,9 +342,15 @@ mod tests {
 
     #[test]
     fn read_is_bounded_and_preserves_lun_and_u64_lba() {
-        let mut device = device(8);
-        let mut output = [0u8; 1_024];
         let lba = u32::MAX as u64 + 32;
+        let mut device = UsbMscBlockDevice::new(
+            TestTransport::default(),
+            2,
+            UsbMscCapacity::from_block_count(512, lba + 2).unwrap(),
+            NonZeroU32::new(8).unwrap(),
+        )
+        .unwrap();
+        let mut output = [0u8; 1_024];
 
         device.read_blocks(lba, 2, &mut output).unwrap();
 
