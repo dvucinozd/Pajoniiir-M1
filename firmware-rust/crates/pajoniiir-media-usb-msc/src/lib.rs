@@ -7,7 +7,6 @@ use core::num::NonZeroU32;
 use pajoniiir_media_block::{BlockDevice, BlockGeometry, TransferError, WritableBlockDevice};
 use pajoniiir_media_session::{MediaLease, MediaSession};
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct UsbMscRequestId(NonZeroU32);
 
@@ -26,14 +25,8 @@ impl UsbMscRequestId {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum UsbMscRequestKind {
-    Read {
-        first_block: u64,
-        block_count: u32,
-    },
-    Write {
-        first_block: u64,
-        block_count: u32,
-    },
+    Read { first_block: u64, block_count: u32 },
+    Write { first_block: u64, block_count: u32 },
     Flush,
 }
 
