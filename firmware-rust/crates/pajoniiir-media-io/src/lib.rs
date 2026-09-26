@@ -1,6 +1,9 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+#[cfg(test)]
+extern crate std;
+
 use core::fmt;
 
 use pajoniiir_media_block::{BlockGeometry, BlockRange, TransferError};
@@ -244,7 +247,8 @@ mod tests {
             self.read_calls += 1;
             self.last_block = first_block;
             let start = first_block as usize * 512;
-            buffer.copy_from_slice(&self.bytes[start..start + buffer.len()]);
+            let len = buffer.len();
+            buffer.copy_from_slice(&self.bytes[start..start + len]);
             Ok(buffer)
         }
     }
@@ -269,7 +273,8 @@ mod tests {
             self.write_calls += 1;
             self.last_block = first_block;
             let start = first_block as usize * 512;
-            self.bytes[start..start + buffer.len()].copy_from_slice(&buffer);
+            let len = buffer.len();
+            self.bytes[start..start + len].copy_from_slice(&buffer);
             Ok(buffer)
         }
 
