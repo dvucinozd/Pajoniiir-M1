@@ -4,6 +4,12 @@
 
 use esp_hal::{clock::CpuClock, main};
 
+fn usb0_hs_handle(
+    usb: esp_hal::peripherals::USB_HS<'static>,
+) -> esp_hal::usb::otg::Usb<'static> {
+    esp_hal::usb::otg::Usb::new_hs(usb)
+}
+
 #[panic_handler]
 fn panic(_: &core::panic::PanicInfo) -> ! {
     esp_hal::system::software_reset()
@@ -21,6 +27,9 @@ fn main() -> ! {
     let _ = core::mem::size_of::<pajoniiir_hot_cues::HotCueBank>();
     let _ = core::mem::size_of::<pajoniiir_mixer::MixerState>();
     let _ = core::mem::size_of::<pajoniiir_media_usb_msc::UsbMscCapacity>();
+    let _usb0_hs_constructor: fn(
+        esp_hal::peripherals::USB_HS<'static>,
+    ) -> esp_hal::usb::otg::Usb<'static> = usb0_hs_handle;
     let _ = core::mem::size_of::<pajoniiir_ui_model::UiSnapshot>();
     let _ = core::mem::size_of::<pajoniiir_waveform::WaveformColumn>();
 
