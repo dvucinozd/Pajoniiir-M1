@@ -1,8 +1,11 @@
+use core::cell::RefCell;
+
+use embassy_futures::select::{Either, select};
 use embassy_sync::{
-    blocking_mutex::raw::CriticalSectionRawMutex,
+    blocking_mutex::{CriticalSectionMutex, raw::CriticalSectionRawMutex},
     channel::Channel,
 };
-use embassy_usb_driver::host::UsbHostAllocator;
+use embassy_usb_driver::host::{DeviceEvent, UsbHostAllocator};
 use embassy_usb_host::{
     BusRoute, BusState, EnumerationError,
     class::msc::{BlockCapacity, MscDevice, MscError, MscLun},
@@ -30,6 +33,35 @@ pub(crate) static USB0_MSC_COMPLETIONS: Channel<
     Usb0MscCompletion,
     USB0_MSC_QUEUE_DEPTH,
 > = Channel::new();
+
+pub(crate) static USB0_MSC_OWNER_EVENTS: Channel<
+    CriticalSectionRawMutex,
+    Usb0MscOwnerEvent,
+    USB0_MSC_QUEUE_DEPTH,
+> = Channel::new();
+
+static USB0_MSC_LIFECYCLE: CriticalSectionMutex<RefCell<Usb0MscLifecycle>> =
+    CriticalSectionMutex::new(RefCell::new(Usb0MscLifecycle::new()));
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum Usb0MscDetachReason {
+    Disconnected,
+    Overcurrent,
+    Replaced,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum Usb0MscOwnerEvent {
+    Ready {
+        binding: Usb0MscBinding,
+        probe: Usb0MscProbe,
+    },
+    Detached {
+        binding: Usb0MscBinding,
+        reason: Usb0MscDetachReason,
+        result: DisconnectResult,
+    },
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum Usb0MscLifecycleError {
@@ -101,6 +133,41 @@ impl Default for Usb0MscLifecycle {
     fn default() -> Self {
         Self::new()
     }
+}
+
+fn with_lifecycle_mut<R>(f: impl FnOnce(&mut Usb0MscLifecycle) -> R) -> R {
+    USB0_MSC_LIFECYCLE.lock(|cell| {
+        let mut lifecycle = cell.borrow_mut();
+        f(&mut lifecycle)
+    })
+}
+
+fn with_lifecycle<R>(f: impl FnOnce(&Usb0MscLifecycle) -> R) -> R {
+    USB0_MSC_LIFECYCLE.lock(|cell| {
+        let lifecycle = cell.borrow();
+        f(&lifecycle)
+    })
+}
+
+pub(crate) fn issue_current_request(
+    lun: u8,
+    kind: UsbMscRequestKind,
+) -> Result<UsbMscRequestTicket, UsbMscSessionError> {
+    with_lifecycle_mut(|lifecycle| lifecycle.bridge_mut().issue(lun, kind))
+}
+
+pub(crate) fn completion_is_current(completion: &Usb0MscCompletion) -> bool {
+    with_lifecycle(|lifecycle| completion.is_current(lifecycle.session()))
+}
+
+fn shared_on_enumerated(
+    info: &EnumerationInfo,
+) -> Result<Usb0MscBinding, Usb0MscLifecycleError> {
+    with_lifecycle_mut(|lifecycle| lifecycle.on_enumerated(info))
+}
+
+fn shared_on_detached(binding: Usb0MscBinding) -> DisconnectResult {
+    with_lifecycle_mut(|lifecycle| lifecycle.on_handler_disconnected(binding))
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -192,6 +259,180 @@ pub(crate) async fn probe_root_msc_once(
     result
 }
 
+/// Persistent root-port MSC owner.
+///
+/// This task owns the Embassy bus, device and LUN for their full lifetime.
+/// MediaSession state is shared only through short critical sections and is
+/// never locked across an await. Queued requests retain ownership of their
+/// buffers even if a detach wins the USB command/device-event race.
+pub(crate) async fn run_root_msc_owner(
+    usb_hs: esp_hal::peripherals::USB_HS<'static>,
+) -> ! {
+    let usb = esp_hal::usb::otg::Usb::new_hs(usb_hs);
+    let driver = esp_hal::usb::otg::embassy_usb_host::Driver::new(usb);
+    let (mut controller, bus) = embassy_usb_host::bus(driver, &USB0_BUS_STATE);
+    let mut pending_speed = None;
+
+    loop {
+        let speed = match pending_speed.take() {
+            Some(speed) => speed,
+            None => loop {
+                match controller.wait_for_device_event().await {
+                    DeviceEvent::Connected(speed) => break speed,
+                    DeviceEvent::Disconnected | DeviceEvent::Overcurrent => {}
+                    _ => {}
+                }
+            },
+        };
+
+        let mut config = [0u8; USB0_ENUM_CONFIG_BYTES];
+        let (info, config_len) = match bus
+            .enumerate(BusRoute::Direct(speed), &mut config)
+            .await
+        {
+            Ok(enumerated) => enumerated,
+            Err(_) => continue,
+        };
+
+        let binding = match shared_on_enumerated(&info) {
+            Ok(binding) => binding,
+            Err(_) => {
+                bus.free_address(info.device_address);
+                continue;
+            }
+        };
+
+        let device = match MscDevice::new(&bus, &info, &config[..config_len]).await {
+            Ok(device) => device,
+            Err(_) => {
+                let _ = shared_on_detached(binding);
+                bus.free_address(info.device_address);
+                continue;
+            }
+        };
+        let num_luns = device.num_luns();
+        let mut lun = match device.lun(0) {
+            Ok(lun) => lun,
+            Err(_) => {
+                let _ = shared_on_detached(binding);
+                drop(device);
+                bus.free_address(info.device_address);
+                continue;
+            }
+        };
+        let capacity = match probe_capacity(&mut lun).await {
+            Ok(capacity) => capacity,
+            Err(_) => {
+                let _ = shared_on_detached(binding);
+                drop(lun);
+                drop(device);
+                bus.free_address(info.device_address);
+                continue;
+            }
+        };
+
+        let probe = Usb0MscProbe {
+            device_address: info.device_address,
+            vendor_id: info.device_desc.vendor_id,
+            product_id: info.device_desc.product_id,
+            num_luns,
+            capacity,
+        };
+        USB0_MSC_OWNER_EVENTS
+            .send(Usb0MscOwnerEvent::Ready { binding, probe })
+            .await;
+
+        let mut replacement_speed = None;
+        'attached: loop {
+            match select(
+                USB0_MSC_REQUESTS.receive(),
+                controller.wait_for_device_event(),
+            )
+            .await
+            {
+                Either::First(mut request) => {
+                    match select(
+                        execute_request_status(&mut lun, binding.lease, &mut request),
+                        controller.wait_for_device_event(),
+                    )
+                    .await
+                    {
+                        Either::First(status) => {
+                            USB0_MSC_COMPLETIONS
+                                .send(complete_with_status(request, status))
+                                .await;
+                        }
+                        Either::Second(event) => {
+                            let (status, reason, next_speed) = match event {
+                                DeviceEvent::Disconnected => (
+                                    Usb0MscCompletionStatus::Disconnected,
+                                    Usb0MscDetachReason::Disconnected,
+                                    None,
+                                ),
+                                DeviceEvent::Overcurrent => (
+                                    Usb0MscCompletionStatus::Overcurrent,
+                                    Usb0MscDetachReason::Overcurrent,
+                                    None,
+                                ),
+                                DeviceEvent::Connected(speed) => (
+                                    Usb0MscCompletionStatus::Disconnected,
+                                    Usb0MscDetachReason::Replaced,
+                                    Some(speed),
+                                ),
+                                _ => (
+                                    Usb0MscCompletionStatus::HostError,
+                                    Usb0MscDetachReason::Disconnected,
+                                    None,
+                                ),
+                            };
+
+                            let result = shared_on_detached(binding);
+                            USB0_MSC_COMPLETIONS
+                                .send(complete_with_status(request, status))
+                                .await;
+                            USB0_MSC_OWNER_EVENTS
+                                .send(Usb0MscOwnerEvent::Detached {
+                                    binding,
+                                    reason,
+                                    result,
+                                })
+                                .await;
+                            replacement_speed = next_speed;
+                            break 'attached;
+                        }
+                    }
+                }
+                Either::Second(event) => {
+                    let (reason, next_speed) = match event {
+                        DeviceEvent::Disconnected => (Usb0MscDetachReason::Disconnected, None),
+                        DeviceEvent::Overcurrent => (Usb0MscDetachReason::Overcurrent, None),
+                        DeviceEvent::Connected(speed) => {
+                            (Usb0MscDetachReason::Replaced, Some(speed))
+                        }
+                        _ => continue,
+                    };
+
+                    let result = shared_on_detached(binding);
+                    USB0_MSC_OWNER_EVENTS
+                        .send(Usb0MscOwnerEvent::Detached {
+                            binding,
+                            reason,
+                            result,
+                        })
+                        .await;
+                    replacement_speed = next_speed;
+                    break 'attached;
+                }
+            }
+        }
+
+        drop(lun);
+        drop(device);
+        bus.free_address(info.device_address);
+        pending_speed = replacement_speed;
+    }
+}
+
 #[derive(Debug)]
 pub(crate) enum Usb0MscError {
     Host(MscError),
@@ -211,6 +452,8 @@ pub(crate) enum Usb0MscCompletionStatus {
     WrongLun,
     InvalidTransfer,
     HostError,
+    Disconnected,
+    Overcurrent,
 }
 
 #[derive(Debug)]
@@ -352,68 +595,66 @@ pub(crate) async fn owner_step<'dev, 'd, A>(
 pub(crate) async fn execute_request<'dev, 'd, A>(
     lun: &mut MscLun<'dev, 'd, A>,
     lease_at_dispatch: MediaLease,
-    request: Usb0MscRequest,
+    mut request: Usb0MscRequest,
 ) -> Usb0MscCompletion
+where
+    A: UsbHostAllocator<'d>,
+{
+    let status = execute_request_status(lun, lease_at_dispatch, &mut request).await;
+    complete_with_status(request, status)
+}
+
+async fn execute_request_status<'dev, 'd, A>(
+    lun: &mut MscLun<'dev, 'd, A>,
+    lease_at_dispatch: MediaLease,
+    request: &mut Usb0MscRequest,
+) -> Usb0MscCompletionStatus
 where
     A: UsbHostAllocator<'d>,
 {
     let ticket = request.ticket();
     if ticket.lease != lease_at_dispatch {
-        return complete_with_status(request, Usb0MscCompletionStatus::StaleLease);
+        return Usb0MscCompletionStatus::StaleLease;
     }
     if ticket.lun != lun.lun() {
-        return complete_with_status(request, Usb0MscCompletionStatus::WrongLun);
+        return Usb0MscCompletionStatus::WrongLun;
     }
 
     match request {
         Usb0MscRequest::Read { ticket, buffer } => {
+            let ticket = *ticket;
             if !buffer_matches_ticket(lun, ticket, buffer.len(), true) {
-                return Usb0MscCompletion::Read {
-                    ticket,
-                    buffer,
-                    status: Usb0MscCompletionStatus::InvalidTransfer,
-                };
+                return Usb0MscCompletionStatus::InvalidTransfer;
             }
-            let status = match lun.read_blocks(ticket.first_block().unwrap(), buffer).await {
+            match lun
+                .read_blocks(ticket.first_block().unwrap(), &mut **buffer)
+                .await
+            {
                 Ok(()) => Usb0MscCompletionStatus::Success,
                 Err(_) => Usb0MscCompletionStatus::HostError,
-            };
-            Usb0MscCompletion::Read {
-                ticket,
-                buffer,
-                status,
             }
         }
         Usb0MscRequest::Write { ticket, buffer } => {
+            let ticket = *ticket;
             if !buffer_matches_ticket(lun, ticket, buffer.len(), false) {
-                return Usb0MscCompletion::Write {
-                    ticket,
-                    buffer,
-                    status: Usb0MscCompletionStatus::InvalidTransfer,
-                };
+                return Usb0MscCompletionStatus::InvalidTransfer;
             }
-            let status = match lun.write_blocks(ticket.first_block().unwrap(), buffer).await {
+            match lun
+                .write_blocks(ticket.first_block().unwrap(), &**buffer)
+                .await
+            {
                 Ok(()) => Usb0MscCompletionStatus::Success,
                 Err(_) => Usb0MscCompletionStatus::HostError,
-            };
-            Usb0MscCompletion::Write {
-                ticket,
-                buffer,
-                status,
             }
         }
         Usb0MscRequest::Flush { ticket } => {
             if ticket.kind != UsbMscRequestKind::Flush {
-                return Usb0MscCompletion::Flush {
-                    ticket,
-                    status: Usb0MscCompletionStatus::InvalidTransfer,
-                };
+                return Usb0MscCompletionStatus::InvalidTransfer;
             }
-            let status = match lun.flush().await {
+            match lun.flush().await {
                 Ok(()) => Usb0MscCompletionStatus::Success,
                 Err(_) => Usb0MscCompletionStatus::HostError,
-            };
-            Usb0MscCompletion::Flush { ticket, status }
+            }
         }
     }
 }
