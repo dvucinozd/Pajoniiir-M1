@@ -412,17 +412,12 @@ pub enum UsbMscDiscoveryPlanError {
     Mount(UsbMscMountError),
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum UsbMscDiscoveryStage {
     Root,
     GptHeader,
-    GptEntries {
-        stream: GptEntryStream,
-        next_lba: u64,
-    },
-    Candidate {
-        index: usize,
-    },
+    GptEntries { next_lba: u64 },
+    Candidate { index: usize },
     Selected(UsbMscMountSelection),
 }
 
@@ -430,6 +425,7 @@ enum UsbMscDiscoveryStage {
 pub struct UsbMscDiscoveryPlan {
     attempt: UsbMscMountAttempt,
     layout: PartitionLayout,
+    gpt_stream: Option<GptEntryStream>,
     stage: UsbMscDiscoveryStage,
 }
 
@@ -444,6 +440,7 @@ impl UsbMscDiscoveryPlan {
         Ok(Self {
             attempt,
             layout: PartitionLayout::new(),
+            gpt_stream: None,
             stage: UsbMscDiscoveryStage::Root,
         })
     }
@@ -468,7 +465,7 @@ impl UsbMscDiscoveryPlan {
             match &self.stage {
                 UsbMscDiscoveryStage::Root => return Ok(Some(0)),
                 UsbMscDiscoveryStage::GptHeader => return Ok(Some(1)),
-                UsbMscDiscoveryStage::GptEntries { next_lba, .. } => {
+                UsbMscDiscoveryStage::GptEntries { next_lba } => {
                     if *next_lba >= self.attempt.geometry.block_count {
                         return Err(UsbMscDiscoveryPlanError::GptTableOutOfRange);
                     }
@@ -543,28 +540,26 @@ impl UsbMscDiscoveryPlan {
                 let stream = GptEntryStream::new(info)
                     .ok_or(UsbMscDiscoveryPlanError::InvalidPartitionTable)?;
                 self.layout.clear();
+                self.gpt_stream = Some(stream);
                 self.stage = UsbMscDiscoveryStage::GptEntries {
-                    stream,
                     next_lba: info.entries_lba,
                 };
             }
-            UsbMscDiscoveryStage::GptEntries { .. } => {
-                let complete;
-                {
-                    let UsbMscDiscoveryStage::GptEntries { stream, next_lba } = &mut self.stage
-                    else {
-                        unreachable!();
-                    };
-                    let _ = stream.push(block, &mut self.layout);
-                    complete = stream.is_complete();
-                    if !complete {
-                        *next_lba = next_lba
-                            .checked_add(1)
-                            .ok_or(UsbMscDiscoveryPlanError::GptTableOutOfRange)?;
-                    }
-                }
-                if complete {
+            UsbMscDiscoveryStage::GptEntries { next_lba } => {
+                let stream = self
+                    .gpt_stream
+                    .as_mut()
+                    .ok_or(UsbMscDiscoveryPlanError::InvalidPartitionTable)?;
+                let _ = stream.push(block, &mut self.layout);
+                if stream.is_complete() {
+                    self.gpt_stream = None;
                     self.stage = UsbMscDiscoveryStage::Candidate { index: 0 };
+                } else {
+                    self.stage = UsbMscDiscoveryStage::GptEntries {
+                        next_lba: next_lba
+                            .checked_add(1)
+                            .ok_or(UsbMscDiscoveryPlanError::GptTableOutOfRange)?,
+                    };
                 }
             }
             UsbMscDiscoveryStage::Candidate { index } => {
