@@ -343,7 +343,6 @@ impl<T: WritableUsbMscTransport> WritableBlockDevice for UsbMscBlockDevice<T> {
 mod tests {
     use super::*;
 
-
     fn lease(session: &mut MediaSession, source: u32) -> MediaLease {
         let source = pajoniiir_media_session::MediaSourceId::new(source).unwrap();
         match session.on_connect(source) {
