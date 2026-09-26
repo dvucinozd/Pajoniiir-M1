@@ -26,7 +26,7 @@ Starting baseline:
 - esp-hal 1.2.2 for the ESP32-P4 target integration
 - target `riscv32imafc-unknown-none-elf`
 
-Before the first executable firmware baseline is accepted, Cargo.lock must be generated, reviewed and committed. Dependency changes after that point are qualified changes.
+The host workspace and standalone ESP32-P4 firmware `Cargo.lock` files are committed. CI resolves both graphs with `--locked`; dependency changes therefore require an explicit reviewed lockfile update.
 
 ## Host commands
 

@@ -106,7 +106,7 @@ impl<D: BlockDevice> BlockDevice for Fat32MbrShim<D> {
         let inner = self.inner.geometry();
         BlockGeometry {
             block_size: inner.block_size,
-            block_count: inner.block_count.checked_add(1).unwrap_or(u64::MAX),
+            block_count: inner.block_count.saturating_add(1),
         }
     }
 
