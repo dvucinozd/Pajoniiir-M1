@@ -3022,6 +3022,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "pajoniiir-media-usb-msc"
+version = "0.1.0"
+dependencies = [
+ "pajoniiir-media-block",
+]
+
+[[package]]
 name = "pajoniiir-mixer"
 version = "0.1.0"
 dependencies = [

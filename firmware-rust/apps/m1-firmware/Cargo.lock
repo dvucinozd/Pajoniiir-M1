@@ -1101,6 +1101,7 @@ dependencies = [
  "pajoniiir-media-identity",
  "pajoniiir-media-partition",
  "pajoniiir-media-session",
+ "pajoniiir-media-usb-msc",
  "pajoniiir-mixer",
  "pajoniiir-ui-model",
  "pajoniiir-waveform",
@@ -1151,6 +1152,13 @@ version = "0.1.0"
 
 [[package]]
 name = "pajoniiir-media-session"
+version = "0.1.0"
+dependencies = [
+ "pajoniiir-media-block",
+]
+
+[[package]]
+name = "pajoniiir-media-usb-msc"
 version = "0.1.0"
 dependencies = [
  "pajoniiir-media-block",
