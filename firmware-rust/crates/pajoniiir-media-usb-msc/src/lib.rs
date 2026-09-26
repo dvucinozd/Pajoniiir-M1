@@ -852,12 +852,7 @@ mod tests {
         write_mbr_partition(block, 0xee, 1, u32::MAX);
     }
 
-    fn write_gpt_header(
-        block: &mut [u8],
-        entries_lba: u64,
-        entry_count: u32,
-        entry_size: u32,
-    ) {
+    fn write_gpt_header(block: &mut [u8], entries_lba: u64, entry_count: u32, entry_size: u32) {
         block[..8].copy_from_slice(b"EFI PART");
         block[12..16].copy_from_slice(&92u32.to_le_bytes());
         block[72..80].copy_from_slice(&entries_lba.to_le_bytes());
