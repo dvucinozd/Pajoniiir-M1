@@ -1,0 +1,49 @@
+[package]
+name = "pajoniiir-m1-firmware"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95.0"
+publish = false
+
+[features]
+default = []
+# Compile-verified target wiring only. Do not enable in normal firmware until
+# USB0 VBUS/power switching, PHY and hot-plug are EVT-verified.
+usb0-hardware-bringup = []
+
+[dependencies]
+embassy-executor = { version = "=0.10.0", default-features = false }
+embassy-futures = { version = "=0.1.2", default-features = false }
+embassy-usb-driver = { version = "=0.2.2", default-features = false }
+embassy-usb-host = { version = "=0.1.0", default-features = false }
+embassy-sync = { version = "=0.8.0", default-features = false }
+esp-hal = { version = "=1.2.2", features = ["esp32p4", "unstable"] }
+esp-rtos = { version = "=0.4.0", default-features = false, features = ["embassy", "esp32p4"] }
+static_cell = { version = "=2.1.1", default-features = false }
+pajoniiir-audio-dsp = { path = "../../crates/pajoniiir-audio-dsp" }
+pajoniiir-audio-keylock = { path = "../../crates/pajoniiir-audio-keylock" }
+pajoniiir-audio-runtime = { path = "../../crates/pajoniiir-audio-runtime" }
+pajoniiir-controller-session = { path = "../../crates/pajoniiir-controller-session" }
+pajoniiir-deck = { path = "../../crates/pajoniiir-deck" }
+pajoniiir-hot-cues = { path = "../../crates/pajoniiir-hot-cues" }
+pajoniiir-mixer = { path = "../../crates/pajoniiir-mixer" }
+pajoniiir-media-block = { path = "../../crates/pajoniiir-media-block" }
+pajoniiir-media-exfat = { path = "../../crates/pajoniiir-media-exfat" }
+pajoniiir-media-fat32 = { path = "../../crates/pajoniiir-media-fat32" }
+pajoniiir-media-fs = { path = "../../crates/pajoniiir-media-fs" }
+pajoniiir-media-identity = { path = "../../crates/pajoniiir-media-identity" }
+pajoniiir-media-io = { path = "../../crates/pajoniiir-media-io" }
+pajoniiir-media-partition = { path = "../../crates/pajoniiir-media-partition" }
+pajoniiir-media-session = { path = "../../crates/pajoniiir-media-session" }
+pajoniiir-media-usb-msc = { path = "../../crates/pajoniiir-media-usb-msc" }
+pajoniiir-ui-model = { path = "../../crates/pajoniiir-ui-model" }
+pajoniiir-waveform = { path = "../../crates/pajoniiir-waveform" }
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+
+[workspace]
+resolver = "2"

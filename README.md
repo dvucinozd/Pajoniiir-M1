@@ -228,3 +228,26 @@ python hardware/Pajoniiir-M1/tools/report_mech_gate_snapshot.py
 Native KiCad 10 CI loads every schematic, exports and cross-checks the manufacturing BOM, exports the hierarchy netlist/PDF, enforces ERC cleanliness and validates the B10 PCB routing contract against a fresh DRC report.
 
 Final placement, routing, Gerbers and EVT ordering remain blocked until every `blocks_layout_freeze` gate is closed and the production impedance geometry is recorded.
+
+## Native Rust firmware foundation
+
+The M1 software rewrite is developed in `firmware-rust/`. The released Pajoniiir M2.2 firmware is the functional/product golden reference; this repository's live hardware contracts remain the electrical authority.
+
+Current Rust architecture decisions:
+
+- native `no_std` ESP32-P4 product direction;
+- Slint for UI;
+- dedicated RGB565 Rust waveform renderer with embedded-graphics for suitable primitives;
+- data-driven multi-controller profiles;
+- provider-neutral TrackAnalysis for Rekordbox/APTA;
+- host-first regression and desktop simulation before M1 EVT hardware exists.
+
+References:
+
+- [M1 Rust Product Requirements](docs/M1_RUST_PRODUCT_REQUIREMENTS.md)
+- [M1 Rust Architecture](docs/M1_RUST_ARCHITECTURE.md)
+- [Architecture Decision Records](docs/adr/)
+- [Rust workspace](firmware-rust/README.md)
+
+Rust host/simulator success does not close any physical PCB, USB, audio, DSI, PSRAM/DMA, C6 or power qualification gate.
+
