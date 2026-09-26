@@ -665,16 +665,12 @@ mod tests {
         let old_handle = media_handle(11);
         let fresh_handle = media_handle(12);
 
-        bridge
-            .on_enumerated(media_source(4), old_handle)
-            .unwrap();
+        bridge.on_enumerated(media_source(4), old_handle).unwrap();
         assert_eq!(
             bridge.on_disconnect(old_handle),
             pajoniiir_media_session::DisconnectResult::Accepted
         );
-        let fresh_lease = bridge
-            .on_enumerated(media_source(4), fresh_handle)
-            .unwrap();
+        let fresh_lease = bridge.on_enumerated(media_source(4), fresh_handle).unwrap();
         let fresh_ticket = bridge.issue(0, UsbMscRequestKind::Flush).unwrap();
 
         assert_eq!(
