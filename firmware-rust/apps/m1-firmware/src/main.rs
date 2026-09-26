@@ -4,6 +4,9 @@
 
 use esp_hal::{clock::CpuClock, main};
 
+#[allow(dead_code)]
+mod usb0_msc;
+
 fn usb0_hs_handle(
     usb: esp_hal::peripherals::USB_HS<'static>,
 ) -> esp_hal::usb::otg::Usb<'static> {

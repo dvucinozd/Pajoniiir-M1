@@ -6,6 +6,8 @@ rust-version = "1.95.0"
 publish = false
 
 [dependencies]
+embassy-usb-driver = { version = "=0.2.2", default-features = false }
+embassy-usb-host = { version = "=0.1.0", default-features = false }
 esp-hal = { version = "=1.2.2", features = ["esp32p4", "unstable"] }
 pajoniiir-audio-dsp = { path = "../../crates/pajoniiir-audio-dsp" }
 pajoniiir-audio-keylock = { path = "../../crates/pajoniiir-audio-keylock" }
