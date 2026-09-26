@@ -106,6 +106,90 @@ impl UsbMscCompletionGate {
     }
 }
 
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum UsbMscSessionError {
+    NoActiveMedia,
+    SecondaryDevice,
+    HandleRejected,
+}
+
+pub struct UsbMscSessionBridge {
+    session: MediaSession,
+    requests: UsbMscRequestSequencer,
+}
+
+impl UsbMscSessionBridge {
+    pub const fn new() -> Self {
+        Self {
+            session: MediaSession::new(),
+            requests: UsbMscRequestSequencer::new(),
+        }
+    }
+
+    pub fn on_enumerated(
+        &mut self,
+        source: pajoniiir_media_session::MediaSourceId,
+        handle: pajoniiir_media_session::MediaHandle,
+    ) -> Result<MediaLease, UsbMscSessionError> {
+        let lease = match self.session.on_connect(source) {
+            pajoniiir_media_session::ConnectResult::Accepted(lease)
+            | pajoniiir_media_session::ConnectResult::Duplicate(lease) => lease,
+            pajoniiir_media_session::ConnectResult::IgnoredSecondary(_) => {
+                return Err(UsbMscSessionError::SecondaryDevice);
+            }
+        };
+
+        if !self.session.bind_handle(lease, handle) {
+            return Err(UsbMscSessionError::HandleRejected);
+        }
+        Ok(lease)
+    }
+
+    pub fn on_disconnect(
+        &mut self,
+        handle: pajoniiir_media_session::MediaHandle,
+    ) -> pajoniiir_media_session::DisconnectResult {
+        self.session.on_disconnect(Some(handle))
+    }
+
+    pub fn issue(
+        &mut self,
+        lun: u8,
+        kind: UsbMscRequestKind,
+    ) -> Result<UsbMscRequestTicket, UsbMscSessionError> {
+        let Some(lease) = self.session.lease() else {
+            return Err(UsbMscSessionError::NoActiveMedia);
+        };
+        if self.session.handle().is_none() {
+            return Err(UsbMscSessionError::NoActiveMedia);
+        }
+        Ok(self.requests.issue(lease, lun, kind))
+    }
+
+    pub const fn session(&self) -> &MediaSession {
+        &self.session
+    }
+
+    pub fn session_mut(&mut self) -> &mut MediaSession {
+        &mut self.session
+    }
+
+    pub const fn lease(&self) -> Option<MediaLease> {
+        self.session.lease()
+    }
+
+    pub const fn accepts_completion(&self, ticket: UsbMscRequestTicket) -> bool {
+        UsbMscCompletionGate::accepts(&self.session, ticket)
+    }
+}
+
+impl Default for UsbMscSessionBridge {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct UsbMscCapacity {
     pub block_size: u32,
@@ -418,6 +502,128 @@ mod tests {
         assert_eq!(ticket.first_block(), Some(lba));
         assert_eq!(ticket.block_count(), Some(8));
         assert!(matches!(ticket.kind, UsbMscRequestKind::Write { .. }));
+    }
+
+
+    fn media_source(value: u32) -> pajoniiir_media_session::MediaSourceId {
+        pajoniiir_media_session::MediaSourceId::new(value).unwrap()
+    }
+
+    fn media_handle(value: u64) -> pajoniiir_media_session::MediaHandle {
+        pajoniiir_media_session::MediaHandle::new(value).unwrap()
+    }
+
+    #[test]
+    fn enumeration_binds_owner_and_admits_requests_only_while_connected() {
+        let mut bridge = UsbMscSessionBridge::new();
+        assert_eq!(
+            bridge.issue(
+                0,
+                UsbMscRequestKind::Read {
+                    first_block: 0,
+                    block_count: 1,
+                },
+            ),
+            Err(UsbMscSessionError::NoActiveMedia)
+        );
+
+        let lease = bridge
+            .on_enumerated(media_source(4), media_handle(11))
+            .unwrap();
+        let ticket = bridge
+            .issue(
+                0,
+                UsbMscRequestKind::Read {
+                    first_block: 0,
+                    block_count: 1,
+                },
+            )
+            .unwrap();
+
+        assert_eq!(ticket.lease, lease);
+        assert!(bridge.accepts_completion(ticket));
+        assert_eq!(
+            bridge.on_disconnect(media_handle(11)),
+            pajoniiir_media_session::DisconnectResult::Accepted
+        );
+        assert!(!bridge.accepts_completion(ticket));
+        assert_eq!(
+            bridge.issue(0, UsbMscRequestKind::Flush),
+            Err(UsbMscSessionError::NoActiveMedia)
+        );
+    }
+
+    #[test]
+    fn same_source_reenumeration_never_revalidates_old_ticket() {
+        let mut bridge = UsbMscSessionBridge::new();
+        let old_lease = bridge
+            .on_enumerated(media_source(4), media_handle(11))
+            .unwrap();
+        let old_ticket = bridge
+            .issue(
+                0,
+                UsbMscRequestKind::Read {
+                    first_block: 7,
+                    block_count: 2,
+                },
+            )
+            .unwrap();
+
+        assert_eq!(
+            bridge.on_disconnect(media_handle(11)),
+            pajoniiir_media_session::DisconnectResult::Accepted
+        );
+        let fresh_lease = bridge
+            .on_enumerated(media_source(4), media_handle(12))
+            .unwrap();
+        let fresh_ticket = bridge
+            .issue(
+                0,
+                UsbMscRequestKind::Read {
+                    first_block: 7,
+                    block_count: 2,
+                },
+            )
+            .unwrap();
+
+        assert_ne!(old_lease.generation, fresh_lease.generation);
+        assert!(!bridge.accepts_completion(old_ticket));
+        assert!(bridge.accepts_completion(fresh_ticket));
+    }
+
+    #[test]
+    fn foreign_disconnect_and_secondary_enumeration_do_not_steal_owner() {
+        let mut bridge = UsbMscSessionBridge::new();
+        let primary = bridge
+            .on_enumerated(media_source(4), media_handle(11))
+            .unwrap();
+        assert_eq!(
+            bridge.on_enumerated(media_source(9), media_handle(99)),
+            Err(UsbMscSessionError::SecondaryDevice)
+        );
+        assert_eq!(
+            bridge.on_disconnect(media_handle(99)),
+            pajoniiir_media_session::DisconnectResult::IgnoredForeign
+        );
+
+        let ticket = bridge.issue(0, UsbMscRequestKind::Flush).unwrap();
+        assert_eq!(ticket.lease, primary);
+        assert!(bridge.accepts_completion(ticket));
+    }
+
+    #[test]
+    fn duplicate_enumeration_cannot_replace_bound_handle() {
+        let mut bridge = UsbMscSessionBridge::new();
+        let lease = bridge
+            .on_enumerated(media_source(4), media_handle(11))
+            .unwrap();
+
+        assert_eq!(
+            bridge.on_enumerated(media_source(4), media_handle(12)),
+            Err(UsbMscSessionError::HandleRejected)
+        );
+        assert_eq!(bridge.lease(), Some(lease));
+        assert_eq!(bridge.session().handle(), Some(media_handle(11)));
     }
 
     #[derive(Clone, Copy, Debug, Eq, PartialEq)]
