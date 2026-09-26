@@ -103,7 +103,6 @@ impl Default for Usb0MscLifecycle {
     }
 }
 
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct Usb0MscProbe {
     pub(crate) device_address: u8,
