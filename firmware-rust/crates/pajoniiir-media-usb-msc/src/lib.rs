@@ -516,29 +516,27 @@ impl UsbMscDiscoveryPlan {
         }
 
         match &mut self.stage {
-            UsbMscDiscoveryStage::Root => {
-                match scan_mbr_or_superfloppy(block, &mut self.layout) {
-                    PartitionScanResult::Ok => {
-                        self.stage = UsbMscDiscoveryStage::Candidate { index: 0 };
-                    }
-                    PartitionScanResult::NeedsGpt => {
-                        if self.attempt.geometry.block_count <= 1 {
-                            return Err(UsbMscDiscoveryPlanError::GptTableOutOfRange);
-                        }
-                        self.layout.clear();
-                        self.stage = UsbMscDiscoveryStage::GptHeader;
-                    }
-                    PartitionScanResult::Invalid => {
-                        return Err(UsbMscDiscoveryPlanError::InvalidPartitionTable);
-                    }
-                    PartitionScanResult::NoCandidate => {
-                        return Err(UsbMscDiscoveryPlanError::NoSupportedFilesystem);
-                    }
+            UsbMscDiscoveryStage::Root => match scan_mbr_or_superfloppy(block, &mut self.layout) {
+                PartitionScanResult::Ok => {
+                    self.stage = UsbMscDiscoveryStage::Candidate { index: 0 };
                 }
-            }
+                PartitionScanResult::NeedsGpt => {
+                    if self.attempt.geometry.block_count <= 1 {
+                        return Err(UsbMscDiscoveryPlanError::GptTableOutOfRange);
+                    }
+                    self.layout.clear();
+                    self.stage = UsbMscDiscoveryStage::GptHeader;
+                }
+                PartitionScanResult::Invalid => {
+                    return Err(UsbMscDiscoveryPlanError::InvalidPartitionTable);
+                }
+                PartitionScanResult::NoCandidate => {
+                    return Err(UsbMscDiscoveryPlanError::NoSupportedFilesystem);
+                }
+            },
             UsbMscDiscoveryStage::GptHeader => {
-                let info =
-                    parse_gpt_header(block).ok_or(UsbMscDiscoveryPlanError::InvalidPartitionTable)?;
+                let info = parse_gpt_header(block)
+                    .ok_or(UsbMscDiscoveryPlanError::InvalidPartitionTable)?;
                 if info.entries_lba >= self.attempt.geometry.block_count {
                     return Err(UsbMscDiscoveryPlanError::GptTableOutOfRange);
                 }
