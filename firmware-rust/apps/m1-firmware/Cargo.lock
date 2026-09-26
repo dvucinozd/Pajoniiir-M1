@@ -1401,6 +1401,7 @@ dependencies = [
  "pajoniiir-mixer",
  "pajoniiir-ui-model",
  "pajoniiir-waveform",
+ "static_cell",
 ]
 
 [[package]]
